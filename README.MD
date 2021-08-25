@@ -8,7 +8,7 @@ The Arena - a multiplayer, competitive habit tracking arena where you and your f
 
 ## We are live folks
 
-See us at https://paret0.com - the URL will change soon. Signup may or may not be working on day 1 (8.23.2021). I will be running some checks, writing some tickets in the next few days.
+See us at https://paret0.com - signup may or may not be working on day 1 (8.23.2021). Admin can create an account for you, definitely - submit and issue with your name and email. I will be running some checks, writing some tickets in the next few days to operationalize some things and get the ball rolling from a management perspective.
 
 ### Open-Source Development
 
