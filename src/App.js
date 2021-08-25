@@ -545,14 +545,29 @@ class App extends Component {
           {this.renderLanguageDropdown()}
         </div>
 
-        {this.state.user.instructor === true ? (
+        <div style={{}}>
+          <NavLink
+            to="/"
+            style={textStyle}
+            className="flex"
+            activeStyle={activeTextStyle}
+            exact
+          >
+            <img
+              src={red}
+              height="30"
+              width="30"
+              alt="pareto blue"
+              className="first-step"
+            />
+            &ensp; <p style={{ marginTop: 4 }}>{I18n.get("arena")}</p>
+          </NavLink>
+        </div>
+
+        {this.state.user.instructor === true &&
+        this.state.athletes.length !== 0 ? (
           <React.Fragment>
-            <NavLink
-              to="/"
-              style={textStyle}
-              activeStyle={activeTextStyle}
-              exact
-            >
+            <p style={(activeTextStyle, { marginLeft: 12, marginTop: 10 })}>
               <img
                 src={red}
                 height="30"
@@ -561,7 +576,7 @@ class App extends Component {
                 alt="pareto-learn"
               />
               &ensp; {I18n.get("mentorship")}
-            </NavLink>
+            </p>
 
             {/* Experience/Quick Info Below */}
             <div className="small-overflow">
@@ -571,14 +586,14 @@ class App extends Component {
                     <div
                       className="flex"
                       style={{
-                        marginLeft: 24,
                         fontSize: 16,
                         color: "white",
                         padding: 8,
                       }}
                     >
                       <p style={{ marginTop: 6, marginLeft: 18 }}>
-                        {relationship.mentee.fName} {relationship.mentee.lName}
+                        {idx + 1}. {relationship.mentee.fName}{" "}
+                        {relationship.mentee.lName}
                       </p>
                     </div>
                   </NavLink>
@@ -589,24 +604,6 @@ class App extends Component {
         ) : null}
         {this.state.user.instructor !== true ? (
           <div>
-            <div style={{ marginTop: 15, marginLeft: 3 }}>
-              <NavLink
-                to="/"
-                style={textStyle}
-                className="flex"
-                activeStyle={activeTextStyle}
-                exact
-              >
-                <img
-                  src={red}
-                  height="30"
-                  width="30"
-                  alt="pareto blue"
-                  className="first-step"
-                />
-                &ensp; <p style={{ marginTop: 4 }}>{I18n.get("arena")}</p>
-              </NavLink>
-            </div>
             {/* Experience/Quick Info Below */}
             <div style={{ marginTop: 15, marginLeft: 3 }}>
               <NavLink

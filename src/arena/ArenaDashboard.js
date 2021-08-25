@@ -1,5 +1,6 @@
 import React from "react";
 import { bindActionCreators } from "redux";
+import Button from "react-bootstrap/lib/Button";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getActiveSprintData } from "../state/sprints";
@@ -24,17 +25,28 @@ function ArenaDashboard(props) {
     <div style={{ marginTop: 20 }}>
       {props.reviewMode === true ? null : (
         <div className="flex-down">
-          <div className="flex-apart">
-            <Link to="/arena/create/template">
-              {I18n.get("createTemplate")}
-            </Link>
-            <Link to="/arena/create/sprints">{I18n.get("startSprint")}</Link>
-          </div>
           <div>
             {props.sprints.length === 0 ? (
-              <p>{I18n.get("ifNoSprints")}</p>
+              <div>
+                <p>
+                  Welcome - this is a competitive, single or multi-player
+                  experience to help you sharpen your habits, work ethic and
+                  daily routing towards optimization for peak performance.
+                </p>
+                <p>
+                  Click the button below to start a new sprint. Offseason
+                  Training v3 is recommended.
+                </p>
+              </div>
             ) : null}
           </div>
+          <Button onClick={() => props.history.push("/arena/create/sprints")}>
+            {I18n.get("startSprint")}
+          </Button>
+          <br />
+          <Button onClick={() => props.history.push("/arena/create/template")}>
+            Beta: {I18n.get("createTemplate")}
+          </Button>
         </div>
       )}
       <div className={classNames("sprints-top")}>

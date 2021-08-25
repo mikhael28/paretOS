@@ -6,6 +6,8 @@ The ParetOS is a browser-based, high level operating system designed to maximize
 
 The Arena - a multiplayer, competitive habit tracking arena where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
 
+Learn Full-Stack JavaScript Development. A fully featured curriculum for you to start with the basics of creating a GitHub account, through building your first project, and tackling technical interviews.
+
 ## We are live folks
 
 See us at https://paret0.com - signup may or may not be working on day 1 (8.23.2021). Admin can create an account for you, definitely - submit and issue with your name and email. I will be running some checks, writing some tickets in the next few days to operationalize some things and get the ball rolling from a management perspective.
@@ -36,6 +38,16 @@ If you find a bug, have a great idea or just a question - please open an issue [
 - [Progressive Web Application](https://web.dev/progressive-web-apps/) - Better than investing time into a mobile application, I figure that having the offline functionality of a PWA will give us the right balance of features and accessibility. Right now, the PWA only installs on mobile - this is 100% intended to be used on phones, while on the links.
 - [AWS Lambda](https://aws.amazon.com/lambda/) - We needed a service to store our Stellar and DynamoDB authentication/data storage, and wanted to avoid paying $10/mo for a container instance on a side-project that is only used by two people (as of 8.12.21, at least)
 - MongoDB + other services.
+
+## Admin
+
+- There is a separate, not quite fully featured admin platform.
+- We can create mentees, mentors, match them, and a host of other options.
+- Currently hidden from view, along with the APIs, to prevent foul play. This open-source repository focuses strictly on the front-end - trusted contributors will be invited to collaborate on the back-end.
+
+## Intellectual Property Notice
+- This CODE is open-source. 
+- The intellectual property in regards to the branding of the Pareto logos, the educational curriculum inside the Full-Stack Starter Kit, and the knowledge base belongs to Michael Litchev. 
 
 
 ## Team
