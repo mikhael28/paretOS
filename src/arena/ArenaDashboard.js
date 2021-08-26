@@ -40,13 +40,17 @@ function ArenaDashboard(props) {
               </div>
             ) : null}
           </div>
-          <Button onClick={() => props.history.push("/arena/create/sprints")}>
-            {I18n.get("startSprint")}
-          </Button>
-          <br />
-          <Button onClick={() => props.history.push("/arena/create/template")}>
-            Beta: {I18n.get("createTemplate")}
-          </Button>
+          <div className="flex-between">
+            <Button onClick={() => props.history.push("/arena/create/sprints")}>
+              {I18n.get("startSprint")}
+            </Button>
+            <br />
+            <Button
+              onClick={() => props.history.push("/arena/create/template")}
+            >
+              Beta: Create Template
+            </Button>
+          </div>
         </div>
       )}
       <div className={classNames("sprints-top")}>
