@@ -816,7 +816,7 @@ class App extends Component {
               </div>
               <div>{error.toString()}</div>
               <div>{componentStack}</div>
-              <button onClick={() => window.location.reload("/")}>
+              <button onClick={() => window.location.replace("/")}>
                 Click here to reset!
               </button>
             </React.Fragment>

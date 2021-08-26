@@ -68,8 +68,8 @@ function Profile(props) {
   let blockCardClass = classNames("context-cards");
 
   return (
-    <div>
-      <h1>{I18n.get("neuroProfile")}</h1>
+    <div style={{ marginTop: 28 }}>
+      {/* <h1>{I18n.get("neuroProfile")}</h1> */}
       {loading === true ? (
         <section style={{ marginTop: -12 }}>
           <h2 className="section-title">
@@ -108,10 +108,6 @@ function Profile(props) {
             >
               <AiOutlineGithub /> {profile.github}
             </a>
-            <p style={{ marginLeft: 10 }}>
-              {I18n.get("completionPercentage")}: {profile.completionPercentage}
-              %
-            </p>
           </div>
 
           <div
