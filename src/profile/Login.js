@@ -10,7 +10,7 @@ import logo from "../assets/Pareto_Lockup-01.png";
 
 /**
  * Self explanatory what this component does.
- * @TODO refactor into hook
+ * @TODO GH Issue #12
  */
 
 export default class Login extends Component {

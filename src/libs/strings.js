@@ -135,8 +135,7 @@ export const strings = {
     projectIdeas: "Project Notes & Ideas",
     noIdeasYet:
       "No project ideas yet? Please click the button below to add one.",
-    noProjectsYet:
-      "No active project yet? Please click the button below to add one.",
+    noProjectsYet: "Please click the plus button to a project to your profile.",
     enterNewProjectIdea: "Enter New Project Idea",
     save: "Save",
     githubRepository: "GitHub Repository",

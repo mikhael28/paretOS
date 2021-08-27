@@ -12,15 +12,13 @@ import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
 import generator from "generate-password";
 import { errorToast } from "../libs/toasts";
-import classNames from "classnames";
 import Tour from "reactour";
 import question from "../assets/help.png";
 import "react-quill/dist/quill.snow.css";
 
 /**
  * These are the forms where you can edit your profile.
- * @TODO we need to remove redundant items here
- * @TODO we need to drastically rework the UI, it looks terrible. This is probably the most neglected container in the entire repository, from a UI perspective. Desktop and mobile.
+ * @TODO GH Issue #13
  */
 
 export default class EditProfile extends Component {
@@ -32,22 +30,16 @@ export default class EditProfile extends Component {
       users: [],
       providers: [],
       summary: "",
+      summaryCheck: false,
       user: {
-        notes: [],
-        ideas: [],
         projects: [],
       },
       id: "",
-      idea: "",
-      note: "",
       github: "https://github.com/",
       githubProfile: "",
       name: "",
-      description: "",
-      summaryCheck: false,
       editName: false,
-      addNote: false,
-      addIdea: false,
+      description: "",
       addProject: false,
       editSchool: false,
       school: "",
@@ -114,24 +106,6 @@ export default class EditProfile extends Component {
     });
   };
 
-  handleRichChange = (value) => {
-    this.setState({
-      note: value,
-    });
-  };
-
-  handleDescription = (value) => {
-    this.setState({
-      description: value,
-    });
-  };
-
-  handleProviderChange = (event) => {
-    this.setState({
-      [event.target.id]: JSON.parse(event.target.value),
-    });
-  };
-
   handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -167,68 +141,6 @@ export default class EditProfile extends Component {
     }
   };
 
-  addIdea = async () => {
-    let ideas = this.state.user.ideas.slice();
-    ideas.push(this.state.idea);
-    let body = {
-      ideas: ideas,
-    };
-    try {
-      let response = await API.put("pareto", `/users/${this.state.user.id}`, {
-        body,
-      });
-      this.setState({ user: response, idea: "", addIdea: false });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  addNote = async () => {
-    this.setState({ noteLoading: true });
-    let notes = this.state.user.notes.slice();
-    notes.push(this.state.text);
-    let body = {
-      notes: notes,
-    };
-    try {
-      const response = await API.put("pareto", `/users/${this.state.user.id}`, {
-        body,
-      });
-      this.setState({
-        user: response,
-        note: "",
-        addNote: false,
-        noteLoading: false,
-      });
-    } catch (e) {
-      errorToast(e, this.props.user);
-      this.setState({ noteLoading: false });
-    }
-  };
-
-  editNote = async () => {
-    this.setState({ noteLoading: true });
-
-    try {
-      const updatedJournal = await API.put(
-        "pareto",
-        `/users/${this.state.user.id}`,
-        {
-          body: {
-            notes: [this.state.note],
-          },
-        }
-      );
-      this.setState({
-        user: updatedJournal,
-        addNote: false,
-        noteLoading: false,
-      });
-    } catch (e) {
-      errorToast(e, this.props.user);
-    }
-  };
-
   updateSchool = async () => {
     let body = {
       school: this.state.school,
@@ -254,23 +166,6 @@ export default class EditProfile extends Component {
       });
       console.log(response);
       this.setState({ user: response });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  deleteNote = async (event, note) => {
-    event.preventDefault();
-    let newNotes = this.state.user.notes.map((note) => note);
-    delete newNotes[note];
-    let body = {
-      notes: newNotes,
-    };
-    try {
-      const updated = await API.put("pareto", `/users/${this.state.id}`, {
-        body,
-      });
-      this.setState({ user: updated });
     } catch (e) {
       console.log(e);
     }
@@ -390,7 +285,7 @@ export default class EditProfile extends Component {
                   style={{
                     cursor: "pointer",
                     marginTop: 30,
-                    marginLeft: 6,
+                    marginLeft: 40,
                   }}
                 />
               </div>
@@ -433,7 +328,9 @@ export default class EditProfile extends Component {
           </div>
         </div>
 
-        {this.state.editSchool === false ? (
+        {/* Hiding the below for now, not sure it makes sense for users to update. More so for admin? Is this feature even relevant anymore? could be for organizations, but not on a user-level */}
+
+        {/* {this.state.editSchool === false ? (
           <p>
             {I18n.get("organization")}: {this.state.user.school}{" "}
             <Glyphicon
@@ -470,36 +367,9 @@ export default class EditProfile extends Component {
               </Button>
             </div>
           </div>
-        )}
-
-        <FormGroup controlId="defaultLanguage" bsSize="large">
-          <ControlLabel>Default Language</ControlLabel>
-          <FormControl
-            componentClass="select"
-            onChange={this.handleChange}
-            value={this.state.defaultLanguage}
-          >
-            <option value="en">Choose Here</option>
-            <option value="en">English</option>
-            <option value="lg">Luganda</option>
-            <option value="ac">Acholi</option>
-            <option value="es">Spanish</option>
-          </FormControl>
-        </FormGroup>
-
-        <LoaderButton
-          align="center"
-          block
-          bsSize="small"
-          type="submit"
-          // disabled={!this.validateForm()}
-          onClick={this.updateLanguage}
-          isLoading={this.state.isLoading}
-          text="Update Language"
-          loadingText="Updating..."
-        />
-
+        )} */}
         <div>
+          <h2>About you</h2>
           {this.state.summaryCheck ? (
             <React.Fragment>
               <FormGroup controlId="summary" bsSize="large">
@@ -530,123 +400,118 @@ export default class EditProfile extends Component {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <p>
-                {this.state.user.summary}{" "}
-                <Glyphicon
-                  onClick={() => this.setState({ summaryCheck: true })}
-                  glyph="glyphicon glyphicon-pencil"
-                  height="33"
-                  width="33"
-                  style={{ marginLeft: 6, cursor: "pointer" }}
-                />
-              </p>
+              <div className="block">
+                <p>
+                  {this.state.user.summary}{" "}
+                  <Glyphicon
+                    onClick={() => this.setState({ summaryCheck: true })}
+                    glyph="glyphicon glyphicon-pencil"
+                    height="33"
+                    width="33"
+                    style={{ marginLeft: 6, cursor: "pointer" }}
+                  />
+                </p>
+              </div>
             </React.Fragment>
           )}
         </div>
-        <Button onClick={() => this.props.history.push("/settings/password")}>
-          Edit Password
-        </Button>
 
-        <div className={classNames("row")}>
-          <div className={classNames("col-xs-12 col-sm-6", "block")}>
-            <h3>{I18n.get("projectIdeas")}</h3>
-            {this.state.user.ideas.length < 1 ? (
-              <p>{I18n.get("noIdeasYet")}</p>
-            ) : (
-              <React.Fragment>
-                {this.state.user.ideas.map((idea, i) => {
-                  return <h5>{idea}</h5>;
-                })}
-              </React.Fragment>
-            )}
+        <div>
+          <h2 className="third-step-home">
+            {I18n.get("projects")}{" "}
+            <Glyphicon
+              onClick={() =>
+                this.setState({ addProject: !this.state.addProject })
+              }
+              glyph="glyphicon glyphicon-plus"
+              height="33"
+              width="33"
+              style={{ marginLeft: 4, cursor: "pointer", marginTop: 2 }}
+            />
+          </h2>
+          {this.state.user.projects.length < 1 ? (
+            <p className="block">{I18n.get("noProjectsYet")}</p>
+          ) : (
+            <React.Fragment>
+              {this.state.user.projects.map((project, i) => {
+                return (
+                  <div className="block">
+                    <h4>{project.name}</h4>
+                    <p>{project.description}</p>
+                    <h4>{project.github}</h4>
+                  </div>
+                );
+              })}
+            </React.Fragment>
+          )}
+          {this.state.addProject ? (
+            <div className="block">
+              <FormGroup controlId="name" bsSize="large">
+                <ControlLabel>{I18n.get("projectName")}</ControlLabel>
+                <FormControl
+                  value={this.state.name}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
 
-            {this.state.addIdea ? (
-              <React.Fragment>
-                <FormGroup controlId="idea" bsSize="large">
-                  <ControlLabel>{I18n.get("enterNewProjectIdea")}</ControlLabel>
-                  <FormControl
-                    value={this.state.idea}
-                    onChange={this.handleChange}
-                  />
-                </FormGroup>
-                <button onClick={this.addIdea}>{I18n.get("save")}</button>
-              </React.Fragment>
-            ) : (
-              <LoaderButton
-                align="center"
-                block
-                bsSize="small"
-                type="submit"
-                // disabled={!this.validateForm()}
-                onClick={() => this.setState({ addIdea: true })}
-                isLoading={this.state.isLoading}
-                text={I18n.get("save")}
-                loadingText={I18n.get("saving")}
-              />
-            )}
-          </div>
+              <FormGroup controlId="description" bsSize="large">
+                <ControlLabel>{I18n.get("description")}</ControlLabel>
+                <FormControl
+                  value={this.state.description}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="github" bsSize="large">
+                <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
+                <FormControl
+                  value={this.state.github}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <div className="flex">
+                <Button onClick={() => this.setState({ addProject: false })}>
+                  {I18n.get("cancel")}
+                </Button>
 
-          <div className={classNames("block", "col-xs-12 col-sm-5")}>
-            <h2 className="third-step-home">
-              {I18n.get("projects")}{" "}
-              <Glyphicon
-                onClick={() => this.setState({ addProject: true })}
-                glyph="glyphicon glyphicon-plus"
-                height="33"
-                width="33"
-                style={{ marginLeft: 4, cursor: "pointer", marginTop: 2 }}
-              />
-            </h2>
-            {this.state.user.projects.length < 1 ? (
-              <p>{I18n.get("noProjectsYet")}</p>
-            ) : (
-              <React.Fragment>
-                {this.state.user.projects.map((project, i) => {
-                  return (
-                    <div className="block">
-                      <h4>{project.name}</h4>
-                      <p>{project.description}</p>
-                      <h4>{project.github}</h4>
-                    </div>
-                  );
-                })}
-              </React.Fragment>
-            )}
-            {this.state.addProject ? (
-              <div className="block">
-                <FormGroup controlId="name" bsSize="large">
-                  <ControlLabel>{I18n.get("projectName")}</ControlLabel>
-                  <FormControl
-                    value={this.state.name}
-                    onChange={this.handleChange}
-                  />
-                </FormGroup>
-
-                <FormGroup controlId="description" bsSize="large">
-                  <ControlLabel>{I18n.get("description")}</ControlLabel>
-                  <FormControl
-                    value={this.state.description}
-                    onChange={this.handleChange}
-                  />
-                </FormGroup>
-                <FormGroup controlId="github" bsSize="large">
-                  <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
-                  <FormControl
-                    value={this.state.github}
-                    onChange={this.handleChange}
-                  />
-                </FormGroup>
-                <div className="flex">
-                  <Button onClick={() => this.setState({ addProject: false })}>
-                    {I18n.get("cancel")}
-                  </Button>
-
-                  <Button onClick={this.addProject}>{I18n.get("save")}</Button>
-                </div>
+                <Button onClick={this.addProject}>{I18n.get("save")}</Button>
               </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
         </div>
+
+        <br />
+
+        <FormGroup controlId="defaultLanguage" bsSize="large">
+          <ControlLabel>Default Language</ControlLabel>
+          <div className="flex">
+            <FormControl
+              componentClass="select"
+              onChange={this.handleChange}
+              value={this.state.defaultLanguage}
+            >
+              <option value="en">Choose Here</option>
+              <option value="en">English</option>
+              <option value="lg">Luganda</option>
+              <option value="ac">Acholi</option>
+              <option value="es">Spanish</option>
+            </FormControl>
+            <LoaderButton
+              align="center"
+              block
+              type="submit"
+              style={{ width: 90 }}
+              // disabled={!this.validateForm()}
+              onClick={this.updateLanguage}
+              isLoading={this.state.isLoading}
+              text="Save"
+              loadingText="Updating..."
+            />
+          </div>
+        </FormGroup>
+
+        <Button onClick={() => this.props.history.push("/settings/password")}>
+          Change Password
+        </Button>
 
         {/* @TODO: Need to add GitHub editing functionality soon */}
 

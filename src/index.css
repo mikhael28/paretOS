@@ -256,7 +256,7 @@ input[type="file"] {
 
 .block {
   padding: 8px;
-  border-radius: 16px;
+  border-radius: 6px;
   background: white;
   margin: 8px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
