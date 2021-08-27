@@ -11,7 +11,7 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * Self-explanatory purpose of this function.
- * @TODO convert into a Hook function instead of a class
+ * @TODO Issue #2
  */
 
 export default class ResetPassword extends Component {

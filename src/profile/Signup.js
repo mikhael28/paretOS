@@ -10,8 +10,7 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * This component signs you up for the Cognito user
- * @TODO refactor into a hook
- * @TODO replace forms with something else potentially. Either that, or just rework the bootstrap styling
+ * @TODO Issue #7
  */
 
 export default class Signup extends Component {
