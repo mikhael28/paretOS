@@ -306,16 +306,7 @@ function sprint(state = [], action) {
         newTeams[action.payload.index].percentage = newPercentage.toFixed(2);
       }
 
-      console.log("State: ", state);
-      // @TODO: investigate why state is being mal-formed, error handling to fix it.
-      let newSprints;
-      if (typeof state === "object") {
-        newSprints = [{ ...state["0"] }];
-      } else {
-        newSprints = state.slice();
-      }
-      // console.log("State pre slice: ", state);
-      // let newSprints = state.slice();
+      let newSprints = state.slice();
       newSprints[action.payload.activeSprintIndex].teams = newTeams;
 
       return {
@@ -340,6 +331,7 @@ function sprint(state = [], action) {
       return state;
   }
 }
+
 export function updatePlanningForms(payload) {
   return { type: PLANNING_FORMS, payload };
 }

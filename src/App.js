@@ -43,10 +43,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 /**
  * This is the initial mount of the application, at the least the high level of it (index.js is the first load, excluding the index.html))
- * @TODO something is wrong with websocket connections, we are reconnecting too often. The pings are not working at establishing the consistent connection.
- * @TODO break down the file size, add some of these functions into the util.
- * @TODO review what childProps are necessary, and what are redundant. What do do about the redux/router props split?
- * @TODO review localization bug, where not everything is being changed on re-render.
+ * @TODO GitHub Issue #3
+ * @TODO Migrate NavBar - Issue #4
+ * @TODO ChildProps Audit - Issue #5
+ * @TODO Internalization Rerender - Issue #6
  */
 
 class App extends Component {
@@ -268,27 +268,35 @@ class App extends Component {
       clearTimeout(connectInterval); //clear interval on onOpen of websocket connection
 
       setInterval(function () {
+        console.log("Firing Ping");
         wsClient.send(`{"action":"sendmessage", "data":"ping" }`);
       }, 400000);
     };
 
     wsClient.onmessage = (message) => {
-      // console.log("Received data: ", JSON.parse(message.data));
+      console.log("Received data: ", JSON.parse(message.data));
       let tempSprintData = JSON.parse(message.data);
-      let newerSprintArray = this.state.sprints.slice();
-      let tempVar = 0;
-      for (let i = 0; i < this.state.sprints.length; i++) {
-        if (this.state.sprints[i].id === tempSprintData.id) {
-          tempVar = i;
-          break;
+      // this check is to see whether the websocket connection successfully retrieved the latest state.
+      // if there are too many extraneous connections, through ping error or otherwise - the function to distribute state across connections will fail
+      if (!tempSprintData.message) {
+        let newerSprintArray = this.state.sprints.slice();
+        let tempVar = 0;
+        for (let i = 0; i < this.state.sprints.length; i++) {
+          if (this.state.sprints[i].id === tempSprintData.id) {
+            tempVar = i;
+            break;
+          }
         }
-      }
-      newerSprintArray[tempVar] = tempSprintData;
-      try {
-        this.setState({ sprints: newerSprintArray });
-        this.props.putUpdatedSprintData(newerSprintArray);
-      } catch (e) {
-        console.log("onmessage error", e);
+        newerSprintArray[tempVar] = tempSprintData;
+        try {
+          console.log("Formatted Sprint Array: ", newerSprintArray);
+          this.setState({ sprints: newerSprintArray });
+          this.props.putUpdatedSprintData(newerSprintArray);
+        } catch (e) {
+          console.log("onmessage error", e);
+        }
+      } else {
+        alert(tempSprintData.message);
       }
     };
 
