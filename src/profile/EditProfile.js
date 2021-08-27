@@ -436,9 +436,11 @@ export default class EditProfile extends Component {
               {this.state.user.projects.map((project, i) => {
                 return (
                   <div className="block">
-                    <h4>{project.name}</h4>
+                    <h3>{project.name}</h3>
                     <p>{project.description}</p>
-                    <h4>{project.github}</h4>
+                    <a href={project.github} target="_blank" rel="noopener">
+                      GitHub Link Here
+                    </a>
                   </div>
                 );
               })}
