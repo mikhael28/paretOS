@@ -16,6 +16,13 @@ import "./index.css";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
+/**
+ * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
+ * @TODO Suspense API Issue #18
+ * @TODO Service Worker Issue #19
+ * @TODO Lazy Loading Issue #20
+ */
+
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
@@ -39,7 +46,7 @@ API.configure({
     {
       name: "util",
       endpoint: process.env.REACT_APP_UTIL_ENDPOINT,
-      region: process.env.REACT_APP_UTIL_ENDPOINT,
+      region: process.env.REACT_APP_UTIL_REGION,
     },
   ],
 });

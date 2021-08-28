@@ -4,7 +4,7 @@ import API from "@aws-amplify/api";
  * A function to generate an email.
  * @param {A} messageTitle This is the main message header, and the email header
  * @param {*} messageDescription The brunt of the message.
- * @TODO add a better email header, darken the font a bit.
+ * @TODO Issue #24
  */
 
 export function generateEmail(messageTitle, messageDescription) {

@@ -301,7 +301,8 @@ function sprint(state = [], action) {
 
       let newPercentage =
         newTeams[action.payload.index].score /
-        (newTeams[action.payload.index].missions.length * 120);
+        (newTeams[action.payload.index].missions.length *
+          (newTeams[action.payload.index].missions[0].missions.length * 10));
       if (isNaN(newPercentage) !== true) {
         newTeams[action.payload.index].percentage = newPercentage.toFixed(2);
       }

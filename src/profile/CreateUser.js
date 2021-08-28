@@ -12,9 +12,10 @@ import { notepadIntro } from "../libs/static";
 
 /**
  * Functionality for new user signup, creating their profile.
- * @TODO re-enable onboarding emails, redesign those.
- * @TODO create a single-page, almost 'Formly' or whatever that app is, where it only asks you a single question per prompt, and gives you details at the end before confirming.
- * @TODO add back in functionality to create educational accounts, for some circumstance? Think through this.
+ * @TODO Onboarding emails Issue #24
+ * @TODO Country picker Issue #23
+ * @TODO Terms of Service Acceptance Issue #22
+ * @TODO <form> Issue #21
  */
 
 export default class CreateUser extends Component {
@@ -23,12 +24,6 @@ export default class CreateUser extends Component {
 
     this.state = {
       isLoading: false,
-      // below is either 'admin' or 'non-admin'
-      viewMode: "non-admin",
-      // can be create or edit
-      editMode: "create",
-      users: [],
-      providers: [],
       email: "",
       fName: "",
       lName: "",
@@ -36,81 +31,44 @@ export default class CreateUser extends Component {
       city: "",
       state: "US",
       github: "",
-      provider: {},
-      id: "",
-      createdBy: "",
       acceptedTOS: false,
       uuid: generator.generate({
         length: 12,
         numbers: true,
       }),
       type: "mentee",
-      admin: {
-        id: "8020",
-        fName: "Vilfredo",
-        lName: "Pareto",
-      },
     };
-  }
-
-  async componentDidMount() {
-    if (window.location.pathname === "/admin/user") {
-      this.setState({
-        viewMode: "admin",
-      });
-    } else {
-      this.setState({
-        viewMode: "non-admin",
-      });
-    }
-    let admin = await API.get(
-      "pareto",
-      `/users/48150f13-679a-40fc-9f23-b4ebe4af6f08`
-    );
-    this.setState({ admin: admin[0] });
   }
 
   validateForm() {
-    if (this.state.viewMode === "admin") {
-      return (
-        this.state.email.length > 0 &&
-        this.state.fName.length > 0 &&
-        this.state.lName.length > 0 &&
-        this.state.city.length > 0 &&
-        this.state.state.length > 0 &&
-        this.state.github.length > 0
-      );
-    } else {
-      return (
-        this.state.fName.length > 0 &&
-        this.state.lName.length > 0 &&
-        this.state.city.length > 0 &&
-        this.state.state.length > 0 &&
-        this.state.github.length > 0
-      );
-    }
+    return (
+      this.state.fName.length > 0 &&
+      this.state.lName.length > 0 &&
+      this.state.city.length > 0 &&
+      this.state.state.length > 0 &&
+      this.state.github.length > 0
+    );
   }
 
-  accountCreationEmail = (email, password) => {
+  accountCreationEmail = async (email) => {
     let body = {
       recipient: email,
-      sender: "michael@fsa.community",
-      subject: "Your new Pareto Account",
-      htmlBody: `<p>Congratulations on starting your journey. You can now download the Full Stack Apprenticeship application on the Google Play Store and login with the email ${email} and the password ${password}.</p>`,
-      textBody: `Congratulations on starting your journey. You can now download the Full Stack Apprenticeship application on the Google Play Store and login with the email ${email} and the password ${password}.`,
+      sender: "michael@pareto.education",
+      subject: "Your ParetOS Login",
+      htmlBody: `<p>Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.</p>`,
+      textBody: `Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.`,
     };
-    API.post("pareto", "/email", { body });
+
+    try {
+      await API.post("util", "/email", { body });
+    } catch (e) {
+      console.log("Email send error: ", e);
+    }
   };
 
   handleChange = (event) => {
     this.setState({
       [event.target.id]: event.target.value,
-    });
-  };
-
-  handleProviderChange = (event) => {
-    this.setState({
-      [event.target.id]: JSON.parse(event.target.value),
     });
   };
 
@@ -135,26 +93,12 @@ export default class CreateUser extends Component {
     try {
       let uuid;
       let tempEmail;
-      if (this.state.viewMode === "admin") {
-        const user = await this.createUser();
-        console.log("User: ", user);
-        uuid = user.message.User.Username;
-        // this.setState({id: user.message.User.Username })
-        const confirm = await API.post("util", "/confirm", {
-          body: {
-            uuid: uuid,
-            email: this.state.email,
-            password: "password123",
-          },
-        });
-        console.log("Confirmed: ", confirm);
-      } else {
-        const session = await Auth.currentSession();
-        console.log("Cognito sessionL: ", session);
-        uuid = session.idToken.payload.sub;
-        tempEmail = session.idToken.payload.email;
-      }
-      const newUser = await API.post("pareto", "/users", {
+
+      const session = await Auth.currentSession();
+      uuid = session.idToken.payload.sub;
+      tempEmail = session.idToken.payload.email;
+
+      await API.post("pareto", "/users", {
         body: {
           id: uuid,
           type: this.state.type,
@@ -162,12 +106,13 @@ export default class CreateUser extends Component {
           lName: this.state.lName,
           email: tempEmail,
           country: "",
-          mentor: "48150f13-679a-40fc-9f23-b4ebe4af6f08",
+          mentor: "",
           mentors: [],
           projects: [],
           ideas: [],
           bio: "",
-          summary: "Write a bio.",
+          summary:
+            "This is the space for you to write your bio, so people can learn more about you and your interests.",
           notes: [notepadIntro],
           actions: [],
           city: this.state.city,
@@ -202,38 +147,15 @@ export default class CreateUser extends Component {
           createdAt: new Date(),
         },
       });
-      console.log(newUser);
 
-      //
-
-      // @TODO: re-activate these emails
-      // // toast('Success', { type: toast.TYPE.SUCCESS})
-      // this.accountCreationEmail(this.state.email)
-      // const emailSent = this.accountCreationEmail(
-      //   this.state.email,
-      //   this.state.uuid
-      // );
-      // console.log(emailSent);
-
-      successToast("User successfully created");
-      if (this.state.viewMode === "non-admin") {
-        await this.props.initialFetch(uuid);
-        this.props.history.push("/");
-      } else {
-        this.props.setCloseLoading();
-        this.props.history.push("/");
-      }
+      await this.accountCreationEmail(tempEmail);
+      successToast("Account created!");
+      await this.props.initialFetch(uuid);
+      this.props.history.push("/");
     } catch (e) {
       errorToast(e);
       this.props.setCloseLoading();
     }
-  };
-
-  createUser = async () => {
-    let body = {
-      email: this.state.email,
-    };
-    return await API.post("util", "/auth", { body });
   };
 
   render() {
@@ -243,17 +165,6 @@ export default class CreateUser extends Component {
           <div className="basic-info">
             <h1>New Student Onboarding</h1>
             <div className="row">
-              {this.state.viewMode === "admin" ? (
-                <div style={{ paddingLeft: 15, paddingRight: 15 }}>
-                  <FormGroup controlId="email" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
-                      value={this.state.email}
-                      onChange={this.handleChange}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null}
               <div className="col-md-6">
                 <FormGroup controlId="fName" bsSize="large">
                   <ControlLabel>First Name</ControlLabel>
@@ -262,19 +173,33 @@ export default class CreateUser extends Component {
                     onChange={this.handleChange}
                   />
                 </FormGroup>
-                {this.state.viewMode === "admin" ? (
-                  <FormGroup controlId="type" bsSize="large">
-                    <ControlLabel>User Type</ControlLabel>
-                    <FormControl
-                      componentClass="select"
-                      onChange={this.handleChange}
-                      value={this.state.type}
-                    >
-                      <option value="mentee">Mentee</option>
-                      <option value="mentor">Mentor</option>
-                    </FormControl>
-                  </FormGroup>
-                ) : null}
+                <FormGroup controlId="lName" bsSize="large">
+                  <ControlLabel>Last Name</ControlLabel>
+                  <FormControl
+                    value={this.state.lName}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId="type" bsSize="large">
+                  <ControlLabel>User Type</ControlLabel>
+                  <FormControl
+                    componentClass="select"
+                    onChange={this.handleChange}
+                    value={this.state.type}
+                  >
+                    <option value="mentee">Mentee</option>
+                    <option value="mentor">Mentor</option>
+                  </FormControl>
+                </FormGroup>
+              </div>
+              <div className="col-md-6">
+                <FormGroup controlId="city" bsSize="large">
+                  <ControlLabel>City</ControlLabel>
+                  <FormControl
+                    value={this.state.city}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
                 <FormGroup controlId="state" bsSize="large">
                   <ControlLabel>Country</ControlLabel>
                   <FormControl
@@ -287,23 +212,8 @@ export default class CreateUser extends Component {
                     <option value="TT">Trinidad & Tobago</option>
                     <option value="CR">Costa Rica</option>
                     <option value="UG">Uganda</option>
+                    <option value="FR">France</option>
                   </FormControl>
-                </FormGroup>
-              </div>
-              <div className="col-md-6">
-                <FormGroup controlId="lName" bsSize="large">
-                  <ControlLabel>Last Name</ControlLabel>
-                  <FormControl
-                    value={this.state.lName}
-                    onChange={this.handleChange}
-                  />
-                </FormGroup>
-                <FormGroup controlId="city" bsSize="large">
-                  <ControlLabel>City</ControlLabel>
-                  <FormControl
-                    value={this.state.city}
-                    onChange={this.handleChange}
-                  />
                 </FormGroup>
                 <FormGroup controlId="github" bsSize="large">
                   <ControlLabel>GitHub Username</ControlLabel>
@@ -323,7 +233,7 @@ export default class CreateUser extends Component {
             disabled={!this.validateForm()}
             onClick={this.handleSubmit}
             isLoading={this.state.isLoading}
-            text="Create User"
+            text="Create Account"
             loadingText="Creation"
           />
         </div>

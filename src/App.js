@@ -549,9 +549,6 @@ class App extends Component {
             {this.state.user.fName}
           </p>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {this.renderLanguageDropdown()}
-        </div>
 
         <div style={{}}>
           <NavLink
@@ -716,7 +713,9 @@ class App extends Component {
 
         <div style={{ flex: "0 0 4px" }} />
 
-        <div style={{ flex: "0 0 16px" }} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {this.renderLanguageDropdown()}
+        </div>
 
         {/* <div className="fourth-step">
           <Pomodoro />
