@@ -48,11 +48,13 @@ function BottomNav(props) {
           style={{ fontSize: 20 }}
           onClick={() => props.history.push("/")}
         />
-        <Tab
-          icon={<GrCli />}
-          style={{ fontSize: 20 }}
-          onClick={() => props.history.push("/training")}
-        />
+        {props.user.instructor !== true ? (
+          <Tab
+            icon={<GrCli />}
+            style={{ fontSize: 20 }}
+            onClick={() => props.history.push("/training")}
+          />
+        ) : null}
         <Tab
           icon={<GrBook />}
           style={{ fontSize: 20 }}

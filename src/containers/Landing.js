@@ -38,9 +38,11 @@ function Landing(props) {
         <p className="text-center">{I18n.get("secondLanding")}</p>
         <p className="text-center">{I18n.get("thirdLanding")}</p>
         <br />
-        {/* <div style={{ textAlign: 'center' }}>
-					<Button onClick={() => props.history.push('/signup')}>{I18n.get('signup')}</Button>
-				</div> */}
+        <div style={{ textAlign: "center" }}>
+          <Button onClick={() => props.history.push("/signup")}>
+            {I18n.get("signup")}
+          </Button>
+        </div>
         <br />
         <div className="flex-center">
           <img
