@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
@@ -13,88 +13,88 @@ import logo from "../assets/Pareto_Lockup-01.png";
  * @TODO GH Issue #12
  */
 
-export default class Login extends Component {
-  constructor(props) {
-    super(props);
+const Login = ({
+  initialFetch,
+  setCloseLoading,
+  setLoading,
+  userHasAuthenticated,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
 
-    this.state = {
-      isLoading: false,
-      email: "",
-      password: "",
-    };
-  }
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
 
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
-
-  handleChange = (event) => {
-    this.setState({
-      [event.target.id]: event.target.value,
-    });
+  const validateForm = () => {
+    return values.email.length > 0 && values.password.length > 0;
   };
 
-  handleSubmit = async (event) => {
-    event.preventDefault();
-    this.props.setLoading();
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.id]: [event.target.value] });
+  };
 
-    this.setState({ isLoading: true });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading();
+
+    setIsLoading(true);
 
     try {
-      const user = await Auth.signIn(this.state.email, this.state.password);
-      await this.props.initialFetch(user.username);
-      this.props.userHasAuthenticated(true);
-      this.props.setCloseLoading();
+      const user = await Auth.signIn(values.email, values.password);
+      await initialFetch(user.username);
+      userHasAuthenticated(true);
+      setCloseLoading();
     } catch (e) {
       alert(e.message);
-      this.setState({ isLoading: false });
-      this.props.setCloseLoading();
+      setIsLoading(false);
+      setCloseLoading();
     }
   };
 
-  render() {
-    return (
-      <div className="Form">
-        <div className="flex-center">
-          <img
-            src={logo}
-            alt="Pareto"
-            height="45"
-            width="180"
-            style={{ marginTop: 32 }}
-          />
-        </div>
-
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
-            <ControlLabel>{I18n.get("email")}</ControlLabel>
-            <FormControl
-              autoFocus
-              type="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <ControlLabel>{I18n.get("password")}</ControlLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <Link to="/login/reset">{I18n.get("resetPassword")}</Link>
-          <LoaderButton
-            block
-            bsSize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-            isLoading={this.state.isLoading}
-            text={I18n.get("login")}
-            loadingText={I18n.get("loggingIn")}
-          />
-        </form>
+  return (
+    <div className="Form">
+      <div className="flex-center">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{ marginTop: 32 }}
+        />
       </div>
-    );
-  }
-}
+
+      <form onSubmit={handleSubmit}>
+        <FormGroup controlId="email" bsSize="large">
+          <ControlLabel>{I18n.get("email")}</ControlLabel>
+          <FormControl
+            autoFocus
+            type="email"
+            value={values.email}
+            onChange={handleChange}
+          />
+        </FormGroup>
+        <FormGroup controlId="password" bsSize="large">
+          <ControlLabel>{I18n.get("password")}</ControlLabel>
+          <FormControl
+            value={values.password}
+            onChange={handleChange}
+            type="password"
+          />
+        </FormGroup>
+        <Link to="/login/reset">{I18n.get("resetPassword")}</Link>
+        <LoaderButton
+          block
+          bsSize="large"
+          disabled={!validateForm()}
+          type="submit"
+          isLoading={isLoading}
+          text={I18n.get("login")}
+          loadingText={I18n.get("loggingIn")}
+        />
+      </form>
+    </div>
+  );
+};
+
+export default Login;
