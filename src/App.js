@@ -8,7 +8,6 @@ import DropdownButton from "react-bootstrap/lib/DropdownButton";
 import MenuItem from "react-bootstrap/lib/MenuItem";
 import Image from "react-bootstrap/lib/Image";
 import Routes from "./Routes";
-import Pomodoro from "./pomodoro/Pomodoro";
 import white from "./assets/Pareto_Lockup-White.png";
 import blue from "./assets/Pareto-Blue-01.png";
 import red from "./assets/Pareto-Red-01.png";
@@ -118,7 +117,6 @@ class App extends Component {
 
       await this.initialFetch(session.idToken.payload.sub);
     } catch (e) {
-      console.log(e);
       if (e === "No current user") {
         this.setCloseLoading();
       }
