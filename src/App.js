@@ -36,6 +36,7 @@ import { strings } from "./libs/strings";
 import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
+import LeftNav from "./components/LeftNav";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -837,7 +838,8 @@ class App extends Component {
                 </div>
 
                 <div className="root-padding">
-                  {this.renderLeftNav()}
+                  {/* {this.renderLeftNav()} */}
+                  <LeftNav chosenLanguage={this.state.chosenLanguage} updateState={this.setState.bind(this)} user={this.state.user} athletes={this.state.athletes} />
 
                   <Routes childProps={childProps} />
                 </div>
