@@ -9,6 +9,7 @@ import API from "@aws-amplify/api";
 import generator from "generate-password";
 import { errorToast, successToast } from "../libs/toasts";
 import { notepadIntro } from "../libs/static";
+import TermsOfService from "./TermsOfService";
 
 /**
  * Functionality for new user signup, creating their profile.
@@ -37,6 +38,7 @@ export default class CreateUser extends Component {
         numbers: true,
       }),
       type: "mentee",
+      showTermsOfService: false,
     };
   }
 
@@ -161,6 +163,14 @@ export default class CreateUser extends Component {
   render() {
     return (
       <div style={{ margin: 16 }}>
+        {/* Terms of service Modal/Popup */}
+        <TermsOfService
+          open={this.state.showTermsOfService}
+          isLoading={this.state.isLoading}
+          onClickAgree={this.handleSubmit}
+          onClose={() => this.setState({showTermsOfService: false})}
+        />
+
         <div className="profile-view-box">
           <div className="basic-info">
             <h1>New Student Onboarding</h1>
@@ -231,8 +241,7 @@ export default class CreateUser extends Component {
             bsSize="small"
             type="submit"
             disabled={!this.validateForm()}
-            onClick={this.handleSubmit}
-            isLoading={this.state.isLoading}
+            onClick={() => this.setState({showTermsOfService: true})}
             text="Create Account"
             loadingText="Creation"
           />

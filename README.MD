@@ -10,7 +10,7 @@ Learn Full-Stack JavaScript Development. A fully featured curriculum for you to 
 
 ## We are live folks
 
-See us at https://paret0.com - signup may or may not be working on day 1 (8.23.2021). Admin can create an account for you, definitely - submit and issue with your name and email. I will be running some checks, writing some tickets in the next few days to operationalize some things and get the ball rolling from a management perspective.
+See us at https://paret0.com - signup is open! For those making an account, you may notice that the 'Training' (one of the OS pieces of functionality), that focuses on Full-Stack JavaScript Development has a 'Paywall Modal'. This is what I call the 'Paywall Puzzle' - based on the code in this front-end repository, after forking it, you can modify the code and freely gain access to all the educational curriculum without paying. It requires changing a couple of values, commenting out a couple of functions. If you can figure out how to do that - congratulations, you probably don't need to buy access to the curriculum! If you can't figure out, you should seriously consider investing in your education. Included is the Full-Stack Starter Kit, a set of laminated paper cheat-sheets, workbooks and playing cards that help teach you the 20% of JavaScript you need to know to get 80% of the actionable information needed to start writing code.
 
 ### Open-Source Development
 
@@ -35,8 +35,8 @@ If you find a bug, have a great idea or just a question - please open an issue [
 ## Built with
 
 - [React + JavaScript](https://reactjs.org/) - The classics, the essentials..
-- [Progressive Web Application](https://web.dev/progressive-web-apps/) - Better than investing time into a mobile application, I figure that having the offline functionality of a PWA will give us the right balance of features and accessibility. Right now, the PWA only installs on mobile - this is 100% intended to be used on phones, while on the links.
-- [AWS Lambda](https://aws.amazon.com/lambda/) - We needed a service to store our Stellar and DynamoDB authentication/data storage, and wanted to avoid paying $10/mo for a container instance on a side-project that is only used by two people (as of 8.12.21, at least)
+- [Progressive Web Application](https://web.dev/progressive-web-apps/) - Better than investing time into a mobile application, I figure that having the offline functionality of a PWA will give us the right balance of features and accessibility. Right now, the PWA service-worker is disabled - it will be re-enabled after a truly stable build is ready for launch (Product Hunt, Show HN, all that jazz)
+- [AWS Lambda](https://aws.amazon.com/lambda/) - Serverless first
 - MongoDB + other services.
 
 ## Admin
