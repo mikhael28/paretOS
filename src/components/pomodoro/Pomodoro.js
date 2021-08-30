@@ -5,11 +5,7 @@ import "./styles.css";
 
 /**
  * Experiemental Pomodoro Timer
- * @TODO move this into components folder, this was originally boilerplate code copy and pasted from somewhere.
- * @TODO re-integrate this, and test timer when the window is not focused on the tab. Service worker functionality may need to be added to track the timer.
- * @TODO track an actual pomodoro, through 3 steps
- * @TODO Keep database records, and apply them to Arena achievements
- * @TODO re-integrate audio/notification queues in the front-end. Do not enable functionality, if device or browser not compatible, better error tracking.
+ * @TODO Issue #29
  *
  */
 

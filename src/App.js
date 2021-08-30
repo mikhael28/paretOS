@@ -31,7 +31,7 @@ import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
 import LeftNav from "./components/LeftNav";
 
-const Transition = React.forwardRef(function Transition (props, ref) {
+const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -44,7 +44,7 @@ const Transition = React.forwardRef(function Transition (props, ref) {
  */
 
 class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -95,7 +95,7 @@ class App extends Component {
     });
   };
 
-  async componentDidMount () {
+  async componentDidMount() {
     this.setLoading();
 
     I18n.putVocabularies(strings);
@@ -112,7 +112,6 @@ class App extends Component {
 
       await this.initialFetch(session.idToken.payload.sub);
     } catch (e) {
-      console.log(e);
       if (e === "No current user") {
         this.setCloseLoading();
       }

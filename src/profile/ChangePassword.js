@@ -8,7 +8,7 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * Change your password through Cognito
- * @TODO refactor into React Hooks
+ * @TODO Issue #28
  */
 
 export default class ChangePassword extends Component {
