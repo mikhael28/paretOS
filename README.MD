@@ -35,8 +35,8 @@ If you find a bug, have a great idea or just a question - please open an issue [
 ## Built with
 
 - [React + JavaScript](https://reactjs.org/) - The classics, the essentials..
-- [Progressive Web Application](https://web.dev/progressive-web-apps/) - Better than investing time into a mobile application, I figure that having the offline functionality of a PWA will give us the right balance of features and accessibility. Right now, the PWA only installs on mobile - this is 100% intended to be used on phones, while on the links.
-- [AWS Lambda](https://aws.amazon.com/lambda/) - We needed a service to store our Stellar and DynamoDB authentication/data storage, and wanted to avoid paying $10/mo for a container instance on a side-project that is only used by two people (as of 8.12.21, at least)
+- [Progressive Web Application](https://web.dev/progressive-web-apps/) - Better than investing time into a mobile application, I figure that having the offline functionality of a PWA will give us the right balance of features and accessibility. Right now, the PWA service-worker is disabled - it will be re-enabled after a truly stable build is ready for launch (Product Hunt, Show HN, all that jazz)
+- [AWS Lambda](https://aws.amazon.com/lambda/) - Serverless first
 - MongoDB + other services.
 
 ## Admin
