@@ -8,12 +8,10 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * Change your password through Cognito
- * @TODO refactor into React Hooks
  */
 
 const ChangePassword = (props) => {
-
-  const [state, setstate] = useState({
+  const [state, setState] = useState({
     password: "",
     oldPassword: "",
     isChanging: false,
@@ -29,39 +27,42 @@ const ChangePassword = (props) => {
   };
 
   const handleChange = (event) => {
-    setstate({
+    setState({
       ...state,
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     });
   };
 
   const handleChangeClick = async (event) => {
     event.preventDefault();
-    setstate({
+    setState({
       ...state,
-      isChanging: true
+      isChanging: true,
     });
 
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      await Auth.changePassword(currentUser,state.oldPassword,state.password);
+      await Auth.changePassword(
+        currentUser, 
+        state.oldPassword, 
+        state.password
+      );
       props.history.push("/settings");
-    } 
-    catch(e) {
+    } catch (e) {
       alert(e);
-      setstate({
+      setState({
         ...state,
-        isChanging : false
+        isChanging: false,
       });
     }
   };
 
-  return(
+  return (
     <div className="Form">
       <form onSubmit={handleChangeClick}>
         <FormGroup bsSize="large" controlId="oldPassword">
           <ControlLabel>{I18n.get("oldPassword")}</ControlLabel>
-            <FormControl
+          <FormControl
             type="password"
             onChange={handleChange}
             value={state.oldPassword}
@@ -96,6 +97,6 @@ const ChangePassword = (props) => {
       </form>
     </div>
   );
-}
+};
 
 export default ChangePassword;
