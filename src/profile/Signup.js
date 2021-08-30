@@ -11,6 +11,22 @@ import LoaderButton from "../components/LoaderButton";
 /**
  * This component signs you up for the Cognito user
  * @TODO Issue #7
+ * 
+ * import useState
+ *    isLoading: false,
+      email: "",
+      password: "",
+      confirmPassword: "",
+      confirmationCode: "",
+      newUser: null,
+
+      bind forms to several useStates
+ * 
+ * import useHistory
+ * history.push("/onboarding/user");
+ * 
+ * 
+ 
  */
 
 export default class Signup extends Component {
