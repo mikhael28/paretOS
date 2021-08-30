@@ -17,7 +17,7 @@ const builder = imageUrlBuilder(sanity);
 
 /**
  * This Tabpanel is repetitive
- * @TODO this component is used in at least one other place. Can I make it a reusable component somewhere?
+ * @TODO Issue #43
  */
 
 function TabPanel(props) {
@@ -42,6 +42,7 @@ function TabPanel(props) {
 
 /**
  * The ContextBuilder component is the main dashboard for the Library of Context. This is where we display our open-knowledge base.
+ * @TODO Issue #42
  */
 
 export default class ContextBuilder extends Component {

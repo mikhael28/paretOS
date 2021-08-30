@@ -1,6 +1,6 @@
 /**
  * Intrnationalization strings.
- * @TODO need to find a better way to refresh the state of the application, with this data. Some things refresh instantly, other's done.
+ * @TODO Issue #31
  */
 export const strings = {
   en: {

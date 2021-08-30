@@ -1,6 +1,6 @@
 /**
  * Intro message to the notepad. Will need to add more strings here as time goes on, that we are using.
- * @TODO update the font/styling on this.
+ * @TODO Issue #32
  */
 
 export const notepadIntro =
