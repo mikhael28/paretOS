@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
@@ -11,8 +11,6 @@ import white from "../assets/Pareto_Lockup-White.png";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools } from "react-icons/fa";
 import { IoMdSchool } from "react-icons/io";
-
-import Pomodoro from "../pomodoro/Pomodoro";
 
 const LeftNav = (props) => {
   const { chosenLanguage, user, updateState, athletes } = props;
@@ -39,12 +37,7 @@ const LeftNav = (props) => {
   const renderLanguageDropdown = () => {
     return (
       <div style={{ marginLeft: 14 }}>
-        <Image
-          src={chosenLanguage.image}
-          height="26"
-          width="26"
-          circle
-        />
+        <Image src={chosenLanguage.image} height="26" width="26" circle />
         <DropdownButton
           key={1}
           title={`${chosenLanguage.name}`}
@@ -115,7 +108,7 @@ const LeftNav = (props) => {
         </DropdownButton>
       </div>
     );
-  }
+  };
 
   return (
     <div id="mySidenav" className="sidenav">
@@ -162,8 +155,7 @@ const LeftNav = (props) => {
         </NavLink>
       </div>
 
-      {user.instructor === true &&
-        athletes.length !== 0 ? (
+      {user.instructor === true && athletes.length !== 0 ? (
         <React.Fragment>
           <p style={(activeTextStyle, { marginLeft: 12, marginTop: 10 })}>
             <img
@@ -218,8 +210,7 @@ const LeftNav = (props) => {
                 alt="pareto blue"
                 className="first-step"
               />
-              &ensp;{" "}
-              <p style={{ marginTop: 4 }}>{I18n.get("basicTraining")}</p>
+              &ensp; <p style={{ marginTop: 4 }}>{I18n.get("basicTraining")}</p>
             </NavLink>
           </div>
           <div
@@ -237,9 +228,7 @@ const LeftNav = (props) => {
               exact
             >
               <AiFillCode style={{ height: 26, width: 26 }} />
-              <p style={{ marginLeft: 10 }}>
-                {I18n.get("technicalTraining")}
-              </p>
+              <p style={{ marginLeft: 10 }}>{I18n.get("technicalTraining")}</p>
             </NavLink>
             <NavLink
               to={`/training/${user.productId}`}
@@ -325,6 +314,6 @@ const LeftNav = (props) => {
       />
     </div>
   );
-}
+};
 
 export default LeftNav;
