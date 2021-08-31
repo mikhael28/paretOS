@@ -5,6 +5,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
+import { errorToast, successToast } from "../libs/toasts";
 
 /**
  * Change your password through Cognito
@@ -47,9 +48,10 @@ const ChangePassword = (props) => {
         state.oldPassword, 
         state.password
       );
-      props.history.push("/settings");
+      successToast('Password successfully changed.');
+      props.history.push("/");
     } catch (e) {
-      alert(e);
+      errorToast(e);
       setState({
         ...state,
         isChanging: false,
