@@ -18,7 +18,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [newUser, setNewUser] = useState("");
+  const [newUser, setNewUser] = useState(null);
 
   // for redirect to new route
   const history = useHistory();
