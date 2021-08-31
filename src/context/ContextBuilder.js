@@ -10,35 +10,17 @@ import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import ContextObject from "./ContextObject";
 import classNames from "classnames";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-
-const builder = imageUrlBuilder(sanity);
-
 /**
  * This Tabpanel is repetitive
  * @TODO Issue #43
  */
+// import Typography from "@material-ui/core/Typography";
+import TabPanel from "../components/TabPanel.js"
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const builder = imageUrlBuilder(sanity);
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
+
 
 /**
  * The ContextBuilder component is the main dashboard for the Library of Context. This is where we display our open-knowledge base.
