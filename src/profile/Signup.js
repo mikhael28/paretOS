@@ -1,5 +1,5 @@
 // hooks import
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 
 import FormGroup from "react-bootstrap/lib/FormGroup";
@@ -10,68 +10,63 @@ import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
-
+import { errorToast, successToast } from "../libs/toasts";
 
 const Signup = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmationCode, setConfirmationCode] = useState('');
-  const [newUser, setNewUser] = useState(null);
-
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [newUser, setNewUser] = useState("");
 
   // for redirect to new route
-  const history = useHistory()
+  const history = useHistory();
 
   const validateForm = () => {
     return (
-      email.length > 0 &&
-      password.length > 0 &&
-      password === confirmPassword
+      email.length > 0 && password.length > 0 && password === confirmPassword
     );
-  }
+  };
 
   const validateConfirmationForm = () => {
     return confirmationCode.length > 0;
-  }
+  };
 
   const handleConfirmationSubmit = async (event) => {
     event.preventDefault();
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       await Auth.confirmSignUp(email, confirmationCode);
       await Auth.signIn(email, password);
+      successToast("Sign up complete");
       history.push("/onboarding/user");
     } catch (e) {
-      alert(e.message);
-      setIsLoading(false)
+      errorToast(e);
+      setIsLoading(false);
     }
-
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const newUser = await Auth.signUp({
         username: email,
-        password
+        password,
       });
-      setNewUser(newUser)
+      setNewUser(newUser);
     } catch (e) {
       alert(e.message);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
-
- const renderConfirmationForm =  () =>  {
+  const renderConfirmationForm = () => {
     return (
       <form onSubmit={handleConfirmationSubmit}>
         <div className="flex-center">
@@ -104,11 +99,11 @@ const Signup = () => {
         />
       </form>
     );
-  }
+  };
 
   const renderForm = () => {
     return (
-      <form  onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex-center">
           <img
             src={logo}
@@ -154,14 +149,12 @@ const Signup = () => {
         />
       </form>
     );
-  }
+  };
   return (
     <div className="Form">
-      {newUser === null
-        ? renderForm()
-        : renderConfirmationForm()}
+      {newUser === null ? renderForm() : renderConfirmationForm()}
     </div>
   );
-}
+};
 
 export default Signup;
