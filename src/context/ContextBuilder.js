@@ -56,7 +56,7 @@ function ContextBuilder({ sanitySchemas }) {
       <div className="context-cards">
         {Children.toArray(
           topics.map((topic) => {
-            const link = topic.type === "hub" ? "hub" : "context";
+            const link = topic.type === "hub" ? "hubs" : "context";
             const img = builder.image(topic.mainImage.asset._ref);
 
             return (
