@@ -1,4 +1,4 @@
-.modal {
+.fresh-modal {
 	position: fixed;
 	z-index: 1;
 	left: 0;
@@ -11,7 +11,7 @@
 }
 
 /* Modal Content/Box */
-.modal-content {
+.fresh-modal-content {
 	background-color: #fefefe;
 	margin: 15% auto;
 	padding: 20px;
