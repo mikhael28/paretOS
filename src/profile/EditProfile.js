@@ -19,6 +19,7 @@ import "react-quill/dist/quill.snow.css";
 /**
  * These are the forms where you can edit your profile.
  * @TODO GH Issue #13
+ * @TODO GH Issue #26
  */
 
 export default class EditProfile extends Component {
@@ -514,15 +515,6 @@ export default class EditProfile extends Component {
         <Button onClick={() => this.props.history.push("/settings/password")}>
           Change Password
         </Button>
-
-        {/* @TODO: Need to add GitHub editing functionality soon */}
-
-        {/* <div>
-					<FormGroup controlId="githubProfile" bsSize="large">
-						<ControlLabel>GitHub Profile</ControlLabel>
-						<FormControl value={this.state.githubProfile} onChange={this.handleChange} />
-					</FormGroup>
-				</div> */}
 
         <Tour
           steps={steps}
