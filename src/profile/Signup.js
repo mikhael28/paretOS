@@ -11,28 +11,7 @@ import { I18n } from "@aws-amplify/core";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 
-/**
- * This component signs you up for the Cognito user
- * @TODO Issue #7
- * 
- * import useState x
- *    isLoading: false, x
-      email: "", x 
-      password: "", x
-      confirmPassword: "", x
-      confirmationCode: "", x
-      newUser: null, x
 
-      bind forms to several useStates
- * 
- * import useHistory x 
- * history.push("/onboarding/user");
- * 
- * 
- 
- */
-
-      
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
