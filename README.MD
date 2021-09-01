@@ -24,7 +24,7 @@ More effective than almost anything towards helping people thrive in life is men
 
 ## Library of Context
 
-A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way.
+A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way. We encourage people to introduce themselves in our Discussions thread, so that we can add new regions, cities and countries to our Library for our community to contribute towards.
 
 ![Library of Context](/screenshots/context.png "The Library of Context")
 
