@@ -10,12 +10,6 @@ import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import ContextObject from "./ContextObject";
 import classNames from "classnames";
-import Box from "@material-ui/core/Box";
-/**
- * This Tabpanel is repetitive
- * @TODO Issue #43
- */
-// import Typography from "@material-ui/core/Typography";
 import TabPanel from "../components/TabPanel.js"
 
 const builder = imageUrlBuilder(sanity);
