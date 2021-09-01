@@ -1,20 +1,42 @@
 # Pareto Operating System (ParetOS)
 
-The ParetOS is a browser-based, high level operating system designed to maximize human potential and performance. It is designed to give you the 20% of software you need to give you 80% of the benefits that technology can give you.
+The ParetOS is a browser-based, high-level operating system designed to maximize human potential. It is designed to give you the 20% of software you need on a day-to-day basis that gives you 80% of the benefits modern tech has to offer.
 
-# Main Features
+Live at https://paret0.com
 
-The Arena - a multiplayer, competitive habit tracking arena where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
+## The Arena
 
-Learn Full-Stack JavaScript Development. A fully featured curriculum for you to start with the basics of creating a GitHub account, through building your first project, and tackling technical interviews.
+A multiplayer, competitive habit tracking competition where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
+
+![The Pareto Arena](/screenshots/sprint.png "The Pareto Arena")
+
+## Pareto Learning
+
+Focus on learning the 20% of a skill that gives you 80% of the value. In the ParetOS, we start with offering Full-Stack JavaScript Development as a proof of concept for mentorship-guided, self-study learning through building. Included is a fully featured curriculum for you to start from the basics of creating a GitHub account, through building your first project and tackling technical interviews.
+
+![Learn Full-Stack JS](/screenshots/learning.png "Pareto Learning - JavaScript")
+
+## Mentorship
+
+More effective than almost anything towards helping people thrive in life is mentorship. We have built-in support, though limited, to allow members to become mentors to other Paretoans. They can review their stats in the Arena, and leave comments/feedback/approval for the curriculum they submit through the Learning modules.
+
+![Mentorship](/screenshots/mentorship.png "Mentorship Built-In")
+
+## Library of Context
+
+A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way. We encourage people to introduce themselves in our Discussions thread, so that we can add new regions, cities and countries to our Library for our community to contribute towards.
+
+![Library of Context](/screenshots/context.png "The Library of Context")
 
 ## We are live folks
 
-See us at https://paret0.com - signup is open! For those making an account, you may notice that the 'Training' (one of the OS pieces of functionality), that focuses on Full-Stack JavaScript Development has a 'Paywall Modal'. This is what I call the 'Paywall Puzzle' - based on the code in this front-end repository, after forking it, you can modify the code and freely gain access to all the educational curriculum without paying. It requires changing a couple of values, commenting out a couple of functions. If you can figure out how to do that - congratulations, you probably don't need to buy access to the curriculum! If you can't figure out, you should seriously consider investing in your education. Included is the Full-Stack Starter Kit, a set of laminated paper cheat-sheets, workbooks and playing cards that help teach you the 20% of JavaScript you need to know to get 80% of the actionable information needed to start writing code.
+Signup is open at https://paret0.com - for those making an account, you may notice that the 'Training' that focuses on Full-Stack JavaScript Development is hiding behind a paywall. This is what I call the 'Paywall Puzzle' - based entirely on the code in this front-end repository, after forking it, you can modify the code and freely gain access to all the educational curriculum without paying. It requires changing a couple of values, commenting out a couple of functions while executing something. Believe it or not, this is a generous hint. If you can figure out how to do that - congratulations, you probably don't need to buy access to the curriculum! If you can't figure itout, you should seriously consider investing in your education. Included in the $89 is the Full-Stack Starter Kit, a set of laminated paper cheat-sheets, stikers, workbooks and playing cards that help teach you the 20% of JavaScript you need to know to get 80% of the actionable information needed to start writing code. In addition to the online curriculum.
+
+It's also a great way of supporting this project, and you get real value that you can either use yourself to prepare for technical interviewing, or donate to a friend/colleague/connection who needs it.
 
 ### Open-Source Development
 
-Want to contribute? Great!
+Want to contribute? Great! We have quite some issues in the repository, and I have tried to mark the easier ones as 'good first issue'. There are also issues marked as 'ownership' - these issues cover an item on our product backlog, a discrete, end to end piece of functionality that requires polish and a significant amount of work to implement. Completing one of these ownership tasks qualifies you to become a maintainer of the project, pending your availability and desire to do so. You will be a member of our Open-Source Hall of Fame as well!
 
 To fix a bug or contribute a new feature, follow these steps:
 
