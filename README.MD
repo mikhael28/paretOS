@@ -1,12 +1,26 @@
 # Pareto Operating System (ParetOS)
 
-The ParetOS is a browser-based, high level operating system designed to maximize human potential and performance. It is designed to give you the 20% of software you need to give you 80% of the benefits that technology can give you.
+The ParetOS is a browser-based, high-level operating system designed to maximize human potential. It is designed to give you the 20% of software you need for 80% of the benefits modern technology gives you.\
 
-# Main Features
+## The Arena
 
-The Arena - a multiplayer, competitive habit tracking arena where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
+A multiplayer, competitive habit tracking competition where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
+![The Pareto Arena](/screenshots/sprint.png "The Pareto Arena")
 
-Learn Full-Stack JavaScript Development. A fully featured curriculum for you to start with the basics of creating a GitHub account, through building your first project, and tackling technical interviews.
+## Pareto Learning
+
+Focus on learning the 20% of a skill that gives you 80% of the value. In the ParetOS, we start with offering Full-Stack JavaScript Development as a proof of concept for mentorship-guided, self-study learning through building. Included is a fully featured curriculum for you to start from the basics of creating a GitHub account, through building your first project and tackling technical interviews.
+![Learn Full-Stack JS](/screenshots/learning.png "Pareto Learning - JavaScript")
+
+## Mentorship
+
+More effective than almost anything towards helping people thrive in life is mentorship. We have built-in support, though limited, to allow members to become mentors to other Paretoans. They can review their stats in the Arena, and leave comments/feedback/approval for the curriculum they submit through the Learning modules.
+![Mentorship](/screenshots/mentorship.png "Mentorship Built-In")
+
+## Library of Context
+
+A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way.
+![Library of Context](/screenshots/sprint.png "The Library of Context")
 
 ## We are live folks
 
