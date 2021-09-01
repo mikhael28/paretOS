@@ -7,9 +7,7 @@ import { createExperience } from "../libs/createExperience";
 
 /**
  * Parent component of the Billing form.
- * @TODO perhaps merge with the billing for component?
- * @TODO migrate to hook
- * @TODO check the handleFormSubmit function, to see if I need to add anything
+ * @TODO Issue #50
  */
 
 export default class Order extends Component {

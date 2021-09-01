@@ -26,14 +26,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 /**
  * This module is where the bulk of the experience module system lies.
- * @TODO change the name from 'New' to just ExperienceModule.
- * @TODO refactor this to work with modules, as an array pattern - and not a series of objects. This can be done for future lessons, and this can become the 'OldExperienceModule' until the legacy classes are fully migrated.
- * @TODO refactor into hook
- * @TODO figure out localization stuff - why does the state not update immediately.
- * @TODO update the tour steps, everywhere really. I should centralize those inside a central file, either way.
- * @TODO figure our more effective mobile UI
- * @TODO migrate PUT operations to a websocket based environment, so that coaches and students can get real-time feedback.
- * @TODO check if we can fetch the experience data inside the App.js mount, even in background to allow for a faster first-render
+ * @TODO Issue #48
+ * @TODO Issue #6
+ * @TODO Issue #27
+ * @TODO Issue #53
  */
 
 class ExperienceModule extends Component {

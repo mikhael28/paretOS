@@ -366,7 +366,7 @@ input[type="file"] {
 
 .btn {
   border: 0;
-  background: rgb(37, 38, 39);
+  background: #30944c;
   color: #fff;
   padding-left: 20px;
   padding-right: 20px;
@@ -380,13 +380,15 @@ input[type="file"] {
 }
 
 .btn:hover {
-  background: rgb(0, 170, 212);
+  background: #1e5f30;
+  color: white;
 }
 
 .btn:active,
 .btn:focus {
   outline: 0;
-  background: rgb(0, 170, 212);
+  background: #1e5f30;
+  color: white;
 }
 
 .btnIcon {
