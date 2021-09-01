@@ -274,13 +274,19 @@ input[type="file"] {
 .exp-card {
   padding: 8px;
   border-radius: 3px;
-  background: white;
+  background: #F1EDED;
   margin: 8px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
   flex-wrap: wrap;
   justify-content: space-between;
   flex-grow: 1;
   max-width: 350px;
+}
+
+.exp-card:hover{
+  background: rgb(37, 38, 39);
+  color:white;
+
 }
 
 .exp-cards {
