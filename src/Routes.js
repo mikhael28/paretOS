@@ -8,7 +8,7 @@ import ChangePassword from "./profile/ChangePassword";
 import Sandbox from "./containers/Sandbox";
 import Order from "./learn/Order";
 import Profile from "./profile/Profile";
-import NewExperienceModule from "./learn/NewExperienceModule";
+import ExperienceModule from "./learn/ExperienceModule";
 import SprintCreation from "./arena/SprintCreation";
 import NotFound from "./containers/NotFound";
 import EditProfile from "./profile/EditProfile";
@@ -100,7 +100,7 @@ export default ({ childProps }) => (
     <AuthenticatedRoute
       path="/training/:id"
       exact
-      component={NewExperienceModule}
+      component={ExperienceModule}
       props={childProps}
     />
     <AuthenticatedRoute
