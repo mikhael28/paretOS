@@ -38,6 +38,9 @@ function Landing(props) {
           <Button onClick={() => props.history.push("/signup")}>
             {I18n.get("signup")}
           </Button>
+          <Button className="btn-outline" onClick={() => props.history.push("/login")}>
+            {I18n.get("login")}
+          </Button>
         </div>
         <br />
         <div className="flex-center">
