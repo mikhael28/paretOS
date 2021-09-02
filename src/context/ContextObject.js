@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-// import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -27,8 +26,8 @@ const useStyles = makeStyles({
 });
 
 /**
- * This is the visual component, that when clicked on, will open in a new tab with that particular item.
- * @TODO can I experiment opening the content in an iFrame, to keep people on the website?
+ * This is the visual component that unlocks the content in the Knowledge Base.
+ * @TODO Issue #66
  */
 
 export default function MediaCard(props) {

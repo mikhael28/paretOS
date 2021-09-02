@@ -9,7 +9,7 @@ import { I18n } from "@aws-amplify/core";
 
 /**
  * This component is for a Coach to approve the work of the student, and to leave feedback.
- * @TODO review UI, check to see if there is something to be added from the coaches perspective.
+ * @TODO Issue #64
  */
 
 const ConfirmModal = (props) => {
