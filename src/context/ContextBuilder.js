@@ -11,12 +11,12 @@ import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import ContextObject from "./ContextObject";
 import classNames from "classnames";
-import TabPanel from "../components/TabPanel.js"
+import TabPanel from "../components/TabPanel.js";
 
 const builder = imageUrlBuilder(sanity);
 
 /**
- * The ContextBuilder component is the main dashboard for the Library of Context. This is where we display our open-knowledge base.
+ * The ContextBuilder component is the main dashboard for the Library of Context.
  *
  */
 

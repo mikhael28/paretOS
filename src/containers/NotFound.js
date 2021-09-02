@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 /**
  * NotFound component is just a 404 not found.
- * @TODO add a logo, joke - something to make this page pop.
+ * @TODO Issue #68
  */
 
 export default () => (
