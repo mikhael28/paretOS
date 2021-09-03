@@ -8,7 +8,7 @@ import { I18n } from "@aws-amplify/core";
 
 /**
  * This is the Messaging component. Perhaps we need to add it back into a bottom-right icon, similar to a chat ui.
- * @TODO How can we set the graphQL subscription in App.js, instead of here, and to simply pass the updated messages here through props instead of manually loading all new messages each time this component mounts
+ * @TODO Issue #74
  */
 
 function Messaging(props) {
