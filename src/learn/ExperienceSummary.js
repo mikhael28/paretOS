@@ -26,6 +26,7 @@ export default function ExperienceSummary(props) {
         textAlign: "center",
         cursor: "pointer",
         flexDirection: "column",
+     
       }}
       onClick={() => props.history.push(`/training/${props.id}`)}
     >
