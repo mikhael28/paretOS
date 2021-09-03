@@ -13,6 +13,8 @@ import { getActiveSprintData } from "../state/sprints";
 import cloneDeep from "lodash.clonedeep";
 import "react-calendar/dist/Calendar.css";
 import { errorToast, successToast } from "../libs/toasts";
+import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import Button from "react-bootstrap/lib/Button";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
@@ -220,20 +222,32 @@ function SprintCreation(props) {
   function renderPlayerOptions(data) {
     return data.map((playr, index) => {
       return (
-        <option key={index} value={JSON.stringify(playr)}>
+        <option key={index} data-value={JSON.stringify(playr)}>
           {playr.fName} {playr.lName}
         </option>
       );
     });
   }
-
   function handleChange(event) {
     let parsedJSON = JSON.parse(event.target.value);
     setChosenMissions(parsedJSON);
   }
 
-  function handlePlayrChange(event) {
-    let parsedJSON = JSON.parse(event.target.value);
+  function onInput() {
+    var playerInput = document.getElementById("player-filter");
+    var opts = document.getElementById("players-datalist").childNodes;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === playerInput.value) {
+        // An item was selected from the list!
+        // yourCallbackHere()
+        handlePlayrChange(opts[i].dataset.value, playerInput);
+        break;
+      }
+    }
+  }
+
+  function handlePlayrChange(value, input) {
+    let parsedJSON = JSON.parse(value);
     let newPlayers = chosenPlayers.slice();
     newPlayers.push(parsedJSON);
     setChosenPlayers(newPlayers);
@@ -246,8 +260,11 @@ function SprintCreation(props) {
     });
     updatedUsers.splice(idxToBeRemoved, 1);
     setPlayers(updatedUsers);
+    input.value = "";
   }
-
+  function removeChosenPlayer(chosenPlayer) {
+    setChosenPlayers(chosenPlayers.filter((plyr) => plyr !== chosenPlayer));
+  }
   return (
     <div>
       <h1>{I18n.get("startSprint")}</h1>
@@ -262,10 +279,18 @@ function SprintCreation(props) {
 
       <FormGroup controlId="players">
         <ControlLabel>{I18n.get("selectPlayers")}</ControlLabel>
-        <FormControl componentClass="select" onChange={handlePlayrChange}>
-          <option value="select">{I18n.get("pleaseChooseAnOption")}</option>
+        <input
+          type="text"
+          onInput={onInput}
+          id="player-filter"
+          list="players-datalist"
+        />
+        <datalist id="players-datalist">
+          <option data-value="select">
+            {I18n.get("pleaseChooseAnOption")}
+          </option>
           {renderPlayerOptions(players)}
-        </FormControl>
+        </datalist>
       </FormGroup>
 
       {chosenPlayers.map((chosen, idx) => {
@@ -273,6 +298,20 @@ function SprintCreation(props) {
           <div key={idx} className="block">
             <p>
               {chosen.fName} {chosen.lName}
+              <Button
+                onClick={() => removeChosenPlayer(chosen)}
+                bsSize="large"
+                style={{
+                  float: "right",
+                  marginTop: "-5px",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                  backgroundColor: "white",
+                  color: "red",
+                }}
+              >
+                <Glyphicon glyph="glyphicon glyphicon-remove" />
+              </Button>
             </p>
           </div>
         );
