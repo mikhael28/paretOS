@@ -59,6 +59,7 @@ input[type="file"] {
   .root-padding {
     padding-left: 24px;
     padding-right: 16px;
+    margin-bottom: 12vh;
   }
   .sticky-nav {
     position: fixed;
