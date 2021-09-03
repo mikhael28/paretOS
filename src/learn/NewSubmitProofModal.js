@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import Modal from 'react-bootstrap/lib/Modal';
-import Button from 'react-bootstrap/lib/Button';
-import LoaderButton from '../components/LoaderButton';
-import { errorToast, successToast } from '../libs/toasts';
-import { I18n } from '@aws-amplify/core';
-import Storage from '@aws-amplify/storage';
+import React, { useState } from "react";
+import FormGroup from "react-bootstrap/lib/FormGroup";
+import ControlLabel from "react-bootstrap/lib/ControlLabel";
+import FormControl from "react-bootstrap/lib/FormControl";
+import Modal from "react-bootstrap/lib/Modal";
+import Button from "react-bootstrap/lib/Button";
+import LoaderButton from "../components/LoaderButton";
+import { errorToast, successToast } from "../libs/toasts";
+import { I18n } from "@aws-amplify/core";
+import Storage from "@aws-amplify/storage";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
@@ -17,8 +17,8 @@ import Storage from '@aws-amplify/storage';
 export default function SubmitProof({ show, handleClose, markSubmitted, activeExperience, mongoExperience }) {
 	const [isChanging, setChanging] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [experienceId, setExperienceId] = useState('');
-	const [formData, setFormData] = useState({ github: '', athleteNotes: '' });
+	const [experienceId, setExperienceId] = useState("");
+	const [formData, setFormData] = useState({ github: "", athleteNotes: "" });
 
 	const validateForm = () => {
 		return formData.athleteNotes.length > 0 && formData.github.length > 0;
@@ -33,7 +33,7 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 	// @TODO: Is this function repetitive? With Arena proof modal?
 	const onChange = async (e) => {
 		const file = e.target.files[0];
-		let fileType = e.target.files[0].name.split('.');
+		let fileType = e.target.files[0].name.split(".");
 
 		// the name to save is the id of the experience_01 or whatever the number is.
 		try {
@@ -41,9 +41,9 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 				bucket: process.env.REACT_APP_PROOF_BUCKET,
 			});
 
-			console.log('Key: ', pictureKey);
+			console.log("Key: ", pictureKey);
 
-			successToast('Proof successfully uploaded.');
+			successToast("Proof successfully uploaded.");
 		} catch (err) {
 			errorToast(err);
 		}
@@ -53,47 +53,39 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 		<div>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title>{I18n.get('submitProof')}</Modal.Title>
+					<Modal.Title>{I18n.get("submitProof")}</Modal.Title>
 				</Modal.Header>
-
 				<Modal.Body>
-					<FormGroup bsSize='large' controlId='athleteNotes'>
-						<ControlLabel>{I18n.get('notesForCoach')}</ControlLabel>
-						<FormControl type='text' onChange={handleChange} value={formData.athleteNotes} />
+					<FormGroup bsSize="large" controlId="athleteNotes">
+						<ControlLabel>{I18n.get("notesForCoach")}</ControlLabel>
+						<FormControl type="text" onChange={handleChange} value={formData.athleteNotes} />
 					</FormGroup>
-
-					<FormGroup bsSize='large' controlId='github'>
-						<ControlLabel>{I18n.get('submitLink')}</ControlLabel>
-						<FormControl type='text' onChange={handleChange} value={formData.github} />
+					<FormGroup bsSize="large" controlId="github">
+						<ControlLabel>{I18n.get("submitLink")}</ControlLabel>
+						<FormControl type="text" onChange={handleChange} value={formData.github} />
 					</FormGroup>
-
-					<h3>{I18n.get('attachment')}</h3>
-
-					<input type='file' accept='image/png' onChange={(evt) => onChange(evt)} />
-
+					<h3>{I18n.get("attachment")}</h3>
+					<input type="file" accept="image/png" onChange={(evt) => onChange(evt)} />
 					<br />
-
-					<div className='flex'>
-						<Button onClick={handleClose}>{I18n.get('close')}</Button>
-
+					<div className="flex">
+						<Button onClick={handleClose}>{I18n.get("close")}</Button>
 						<LoaderButton
 							block
 							onClick={() => {
 								markSubmitted(activeExperience, formData.github, formData.athleteNotes);
 								setFormData({
-									athleteNotes: '',
-									github: '',
+									athleteNotes: "",
+									github: "",
 								});
 							}}
-							bsSize='large'
-							text={I18n.get('submitProof')}
-							loadingText={I18n.get('saving')}
+							bsSize="large"
+							text={I18n.get("submitProof")}
+							loadingText={I18n.get("saving")}
 							disabled={validateForm()}
 							isLoading={isChanging}
 						/>
 					</div>
 				</Modal.Body>
-
 				<Modal.Footer />
 			</Modal>
 		</div>
