@@ -17,15 +17,49 @@ body {
   right: 15px;
   cursor: pointer;
   font-size: 36px;
+  z-index: 10;
 }
+
+/* Typography */
+
+h1 {
+  color: rgb(36, 35, 35);
+  margin-top: 36px;
+  font-weight: 400;
+  font-size: 36px;
+}
+select.form-control,
+textarea.form-control,
+input.form-control {
+  font-size: 16px;
+}
+input[type="file"] {
+  width: 100%;
+}
+
+/* mobile/tablet styling */
 
 @media screen and (max-width: 768px) {
   html {
     padding-top: -74px;
   }
+   h1 {
+      color: rgb(36, 35, 35);
+      margin-top: 36px;
+      font-weight: 400;
+      font-size: 9vw;
+    }
+    header span{
+      font-size: 3vw;
+    }
+  .tabPanelCont{
+    margin: -8.5vw;
+    margin-bottom: 6vh;
+  }
   .root-padding {
     padding-left: 24px;
     padding-right: 16px;
+    margin-bottom: 12vh;
   }
   .sticky-nav {
     position: fixed;
@@ -34,7 +68,9 @@ body {
     width: 100%;
     padding-left: -24px;
   }
-
+  .sticky-nav button {
+    min-width: 0;
+  }
   .sidenav {
     height: 100%;
     position: fixed;
@@ -47,11 +83,10 @@ body {
     -webkit-transition: all 0.5s ease 0s;
     visibility: hidden;
   }
-
   .sticky-chat {
     visibility: hidden;
   }
- 
+
   .notes-overflow {
     overflow: scroll;
     max-height: 180px;
@@ -71,7 +106,6 @@ body {
   .sticky-nav {
     visibility: hidden;
   }
-
   .sidenav {
     display: flex;
     flex-direction: column;
@@ -121,23 +155,6 @@ body {
 .blue-black {
   background-color: rgb(0, 170, 212);
   color: rgb(52, 58, 64);
-}
-
-/* Typography */
-
-h1 {
-  color: rgb(36, 35, 35);
-  margin-top: 36px;
-  font-weight: 400;
-  font-size: 36px;
-}
-select.form-control,
-textarea.form-control,
-input.form-control {
-  font-size: 16px;
-}
-input[type="file"] {
-  width: 100%;
 }
 
 /* Overflow classes */
