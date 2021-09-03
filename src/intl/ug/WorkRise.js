@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import WRJob from "../components/WRJob";
+import WRJob from "./WRJob";
 
 /**
  * This is a proof of concept page to display Work and Rise related jobs/media, if you are in UG.
