@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import {useHistory} from 'react-router-dom';
 import Order from "./Order";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "react-bootstrap/lib/Button";
@@ -12,6 +13,25 @@ import Button from "react-bootstrap/lib/Button";
 
 function LoadingModal(props) {
   const [showPayment, setShowPayment] = useState(false);
+
+  const history = useHistory();
+  const modalRef = useRef();
+
+  useEffect(()=>{
+    let handleModalClose = (event) =>{
+      if(!modalRef.current?.contains(event.target)){
+        history.push('/'); 
+        
+      }
+    }  
+    document.addEventListener('mousedown', handleModalClose)
+
+    return () => {
+      document.removeEventListener('mousedown', handleModalClose)
+    }
+        
+  },[showPayment]);
+
   return (
     <React.Fragment>
       <h1 style={{ textAlign: "center" }}>Pareto Full-Stack Starter Kit</h1>
@@ -24,7 +44,7 @@ function LoadingModal(props) {
         allowfullscreen
       />
       {showPayment === false ? (
-        <DialogContent style={{ textAlign: "center" }}>
+        <DialogContent ref={modalRef} style={{ textAlign: "center" }}>
           <p>Included in your $89 purchase:</p>
           <ul style={{ listStyle: "none" }}>
             <li>
@@ -48,12 +68,18 @@ function LoadingModal(props) {
             <li>Priority support & first access to new features.</li>
             <li>Lifetime access to the Knowledge Base & Arena</li>
           </ul>
-          <Button onClick={() => props.history.push("/")}>Cancel</Button>
+          <Button className="btn-cancel" onClick={() => props.history.push("/")}>Cancel</Button>
           <Button onClick={() => setShowPayment(true)}>Purchase</Button>
         </DialogContent>
       ) : (
-        <DialogContent style={{ textAlign: "center" }}>
-          <Order {...props} />
+        <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
+          <div className='ConfirmPurchaseForm'>
+            <Order {...props} />
+            <Button onClick={() => setShowPayment(false)}>Back</Button>
+          </div>
+          
+
+          
         </DialogContent>
       )}
     </React.Fragment>

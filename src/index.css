@@ -366,6 +366,7 @@ input[type="file"] {
 
 .btn {
   border: 0;
+  width:100%;
   background: rgb(37, 38, 39);
   color: #fff;
   padding-left: 20px;
@@ -387,6 +388,22 @@ input[type="file"] {
 .btn:focus {
   outline: 0;
   background: rgb(0, 170, 212);
+}
+
+.btn-cancel{
+  border: 0;
+  width:100%;
+  background: #f44336;
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-weight: 1000;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  max-width: 200px;
+  margin-right: 10px;
 }
 
 .btnIcon {
@@ -418,6 +435,17 @@ input[type="file"] {
   text-align: center;
 }
 
+
+
+.BillingForm{
+  display: flex;
+  flex:1;
+  flex-direction: column;
+  align-items: center;
+  
+
+}
+
 .BillingForm .card-field {
   margin-bottom: 15px;
   background-color: white;
@@ -434,10 +462,30 @@ input[type="file"] {
   border-color: #66afe9;
 }
 
+.BillingForm .form-group .form-group-lg{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.ConfirmPurchaseForm{
+  display: flex;
+  align-items: flex-end;
+  gap:20px;
+}
+
+.ConfirmPurchaseForm > button{
+  height:56px;
+  margin-bottom: 60px;
+  border-radius: 6px;
+  background-color: #f44336;
+  font-size: 18px;
+  
+}
+
 @media all and (min-width: 480px) {
   .Form {
     padding: 60px 0;
-    margin: 0 auto;
     max-width: 320px;
   }
 }
