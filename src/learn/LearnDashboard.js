@@ -16,9 +16,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.
- * @TODO how can we create a 'daily notes', Roam like experience here?
- * @TODO how can we more effectively allow navigation of users to their educational modules? This whole dashboard feels a big chunky.
- * @TODO create a simpler, home navigation system for mobile. Have a bunch of small cards, that go to routes.
+ * @TODO Issue #32
+ * @TODO Issue #55
  */
 
 function LearnDashboard(props) {

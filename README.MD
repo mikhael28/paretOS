@@ -1,6 +1,6 @@
 # Pareto Operating System (ParetOS)
 
-The ParetOS is a browser-based, high level operating system designed to maximize human potential and performance. It is designed to give you the 20% of software you need to give you 80% of the benefits that technology can give you in optimizing your performance.
+The ParetOS is a browser-based, high level operating system designed to maximize human potential and performance. It is designed to give you the 20% of software you need to give you 80% of the benefits that technology can give you.
 
 # Main Features
 

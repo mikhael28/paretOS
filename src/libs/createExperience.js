@@ -2,8 +2,7 @@ import API from "@aws-amplify/api";
 
 /**
  * Reusable function to create experience items.
- * @TODO refactor this, instead of _01 it needs to be an array item. This will be a long process, but likely not too long.
- * @TODO this will likely entail refactoring how things are stored on Sanity, but will allow for much more flexible stuff. Will need rich text editing to replace the Sanity Rich text.
+ * @TODO Issue #48
  */
 
 export async function createExperience(params) {
