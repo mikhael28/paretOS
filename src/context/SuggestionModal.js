@@ -98,26 +98,26 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 
 	return (
 		<div>
-			<h1>Suggestion for {schema}</h1>
 			<DialogContent>
-				<DialogContentText>
+				<h1>Suggestion for {schema}</h1>
+				<DialogContentText style={{ fontSize: "24px" }}>
 					Please include the link to the resource, a proposed title, description and link
 					to logo/image associated with the suggestion.
 				</DialogContentText>
 				<FormGroup controlId="title" bsSize="large">
-					<ControlLabel>Title</ControlLabel>
+					<ControlLabel style={{ fontSize: "16px" }}>Title</ControlLabel>
 					<FormControl value={formData.title} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="description" bsSize="large">
-					<ControlLabel>Description</ControlLabel>
+					<ControlLabel style={{ fontSize: "16px" }}>Description</ControlLabel>
 					<FormControl value={formData.description} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="url" bsSize="large">
-					<ControlLabel>Website Link</ControlLabel>
+					<ControlLabel style={{ fontSize: "16px" }}>Website Link</ControlLabel>
 					<FormControl value={formData.url} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="type" bsSize="large">
-					<ControlLabel>Type</ControlLabel>
+					<ControlLabel style={{ fontSize: "16px" }}>Type</ControlLabel>
 					<FormControl
 						componentClass="select"
 						onChange={handleChange}
@@ -143,7 +143,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 					</FormControl>
 				</FormGroup>
 
-				<FormGroup controlId="imgUrl" bsSize="large">
+				<FormGroup controlId="imgUrl" bsSize="large" style={{ fontSize: "16px" }}>
 					<ControlLabel>Link to Logo/Image (optional)</ControlLabel>
 					<FormControl value={formData.imgUrl} onChange={handleChange} />
 				</FormGroup>
