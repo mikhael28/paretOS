@@ -16,7 +16,17 @@ export default class Order extends Component {
 
     this.state = {
       isLoading: false,
+      stripeKey: null,
     };
+  }
+
+  componentDidMount() {
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === "development") {
+      this.setState({ stripeKey: process.env.REACT_APP_STRIPE_DEV });
+    } else {
+      this.setState({ stripeKey: process.env.REACT_APP_STRIPE_PROD });
+    }
   }
 
   billUser(details) {
@@ -123,15 +133,9 @@ export default class Order extends Component {
   };
 
   render() {
-    let stripeKey = null;
-    if (process.env.NODE_ENV === "development") {
-      stripeKey = process.env.REACT_APP_STRIPE_DEV;
-    } else {
-      process.env.REACT_APP_STRIPE_PROD;
-    }
     return (
       <div className="Form">
-        <StripeProvider apiKey={stripeKey}>
+        <StripeProvider apiKey={this.state.stripeKey}>
           <Elements>
             <BillingForm
               loading={this.state.isLoading}
