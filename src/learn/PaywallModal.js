@@ -45,7 +45,7 @@ function LoadingModal(props) {
         style={{ alignSelf: "center" }}
       />
       {showPayment === false ? (
-        <DialogContent style={{ fontSize: 12 }}>
+        <DialogContent ref={modalRef} style={{ fontSize: 12 }}>
           <p>
             Hint: you can change some code in this repo and not pay for this. If
             you can't figure out how to do that... you should invest $89 in your
