@@ -165,7 +165,7 @@ input[type="file"] {
 }
 
 .small-overflow {
-  overflow: scroll;
+  overflow: visible;
   max-height: 200px;
 }
 

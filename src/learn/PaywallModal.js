@@ -1,15 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Order from "./Order";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "react-bootstrap/lib/Button";
 
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.
- * @TODO Issue #49.
  */
 
 function LoadingModal(props) {
+  const [stripeKey, setStripeKey] = useState(null);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      setStripeKey(process.env.REACT_APP_STRIPE_DEV);
+    } else {
+      setStripeKey(process.env.REACT_APP_STRIPE_PROD);
+    }
+  }, []);
+
   const [showPayment, setShowPayment] = useState(false);
 
   const history = useHistory();
@@ -19,8 +28,6 @@ function LoadingModal(props) {
     let handleModalClose = (event) =>{
       if(!modalRef.current?.contains(event.target)){
         history.push('/');
-      
-        
       }
     }  
     document.addEventListener('mousedown', handleModalClose)
@@ -67,13 +74,9 @@ function LoadingModal(props) {
         </DialogContent>
       ) : (
         <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
-          <div >
-            <Order {...props} />
-            
+          <div>
+            <Order {...props} stripeKey={stripeKey} />
           </div>
-          
-
-          
         </DialogContent>
       )}
     </React.Fragment>
