@@ -7,7 +7,6 @@ import Button from "react-bootstrap/lib/Button";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import { I18n } from "@aws-amplify/core";
-import Storage from "@aws-amplify/storage";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
@@ -44,15 +43,11 @@ export default function SubmitProof({
 
 		// the name to save is the id of the experience_01 or whatever the number is.
 		try {
-			let pictureKey = await Storage.put(
-				`${mongoExperience.id}${activeExperience.priority}.${fileType[1]}`,
+			await uploadToS3(
+				`${mongoExperience.id}${activeExperience.priority}`,
 				file,
-				{
-					bucket: process.env.REACT_APP_PROOF_BUCKET,
-				}
+				fileType[1]
 			);
-
-			console.log("Key: ", pictureKey);
 
 			successToast("Proof successfully uploaded.");
 		} catch (err) {
