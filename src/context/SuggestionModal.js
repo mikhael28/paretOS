@@ -26,6 +26,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 
 	const handleChange = (event) => {
 		setFormData({
+			...formData,
 			[event.target.id]: event.target.value,
 		});
 	};
