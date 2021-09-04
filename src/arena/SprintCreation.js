@@ -28,10 +28,7 @@ function SprintCreation(props) {
   const [ready, setReady] = useState(false);
   const [missions, setMissions] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [chosenMissions, setChosenMissions] = useState({
-    title: "",
-    missions: [],
-  });
+  const [chosenMissions, setChosenMissions] = useState(null);
   const [chosenPlayers, setChosenPlayers] = useState([]);
 
   useEffect(() => {
@@ -39,10 +36,12 @@ function SprintCreation(props) {
   }, []);
 
   async function getConfiguration() {
+    setLoading(true);
     let options = await API.get("pareto", "/templates");
     let userOptions = await API.get("pareto", "/users");
     setMissions(options);
     setPlayers(userOptions);
+    setLoading(false);
   }
 
   async function createSprint() {
@@ -212,7 +211,7 @@ function SprintCreation(props) {
   function renderMissionOptions(missions) {
     return missions.map((mission, i) => {
       return (
-        <option key={i} value={JSON.stringify(mission)}>
+        <option key={i} data-value={JSON.stringify(mission)}>
           {mission.title}
         </option>
       );
@@ -228,20 +227,33 @@ function SprintCreation(props) {
       );
     });
   }
-  function handleChange(event) {
-    let parsedJSON = JSON.parse(event.target.value);
+  function handleChange(value, input) {
+    let parsedJSON = JSON.parse(value);
     setChosenMissions(parsedJSON);
   }
 
-  function onInput() {
-    var playerInput = document.getElementById("player-filter");
-    var opts = document.getElementById("players-datalist").childNodes;
-    for (var i = 0; i < opts.length; i++) {
-      if (opts[i].value === playerInput.value) {
-        // An item was selected from the list!
-        // yourCallbackHere()
-        handlePlayrChange(opts[i].dataset.value, playerInput);
-        break;
+  function onInput(e) {
+    if (e.target.nextSibling.id === "players-datalist") {
+      var input = document.getElementById("players-input");
+      var opts = document.getElementById(e.target.nextSibling.id).childNodes;
+      for (var i = 0; i < opts.length; i++) {
+        if (opts[i].value === input.value) {
+          // An item was selected from the list!
+          // yourCallbackHere()
+          handlePlayrChange(opts[i].dataset.value, input);
+          break;
+        }
+      }
+    } else if (e.target.nextSibling.id === "sprint-options") {
+      var input = document.getElementById("sprints-input");
+      var opts = document.getElementById(e.target.nextSibling.id).childNodes;
+      for (var i = 0; i < opts.length; i++) {
+        if (opts[i].value === input.value) {
+          // An item was selected from the list!
+          // yourCallbackHere()
+          handleChange(opts[i].dataset.value, input);
+          break;
+        }
       }
     }
   }
@@ -265,30 +277,41 @@ function SprintCreation(props) {
   function removeChosenPlayer(chosenPlayer) {
     setChosenPlayers(chosenPlayers.filter((plyr) => plyr !== chosenPlayer));
   }
+  console.log(chosenMissions)
   return (
     <div>
       <h1>{I18n.get("startSprint")}</h1>
       <p>{I18n.get("sprintDescription")} </p>
       <FormGroup controlId="chosenMissions">
         <ControlLabel>{I18n.get("selectTemplate")}</ControlLabel>
-        <FormControl componentClass="select" onChange={handleChange}>
+        <FormControl
+          onInput={onInput}
+          componentClass="input"
+          id="sprints-input"
+          list="sprint-options"
+          placeholder={I18n.get("pleaseChooseAnOption")}
+          disabled={loading}
+        ></FormControl>
+        <datalist id="sprint-options">
+          {renderMissionOptions(missions)}
+        </datalist>
+        {/* <FormControl componentClass="select" onChange={handleChange}>
           <option value="select">{I18n.get("pleaseChooseAnOption")}</option>
           {renderMissionOptions(missions)}
-        </FormControl>
+        </FormControl> */}
       </FormGroup>
 
       <FormGroup controlId="players">
         <ControlLabel>{I18n.get("selectPlayers")}</ControlLabel>
-        <input
-          type="text"
+        <FormControl
           onInput={onInput}
-          id="player-filter"
+          componentClass="input"
+          id="players-input"
           list="players-datalist"
-        />
+          placeholder={I18n.get("pleaseChooseAnOption")}
+          disabled={loading}
+        ></FormControl>
         <datalist id="players-datalist">
-          <option data-value="select">
-            {I18n.get("pleaseChooseAnOption")}
-          </option>
           {renderPlayerOptions(players)}
         </datalist>
       </FormGroup>
