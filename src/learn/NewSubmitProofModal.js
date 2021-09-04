@@ -14,7 +14,13 @@ import Storage from "@aws-amplify/storage";
  * @TODO Issue #26
  */
 
-export default function SubmitProof({ show, handleClose, markSubmitted, activeExperience, mongoExperience }) {
+export default function SubmitProof({
+	show,
+	handleClose,
+	markSubmitted,
+	activeExperience,
+	mongoExperience,
+}) {
 	const [isChanging, setChanging] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [experienceId, setExperienceId] = useState("");
@@ -37,9 +43,13 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 
 		// the name to save is the id of the experience_01 or whatever the number is.
 		try {
-			let pictureKey = await Storage.put(`${mongoExperience.id}${activeExperience.priority}.${fileType[1]}`, file, {
-				bucket: process.env.REACT_APP_PROOF_BUCKET,
-			});
+			let pictureKey = await Storage.put(
+				`${mongoExperience.id}${activeExperience.priority}.${fileType[1]}`,
+				file,
+				{
+					bucket: process.env.REACT_APP_PROOF_BUCKET,
+				}
+			);
 
 			console.log("Key: ", pictureKey);
 
@@ -58,7 +68,11 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 				<Modal.Body>
 					<FormGroup bsSize="large" controlId="athleteNotes">
 						<ControlLabel>{I18n.get("notesForCoach")}</ControlLabel>
-						<FormControl type="text" onChange={handleChange} value={formData.athleteNotes} />
+						<FormControl
+							type="text"
+							onChange={handleChange}
+							value={formData.athleteNotes}
+						/>
 					</FormGroup>
 					<FormGroup bsSize="large" controlId="github">
 						<ControlLabel>{I18n.get("submitLink")}</ControlLabel>
@@ -72,7 +86,11 @@ export default function SubmitProof({ show, handleClose, markSubmitted, activeEx
 						<LoaderButton
 							block
 							onClick={() => {
-								markSubmitted(activeExperience, formData.github, formData.athleteNotes);
+								markSubmitted(
+									activeExperience,
+									formData.github,
+									formData.athleteNotes
+								);
 								setFormData({
 									athleteNotes: "",
 									github: "",
