@@ -100,7 +100,7 @@ export default function SubmitProof({
 							bsSize="large"
 							text={I18n.get("submitProof")}
 							loadingText={I18n.get("saving")}
-							disabled={validateForm()}
+							disabled={!validateForm()}
 							isLoading={isChanging}
 						/>
 					</div>
