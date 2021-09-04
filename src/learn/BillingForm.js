@@ -7,8 +7,7 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * This is the Billing form, where payment is processed for the Starter pack. This hides in the paywall.
- * @TODO refactor into React Hook
- * @TODO better error handling, more effective visual message to user when there is a failure.
+ * @TODO Issue #50
  */
 
 class BillingForm extends Component {

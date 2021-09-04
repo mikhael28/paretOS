@@ -11,10 +11,8 @@ import Storage from "@aws-amplify/storage";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
- * @TODO move this into arena folder.
- * @TODO better error handling around onChange/s3 upload function.
- * @TODO refactor into Hook
- * @TODO choose new, better form library/UI and apply it around the board.
+ * @TODO Issue #26
+ * @TODO Issue #52
  */
 
 export default class SubmitProof extends Component {

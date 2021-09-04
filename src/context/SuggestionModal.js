@@ -13,7 +13,7 @@ import { API } from "@aws-amplify/api";
 
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
- * @TODO Review UI
+ * @TODO Issue #65
  */
 
 export default class SuggestionModal extends Component {
@@ -78,7 +78,6 @@ export default class SuggestionModal extends Component {
         }
       )
         .then((response) => response.json())
-        // .then((result) => console.log(result))
         .catch((error) => console.error(error));
 
       await API.post("util", "/email", {

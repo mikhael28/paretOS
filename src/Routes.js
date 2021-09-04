@@ -7,12 +7,12 @@ import ResetPassword from "./profile/ResetPassword";
 import ChangePassword from "./profile/ChangePassword";
 import Sandbox from "./containers/Sandbox";
 import Order from "./learn/Order";
-import Profile from "./profile/Profile";
-import NewExperienceModule from "./learn/NewExperienceModule";
+import Profile from "./mentorship/MenteeProfile";
+import ExperienceModule from "./learn/ExperienceModule";
 import SprintCreation from "./arena/SprintCreation";
 import NotFound from "./containers/NotFound";
 import EditProfile from "./profile/EditProfile";
-import ArenaDashboard from "./arena/ArenaDashboard";
+import ArenaDashboard from "./arena/Sprints";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
@@ -24,7 +24,8 @@ import CreateSprintTemplate from "./arena/CreateSprintTemplate";
 import LearnDashboard from "./learn/LearnDashboard";
 import Messaging from "./components/Messaging";
 import Room from "./containers/Room";
-import WorkRise from "./containers/WorkRise";
+import WorkRise from "./intl/ug/WorkRise";
+import MentorDashboard from "./mentorship/MentorDashboard";
 
 export default ({ childProps }) => (
   <Switch>
@@ -100,7 +101,7 @@ export default ({ childProps }) => (
     <AuthenticatedRoute
       path="/training/:id"
       exact
-      component={NewExperienceModule}
+      component={ExperienceModule}
       props={childProps}
     />
     <AuthenticatedRoute
@@ -138,6 +139,12 @@ export default ({ childProps }) => (
       path="/sandbox"
       exact
       component={Sandbox}
+      props={childProps}
+    />
+    <AuthenticatedRoute
+      path="/mentorship"
+      exact
+      component={MentorDashboard}
       props={childProps}
     />
     <AuthenticatedRoute

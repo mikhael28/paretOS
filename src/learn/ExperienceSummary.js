@@ -5,8 +5,8 @@ import { GiCoins } from "react-icons/gi";
 
 /**
  * The Experience summary component is shown as a shortcut to enter a particular training module by ID. The coach can see this when viewing his/her students, and the students see this in the learning dashboard.
- * @TODO refactor the experience system into an array.
- * @TODO refactor the experience system, to live in a proprietary db instead of on Sanity. Or, at the least, revisit how the experience system as a whole is organized/tracked/completed.
+ * @TODO Issue #54
+ * @TODO Issue #48
  */
 
 export default function ExperienceSummary(props) {
@@ -26,6 +26,7 @@ export default function ExperienceSummary(props) {
         textAlign: "center",
         cursor: "pointer",
         flexDirection: "column",
+     
       }}
       onClick={() => props.history.push(`/training/${props.id}`)}
     >
