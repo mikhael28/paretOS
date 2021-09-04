@@ -4,14 +4,10 @@ import logo from "../assets/Pareto_Lockup-White.png";
 import { I18n } from "@aws-amplify/core";
 import Button from "react-bootstrap/lib/Button";
 import marketing from "../assets/marketing.png";
-import jerod from "../assets/jerod.jpeg";
-import deline from "../assets/deline.jpeg";
 
 /**
  * This is the Landing page component, that has the testimonials from theoretically real users.
- * @TODO need to actually have some testimonials. Instead of their images, I need to put their photos in a public S3 bucket and fetch them to keep bundle sizes down.
- * @TODO foreign language testimonials? Depending on IP address? Or Lambda @ Edge? This is far away from now.
- * @TODO add a signup button back in, once that process is verified working again.
+ * @TODO Issue #69
  */
 
 function Landing(props) {

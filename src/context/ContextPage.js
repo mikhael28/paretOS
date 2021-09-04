@@ -28,7 +28,7 @@ const builder = imageUrlBuilder(sanity);
 
 /**
  * The Digest page, displaying Context Objects about a particular topic.
- * @TODO review tour strings
+ * @TODO Issue #27
  */
 
 function ContextPage(props) {
@@ -193,7 +193,6 @@ function ContextPage(props) {
           ) : (
             <div className="context-cards-start">
               {community.map((item, i) => {
-                console.log(item);
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -422,16 +421,14 @@ function ContextPage(props) {
           )}
         </React.Fragment>
       ) : null}
-      {/* @TODO: investigate what's going on here */}
+      {/* This is the render for non-city based pages. */}
       {renderType === "generic" ? (
         <React.Fragment>
           <h2>{schemaObject.description}</h2>
           <Accordion allowMultipleExpanded allowZeroExpanded>
             <AccordionItem>
               <AccordionItemHeading>
-                <AccordionItemButton>
-                  Click to Read Overview
-                </AccordionItemButton>
+                <AccordionItemButton>Read Overview</AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel>
                 <BlockContent blocks={schemaObject.body} />

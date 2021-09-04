@@ -3,9 +3,7 @@ import { I18n } from "@aws-amplify/core";
 import Table from "react-bootstrap/lib/Table";
 /**
  * @class Leaderboard
- * @TODO Review JSDocs techniques, apply to rest of the code-base if practical and useful.
- * @TODO Review what this component looks like, with more than 10 users passed through.
- * @TODO Review the UI of the buttons, to go from next to previous. Perhaps disable the previous button if on the first page, and next if no more than 10 users.
+ * @TODO Issue #75
  * @desc Compares the score property of each user object
  * @param {Prop} users-an array of objects with name and score properties
  * @param {Prop} paginate-integer to determine how many users to display on each page

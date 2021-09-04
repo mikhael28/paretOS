@@ -1,5 +1,5 @@
 import React from "react";
-import Dashboard from "./Dashboard";
+import Dashboard from "../arena/ArenaDashboard";
 import Landing from "./Landing";
 
 /**

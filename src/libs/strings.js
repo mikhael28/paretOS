@@ -75,7 +75,7 @@ export const strings = {
 
     pageNoExist: "Sorry, this page doesn't exist!",
     returnToHome: "here to go back to the home page.",
-    markAsComplete: "Click here to submit",
+    markAsComplete: "Submit Work",
     reviewWork: "Review Work",
     seeTheProof: "Press to See Proof",
 
@@ -276,7 +276,7 @@ export const strings = {
     arenaFourth:
       "You can click this link to start another sprint for the following-week! Keep in mind that you need to start it the Sunday before.",
     termsOfService:
-      "This is a dummy Terms of Service: The following sets forth the agreement (this “Agreement”) between you and Send Me a Sample Limited (“Send Me a Sample”, “we” or “us”) under which you may enable and use the Send Me a Sample platform (the “Software” or the “Send Me a Sample Service”), including, without limitation, all or any part of any content, visual interfaces, images, information, graphics, design, compilation, computer code, products, software, services, and all other elements of the Send Me a Sample Service and other materials that are provided by or in connection with the Send Me a Sample Service (“Send Me a Sample Materials”). You acknowledge that, prior to creating an account, enabling any related skill or data capture form and using the platform, you have read and understood the terms of this agreement, without modification. By using the software, you agree to be bound by the terms of this agreement and to comply with all applicable laws and regulations. If you do not agree to these terms, do not use the platform. You can review the most current version of this Agreement by visiting www.sendmeasample.net The most current version will supersede all previous versions. By continuing to use the Send Me a Sample Service after changes are made, you agree to be bound by such changes. You also acknowledge that you have read and understood the Privacy Policy which explains how we will use any personal data you give us when enabling or using the Sent Me a Sample Service."
+      "This is a dummy Terms of Service: The following sets forth the agreement (this “Agreement”) between you and Send Me a Sample Limited (“Send Me a Sample”, “we” or “us”) under which you may enable and use the Send Me a Sample platform (the “Software” or the “Send Me a Sample Service”), including, without limitation, all or any part of any content, visual interfaces, images, information, graphics, design, compilation, computer code, products, software, services, and all other elements of the Send Me a Sample Service and other materials that are provided by or in connection with the Send Me a Sample Service (“Send Me a Sample Materials”). You acknowledge that, prior to creating an account, enabling any related skill or data capture form and using the platform, you have read and understood the terms of this agreement, without modification. By using the software, you agree to be bound by the terms of this agreement and to comply with all applicable laws and regulations. If you do not agree to these terms, do not use the platform. You can review the most current version of this Agreement by visiting www.sendmeasample.net The most current version will supersede all previous versions. By continuing to use the Send Me a Sample Service after changes are made, you agree to be bound by such changes. You also acknowledge that you have read and understood the Privacy Policy which explains how we will use any personal data you give us when enabling or using the Sent Me a Sample Service.",
   },
 
   // acholi work, below for Anwar
