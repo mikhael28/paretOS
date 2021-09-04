@@ -36,7 +36,7 @@ function LoadingModal(props) {
     <React.Fragment>
       <h1 style={{ textAlign: "center" }}>Pareto Full-Stack Starter Kit</h1>
       <iframe
-        width="560"
+        width="fit-content"
         height="315"
         src="https://www.youtube.com/embed/ukMisjPq7ec"
         frameborder="0"
