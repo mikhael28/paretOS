@@ -46,11 +46,11 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 		const mutations = [
 			{
 				create: {
-					_type: `${this.props.schema}Schema`,
-					title: this.state.title,
-					summary: this.state.description,
-					url: this.state.url,
-					type: this.state.type,
+					_type: `${schema}Schema`,
+					title: formData.title,
+					summary: formData.description,
+					url: formData.url,
+					type: formData.type,
 				},
 			},
 		];
@@ -150,7 +150,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 			</DialogContent>
 
 			<DialogActions>
-				<Button onClick={this.props.handleClose}>Cancel</Button>
+				<Button onClick={handleClose}>Cancel</Button>
 				<LoaderButton
 					text="Submit Suggestion"
 					loadingText="Submitting"
