@@ -499,15 +499,6 @@ input[type="file"] {
 
 
 
-.BillingForm{
-  display: flex;
-  flex:1;
-  flex-direction: column;
-  align-items: center;
-  
-
-}
-
 .BillingForm .card-field {
   margin-bottom: 15px;
   background-color: white;

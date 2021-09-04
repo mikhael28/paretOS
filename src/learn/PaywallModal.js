@@ -67,9 +67,9 @@ function LoadingModal(props) {
         </DialogContent>
       ) : (
         <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
-          <div className='ConfirmPurchaseForm'>
+          <div >
             <Order {...props} />
-            <Button className="btn-cancel" onClick={() => setShowPayment(false)}>Back</Button>
+            
           </div>
           
 
