@@ -549,6 +549,7 @@ input[type="file"] {
   .Form {
     padding: 60px 0;
     max-width: 320px;
+    margin: 0 auto;
   }
 }
 .Form .LoaderButton:last-child {

@@ -17,8 +17,7 @@ function LoadingModal(props) {
 
   useEffect(()=>{
     let handleModalClose = (event) =>{
-      if(showPayment && !modalRef.current?.contains(event.target)){
-        setShowPayment(false);
+      if(!modalRef.current?.contains(event.target)){
         history.push('/');
       
         
