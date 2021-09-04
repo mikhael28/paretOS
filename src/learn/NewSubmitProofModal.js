@@ -32,6 +32,7 @@ export default function SubmitProof({
 
 	const handleChange = (event) => {
 		setFormData({
+			...formData,
 			[event.target.id]: event.target.value,
 		});
 	};
