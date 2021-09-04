@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Order from "./Order";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "react-bootstrap/lib/Button";
@@ -9,6 +9,17 @@ import Button from "react-bootstrap/lib/Button";
  */
 
 function LoadingModal(props) {
+  const [stripeKey, setStripeKey] = useState(null);
+
+  useEffect(() => {
+    console.log(process.env);
+    if (process.env.NODE_ENV === "development") {
+      setStripeKey(process.env.REACT_APP_STRIPE_DEV);
+    } else {
+      setStripeKey(process.env.REACT_APP_STRIPE_PROD);
+    }
+  }, []);
+
   const [showPayment, setShowPayment] = useState(false);
   return (
     <React.Fragment>
@@ -46,7 +57,7 @@ function LoadingModal(props) {
         </DialogContent>
       ) : (
         <DialogContent style={{ textAlign: "center" }}>
-          <Order {...props} />
+          <Order {...props} stripeKey={stripeKey} />
         </DialogContent>
       )}
     </React.Fragment>
