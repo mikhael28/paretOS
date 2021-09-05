@@ -94,13 +94,13 @@ function ContextBuilder({ sanitySchemas }) {
           <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} style={{ margin: -30 }}>
+      <TabPanel value={value} index={0} className = "tabPanelCont">
         {renderTopicsList(sanitySchemas.hubSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={1} style={{ margin: -30 }}>
+      <TabPanel value={value} index={1} className = "tabPanelCont">
         {renderTopicsList(sanitySchemas.economicSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={2} style={{ margin: -30 }}>
+      <TabPanel value={value} index={2} className = "tabPanelCont">
         {renderTopicsList(sanitySchemas.technicalSchemas)}
       </TabPanel>
 

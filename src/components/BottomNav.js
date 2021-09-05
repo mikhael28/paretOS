@@ -11,14 +11,9 @@ import {
   GrCli,
 } from "react-icons/gr";
 import { withRouter } from "react-router-dom";
-import { I18n } from "@aws-amplify/core";
 
 /**
  * This component is a mobile view only bottom navigation bar that helps mobile PWA users navigate the site more effectively
- * @TODO Investigate bargain phone screen sizes - how can we make sure the icons resize themselves
- * @TODO How can we make sure that the icons, on a small enough screen, do not push the 5th icon out of view?
- * @TODO Review accessibility on the Tabs component
- * @TODO Re-stablish I18 localization
  */
 
 const useStyles = makeStyles({
@@ -41,7 +36,7 @@ function BottomNav(props) {
         variant="fullWidth"
         indicatorColor="secondary"
         textColor="secondary"
-        aria-label="icon label tabs example"
+        aria-label="navigation-bar"
       >
         <Tab
           icon={<GrAchievement />}
