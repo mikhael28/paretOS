@@ -4,7 +4,7 @@ import logo from '../assets/Pareto_Lockup-White.png';
 import { I18n } from '@aws-amplify/core';
 import Button from 'react-bootstrap/lib/Button';
 import marketing from '../assets/marketing.png';
-import PropTypes from "prop-types";
+import propTypes from 'prop-types';
 
 /**
  * This is the Landing page component, that has the testimonials from theoretically real users.
@@ -14,13 +14,13 @@ import PropTypes from "prop-types";
 function Landing(props) {
   const [testimonials, setTestimonials] = useState([
     {
-    name: 'Leonard Ugorji',
-    title: 'UX and Coding Designer',
-    img: 'https://res.cloudinary.com/leonuch/image/upload/v1566585511/IMG_20190517_121637_1_wqcwyd.jpg',
-    words: 'Great OS project lot to learn here'
-    }
+      name: 'Leonard Ugorji',
+      title: 'UX and Coding Designer',
+      img: 'https://res.cloudinary.com/leonuch/image/upload/v1566585511/IMG_20190517_121637_1_wqcwyd.jpg',
+      words: 'Great OS project lot to learn here',
+    },
   ]);
-  
+
   return (
     <div>
       <div className='top-nav'>
@@ -99,11 +99,11 @@ function Landing(props) {
   );
 }
 
-Landing.PropTypes = {
-  name: PropTypes.string,
-    title: PropTypes.string,
-    img: PropTypes.img,
-    words: PropTypes.string,
-}
+Landing.propTypes = {
+  name: propTypes.string,
+  title: propTypes.string,
+  img: propTypes.any,
+  words: propTypes.string,
+};
 
 export default Landing;
