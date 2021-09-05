@@ -99,7 +99,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 	return (
 		<div>
 			<DialogContent>
-				<h1>Suggestion for {schema}</h1>
+				<h1 style={{ marginTop: "0px" }}>Suggestion for {schema}</h1>
 				<DialogContentText style={{ fontSize: "18px" }}>
 					Please include the link to the resource, a proposed title, description and link
 					to logo/image associated with the suggestion.
