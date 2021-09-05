@@ -11,10 +11,8 @@ import API from "@aws-amplify/api";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
- * @TODO Move the  'Create Template' and 'Start Sprint' into a different form. Buttons. In the desktop nav-bar? Mobile TBD?
- * @TODO Move the 'Delete Sprint' functionality into the admin repository.
- * @TODO Show the most recent sprint, and have a separate page/some other UI element to show the historical sprints. Perhaps we can show simplified analytics/statistics below the current sprint?
- * @TODO Remove the 'active'checking here, it's not necessary - we want people to review the sprints either way. Unless we want to add some UI element to demonstrate
+ * @TODO Issue #55
+ * @TODO Issue #91
  * @param {Object} props Includes the sprints object, from childProps.
  * @returns {JSX}
  */
@@ -47,19 +45,6 @@ function Sprints(props) {
           {props.sprints.length > 0 ? (
             <div className="exp-cards">
               {props.sprints.map((sprint, index) => {
-                // likely need to do sprint calculations here, whether it's early or whatnot - not in the useEffect
-                let tempStatus;
-                let currentTS = Date.now();
-                let newTS = new Date(sprint.startDate);
-                let msDifferential = currentTS - newTS.getTime();
-
-                if (msDifferential < 0) {
-                  tempStatus = "early";
-                } else if (msDifferential > 0 && msDifferential < 432000000) {
-                  tempStatus = "active";
-                } else if (msDifferential > 432000000) {
-                  tempStatus = "inactive";
-                }
                 return (
                   <div
                     className={newClassName}

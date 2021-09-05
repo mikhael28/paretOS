@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import Order from "./Order";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "react-bootstrap/lib/Button";
@@ -24,19 +24,18 @@ function LoadingModal(props) {
   const history = useHistory();
   const modalRef = useRef();
 
-  useEffect(()=>{
-    let handleModalClose = (event) =>{
-      if(!modalRef.current?.contains(event.target)){
-        history.push('/');
+  useEffect(() => {
+    let handleModalClose = (event) => {
+      if (props.open === false && !modalRef.current?.contains(event.target)) {
+        history.push("/");
       }
-    }  
-    document.addEventListener('mousedown', handleModalClose)
+    };
+    document.addEventListener("mousedown", handleModalClose);
 
     return () => {
-      document.removeEventListener('mousedown', handleModalClose)
-    }
-        
-  },[showPayment]);
+      document.removeEventListener("mousedown", handleModalClose);
+    };
+  }, [showPayment]);
 
   return (
     <React.Fragment>
@@ -68,7 +67,12 @@ function LoadingModal(props) {
           </p>
 
           <div className="flex-evenly">
-            <Button className="btn-cancel" onClick={() => props.history.push("/")}>Cancel</Button>
+            <Button
+              className="btn-cancel"
+              onClick={() => props.history.push("/")}
+            >
+              Cancel
+            </Button>
             <Button onClick={() => setShowPayment(true)}>Purchase</Button>
           </div>
         </DialogContent>

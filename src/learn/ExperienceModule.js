@@ -492,7 +492,10 @@ class ExperienceModule extends Component {
             aria-labelledby="loading"
             aria-describedby="Please wait while the page loads"
           >
-            <PaywallModal {...this.props} />
+            <PaywallModal
+              {...this.props}
+              open={this.props.user.learningPurchase}
+            />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (

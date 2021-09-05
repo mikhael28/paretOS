@@ -5,7 +5,6 @@ import ArenaDashboard from "./Sprints";
 import Messaging from "../components/Messaging";
 import Tour from "reactour";
 import question from "../assets/help.png";
-import Athlete from "../mentorship/Athlete";
 import logo from "../assets/Pareto_Lockup-01.png";
 
 /**
