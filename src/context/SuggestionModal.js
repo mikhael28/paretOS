@@ -100,24 +100,24 @@ export default function SuggestionModal({ schema, user, handleClose }) {
 		<div>
 			<DialogContent>
 				<h1>Suggestion for {schema}</h1>
-				<DialogContentText style={{ fontSize: "24px" }}>
+				<DialogContentText style={{ fontSize: "18px" }}>
 					Please include the link to the resource, a proposed title, description and link
 					to logo/image associated with the suggestion.
 				</DialogContentText>
 				<FormGroup controlId="title" bsSize="large">
-					<ControlLabel style={{ fontSize: "16px" }}>Title</ControlLabel>
+					<ControlLabel style={{ fontSize: "14px" }}>Title</ControlLabel>
 					<FormControl value={formData.title} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="description" bsSize="large">
-					<ControlLabel style={{ fontSize: "16px" }}>Description</ControlLabel>
+					<ControlLabel style={{ fontSize: "14px" }}>Description</ControlLabel>
 					<FormControl value={formData.description} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="url" bsSize="large">
-					<ControlLabel style={{ fontSize: "16px" }}>Website Link</ControlLabel>
+					<ControlLabel style={{ fontSize: "14px" }}>Website Link</ControlLabel>
 					<FormControl value={formData.url} onChange={handleChange} />
 				</FormGroup>
 				<FormGroup controlId="type" bsSize="large">
-					<ControlLabel style={{ fontSize: "16px" }}>Type</ControlLabel>
+					<ControlLabel style={{ fontSize: "14px" }}>Type</ControlLabel>
 					<FormControl
 						componentClass="select"
 						onChange={handleChange}
