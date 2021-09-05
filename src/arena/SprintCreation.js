@@ -16,8 +16,7 @@ import { errorToast, successToast } from "../libs/toasts";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
- * @TODO Automatically add yourself, when creating a sprint.
- * @TODO Add a red x, to remove certain players (including yourself) from a sprint if you change your mind. Line 273.
+ * @TODO Pull-request #79 to address this from Wesley.
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
