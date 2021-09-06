@@ -12,6 +12,10 @@ import ExperienceModule from "./learn/ExperienceModule";
 import SprintCreation from "./arena/SprintCreation";
 import NotFound from "./containers/NotFound";
 import EditProfile from "./profile/EditProfile";
+import AboutYou from "./profile/AboutYou";
+import Project from "./profile/Project";
+import Languages from "./profile/Languages";
+import ProfileId from "./profile/ProfileId";
 import ArenaDashboard from "./arena/Sprints";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
@@ -127,6 +131,30 @@ export default ({ childProps }) => (
       path="/profile/edit/:id"
       exact
       component={EditProfile}
+      props={childProps}
+    />
+    <AuthenticatedRoute
+      path="/profile/about/:id"
+      exact
+      component={AboutYou}
+      props={childProps}
+    />
+    <AuthenticatedRoute
+      path="/profile/project/:id"
+      exact
+      component={Project}
+      props={childProps}
+    />
+    <AuthenticatedRoute
+      path="/profile/languages/:id"
+      exact
+      component={Languages}
+      props={childProps}
+    />
+    <AuthenticatedRoute
+      path="/profile/profile/:id"
+      exact
+      component={ProfileId}
       props={childProps}
     />
     <AppliedRoute
