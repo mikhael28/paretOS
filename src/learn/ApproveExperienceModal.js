@@ -45,14 +45,14 @@ const ConfirmModal = (props) => {
           >
             {I18n.get("openLink")}
           </a>
-          <h3>{I18n.get("attachment")} (PDF, JPG, MP3, etc)</h3>
+          {/* <h3>{I18n.get("attachment")} (PDF, JPG, MP3, etc)</h3>
           <a
-            href={`https://${process.env.REACT_APP_PROOF_BUCKET}-prod.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}`}
+            href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}.png`}
             target="_blank"
             rel="noopener noreferrer"
           >
             {I18n.get("clickToDownload")}
-          </a>
+          </a> */}
           <br />
           {props.mongoExperience[props.activeExperience.priority].coachNotes
             .length > 0 ? (
