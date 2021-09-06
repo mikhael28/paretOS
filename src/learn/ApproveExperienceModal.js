@@ -9,7 +9,7 @@ import { I18n } from "@aws-amplify/core";
 
 /**
  * This component is for a Coach to approve the work of the student, and to leave feedback.
- * @TODO review UI, check to see if there is something to be added from the coaches perspective.
+ * @TODO Issue #64
  */
 
 const ConfirmModal = (props) => {
@@ -45,14 +45,14 @@ const ConfirmModal = (props) => {
           >
             {I18n.get("openLink")}
           </a>
-          <h3>{I18n.get("attachment")} (PDF, JPG, MP3, etc)</h3>
+          {/* <h3>{I18n.get("attachment")} (PDF, JPG, MP3, etc)</h3>
           <a
-            href={`https://${process.env.REACT_APP_PROOF_BUCKET}-prod.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}`}
+            href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}.png`}
             target="_blank"
             rel="noopener noreferrer"
           >
             {I18n.get("clickToDownload")}
-          </a>
+          </a> */}
           <br />
           {props.mongoExperience[props.activeExperience.priority].coachNotes
             .length > 0 ? (

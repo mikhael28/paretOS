@@ -8,15 +8,13 @@ import LoaderButton from "./LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
+import { uploadToS3 } from "../libs/s3";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.
- * @TODO Can a coach see their students sprints? Lets review, and create this possibility if needed.
- * @TODO How to disable the form, based on inputs - like, for example, a mandatory proof request.
- * @TODO How to integrate different type of proof requests? For example, a 'check-in' that only checks for the time it was submitted?
- * @TODO Replace Modal from react-bootstrap, as it uses out-dated componentWillReceiveProps functionality and that will at some point be a no-go, even in node_modules
- * @TODO Test for whether mp3s/mp4s work.
- * @TODO Render the image/mp3/mp4 inside the modal, instead of going to the S3 bucket URL and exposing its id.
+ * @TODO #89
+ * @TODO #87
+ * @TODO #26
  */
 
 export default class ArenaProofModal extends Component {
@@ -50,13 +48,22 @@ export default class ArenaProofModal extends Component {
     const file = e.target.files[0];
     // the name to save is the sprint_id_teamIndex_dayIndex_missionIndex
     try {
-      let pictureKey = await Storage.put(
-        `${this.props.sprint.id}_0_${this.props.day}_${this.props.activeIndex}.${fileType[1]}`,
+      // let pictureKey = await Storage.put(
+      //   `${this.props.sprint.id}_0_${this.props.day}_${this.props.activeIndex}.${fileType[1]}`,
+      //   file,
+      //   {
+      //     bucket: process.env.REACT_APP_PROOF_BUCKET,
+      //   }
+      // );
+
+      const pictureKey = await uploadToS3(
+        `${this.props.sprint.id}_0_${this.props.day}_${this.props.activeIndex}`,
         file,
-        {
-          bucket: process.env.REACT_APP_PROOF_BUCKET,
-        }
+        fileType[1]
       );
+
+      console.log("Picture Key: ", pictureKey);
+
       this.setState({ key: pictureKey.key });
       successToast("Proof successfully uploaded.");
       this.props.setLoading(false);
@@ -93,6 +100,7 @@ export default class ArenaProofModal extends Component {
                   </Button>
                   <LoaderButton
                     onClick={() => {
+                      console.log("Key:", this.state.key);
                       this.props.handleChange(
                         this.props.activeMission,
                         this.props.activeIndex,
@@ -122,7 +130,7 @@ export default class ArenaProofModal extends Component {
               <div>
                 {this.props.activeMission.proofLink !== "" ? (
                   <a
-                    href={`https://${process.env.REACT_APP_PROOF_BUCKET}-prod.s3.amazonaws.com/public/${this.props.activeMission.proofLink}`}
+                    href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${this.props.activeMission.proofLink}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import WRJob from "../components/WRJob";
+import WRJob from "./WRJob";
 
 /**
  * This is a proof of concept page to display Work and Rise related jobs/media, if you are in UG.
- * @TODO is this necessary? Rethink WR relationship, if it makes sense to continue. I'm sure it does, but I need to rethink things.
+ * @TODO Issue #67
  */
 
 export default function WorkRise(props) {
@@ -20,7 +20,6 @@ export default function WorkRise(props) {
         },
       });
       fetchResult = await fetchResult.json();
-      console.log(fetchResult);
       if (fetchResult.code === 200) {
         setJobs(fetchResult.dataset);
         setFetching(false);

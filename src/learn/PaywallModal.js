@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Order from "./Order";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "react-bootstrap/lib/Button";
 
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.
- * @TODO Issue #49.
  */
 
 function LoadingModal(props) {
+  const [stripeKey, setStripeKey] = useState(null);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      setStripeKey(process.env.REACT_APP_STRIPE_DEV);
+    } else {
+      setStripeKey(process.env.REACT_APP_STRIPE_PROD);
+    }
+  }, []);
+
   const [showPayment, setShowPayment] = useState(false);
+
+  const history = useHistory();
+  const modalRef = useRef();
+
+  useEffect(() => {
+    let handleModalClose = (event) => {
+      if (props.open === false && !modalRef.current?.contains(event.target)) {
+        history.push("/");
+      }
+    };
+    document.addEventListener("mousedown", handleModalClose);
+
+    return () => {
+      document.removeEventListener("mousedown", handleModalClose);
+    };
+  }, [showPayment]);
+
   return (
     <React.Fragment>
       <h1 style={{ textAlign: "center" }}>Pareto Full-Stack Starter Kit</h1>
       <iframe
-        width="380"
+        width="100%"
         height="160"
         src="https://www.youtube.com/embed/ukMisjPq7ec"
         frameborder="0"
@@ -23,7 +50,7 @@ function LoadingModal(props) {
         style={{ alignSelf: "center" }}
       />
       {showPayment === false ? (
-        <DialogContent style={{ fontSize: 12 }}>
+        <DialogContent ref={modalRef} style={{ fontSize: 12 }}>
           <p>
             Hint: you can change some code in this repo and not pay for this. If
             you can't figure out how to do that... you should invest $89 in your
@@ -40,13 +67,20 @@ function LoadingModal(props) {
           </p>
 
           <div className="flex-evenly">
-            <Button onClick={() => props.history.push("/")}>Cancel</Button>
+            <Button
+              className="btn-cancel"
+              onClick={() => props.history.push("/")}
+            >
+              Cancel
+            </Button>
             <Button onClick={() => setShowPayment(true)}>Purchase</Button>
           </div>
         </DialogContent>
       ) : (
-        <DialogContent style={{ textAlign: "center" }}>
-          <Order {...props} />
+        <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
+          <div>
+            <Order {...props} stripeKey={stripeKey} />
+          </div>
         </DialogContent>
       )}
     </React.Fragment>
