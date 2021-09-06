@@ -57,65 +57,73 @@ function ArenaDashboard(props) {
         <div className={classNames("sprints-container", "sprints-scroller")}>
           {props.sprints.length > 0 ? (
             <div className="exp-cards">
-              {props.sprints.map((sprint, index) => {
-                // likely need to do sprint calculations here, whether it's early or whatnot - not in the useEffect
-                let tempStatus;
-                let currentTS = Date.now();
-                let newTS = new Date(sprint.startDate);
-                let msDifferential = currentTS - newTS.getTime();
+              {props.sprints
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((sprint, index) => {
+                  // debugger;
+                  // likely need to do sprint calculations here, whether it's early or whatnot - not in the useEffect
+                  let tempStatus;
+                  let currentTS = Date.now();
+                  let newTS = new Date(sprint.startDate);
+                  let msDifferential = currentTS - newTS.getTime();
 
-                if (msDifferential < 0) {
-                  tempStatus = "early";
-                } else if (msDifferential > 0 && msDifferential < 432000000) {
-                  tempStatus = "active";
-                } else if (msDifferential > 432000000) {
-                  tempStatus = "inactive";
-                }
-                return (
-                  <div
-                    className={newClassName}
-                    key={index}
-                    style={{ cursor: "pointer", textAlign: "center" }}
-                    onClick={() =>
-                      props.history.push(`/arena/sprints/${sprint.id}`)
-                    }
-                  >
-                    <div>
-                      <h4 style={{ fontWeight: "bold" }}>Sprint {index + 1}</h4>
+                  if (msDifferential < 0) {
+                    tempStatus = "early";
+                  } else if (msDifferential > 0 && msDifferential < 432000000) {
+                    tempStatus = "active";
+                  } else if (msDifferential > 432000000) {
+                    tempStatus = "inactive";
+                  }
+                  return (
+                    <div
+                      className={newClassName}
+                      key={index}
+                      style={{ cursor: "pointer", textAlign: "center" }}
+                      onClick={() =>
+                        props.history.push(`/arena/sprints/${sprint.id}`)
+                      }
+                    >
+                      <div>
+                        <h4 style={{ fontWeight: "bold" }}>
+                          {index === 0
+                            ? "Most Recent Sprint"
+                            : "Sprint" + " " + (index + 1)}
+                        </h4>
 
-                      <p>
-                        {I18n.get("starts")}:{" "}
-                        {new Date(sprint.startDate).getUTCMonth() + 1}/
-                        {new Date(sprint.startDate).getUTCDate()}/
-                        {new Date(sprint.startDate).getUTCFullYear()}
-                        <br />
-                        {I18n.get("finishes")}:{" "}
-                        {new Date(sprint.endDate).getUTCMonth() + 1}/
-                        {new Date(sprint.endDate).getUTCDate()}/
-                        {new Date(sprint.endDate).getUTCFullYear()}
-                      </p>
-                    </div>
-                    <div>
-                      {tempStatus === "active" || tempStatus === "inactive" ? (
-                        <Link to={`/arena/sprints/${sprint.id}`}>
-                          <BiRun /> {I18n.get("viewSprint")}
-                        </Link>
+                        <p>
+                          {I18n.get("starts")}:{" "}
+                          {new Date(sprint.startDate).getUTCMonth() + 1}/
+                          {new Date(sprint.startDate).getUTCDate()}/
+                          {new Date(sprint.startDate).getUTCFullYear()}
+                          <br />
+                          {I18n.get("finishes")}:{" "}
+                          {new Date(sprint.endDate).getUTCMonth() + 1}/
+                          {new Date(sprint.endDate).getUTCDate()}/
+                          {new Date(sprint.endDate).getUTCFullYear()}
+                        </p>
+                      </div>
+                      <div>
+                        {tempStatus === "active" ||
+                        tempStatus === "inactive" ? (
+                          <Link to={`/arena/sprints/${sprint.id}`}>
+                            <BiRun /> {I18n.get("viewSprint")}
+                          </Link>
+                        ) : null}
+                      </div>
+
+                      {props.user.admin === true ? (
+                        <button
+                          onClick={async () => {
+                            await API.del("pareto", `/sprints/${sprint.id}`);
+                            await props.fetchMenteeSprints(props.user.id);
+                          }}
+                        >
+                          {I18n.get("delete")}
+                        </button>
                       ) : null}
                     </div>
-
-                    {props.user.admin === true ? (
-                      <button
-                        onClick={async () => {
-                          await API.del("pareto", `/sprints/${sprint.id}`);
-                          await props.fetchMenteeSprints(props.user.id);
-                        }}
-                      >
-                        {I18n.get("delete")}
-                      </button>
-                    ) : null}
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           ) : null}
         </div>
