@@ -165,7 +165,7 @@ input[type="file"] {
 }
 
 .small-overflow {
-  overflow: scroll;
+  overflow: visible;
   max-height: 200px;
 }
 
@@ -282,7 +282,7 @@ input[type="file"] {
 .highlight-block {
   padding: 8px;
   border-radius: 3px;
-  background: rgb(0, 170, 212);
+  background: #339c51;
   color: white;
   margin: 8px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
@@ -291,7 +291,7 @@ input[type="file"] {
 .exp-card {
   padding: 8px;
   border-radius: 3px;
-  background: #F1EDED;
+  background: #f1efef;
   margin: 8px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
   flex-wrap: wrap;
@@ -344,6 +344,29 @@ input[type="file"] {
   background-color: rgb(233, 232, 232);
 }
 
+/* Modal Styles */
+
+.fresh-modal {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content/Box */
+.fresh-modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
 /* Leaderboard styles */
 
 .rank-header {
@@ -373,6 +396,8 @@ input[type="file"] {
 
 /* button styles */
 
+
+
 .LoaderButton .spinning.glyphicon {
   margin-right: 7px;
   top: 2px;
@@ -389,28 +414,58 @@ input[type="file"] {
 
 .btn {
   border: 0;
-  background: #30944c;
+  background: #339c51;
+  width:180px;
   color: #fff;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   font-weight: 1000;
   -webkit-transition: background 0.3s;
   transition: background 0.3s;
-  max-width: 200px;
+  max-height: 30px;
   margin-right: 10px;
 }
 
 .btn:hover {
-  background: #1e5f30;
+  background: #26773d;
   color: white;
 }
 
 .btn:active,
 .btn:focus {
   outline: 0;
-  background: #1e5f30;
+  background: #247039;
+  color: white;
+}
+
+.btn-cancel{
+  background: #f44336;
+  border: 0;
+  width:180px;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 1000;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  max-height: 30px;
+  margin-right: 10px;
+  
+}
+
+.btn-cancel:hover {
+  background: #af3b32;
+  color: white;
+}
+
+.btn:active,
+.btn:focus {
+  outline: 0;
+  background: #af3b32;
   color: white;
 }
 
@@ -436,12 +491,25 @@ input[type="file"] {
   opacity: 0.5;
 }
 
+.btn-outline {
+  background: none;
+  color: #30944c;
+  border: 2px solid #30944c;
+}
+
+.btn-outline:hover {
+  background: #30944c;
+  border: 2px solid #30944c;
+}
+
 /* Form styles */
 
 .NotFound {
   padding-top: 100px;
   text-align: center;
 }
+
+
 
 .BillingForm .card-field {
   margin-bottom: 15px;
@@ -459,11 +527,32 @@ input[type="file"] {
   border-color: #66afe9;
 }
 
+.BillingForm .form-group .form-group-lg{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.ConfirmPurchaseForm{
+  display: flex;
+  align-items: flex-end;
+  gap:20px;
+}
+
+.ConfirmPurchaseForm > button{
+  height:56px;
+  margin-bottom: 60px;
+  border-radius: 6px;
+  background-color: #f44336;
+  font-size: 18px;
+  
+}
+
 @media all and (min-width: 480px) {
   .Form {
     padding: 60px 0;
-    margin: 0 auto;
     max-width: 320px;
+    margin: 0 auto;
   }
 }
 .Form .LoaderButton:last-child {
@@ -623,7 +712,7 @@ input[type="file"] {
   margin-top: 4px;
   padding: 8px 12px;
   max-width: 280px;
-  background: rgb(0, 170, 212);
+  background: #339c51;
   border-radius: 16px;
   font-size: 14px;
   color: rgb(255, 255, 254);

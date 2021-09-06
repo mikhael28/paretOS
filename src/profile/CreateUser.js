@@ -6,7 +6,6 @@ import LoaderButton from "../components/LoaderButton";
 import uuidv4 from "uuid";
 import Auth from "@aws-amplify/auth";
 import API from "@aws-amplify/api";
-import generator from "generate-password";
 import { errorToast, successToast } from "../libs/toasts";
 import { notepadIntro } from "../libs/static";
 import TermsOfService from "./TermsOfService";
@@ -33,10 +32,6 @@ export default class CreateUser extends Component {
       state: "US",
       github: "",
       acceptedTOS: false,
-      uuid: generator.generate({
-        length: 12,
-        numbers: true,
-      }),
       type: "mentee",
       showTermsOfService: false,
     };
