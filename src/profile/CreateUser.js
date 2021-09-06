@@ -10,7 +10,7 @@ import generator from "generate-password";
 import { errorToast, successToast } from "../libs/toasts";
 import { notepadIntro } from "../libs/static";
 import TermsOfService from "./TermsOfService";
-
+import { countries } from "../libs/static";
 /**
  * Functionality for new user signup, creating their profile.
  * @TODO Onboarding emails Issue #24
@@ -168,7 +168,7 @@ export default class CreateUser extends Component {
           open={this.state.showTermsOfService}
           isLoading={this.state.isLoading}
           onClickAgree={this.handleSubmit}
-          onClose={() => this.setState({showTermsOfService: false})}
+          onClose={() => this.setState({ showTermsOfService: false })}
         />
 
         <div className="profile-view-box">
@@ -217,12 +217,9 @@ export default class CreateUser extends Component {
                     onChange={this.handleChange}
                     value={this.state.state}
                   >
-                    <option value="US">United States</option>
-                    <option value="IN">India</option>
-                    <option value="TT">Trinidad & Tobago</option>
-                    <option value="CR">Costa Rica</option>
-                    <option value="UG">Uganda</option>
-                    <option value="FR">France</option>
+                    {countries.map((country, index) => {
+                      return <option key={index} value={country.code}>{country.name}</option>
+                    })}
                   </FormControl>
                 </FormGroup>
                 <FormGroup controlId="github" bsSize="large">
@@ -241,7 +238,7 @@ export default class CreateUser extends Component {
             bsSize="small"
             type="submit"
             disabled={!this.validateForm()}
-            onClick={() => this.setState({showTermsOfService: true})}
+            onClick={() => this.setState({ showTermsOfService: true })}
             text="Create Account"
             loadingText="Creation"
           />
