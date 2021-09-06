@@ -397,6 +397,7 @@ input[type="file"] {
 /* button styles */
 
 
+
 .LoaderButton .spinning.glyphicon {
   margin-right: 7px;
   top: 2px;
@@ -488,6 +489,17 @@ input[type="file"] {
 .btnIcon:focus {
   outline: 0;
   opacity: 0.5;
+}
+
+.btn-outline {
+  background: none;
+  color: #30944c;
+  border: 2px solid #30944c;
+}
+
+.btn-outline:hover {
+  background: #30944c;
+  border: 2px solid #30944c;
 }
 
 /* Form styles */
