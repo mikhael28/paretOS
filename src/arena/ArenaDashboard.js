@@ -1,24 +1,18 @@
-import React from "react";
-import { bindActionCreators } from "redux";
-import Button from "react-bootstrap/lib/Button";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { getActiveSprintData } from "../state/sprints";
+import React, { useState } from "react";
+import Image from "react-bootstrap/lib/Image";
 import { I18n } from "@aws-amplify/core";
-import { BiRun } from "react-icons/bi";
-import classNames from "classnames";
-import API from "@aws-amplify/api";
+import ArenaDashboard from "./Sprints";
+import Messaging from "../components/Messaging";
+import Tour from "reactour";
+import question from "../assets/help.png";
+import logo from "../assets/Pareto_Lockup-01.png";
 
 /**
- * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
- * @TODO Move the  'Create Template' and 'Start Sprint' into a different form. Buttons. In the desktop nav-bar? Mobile TBD?
- * @TODO Move the 'Delete Sprint' functionality into the admin repository.
- * @TODO Show the most recent sprint, and have a separate page/some other UI element to show the historical sprints. Perhaps we can show simplified analytics/statistics below the current sprint?
- * @TODO Remove the 'active'checking here, it's not necessary - we want people to review the sprints either way. Unless we want to add some UI element to demonstrate
- * @param {Object} props Includes the sprints object, from childProps.
- * @returns {JSX}
+ * The 'main dashboard' in the UI, that shows different things depending on what level of user you are.
+ *
  */
 
+<<<<<<< HEAD
 function ArenaDashboard(props) {
   let newClassName = classNames("exp-card");
   return (
@@ -126,25 +120,97 @@ function ArenaDashboard(props) {
                 })}
             </div>
           ) : null}
+=======
+const HomeDashboard = ({
+  sprints,
+  history,
+  user,
+  fetchMenteeSprints,
+  messages,
+  updateMessages,
+}) => {
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const steps = [
+    {
+      selector: ".first-step-home",
+      content: `${I18n.get("homeFirst")}`,
+    },
+    {
+      selector: ".second-step-home",
+      content: `${I18n.get("homeSecond")}`,
+    },
+    // {
+    // 	selector: '.third-step-home',
+    // 	content: `${I18n.get('homeThird')}`
+    // }
+  ];
+  return (
+    <div className="flex-down">
+      <div className="flex">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{ marginTop: 33 }}
+        />
+
+        <h1
+          style={{
+            marginLeft: 0,
+            marginBottom: 0,
+            marginTop: 33,
+            fontSize: 40,
+          }}
+        >
+          Arena
+        </h1>
+        <Image
+          src={question}
+          onClick={(event) => {
+            event.preventDefault();
+            setIsTourOpen(true);
+          }}
+          height="40"
+          width="40"
+          circle
+          style={{
+            cursor: "pointer",
+            marginTop: 30,
+            marginLeft: 6,
+          }}
+        />
+      </div>
+      <div className="row">
+        <div className="col-xs-12 col-sm-5">
+          <ArenaDashboard
+            sprints={sprints}
+            history={history}
+            user={user}
+            fetchMenteeSprints={fetchMenteeSprints}
+          />
+        </div>
+        <div className="hidden-xs col-sm-7">
+          <Messaging
+            user={user}
+            messages={messages}
+            updateMessages={updateMessages}
+            history={history}
+          />
+>>>>>>> 11d705a9491dd092530b4716195a229fd87cb93b
         </div>
       </div>
+
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+        // showCloseButton={true}
+        // rewindOnClose={false}
+      />
     </div>
   );
-}
-
-const mapStateToProps = (state) => {
-  return {
-    redux: state,
-  };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      getActiveSprintData: (data) => getActiveSprintData(data),
-    },
-    dispatch
-  );
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArenaDashboard);
+export default HomeDashboard;
