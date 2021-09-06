@@ -15,22 +15,16 @@ class AboutYou extends Component {
       super(props);
         this.state = {
         isLoading: false,
-        users: [],
-        providers: [],
         summary: "",
         summaryCheck: false,
-        user: {
-          projects: [],
-        },
        uuid: generator.generate({
           length: 12,
           numbers: true,
         }),
-        type: "mentee",
         text: "",
-        isTourOpen: false,
-        noteLoading: false,
-        defaultLanguage: "",
+        user: {
+          projects: [],
+        },
        
       };
     }

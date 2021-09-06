@@ -24,22 +24,16 @@ class Project extends Component {
         github: "https://github.com/",
         githubProfile: "",
         name: "",
-        editName: false,
         description: "",
         addProject: false,
         team: [],
         tools: [],
-        fName: "",
         lName: "",
         uuid: generator.generate({
           length: 12,
           numbers: true,
         }),
-        type: "mentee",
         text: "",
-        isTourOpen: false,
-        noteLoading: false,
-        defaultLanguage: "",
         picture:
           "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp",
       };
@@ -50,21 +44,6 @@ class Project extends Component {
     this.setState({
       [event.target.id]: event.target.value,
     });
-  };
-
-  editName = async () => {
-    let body = {
-      fName: this.state.fName,
-      lName: this.state.lName,
-    };
-    try {
-      const newName = await API.put("pareto", `/users/${this.state.id}`, {
-        body,
-      });
-      this.setState({ user: newName, editName: false });
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   addProject = async () => {

@@ -5,7 +5,6 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import Button from "react-bootstrap/lib/Button";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import Image from "react-bootstrap/lib/Image";
-import uuidv4 from "uuid";
 import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
@@ -18,38 +17,21 @@ class ProfileId extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        isLoading: false,
         users: [],
-        providers: [],
-        summary: "",
-        summaryCheck: false,
-        user: {
-          projects: [],
-        },
         id: "",
-        github: "https://github.com/",
-        githubProfile: "",
         name: "",
         editName: false,
-        description: "",
-        addProject: false,
-        editSchool: false,
-        school: "",
-        team: [],
-        tools: [],
         fName: "",
         lName: "",
-        createdBy: "",
-        acceptedTOS: false,
         uuid: generator.generate({
           length: 12,
           numbers: true,
         }),
-        type: "mentee",
+        user: {
+          projects: [],
+        },
         text: "",
         isTourOpen: false,
-        noteLoading: false,
-        defaultLanguage: "",
         picture:
           "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp",
       };
@@ -76,39 +58,6 @@ class ProfileId extends Component {
         }
       };
 
-      addProject = async () => {
-        let projects = this.state.user.projects.slice();
-    
-        let newProject = {
-          id: uuidv4(),
-          description: this.state.description,
-          github: this.state.github,
-          name: this.state.name,
-          team: this.state.team,
-          tools: this.state.tools,
-        };
-        projects.push(newProject);
-    
-        let body = {
-          projects: projects,
-        };
-        try {
-          const response = await API.put("pareto", `/users/${this.state.user.id}`, {
-            body,
-          });
-          this.setState({
-            user: response,
-            description: "",
-            github: "",
-            name: "",
-            team: [],
-            tools: [],
-            addProject: false,
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      };
     
       onChange = async (e) => {
         const file = e.target.files[0];
