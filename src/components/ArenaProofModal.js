@@ -23,21 +23,23 @@ export default function ArenaProofModal({
 	day,
 	view,
 	show,
+	user,
 	sprint,
-	loading,
-	setLoading,
 	handleClose,
 	activeIndex,
 	activeMission,
 	activeSprintId,
 	handleChange: propsHandleChange,
 }) {
-	const [formData, setFormData] = useState({ trashTalk: "" });
-	const [athleteNotes, setAthleteNotes] = useState("");
-	const [github, setGithub] = useState("");
-	const [key, setKey] = useState("");
-	const [experienceId, setExperienceId] = useState("");
+	const [formData, setFormData] = useState({
+		trashTalk: "",
+		athleteNotes: "",
+		key: "",
+		github: "",
+		experienceId: "",
+	});
 	const [isChanging, setIsChanging] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const validateForm = () => {
 		return athleteNotes.length > 0 && github.length > 0;
@@ -59,7 +61,7 @@ export default function ArenaProofModal({
 		try {
 			const pictureKey = uploadToS3(`${sprint.id}_0_${day}_${activeIndex}`, file, fileType[1]);
 
-			setKey(pictureKey.key);
+			setFormData({ ...formData, key: pictureKey.key });
 			successToast("Proof successfully uploaded.");
 			setLoading(false);
 		} catch (e) {
@@ -92,7 +94,7 @@ export default function ArenaProofModal({
 											activeMission,
 											activeIndex,
 											day,
-											key,
+											formData.key,
 											activeSprintId,
 											`${user.fName} just completed ${activeMission.title}.${
 												formData.trashTalk.length > 0
@@ -101,13 +103,13 @@ export default function ArenaProofModal({
 											} `
 										);
 										setFormData({ trashTalk: "" });
-										setKey("");
+										setFormData({ ...formData, key: "" });
 										handleClose();
 									}}
 									bsSize="large"
 									text={I18n.get("submitProof")}
 									loadingText={I18n.get("creating")}
-									// ! Is there a reason this is commented?
+									// ? Is there a reason this is commented?
 									// disabled={!this.validateForm()}
 									isLoading={loading}
 								/>
