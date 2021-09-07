@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ListGroup from "react-bootstrap/lib/ListGroup";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import API from "@aws-amplify/api";
 import BlockContent from "@sanity/block-content-to-react";
@@ -333,18 +334,20 @@ class ExperienceModule extends Component {
               {mongoExperience[activeExperience.priority].completed ? (
                 <React.Fragment />
               ) : (
-                <a
+                <Button
                   onClick={() => this.setState({ showSubmitModal: true })}
                   style={{ marginTop: 16, marginRight: 10, fontSize: 16 }}
                 >
                   <HiOutlineClipboardCheck /> {I18n.get("markAsComplete")}
-                </a>
+                </Button>
               )}
               {this.props.user.instructor === true &&
               mongoExperience[activeExperience.priority].completed === true ? (
-                <a onClick={() => this.setState({ openReviewModal: true })}>
+                <Button
+                  onClick={() => this.setState({ openReviewModal: true })}
+                >
                   <HiOutlineClipboardCheck /> {I18n.get("reviewWork")}
-                </a>
+                </Button>
               ) : null}
             </div>
           ) : null}
@@ -489,7 +492,10 @@ class ExperienceModule extends Component {
             aria-labelledby="loading"
             aria-describedby="Please wait while the page loads"
           >
-            <PaywallModal {...this.props} />
+            <PaywallModal
+              {...this.props}
+              open={this.props.user.learningPurchase}
+            />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (

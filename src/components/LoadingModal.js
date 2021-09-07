@@ -7,9 +7,7 @@ const randomIndex = Math.floor(Math.random() * Math.floor(quotes.length));
 
 /**
  * This component is responsible for showing some sweet motivational quotes while everything loads.
- * @TODO Add a progressive loading bar, that updates proportionally based on how many of the network requests it completes that it is supposed to.
- * @TODO Optimize the current number of network requests that are being sent out in App.js. I know that this todo should be in that file, but this is such an important feature that I figured it should also be in here - just as extra emphasis.
- * @TODO Review accessibility for the loading modal and dialog text. Review ids.
+ * @TODO Issue #53
  */
 
 const LoadingModal = () => {
@@ -18,7 +16,6 @@ const LoadingModal = () => {
       <DialogContent style={{ overflow: "visible", textAlign: "center" }}>
         <div className="ipl-progress-indicator" id="spinner">
           <h1 id="header">Un Momento</h1>
-          <br />
           <div className="lds-dual-ring" />
         </div>{" "}
       </DialogContent>
@@ -33,7 +30,7 @@ const LoadingModal = () => {
               marginLeft: "20%",
               textAlign: "center",
             }}
-            id="alert-dialog-slide-description"
+            id="now-loading"
           >
             {quotes[randomIndex].quote}
           </DialogContentText>
