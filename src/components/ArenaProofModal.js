@@ -45,6 +45,7 @@ export default function ArenaProofModal({
 
 	const handleChange = (event) => {
 		setFormData({
+			...formData,
 			[event.target.id]: event.target.value,
 		});
 	};
@@ -56,11 +57,7 @@ export default function ArenaProofModal({
 		const file = e.target.files[0];
 		// the name to save is the sprint_id_teamIndex_dayIndex_missionIndex
 		try {
-			const pictureKey = uploadToS3(
-				`${sprint.id}_0_${day}_${activeIndex}`,
-				file,
-				fileType[1]
-			);
+			const pictureKey = uploadToS3(`${sprint.id}_0_${day}_${activeIndex}`, file, fileType[1]);
 
 			setKey(pictureKey.key);
 			successToast("Proof successfully uploaded.");
@@ -82,11 +79,7 @@ export default function ArenaProofModal({
 						<React.Fragment>
 							<FormGroup bsSize="large" controlId="trashTalk">
 								<ControlLabel>{I18n.get("trashTalkPSA")}</ControlLabel>
-								<FormControl
-									type="text"
-									onChange={handleChange}
-									value={formData.trashTalk}
-								/>
+								<FormControl type="text" onChange={handleChange} value={formData.trashTalk} />
 							</FormGroup>
 							<h3>{I18n.get("attachment")}</h3>
 							<input type="file" onChange={(evt) => onChange(evt)} />
