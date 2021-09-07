@@ -37,6 +37,7 @@ export default function MediaCard(props) {
     <React.Fragment>
       {props.logo || props.slug || props.img.options ? (
         <HtmlTooltip title={props.summary}>
+          {/* This is where you should write the modal */}
           <div
             className={classNames("context-card", "block")}
             onClick={() => {
@@ -46,6 +47,15 @@ export default function MediaCard(props) {
               }
             }}
           >
+          {/* <div
+            className={classNames("context-card", "block")}
+            onClick={() => {
+              if (props.openLink) {
+                let win = window.open(props.url, "_blank");
+                win.focus();
+              }
+            }}
+          > */}
             <CardActionArea>
               {props.url !== "na" ? (
                 <CardMedia

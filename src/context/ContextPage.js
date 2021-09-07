@@ -215,7 +215,7 @@ function ContextPage(props) {
                       <ContextObject
                         {...item}
                         img={url.toString()}
-                        openLink={true}
+                        openLink={false}
                       />
                     )}
                   </React.Fragment>
@@ -471,6 +471,7 @@ function ContextPage(props) {
           </div>
         </React.Fragment>
       ) : null}
+      {/* Modal Component */}
       <Dialog
         style={{
           margin: "auto",
