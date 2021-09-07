@@ -424,6 +424,7 @@ export default class EditProfile extends Component {
               <option value="lg">Luganda</option>
               <option value="ac">Acholi</option>
               <option value="es">Spanish</option>
+              <option value="ptbr">Portuguese</option>
             </FormControl>
             <LoaderButton
               align="center"
