@@ -105,6 +105,24 @@ const LeftNav = (props) => {
               <Glyphicon glyph="glyphicon glyphicon-cog" />
               &ensp; English
             </MenuItem>
+            
+            <MenuItem
+              exact
+              key={1.4}
+              onClick={() => {
+                I18n.setLanguage("ptbr");
+                updateState({
+                  chosenLanguage: {
+                    name: "Portuguese",
+                    image:
+                      "https://cdn.countryflags.com/thumbs/brazil/flag-400.png",
+                  },
+                });
+              }}
+            >
+              <Glyphicon glyph="glyphicon glyphicon-cog" />
+              &ensp; Portuguese(Brazil)
+            </MenuItem>
           </div>
         </DropdownButton>
       </div>
