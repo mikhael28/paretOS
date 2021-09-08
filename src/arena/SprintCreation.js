@@ -15,10 +15,10 @@ import "react-calendar/dist/Calendar.css";
 import { errorToast, successToast } from "../libs/toasts";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import Button from "react-bootstrap/lib/Button";
-
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
- * @TODO Pull-request #79 to address this from Wesley.
+ * @TODO Automatically add yourself, when creating a sprint.
+ * @TODO Add a red x, to remove certain players (including yourself) from a sprint if you change your mind. Line 273.
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
@@ -39,7 +39,7 @@ function SprintCreation(props) {
     let options = await API.get("pareto", "/templates");
     let userOptions = await API.get("pareto", "/users");
     setMissions(options);
-    setPlayers(userOptions);
+    setPlayers(userOptions.filter((e) => e.id !== props.profile.id));
     setLoading(false);
   }
 
@@ -65,16 +65,16 @@ function SprintCreation(props) {
       };
       databasedMissions.push(dbMission);
     });
-
     let finalDBMission = {
       dailyScore: 0,
       dailyCompletion: 0,
       missions: databasedMissions,
     };
-
     let databasedTeams = [];
     let dbTeam;
-    chosenPlayers.forEach((el) => {
+    let chosenCompetitors = chosenPlayers.slice();
+    chosenCompetitors.push(props.profile);
+    chosenCompetitors.forEach((el) => {
       dbTeam = {
         fName: el.fName,
         lName: el.lName,
@@ -166,9 +166,9 @@ function SprintCreation(props) {
           cloneDeep(finalDBMission),
         ],
       };
+      debugger;
       databasedTeams.push(dbTeam);
     });
-
     let body = {
       id: uuidv4(),
       athleteId: props.user.id,
@@ -194,7 +194,6 @@ function SprintCreation(props) {
     }
     setLoading(false);
   }
-
   function validateForm() {
     let result;
     console.log(Date.now(startDate) - 5000 < Date.now(new Date()) + 4000000);
@@ -206,7 +205,6 @@ function SprintCreation(props) {
     console.log(result);
     return result;
   }
-
   function renderMissionOptions(missions) {
     return missions.map((mission, i) => {
       return (
@@ -216,7 +214,6 @@ function SprintCreation(props) {
       );
     });
   }
-
   function renderPlayerOptions(data) {
     return data.map((playr, index) => {
       return (
@@ -226,6 +223,7 @@ function SprintCreation(props) {
       );
     });
   }
+
   function handleChange(value, input) {
     let parsedJSON = JSON.parse(value);
     setChosenMissions(parsedJSON);
@@ -256,7 +254,6 @@ function SprintCreation(props) {
       }
     }
   }
-
   function handlePlayrChange(value, input) {
     let parsedJSON = JSON.parse(value);
     let newPlayers = chosenPlayers.slice();
@@ -276,13 +273,14 @@ function SprintCreation(props) {
   function removeChosenPlayer(chosenPlayer) {
     setChosenPlayers(chosenPlayers.filter((plyr) => plyr !== chosenPlayer));
   }
-  console.log(chosenMissions)
+  console.log(chosenMissions);
   return (
     <div>
       <h1>{I18n.get("startSprint")}</h1>
       <p>{I18n.get("sprintDescription")} </p>
       <FormGroup controlId="chosenMissions">
         <ControlLabel>{I18n.get("selectTemplate")}</ControlLabel>
+
         <FormControl
           onInput={onInput}
           componentClass="input"
@@ -314,7 +312,6 @@ function SprintCreation(props) {
           {renderPlayerOptions(players)}
         </datalist>
       </FormGroup>
-
       {chosenPlayers.map((chosen, idx) => {
         return (
           <div key={idx} className="block">
@@ -352,7 +349,6 @@ function SprintCreation(props) {
         showNeighboringMonth={true}
       />
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
-
       <LoaderButton
         style={{ width: 350 }}
         onClick={() => createSprint()}
@@ -364,14 +360,12 @@ function SprintCreation(props) {
     </div>
   );
 }
-
 const mapStateToProps = (state) => {
   return {
     profile: state.profile,
     redux: state,
   };
 };
-
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
@@ -380,5 +374,4 @@ const mapDispatchToProps = (dispatch) => {
     dispatch
   );
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(SprintCreation);
