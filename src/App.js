@@ -27,6 +27,7 @@ import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
 import LeftNav from "./components/LeftNav";
+import { getUser } from "./state/profile";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -124,6 +125,8 @@ class App extends Component {
     try {
       const user = await API.get("pareto", `/users/${username}`);
       if (user.length > 0) {
+        console.log("user", user[0]);
+        this.props.getUser(user[0]);
         this.setState({ user: user[0] });
         if (user[0].defaultLanguage) {
           I18n.setLanguage(user[0].defaultLanguage);
@@ -590,6 +593,7 @@ const mapDispatchToProps = (dispatch) => {
       getActiveSprintData: (data) => getActiveSprintData(data),
       getInitialSprintData: (data) => getInitialSprintData(data),
       putUpdatedSprintData: (data) => putUpdatedSprintData(data),
+      getUser: (data) => getUser(data),
     },
     dispatch
   );
