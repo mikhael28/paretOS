@@ -56,7 +56,11 @@ export default function ArenaProofModal({
 		const file = e.target.files[0];
 		// the name to save is the sprint_id_teamIndex_dayIndex_missionIndex
 		try {
-			const pictureKey = uploadToS3(`${sprint.id}_0_${day}_${activeIndex}`, file, fileType[1]);
+			const pictureKey = await uploadToS3(
+				`${sprint.id}_0_${day}_${activeIndex}`,
+				file,
+				fileType[1]
+			);
 
 			setFormData({ ...formData, key: pictureKey.key });
 			successToast("Proof successfully uploaded.");
