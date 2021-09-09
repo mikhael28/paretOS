@@ -13,7 +13,7 @@ Pull-Request for `paretOS`
 - @person2
 - ...
 
-## Steps to reproduce
+## Steps to reproduce (if describing bug fix)
 - Start project
 - Make request to `/endpoint` with `{ "body": "test" }`
 - Expect some response
