@@ -31,6 +31,7 @@ export default class Pomodoro extends React.Component {
 		this.reset = this.reset.bind(this);
 		this.play = this.play.bind(this);
 		this.elapseTime = this.elapseTime.bind(this);
+		this.defaultTime = 10;
 	}
 
 	componentDidMount() {
@@ -94,6 +95,7 @@ export default class Pomodoro extends React.Component {
 			this.restartInterval();
 
 			this.setState({
+				activePomodoro: { ...this.state.activePomodoro, one: Date.now() },
 				play: true,
 			});
 		} catch (err) {
@@ -129,12 +131,10 @@ export default class Pomodoro extends React.Component {
 	}
 
 	setDefaultTime() {
-		let defaultTime = 1500;
-
 		this.setState({
-			time: defaultTime,
-			timeType: defaultTime,
-			title: this.getTitle(defaultTime),
+			time: this.defaultTime,
+			timeType: this.defaultTime,
+			title: this.getTitle(this.defaultTime),
 			play: false,
 		});
 	}
@@ -182,7 +182,7 @@ export default class Pomodoro extends React.Component {
 	alert() {
 		// notification
 		if (true) {
-			if (this.state.timeType === 1500) {
+			if (this.state.timeType === this.defaultTime) {
 				let notification = new Notification("Relax :)", {
 					icon: "img/coffee.png",
 					lang: "en",
@@ -210,6 +210,8 @@ export default class Pomodoro extends React.Component {
 				<div style={{ display: "flex", marginLeft: 12 }}>
 					<img src={gray} height="30" width="30" alt="Pareto" />
 					<p style={textStyle}>POMODORO</p>
+
+					<p>{this.state.title}</p>
 				</div>
 				<div className="flex">
 					<p className="time">{this.format(this.state.time)}</p>
