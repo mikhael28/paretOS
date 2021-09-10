@@ -215,7 +215,10 @@ function ContextPage(props) {
                       <ContextObject
                         {...item}
                         img={url.toString()}
-                        openLink={false}
+                        onClick={() => {
+                          setOpenModal(true);
+                        }}
+                        openLink={false} // this is what opens the new link
                       />
                     )}
                   </React.Fragment>

@@ -41,10 +41,8 @@ export default function MediaCard(props) {
           <div
             className={classNames("context-card", "block")}
             onClick={() => {
-              if (props.openLink) {
-                let win = window.open(props.url, "_blank");
-                win.focus();
-              }
+              
+              
             }}
           >
           {/* <div
