@@ -5,6 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Tooltip from "@material-ui/core/Tooltip";
 import classNames from "classnames";
+import ExternalSiteModal from "./ExternalSiteModal";
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles({
  * @TODO Issue #66
  */
 
+
 export default function MediaCard(props) {
   const classes = useStyles();
 
@@ -40,10 +42,7 @@ export default function MediaCard(props) {
           {/* This is where you should write the modal */}
           <div
             className={classNames("context-card", "block")}
-            onClick={() => {
-              
-              
-            }}
+            onClick={() => props.openExternalModal(props.url)}
           >
           {/* <div
             className={classNames("context-card", "block")}

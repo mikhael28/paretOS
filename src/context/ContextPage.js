@@ -20,6 +20,8 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
+import { Modal } from "react-bootstrap";
+import ExternalSiteModal from "./ExternalSiteModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,7 +31,7 @@ const builder = imageUrlBuilder(sanity);
 /**
  * The Digest page, displaying Context Objects about a particular topic.
  * @TODO Issue #27
- */
+ */Modal
 
 function ContextPage(props) {
   const [items, setItems] = useState([]);
@@ -53,6 +55,15 @@ function ContextPage(props) {
     title: "",
   });
   const [openModal, setOpenModal] = useState(false);
+  const [externalModal, setExternalModal] = useState({display: false, url: ''});
+
+  const openExternalModal = (url) => {
+    setExternalModal({display: true, url})
+  }
+
+  const closeExternalModal = () => {
+    setExternalModal({display: false, url: ''})
+  }
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -215,10 +226,9 @@ function ContextPage(props) {
                       <ContextObject
                         {...item}
                         img={url.toString()}
-                        onClick={() => {
-                          setOpenModal(true);
-                        }}
-                        openLink={false} // this is what opens the new link
+                        openExternalModal={openExternalModal}
+                        closeExternalModal={closeExternalModal}
+                        // openLink={true}  this is what opens the new link
                       />
                     )}
                   </React.Fragment>
@@ -493,6 +503,24 @@ function ContextPage(props) {
           user={props.user}
         />
       </Dialog>
+
+      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
+
+      <Dialog
+        style={{
+          margin: "auto",
+        }}
+        open={externalModal.display}
+        onClose={closeExternalModal}
+        TransitionComponent={Transition}
+        keepMounted
+        hideBackdrop={false}
+      >
+        <ExternalSiteModal url={externalModal.url} />
+      </Dialog>
+
+      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
+      
       <Tour
         steps={steps}
         isOpen={isTourOpen}
