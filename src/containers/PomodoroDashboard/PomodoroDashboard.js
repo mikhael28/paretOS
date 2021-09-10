@@ -2,6 +2,7 @@ import React from "react";
 // import Mousetrap from "mousetrap";
 import gray from "../../assets/Pareto-Gray.png";
 import "./style.css";
+import alarm from "../../assets/alarm.mp3";
 
 /**
  * Experiemental Pomodoro Timer
@@ -17,6 +18,11 @@ export default class Pomodoro extends React.Component {
 			play: false,
 			timeType: 0,
 			title: "",
+			activePomodoro: {
+				one: { start: 0, end: 0 },
+				two: { start: 0, end: 0 },
+				three: { start: 0, end: 0 },
+			},
 		};
 		// Bind early, avoid function creation on render loop
 		this.setTimeForCode = this.setTime.bind(this, 1500);
@@ -75,18 +81,24 @@ export default class Pomodoro extends React.Component {
 		this.interval = setInterval(this.elapseTime, 1000);
 	}
 
-	play() {
-		let audio = new Audio("assets/alarm.mp3");
-		// audio.volume = 1;
-		audio.play();
-		setTimeout(() => audio.pause(), 1400);
-		if (true === this.state.play) return;
+	async play() {
+		try {
+			let audio = new Audio(alarm);
+			console.log(audio);
+			// audio.volume = 1;
+			const playPromise = await audio.play();
 
-		this.restartInterval();
+			setTimeout(() => audio.pause(), 1400);
+			if (true === this.state.play) return;
 
-		this.setState({
-			play: true,
-		});
+			this.restartInterval();
+
+			this.setState({
+				play: true,
+			});
+		} catch (err) {
+			console.log("Err", err);
+		}
 	}
 
 	reset(resetFor = this.state.time) {
