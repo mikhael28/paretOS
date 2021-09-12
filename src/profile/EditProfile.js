@@ -11,10 +11,10 @@ import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
 import { errorToast } from "../libs/toasts";
-import Tour from "reactour";
+ import Tour from "reactour";
 import question from "../assets/help.png";
 import "react-quill/dist/quill.snow.css";
-
+import Languages from "../components/Languages";
 /**
  * These are the forms where you can edit your profile.
  * @TODO GH Issue #13
@@ -119,20 +119,20 @@ export default class EditProfile extends Component {
 
   // This function updates the user profile's default language
 
-  updateLanguage = async () => {
-    let body = {
-      defaultLanguage: this.state.defaultLanguage,
-    };
-    try {
-      const response = await API.put("pareto", `/users/${this.state.id}`, {
-        body,
-      });
-      console.log(response);
-      this.setState({ user: response });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // updateLanguage = async () => {
+  //   let body = {
+  //     defaultLanguage: this.state.defaultLanguage,
+  //   };
+  //   try {
+  //     const response = await API.put("pareto", `/users/${this.state.id}`, {
+  //       body,
+  //     });
+  //     console.log(response);
+  //     this.setState({ user: response });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   // This function updates the user profile object with a PUT, and updates with a new project
 
@@ -238,6 +238,7 @@ export default class EditProfile extends Component {
                   width="33"
                   style={{ marginTop: 54, marginLeft: 6, cursor: "pointer" }}
                 />
+                {/* this is where question mark doesnt open tour */}
                 <Image
                   src={question}
                   onClick={(event) => {
@@ -408,49 +409,8 @@ export default class EditProfile extends Component {
         </div>
 
         <br />
-
-        {/* Here we are updating our default language */}
-
-        <FormGroup controlId="defaultLanguage" bsSize="large">
-          <ControlLabel>Default Language</ControlLabel>
-          <div className="flex">
-            <FormControl
-              componentClass="select"
-              onChange={this.handleChange}
-              value={this.state.defaultLanguage}
-            >
-              <option value="en">Choose Here</option>
-              <option value="en">English</option>
-              <option value="lg">Luganda</option>
-              <option value="ac">Acholi</option>
-              <option value="es">Spanish</option>
-              <option value="ptbr">Portuguese</option>
-            </FormControl>
-            <LoaderButton
-              align="center"
-              block
-              type="submit"
-              style={{ width: 90 }}
-              // disabled={!this.validateForm()}
-              onClick={this.updateLanguage}
-              isLoading={this.state.isLoading}
-              text="Save"
-              loadingText="Updating..."
-            />
-          </div>
-        </FormGroup>
-
-        <Button onClick={() => this.props.history.push("/settings/password")}>
-          Change Password
-        </Button>
-
-        <Tour
-          steps={steps}
-          isOpen={this.state.isTourOpen}
-          onRequestClose={this.closeTour}
-          // showCloseButton={true}
-          // rewindOnClose={false}
-        />
+              {/* update the language */}
+        <Languages />
       </div>
     );
   }
