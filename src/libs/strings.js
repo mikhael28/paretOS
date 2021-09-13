@@ -1352,7 +1352,7 @@ export const strings = {
 
   // Hindi language, India.
   hi: {
-    appTitle1: "Pareto",
+    appTitle1: "परेटो",
     email: "ईमेल",
     login: "साइन इन करें",
     logout: "लॉग आउट",
