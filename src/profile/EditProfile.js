@@ -425,6 +425,7 @@ export default class EditProfile extends Component {
               <option value="ac">Acholi</option>
               <option value="es">Spanish</option>
               <option value="ptbr">Portuguese</option>
+              <option value="hi">Hindi</option>
             </FormControl>
             <LoaderButton
               align="center"
@@ -448,8 +449,8 @@ export default class EditProfile extends Component {
           steps={steps}
           isOpen={this.state.isTourOpen}
           onRequestClose={this.closeTour}
-          // showCloseButton={true}
-          // rewindOnClose={false}
+        // showCloseButton={true}
+        // rewindOnClose={false}
         />
       </div>
     );
