@@ -42,17 +42,8 @@ export default function MediaCard(props) {
           {/* This is where you should write the modal */}
           <div
             className={classNames("context-card", "block")}
-            onClick={() => props.openExternalModal(props.url)}
+            onClick={() => props.openExternalModal(props.url)}  // TypeError: props.openExternalModal is not a function after initalizing server, navigating to library of context, and clicking a resource
           >
-          {/* <div
-            className={classNames("context-card", "block")}
-            onClick={() => {
-              if (props.openLink) {
-                let win = window.open(props.url, "_blank");
-                win.focus();
-              }
-            }}
-          > */}
             <CardActionArea>
               {props.url !== "na" ? (
                 <CardMedia

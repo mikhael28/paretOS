@@ -228,7 +228,6 @@ function ContextPage(props) {
                         img={url.toString()}
                         openExternalModal={openExternalModal}
                         closeExternalModal={closeExternalModal}
-                        // openLink={true}  this is what opens the new link
                       />
                     )}
                   </React.Fragment>
@@ -276,7 +275,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -325,7 +325,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -374,7 +375,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -423,7 +425,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -475,7 +478,8 @@ function ContextPage(props) {
                     <ContextObject
                       {...item}
                       img={url.toString()}
-                      openLink={true}
+                      openExternalModal={openExternalModal}
+                      closeExternalModal={closeExternalModal}
                     />
                   )}
                 </React.Fragment>
@@ -508,7 +512,7 @@ function ContextPage(props) {
 
       <Dialog
         style={{
-          margin: "auto",
+          margin: "auto"
         }}
         open={externalModal.display}
         onClose={closeExternalModal}
