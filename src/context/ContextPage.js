@@ -9,6 +9,7 @@ import BlockContent from "@sanity/block-content-to-react";
 import add from "../assets/add.png";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
 import SuggestionModal from "./SuggestionModal";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -120,6 +121,7 @@ function ContextPage(props) {
       let tempPath = window.location.pathname.split("/");
       let schema = tempPath[2];
       let sObj;
+      // possible to refactor??
       props.sanitySchemas.technicalSchemas.map((obj, idx) => {
         if (obj.slug.current === schema) {
           sObj = obj;
@@ -521,6 +523,15 @@ function ContextPage(props) {
         hideBackdrop={false}
       >
         <ExternalSiteModal url={externalModal.url} />
+        <Button size="small" variant="contained" color="secondary"
+          style={{
+            padding: '10px',
+            fontSize: '20px'
+          }}
+          onClick={() => closeExternalModal()}
+        >
+          Close
+        </Button>
       </Dialog>
 
       {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
