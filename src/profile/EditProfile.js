@@ -6,6 +6,7 @@ import Button from "react-bootstrap/lib/Button";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import Image from "react-bootstrap/lib/Image";
 import LoaderButton from "../components/LoaderButton";
+import Languages from "../components/Languages";
 import uuidv4 from "uuid";
 import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
@@ -411,47 +412,7 @@ export default class EditProfile extends Component {
 
         {/* Here we are updating our default language */}
 
-        <FormGroup controlId="defaultLanguage" bsSize="large">
-          <ControlLabel>Default Language</ControlLabel>
-          <div className="flex">
-            <FormControl
-              componentClass="select"
-              onChange={this.handleChange}
-              value={this.state.defaultLanguage}
-            >
-              <option value="en">Choose Here</option>
-              <option value="en">English</option>
-              <option value="lg">Luganda</option>
-              <option value="ac">Acholi</option>
-              <option value="es">Spanish</option>
-              <option value="ptbr">Portuguese</option>
-              <option value="hi">Hindi</option>
-            </FormControl>
-            <LoaderButton
-              align="center"
-              block
-              type="submit"
-              style={{ width: 90 }}
-              // disabled={!this.validateForm()}
-              onClick={this.updateLanguage}
-              isLoading={this.state.isLoading}
-              text="Save"
-              loadingText="Updating..."
-            />
-          </div>
-        </FormGroup>
-
-        <Button onClick={() => this.props.history.push("/settings/password")}>
-          Change Password
-        </Button>
-
-        <Tour
-          steps={steps}
-          isOpen={this.state.isTourOpen}
-          onRequestClose={this.closeTour}
-        // showCloseButton={true}
-        // rewindOnClose={false}
-        />
+        <Languages />
       </div>
     );
   }
