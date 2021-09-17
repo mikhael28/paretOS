@@ -12,43 +12,39 @@ import API from "@aws-amplify/api";
 
 
 const Languages = (props) => {
-  let [defaultLanguage, setDefaultLanguage] = useState("")
-  let [isLoading, setIsLoading] = useState(false)
-  let [isTourOpen, setIsTourOpen] = useState(false)
-  let [value, setValue] = useState("")
-  let [user, setUser] = useState(props.response)
-  let [name, setName] = useState(props.name)
-  let [id, setId] = useState("")
- //  let [user, setUser] = useState(response)  // let [summary,setSummary] = useState(response[0].summary)
-  // let [fname, setFname] = useState(response[0].fName)
-  // let [lname, setLname] = useState(response[0].lName)
-  // let [note, setNote] = useState(response[0].notes[0])
-  // let [school, setSchool] = useState(response[0].school)
+  let [defaultLanguage, setDefaultLanguage] = useState("");
+  let [isLoading, setIsLoading] = useState(false);
+  let [isTourOpen, setIsTourOpen] = useState(false);
+  let [value, setValue] = useState("");
+  let [user, setUser] = useState(props.response);
+  let [name, setName] = useState(props.name);
+  let [id, setId] = useState("");
+  let [summary,setSummary] = useState("");
+  let [fName,setFName] = useState("");
+  let [lName,setLName] = useState("");
+  let [note,setNote] = useState("");
+  let [school,setSchool] = useState("");
+  
 
-  //  useEffect (() => {
-  //   const path = window.location.pathname.split("/");
-  //   let userId;
-  //   userId = path[path.length - 1];
-  //   // what we did above, was the get the user id from the navigation bar
-  //   const response = await API.get("pareto", `/users/${userId}`);
-  //   // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
-  //    // user: response[0],
-  //    setUser(user)
-  //    setId(id)
-  //     // id: userId,
-  //    setSummary(summary)
-  //     // summary: response[0].summary,
-  //    setFname(fname)
-  //     // fName: response[0].fName,
-  //    setLname(lname)
-  //     // lName: response[0].lName,
-  //    setNote(note)
-  //     // note: response[0].notes[0],
-  //    setSchool(school)
-  //     // school: response[0].school,
-  //     setDefaultLanguage(response[0].defaultLanguage)
-  //     // defaultLanguage: response[0].defaultLanguage,
-  // }, [])
+
+
+useEffect (async () => {
+    const path = window.location.pathname.split("/");
+    let userId = path[path.length - 1];
+    // what we did above, was the get the user id from the navigation bar
+    const response = await API.get("pareto", `/users/${userId}`);
+    // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
+    setUser(response[0]);
+    setId(userId);
+    setSummary(response[0].summary);
+    setFName(response[0].fName);
+    setLName(response[0].lName);
+    setNote(response[0].notes[0]);
+    setSchool(response[0].school);
+    setDefaultLanguage(response.defaultLanguage);
+     
+  })
+
 
   const closeTour = () => {
     setIsTourOpen(!isTourOpen);
@@ -94,11 +90,13 @@ const Languages = (props) => {
             onChange={ (e) => setName(e.target.value)}
             value={name}
           >
-            <option value="en">Choose Here</option>
+            <option value="">Choose Here</option>
             <option value="en">English</option>
             <option value="lg">Luganda</option>
             <option value="ac">Acholi</option>
             <option value="es">Spanish</option>
+            <option value="ptbr">Portuguese</option>
+            <option value="hi">Hindi</option>
           </FormControl>
           <LoaderButton // this is where the save button to render chosen language
             align="center"
@@ -122,8 +120,8 @@ const Languages = (props) => {
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={closeTour}
-        showCloseButton={true}
-        rewindOnClose={false}
+        // showCloseButton={true}
+        // rewindOnClose={false}
       /> 
     
     </div>

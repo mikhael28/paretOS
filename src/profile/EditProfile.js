@@ -117,23 +117,7 @@ export default class EditProfile extends Component {
     }
   };
 
-  // This function updates the user profile's default language
-
-  // updateLanguage = async () => {
-  //   let body = {
-  //     defaultLanguage: this.state.defaultLanguage,
-  //   };
-  //   try {
-  //     const response = await API.put("pareto", `/users/${this.state.id}`, {
-  //       body,
-  //     });
-  //     console.log(response);
-  //     this.setState({ user: response });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
+ 
   // This function updates the user profile object with a PUT, and updates with a new project
 
   addProject = async () => {
