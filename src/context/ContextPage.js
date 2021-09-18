@@ -527,10 +527,19 @@ function ContextPage(props) {
           style={{
             padding: '10px',
             fontSize: '20px'
-          }}
+          }} // Make another button next to it that redirects user to the page
           onClick={() => closeExternalModal()}
         >
           Close
+        </Button>
+        <Button size="small" variant="contained" color="secondary"
+          style={{
+            padding: '10px',
+            fontSize: '20px'
+          }} // Make another button next to it that redirects user to the page
+          onClick={() => closeExternalModal()}
+        >
+          Open External Link
         </Button>
       </Dialog>
 
