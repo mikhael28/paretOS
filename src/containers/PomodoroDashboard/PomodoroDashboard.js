@@ -9,30 +9,11 @@ import alarm from "../../assets/alarm.mp3";
  */
 
 export default function PomodoroDashboard() {
-    const defaultBreakTime = { seconds: 0, minutes: 5 };
-    const defaultWorkTime = {seconds: 0, minutes: 25};
-
-    // timer is running
-    const [isPlaying, setIsPlaying] = useState(false);
-    // time
-    const [minutes, setMinutes] = useState(25);
-    const [seconds, setSeconds] = useState(0);
-    // type of timer - break or work
-    const [isBreak, setIsBreak] = useState(false);
-    const [timerHeading, setTimerHeading] = useState("Work");
-
-    useEffect(() => {
-        if(isPlaying) tick();
-    }, [isPlaying]);
-
-
-    const resetState = () => {
-        setMinutes(25);
-        setSeconds(0);
-        setIsBreak(false);
-        setTimerHeading('Work');
-        setIsPlaying(false);
-    };
+    const [sessionLength, setSessionLength] = useState(2);
+    const [breakLength, setBreakLength] = useState(1);
+    const [timerLabel, setTimerLabel] = useState('Session');
+    const [secondsLeft, setSecondsLeft] = useState(2 * 60);
+    const [timerRunning, setTimerRunning] = useState(false);
 
     const playSound = async  () => {
         // Play and pause the audio
@@ -42,53 +23,75 @@ export default function PomodoroDashboard() {
         setTimeout(() => audio.pause(), 1400);
     }
 
-    const tick = () => {
-        if(!isPlaying) return;
+    let minutes = Math.floor(secondsLeft / 60);
+    let seconds = secondsLeft % 60;
 
-        console.log('tick');
+    useEffect(() => {
+            const handleSwitch = () => {
+                if (timerLabel === 'Session') {
+                    setTimerLabel('Break');
+                    setSecondsLeft(breakLength * 60);
+                } else if (timerLabel === 'Break') {
+                    setTimerLabel('Session');
+                    setSecondsLeft(sessionLength * 60);
+                }
+            }
 
-        console.log(seconds, minutes);
-        if (seconds > 0) {
-            setSeconds(prevSeconds => prevSeconds - 1);
-        } else if (minutes > 0) {
-            console.log(seconds);
-            console.log(minutes);
-            setSeconds(59);
-            setMinutes(prevMinutes => prevMinutes - 1);
-        } else {
-            playSound();
-            handleBreak();
-        }
+            let countdown = null;
+            if (timerRunning && secondsLeft > 0) {
+                countdown = setInterval(() => {
+                    setSecondsLeft(secondsLeft - 1);
+                }, 1000);
+            } else if (timerRunning && secondsLeft === 0) {
+                countdown = setInterval(() => {
+                    setSecondsLeft(secondsLeft - 1);
+                }, 1000);
+                playSound();
+                handleSwitch();
+            } else {
+                clearInterval(countdown);
+            }
+            return () => clearInterval(countdown);
+        },
+        [timerRunning, secondsLeft, timerLabel, breakLength, sessionLength]);
 
-        setTimeout(tick, 1000);
-    };
-
-    const handleBreak = () => {
-        if(isBreak) {
-            setIsPlaying(true);
-            setIsBreak(false);
-            setSeconds(defaultBreakTime.seconds);
-            setMinutes(defaultBreakTime.minutes);
-            setTimerHeading('Break');
-        } else {
-            setIsBreak(true);
-            setTimerHeading('Work');
-            setMinutes(defaultWorkTime.minutes);
-            setSeconds(defaultWorkTime.seconds);
-        }
+    const handleStart = () => {
+        playSound();
+        setTimerRunning(true);
     }
 
-    const onToggle = () => {
-        if(isPlaying) setIsPlaying(false)
-        else setIsPlaying(true);
-    };
+    const handleStop = () => {
+        playSound();
+        setTimerRunning(false);
+    }
+
+    const handleReset = () => {
+        setSessionLength(25);
+        setBreakLength(5);
+        setSecondsLeft(25 * 60);
+        setTimerLabel('Session');
+        setTimerRunning(false);
+    }
 
     return (
         <div>
-            <h1>{timerHeading} - {minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}</h1>
+            <h2 id='timer-label'>{timerLabel}</h2>
+            <h3 id='time-left'>
+                {minutes < 10 ? ("0" + minutes).slice(-2) : minutes}:{seconds < 10 ? ("0" + seconds).slice(-2) : seconds}
+            </h3>
 
-            <button onClick={onToggle}>Toggle</button>
-            <button onClick={resetState}>Reset</button>
+            <button
+                id='start_stop'
+                onClick={timerRunning ? handleStop : handleStart}
+            >
+                Start/Stop
+            </button>
+            <button
+                onClick={handleReset}
+                id='reset'
+            >
+                Reset
+            </button>
         </div>
     )
 }
