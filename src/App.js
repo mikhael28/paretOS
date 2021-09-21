@@ -125,7 +125,6 @@ class App extends Component {
     try {
       const user = await API.get("pareto", `/users/${username}`);
       if (user.length > 0) {
-        console.log("user", user[0]);
         this.props.getUser(user[0]);
         this.setState({ user: user[0] });
         if (user[0].defaultLanguage) {
