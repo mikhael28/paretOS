@@ -523,24 +523,29 @@ function ContextPage(props) {
         hideBackdrop={false}
       >
         <ExternalSiteModal url={externalModal.url} />
+
+         <Button size="small" variant="contained" color="primary"
+          style={{
+            padding: '10px',
+            fontSize: '20px'
+          }}
+          onClick={() => {
+            let win = window.open(externalModal.url, "_blank");
+            win.focus();}
+          }
+        >
+          Open External Link
+        </Button>
         <Button size="small" variant="contained" color="secondary"
           style={{
             padding: '10px',
             fontSize: '20px'
-          }} // Make another button next to it that redirects user to the page
+          }}
           onClick={() => closeExternalModal()}
         >
           Close
         </Button>
-        <Button size="small" variant="contained" color="secondary"
-          style={{
-            padding: '10px',
-            fontSize: '20px'
-          }} // Make another button next to it that redirects user to the page
-          onClick={() => closeExternalModal()}
-        >
-          Open External Link
-        </Button>
+       
       </Dialog>
 
       {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}

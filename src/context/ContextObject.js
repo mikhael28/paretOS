@@ -5,7 +5,6 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Tooltip from "@material-ui/core/Tooltip";
 import classNames from "classnames";
-import ExternalSiteModal from "./ExternalSiteModal";
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
