@@ -30,6 +30,7 @@ const useStyles = makeStyles({
  * @TODO Issue #66
  */
 
+
 export default function MediaCard(props) {
   const classes = useStyles();
 
@@ -37,14 +38,10 @@ export default function MediaCard(props) {
     <React.Fragment>
       {props.logo || props.slug || props.img.options ? (
         <HtmlTooltip title={props.summary}>
+          {/* This is where you should write the modal */}
           <div
             className={classNames("context-card", "block")}
-            onClick={() => {
-              if (props.openLink) {
-                let win = window.open(props.url, "_blank");
-                win.focus();
-              }
-            }}
+            onClick={() => props.openExternalModal(props.url)}  // TypeError: props.openExternalModal is not a function, only after after initalizing server, navigating to library of context, and clicking a resource
           >
             <CardActionArea>
               {props.url !== "na" ? (
