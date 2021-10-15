@@ -21,7 +21,6 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import { Modal } from "react-bootstrap";
 import ExternalSiteModal from "./ExternalSiteModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -32,7 +31,7 @@ const builder = imageUrlBuilder(sanity);
 /**
  * The Digest page, displaying Context Objects about a particular topic.
  * @TODO Issue #27
- */Modal
+ */
 
 function ContextPage(props) {
   const [items, setItems] = useState([]);
@@ -56,14 +55,17 @@ function ContextPage(props) {
     title: "",
   });
   const [openModal, setOpenModal] = useState(false);
-  const [externalModal, setExternalModal] = useState({display: false, url: ''});
+  const [externalModal, setExternalModal] = useState({
+    display: false,
+    url: "",
+  });
 
-  const openExternalModal = (url) => {
-    setExternalModal({display: true, url})
+  function openExternalModal(url) {
+    setExternalModal({ display: true, url });
   }
 
-  const closeExternalModal = () => {
-    setExternalModal({display: false, url: ''})
+  function closeExternalModal() {
+    setExternalModal({ display: false, url: "" });
   }
 
   const handleCloseModal = () => {
@@ -510,11 +512,9 @@ function ContextPage(props) {
         />
       </Dialog>
 
-      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
-
       <Dialog
         style={{
-          margin: "auto"
+          margin: "auto",
         }}
         open={externalModal.display}
         onClose={closeExternalModal}
@@ -524,32 +524,37 @@ function ContextPage(props) {
       >
         <ExternalSiteModal url={externalModal.url} />
 
-         <Button size="small" variant="contained" color="primary"
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
           style={{
-            padding: '10px',
-            fontSize: '20px'
+            padding: "10px",
+            fontSize: "20px",
           }}
           onClick={() => {
             let win = window.open(externalModal.url, "_blank");
-            win.focus();}
-          }
+            win.focus();
+          }}
         >
           Open External Link
         </Button>
-        <Button size="small" variant="contained" color="secondary"
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
           style={{
-            padding: '10px',
-            fontSize: '20px'
+            padding: "10px",
+            fontSize: "20px",
           }}
           onClick={() => closeExternalModal()}
         >
           Close
         </Button>
-       
       </Dialog>
 
       {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
-      
+
       <Tour
         steps={steps}
         isOpen={isTourOpen}
