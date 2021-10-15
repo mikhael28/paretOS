@@ -9,6 +9,7 @@ import BlockContent from "@sanity/block-content-to-react";
 import add from "../assets/add.png";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
 import SuggestionModal from "./SuggestionModal";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -20,6 +21,8 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
+import { Modal } from "react-bootstrap";
+import ExternalSiteModal from "./ExternalSiteModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,7 +32,7 @@ const builder = imageUrlBuilder(sanity);
 /**
  * The Digest page, displaying Context Objects about a particular topic.
  * @TODO Issue #27
- */
+ */Modal
 
 function ContextPage(props) {
   const [items, setItems] = useState([]);
@@ -53,6 +56,15 @@ function ContextPage(props) {
     title: "",
   });
   const [openModal, setOpenModal] = useState(false);
+  const [externalModal, setExternalModal] = useState({display: false, url: ''});
+
+  const openExternalModal = (url) => {
+    setExternalModal({display: true, url})
+  }
+
+  const closeExternalModal = () => {
+    setExternalModal({display: false, url: ''})
+  }
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -109,6 +121,7 @@ function ContextPage(props) {
       let tempPath = window.location.pathname.split("/");
       let schema = tempPath[2];
       let sObj;
+      // possible to refactor??
       props.sanitySchemas.technicalSchemas.map((obj, idx) => {
         if (obj.slug.current === schema) {
           sObj = obj;
@@ -215,7 +228,8 @@ function ContextPage(props) {
                       <ContextObject
                         {...item}
                         img={url.toString()}
-                        openLink={true}
+                        openExternalModal={openExternalModal}
+                        closeExternalModal={closeExternalModal}
                       />
                     )}
                   </React.Fragment>
@@ -263,7 +277,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -312,7 +327,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -361,7 +377,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -410,7 +427,8 @@ function ContextPage(props) {
                         <ContextObject
                           {...item}
                           img={url.toString()}
-                          openLink={true}
+                          openExternalModal={openExternalModal}
+                          closeExternalModal={closeExternalModal}
                         />
                       )}
                     </React.Fragment>
@@ -462,7 +480,8 @@ function ContextPage(props) {
                     <ContextObject
                       {...item}
                       img={url.toString()}
-                      openLink={true}
+                      openExternalModal={openExternalModal}
+                      closeExternalModal={closeExternalModal}
                     />
                   )}
                 </React.Fragment>
@@ -471,6 +490,7 @@ function ContextPage(props) {
           </div>
         </React.Fragment>
       ) : null}
+      {/* Modal Component */}
       <Dialog
         style={{
           margin: "auto",
@@ -489,6 +509,47 @@ function ContextPage(props) {
           user={props.user}
         />
       </Dialog>
+
+      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
+
+      <Dialog
+        style={{
+          margin: "auto"
+        }}
+        open={externalModal.display}
+        onClose={closeExternalModal}
+        TransitionComponent={Transition}
+        keepMounted
+        hideBackdrop={false}
+      >
+        <ExternalSiteModal url={externalModal.url} />
+
+         <Button size="small" variant="contained" color="primary"
+          style={{
+            padding: '10px',
+            fontSize: '20px'
+          }}
+          onClick={() => {
+            let win = window.open(externalModal.url, "_blank");
+            win.focus();}
+          }
+        >
+          Open External Link
+        </Button>
+        <Button size="small" variant="contained" color="secondary"
+          style={{
+            padding: '10px',
+            fontSize: '20px'
+          }}
+          onClick={() => closeExternalModal()}
+        >
+          Close
+        </Button>
+       
+      </Dialog>
+
+      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
+      
       <Tour
         steps={steps}
         isOpen={isTourOpen}

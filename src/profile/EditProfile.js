@@ -10,7 +10,6 @@ import uuidv4 from "uuid";
 import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
-import generator from "generate-password";
 import { errorToast } from "../libs/toasts";
 import Tour from "reactour";
 import question from "../assets/help.png";
@@ -28,7 +27,6 @@ export default class EditProfile extends Component {
 
     this.state = {
       isLoading: false,
-      users: [],
       providers: [],
       summary: "",
       summaryCheck: false,
@@ -37,27 +35,13 @@ export default class EditProfile extends Component {
       },
       id: "",
       github: "https://github.com/",
-      githubProfile: "",
       name: "",
       editName: false,
       description: "",
       addProject: false,
-      editSchool: false,
-      school: "",
-      team: [],
-      tools: [],
       fName: "",
       lName: "",
-      createdBy: "",
-      acceptedTOS: false,
-      uuid: generator.generate({
-        length: 12,
-        numbers: true,
-      }),
-      type: "mentee",
-      text: "",
       isTourOpen: false,
-      noteLoading: false,
       defaultLanguage: "",
       picture:
         "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp",
@@ -67,32 +51,20 @@ export default class EditProfile extends Component {
   async componentDidMount() {
     const path = window.location.pathname.split("/");
     let userId;
-    if (window.location.pathname === "/") {
-      userId = this.props.username;
-      this.setState({
-        user: this.props.user,
-        id: userId,
-        summary: this.props.user.summary,
-        fName: this.props.user.fName,
-        lName: this.props.user.lName,
-        note: this.props.user.notes[0],
-        school: this.props.user.school,
-        defaultLanguage: this.props.user.defaultLanguage,
-      });
-    } else {
-      userId = path[path.length - 1];
-      const response = await API.get("pareto", `/users/${userId}`);
-      this.setState({
-        user: response[0],
-        id: userId,
-        summary: response[0].summary,
-        fName: response[0].fName,
-        lName: response[0].lName,
-        note: response[0].notes[0],
-        school: response[0].school,
-        defaultLanguage: response[0].defaultLanguage,
-      });
-    }
+    userId = path[path.length - 1];
+    // what we did above, was the get the user id from the navigation bar
+    const response = await API.get("pareto", `/users/${userId}`);
+    // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
+    this.setState({
+      user: response[0],
+      id: userId,
+      summary: response[0].summary,
+      fName: response[0].fName,
+      lName: response[0].lName,
+      note: response[0].notes[0],
+      school: response[0].school,
+      defaultLanguage: response[0].defaultLanguage,
+    });
   }
 
   closeTour = () => {
@@ -101,13 +73,16 @@ export default class EditProfile extends Component {
     });
   };
 
+  // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
+  // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
+
   handleChange = (event) => {
     this.setState({
       [event.target.id]: event.target.value,
     });
   };
 
-  handleSubmit = async (event) => {
+  updateBio = async (event) => {
     event.preventDefault();
 
     this.setState({ isLoading: true });
@@ -142,20 +117,7 @@ export default class EditProfile extends Component {
     }
   };
 
-  updateSchool = async () => {
-    let body = {
-      school: this.state.school,
-    };
-    try {
-      const response = await API.put("pareto", `/users/${this.state.id}`, {
-        body,
-      });
-      console.log(response);
-      this.setState({ user: response });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // This function updates the user profile's default language
 
   updateLanguage = async () => {
     let body = {
@@ -172,6 +134,8 @@ export default class EditProfile extends Component {
     }
   };
 
+  // This function updates the user profile object with a PUT, and updates with a new project
+
   addProject = async () => {
     let projects = this.state.user.projects.slice();
 
@@ -180,8 +144,8 @@ export default class EditProfile extends Component {
       description: this.state.description,
       github: this.state.github,
       name: this.state.name,
-      team: this.state.team,
-      tools: this.state.tools,
+      team: [],
+      tools: [],
     };
     projects.push(newProject);
 
@@ -198,7 +162,6 @@ export default class EditProfile extends Component {
         github: "",
         name: "",
         team: [],
-        tools: [],
         addProject: false,
       });
     } catch (e) {
@@ -206,7 +169,7 @@ export default class EditProfile extends Component {
     }
   };
 
-  onChange = async (e) => {
+  uploadToS3 = async (e) => {
     const file = e.target.files[0];
     let fileType = e.target.files[0].name.split(".");
 
@@ -214,7 +177,7 @@ export default class EditProfile extends Component {
       // @TODO: check to see whether this works for video, and what safeguards may not to be added.
       // @TODO: update this manual id for a dynamically generated one
       let pictureKey = await Storage.put(
-        `48150f13-679a-40fc-9f23-b4ebe4af6f08.${fileType[1]}`,
+        `${this.state.user.id}.${fileType[1]}`,
         file,
         {
           contentType: "image/*",
@@ -256,6 +219,7 @@ export default class EditProfile extends Component {
       <div className="flex-down">
         <div className="flex">
           <div className="first-step-home">
+            {/* Here we should the name, and Glyphicon to trigger the edit name forms. */}
             {this.state.editName === false ? (
               <div className="flex">
                 <img
@@ -292,6 +256,7 @@ export default class EditProfile extends Component {
               </div>
             ) : (
               <div className="flex">
+                {/* Here we are actuall editing our names/choosing a photo to upload to s3. */}
                 <div className="flex-down" style={{ marginTop: 20 }}>
                   <div className="flex">
                     <FormGroup controlId="fName" bsSize="large">
@@ -318,7 +283,7 @@ export default class EditProfile extends Component {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(evt) => this.onChange(evt)}
+                    onChange={(evt) => this.uploadToS3(evt)}
                   />
                   <Button onClick={() => this.setState({ editName: false })}>
                     {I18n.get("cancel")}
@@ -328,47 +293,6 @@ export default class EditProfile extends Component {
             )}
           </div>
         </div>
-
-        {/* Hiding the below for now, not sure it makes sense for users to update. More so for admin? Is this feature even relevant anymore? could be for organizations, but not on a user-level */}
-
-        {/* {this.state.editSchool === false ? (
-          <p>
-            {I18n.get("organization")}: {this.state.user.school}{" "}
-            <Glyphicon
-              onClick={() => this.setState({ editSchool: true })}
-              glyph="glyphicon glyphicon-pencil"
-              height="33"
-              width="33"
-              style={{ marginLeft: 6, cursor: "pointer" }}
-            />
-          </p>
-        ) : (
-          <div className="block">
-            <FormGroup controlId="school" bsSize="large">
-              <ControlLabel>{I18n.get("school")}</ControlLabel>
-              <FormControl
-                componentClass="select"
-                onChange={this.handleChange}
-                value={this.state.school}
-              >
-                <option value="No School">
-                  {I18n.get("pleaseChooseAnOption")}
-                </option>
-                <option value="LCF">Latino Community Fund</option>
-                <option value="PARETO">Pareto</option>
-                <option value="JDSB">Junior Dev Struggle Bus</option>
-              </FormControl>
-            </FormGroup>
-            <div className="button-space">
-              <Button onClick={() => this.setState({ editSchool: false })}>
-                {I18n.get("cancel")}
-              </Button>
-              <Button onClick={this.updateSchool}>
-                {I18n.get("confirmation")}
-              </Button>
-            </div>
-          </div>
-        )} */}
         <div>
           <h2>About you</h2>
           {this.state.summaryCheck ? (
@@ -392,7 +316,7 @@ export default class EditProfile extends Component {
                   bsSize="small"
                   type="submit"
                   // disabled={!this.validateForm()}
-                  onClick={this.handleSubmit}
+                  onClick={this.updateBio}
                   isLoading={this.state.isLoading}
                   text="Update Summary"
                   loadingText="Creation"
@@ -417,6 +341,7 @@ export default class EditProfile extends Component {
           )}
         </div>
 
+        {/* This is where we are adding projects to your profile */}
         <div>
           <h2 className="third-step-home">
             {I18n.get("projects")}{" "}
@@ -484,6 +409,8 @@ export default class EditProfile extends Component {
 
         <br />
 
+        {/* Here we are updating our default language */}
+
         <FormGroup controlId="defaultLanguage" bsSize="large">
           <ControlLabel>Default Language</ControlLabel>
           <div className="flex">
@@ -497,6 +424,8 @@ export default class EditProfile extends Component {
               <option value="lg">Luganda</option>
               <option value="ac">Acholi</option>
               <option value="es">Spanish</option>
+              <option value="ptbr">Portuguese</option>
+              <option value="hi">Hindi</option>
             </FormControl>
             <LoaderButton
               align="center"
@@ -520,8 +449,8 @@ export default class EditProfile extends Component {
           steps={steps}
           isOpen={this.state.isTourOpen}
           onRequestClose={this.closeTour}
-          // showCloseButton={true}
-          // rewindOnClose={false}
+        // showCloseButton={true}
+        // rewindOnClose={false}
         />
       </div>
     );

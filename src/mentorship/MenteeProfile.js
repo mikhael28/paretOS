@@ -70,7 +70,6 @@ function Profile(props) {
 
   return (
     <div style={{ marginTop: 28 }}>
-      <h2>Mentee Profile</h2>
       {loading === true ? (
         <section style={{ marginTop: -12 }}>
           <h2 className="section-title">

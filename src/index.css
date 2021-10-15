@@ -12,93 +12,127 @@ body {
 /* global mobile style media query, primarily for navigation layout */
 
 .sticky-logout {
-	position: fixed;
-	top: 36px;
-	right: 15px;
-	cursor: pointer;
-	font-size: 36px;
+  position: fixed;
+  top: 36px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 36px;
+  z-index: 10;
 }
 
+/* Typography */
+
+h1 {
+  color: rgb(36, 35, 35);
+  margin-top: 36px;
+  font-weight: 400;
+  font-size: 36px;
+}
+select.form-control,
+textarea.form-control,
+input.form-control {
+  font-size: 16px;
+}
+input[type="file"] {
+  width: 100%;
+}
+
+/* mobile/tablet styling */
+
 @media screen and (max-width: 768px) {
-	html {
-		padding-top: -74px;
-	}
-	.root-padding {
-		padding-left: 24px;
-		padding-right: 16px;
-	}
-	.sticky-nav {
-		position: fixed;
-		bottom: 0px;
-		visibility: visible;
-		width: 100%;
-		padding-left: -24px;
-	}
+  html {
+    padding-top: -74px;
+  }
+   h1 {
+      color: rgb(36, 35, 35);
+      margin-top: 36px;
+      font-weight: 400;
+      font-size: 9vw;
+    }
+    header span{
+      font-size: 3vw;
+    }
+  .tabPanelCont{
+    margin: -8.5vw;
+    margin-bottom: 6vh;
+  }
+  .root-padding {
+    padding-left: 24px;
+    padding-right: 16px;
+    margin-bottom: 12vh;
+  }
+  .sticky-nav {
+    position: fixed;
+    bottom: 0px;
+    visibility: visible;
+    width: 100%;
+    padding-left: -24px;
+  }
+  .sticky-nav button {
+    min-width: 0;
+  }
+  .sidenav {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    padding-top: 40px;
+    background-color: rgb(37, 38, 39);
+    -webkit-transform: translate3d(-100%, 0px, 0px);
+    transform: translate3d(-100%, 0px, 0px);
+    transition: all 0.5s ease 0s;
+    -webkit-transition: all 0.5s ease 0s;
+    visibility: hidden;
+  }
+  .sticky-chat {
+    visibility: hidden;
+  }
 
-	.sidenav {
-		height: 100%;
-		position: fixed;
-		z-index: 1;
-		padding-top: 40px;
-		background-color: rgb(37, 38, 39);
-		-webkit-transform: translate3d(-100%, 0px, 0px);
-		transform: translate3d(-100%, 0px, 0px);
-		transition: all 0.5s ease 0s;
-		-webkit-transition: all 0.5s ease 0s;
-		visibility: hidden;
-	}
-
-	.sticky-chat {
-		visibility: hidden;
-	}
-
-	.notes-overflow {
-		overflow: scroll;
-		max-height: 180px;
-	}
+  .notes-overflow {
+    overflow: scroll;
+    max-height: 180px;
+  }
 }
 
 /* Global tablet+ media query */
 
 @media screen and (min-width: 768px) {
-	html {
-		padding-top: -74px;
-	}
-	.root-padding {
-		padding-left: 244px;
-		padding-right: 16px;
-	}
-	.sticky-nav {
-		visibility: hidden;
-	}
+  html {
+    padding-top: -74px;
+  }
+  .root-padding {
+    padding-left: 244px;
+    padding-right: 16px;
+  }
+  .sticky-nav {
+    visibility: hidden;
+  }
+  .sidenav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 232px;
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: rgb(37, 38, 39);
+    padding-top: 40px;
+    color: rgb(242, 243, 243);
+    border: 1px solid grey;
+    list-style: none;
+    transition: all 0.5s;
+  }
 
-	.sidenav {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		width: 232px;
-		position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-		z-index: 1; /* Stay on top */
-		top: 0; /* Stay at the top */
-		left: 0;
-		background-color: rgb(37, 38, 39);
-		padding-top: 40px;
-		color: rgb(242, 243, 243);
-		border: 1px solid grey;
-		list-style: none;
-		transition: all 0.5s;
-	}
-
-	.sticky-chat {
-		position: fixed;
-		bottom: 90px;
-		right: 15px;
-		visibility: visible;
-	}
-	.notes-overflow {
-		overflow: scroll;
-		max-height: 610px;
-	}
+  .sticky-chat {
+    position: fixed;
+    bottom: 90px;
+    right: 15px;
+    visibility: visible;
+  }
+  .notes-overflow {
+    overflow: scroll;
+    max-height: 610px;
+  }
 }
 
 /* Colors */
@@ -123,23 +157,6 @@ body {
 	color: rgb(52, 58, 64);
 }
 
-/* Typography */
-
-h1 {
-	color: rgb(36, 35, 35);
-	margin-top: 36px;
-	font-weight: 400;
-	font-size: 36px;
-}
-select.form-control,
-textarea.form-control,
-input.form-control {
-	font-size: 16px;
-}
-input[type="file"] {
-	width: 100%;
-}
-
 /* Overflow classes */
 
 .overflow {
@@ -148,8 +165,8 @@ input[type="file"] {
 }
 
 .small-overflow {
-	overflow: scroll;
-	max-height: 200px;
+  overflow: visible;
+  max-height: 200px;
 }
 
 .visible-overflow {
@@ -263,24 +280,24 @@ input[type="file"] {
 }
 
 .highlight-block {
-	padding: 8px;
-	border-radius: 3px;
-	background: rgb(0, 170, 212);
-	color: white;
-	margin: 8px;
-	box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  padding: 8px;
+  border-radius: 3px;
+  background: #339c51;
+  color: white;
+  margin: 8px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
 }
 
 .exp-card {
-	padding: 8px;
-	border-radius: 3px;
-	background: #f1eded;
-	margin: 8px;
-	box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	flex-grow: 1;
-	max-width: 350px;
+  padding: 8px;
+  border-radius: 3px;
+  background: #f1efef;
+  margin: 8px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-grow: 1;
+  max-width: 350px;
 }
 
 .exp-card:hover {
@@ -326,6 +343,29 @@ input[type="file"] {
 	background-color: rgb(233, 232, 232);
 }
 
+/* Modal Styles */
+
+.fresh-modal {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content/Box */
+.fresh-modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
 /* Leaderboard styles */
 
 .rank-header {
@@ -355,6 +395,8 @@ input[type="file"] {
 
 /* button styles */
 
+
+
 .LoaderButton .spinning.glyphicon {
 	margin-right: 7px;
 	top: 2px;
@@ -370,30 +412,60 @@ input[type="file"] {
 }
 
 .btn {
-	border: 0;
-	background: #30944c;
-	color: #fff;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	font-weight: 1000;
-	-webkit-transition: background 0.3s;
-	transition: background 0.3s;
-	max-width: 200px;
-	margin-right: 10px;
+  border: 0;
+  background: #339c51;
+  width:180px;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 1000;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  max-height: 30px;
+  margin-right: 10px;
 }
 
 .btn:hover {
-	background: #1e5f30;
-	color: white;
+  background: #26773d;
+  color: white;
 }
 
 .btn:active,
 .btn:focus {
-	outline: 0;
-	background: #1e5f30;
-	color: white;
+  outline: 0;
+  background: #247039;
+  color: white;
+}
+
+.btn-cancel{
+  background: #f44336;
+  border: 0;
+  width:180px;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 1000;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  max-height: 30px;
+  margin-right: 10px;
+  
+}
+
+.btn-cancel:hover {
+  background: #af3b32;
+  color: white;
+}
+
+.btn:active,
+.btn:focus {
+  outline: 0;
+  background: #af3b32;
+  color: white;
 }
 
 .btnIcon {
@@ -418,12 +490,25 @@ input[type="file"] {
 	opacity: 0.5;
 }
 
+.btn-outline {
+  background: none;
+  color: #30944c;
+  border: 2px solid #30944c;
+}
+
+.btn-outline:hover {
+  background: #30944c;
+  border: 2px solid #30944c;
+}
+
 /* Form styles */
 
 .NotFound {
 	padding-top: 100px;
 	text-align: center;
 }
+
+
 
 .BillingForm .card-field {
 	margin-bottom: 15px;
@@ -441,12 +526,33 @@ input[type="file"] {
 	border-color: #66afe9;
 }
 
+.BillingForm .form-group .form-group-lg{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.ConfirmPurchaseForm{
+  display: flex;
+  align-items: flex-end;
+  gap:20px;
+}
+
+.ConfirmPurchaseForm > button{
+  height:56px;
+  margin-bottom: 60px;
+  border-radius: 6px;
+  background-color: #f44336;
+  font-size: 18px;
+  
+}
+
 @media all and (min-width: 480px) {
-	.Form {
-		padding: 60px 0;
-		margin: 0 auto;
-		max-width: 320px;
-	}
+  .Form {
+    padding: 60px 0;
+    max-width: 320px;
+    margin: 0 auto;
+  }
 }
 .Form .LoaderButton:last-child {
 	margin-top: 15px;
@@ -601,14 +707,14 @@ input[type="file"] {
 }
 
 .message {
-	align-self: flex-start;
-	margin-top: 4px;
-	padding: 8px 12px;
-	max-width: 280px;
-	background: rgb(0, 170, 212);
-	border-radius: 16px;
-	font-size: 14px;
-	color: rgb(255, 255, 254);
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 8px 12px;
+  max-width: 280px;
+  background: #339c51;
+  border-radius: 16px;
+  font-size: 14px;
+  color: rgb(255, 255, 254);
 }
 
 .message.league {

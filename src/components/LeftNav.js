@@ -9,8 +9,9 @@ import red from "../assets/Pareto-Red-01.png";
 import blue from "../assets/Pareto-Blue-01.png";
 import white from "../assets/Pareto_Lockup-White.png";
 import { AiFillCode } from "react-icons/ai";
-import { FaTools } from "react-icons/fa";
-import { IoMdSchool } from "react-icons/io";
+import { FaTools, FaHandsHelping } from "react-icons/fa";
+import { IoMdSchool, IoMdCreate } from "react-icons/io";
+import { BiRun } from "react-icons/bi";
 
 const LeftNav = (props) => {
   const { chosenLanguage, user, updateState, athletes } = props;
@@ -104,6 +105,42 @@ const LeftNav = (props) => {
               <Glyphicon glyph="glyphicon glyphicon-cog" />
               &ensp; English
             </MenuItem>
+
+            <MenuItem
+              exact
+              key={1.4}
+              onClick={() => {
+                I18n.setLanguage("ptbr");
+                updateState({
+                  chosenLanguage: {
+                    name: "Portuguese",
+                    image:
+                      "https://cdn.countryflags.com/thumbs/brazil/flag-400.png",
+                  },
+                });
+              }}
+            >
+              <Glyphicon glyph="glyphicon glyphicon-cog" />
+              &ensp; Portuguese(Brazil)
+            </MenuItem>
+
+            <MenuItem
+              exact
+              key={1.5}
+              onClick={() => {
+                I18n.setLanguage("hi");
+                updateState({
+                  chosenLanguage: {
+                    name: "Hindi",
+                    image:
+                      "https://cdn.countryflags.com/thumbs/india/flag-400.png",
+                  },
+                });
+              }}
+            >
+              <Glyphicon glyph="glyphicon glyphicon-cog" />
+              &ensp; Hindi(India)
+            </MenuItem>
           </div>
         </DropdownButton>
       </div>
@@ -136,7 +173,7 @@ const LeftNav = (props) => {
         </p>
       </div>
 
-      <div style={{}}>
+      <div style={{ marginTop: 10 }}>
         <NavLink
           to="/"
           style={textStyle}
@@ -151,51 +188,85 @@ const LeftNav = (props) => {
             alt="pareto blue"
             className="first-step"
           />
-          &ensp; <p style={{ marginTop: 4 }}>{I18n.get("arena")}</p>
+          &ensp;{" "}
+          <p style={{ marginTop: 4, marginLeft: 3 }}>{I18n.get("arena")}</p>
         </NavLink>
+
+        <div
+          style={{
+            // marginLeft: 22,
+            fontSize: 14,
+            color: "white",
+          }}
+        >
+          <NavLink
+            to={`/arena/create/sprints`}
+            style={noPadStyle}
+            activeStyle={activeTextStyle}
+            exact
+          >
+            <BiRun style={{ height: 26, width: 26 }} />
+            <p style={{ marginLeft: 10 }}>{I18n.get("startSprint")}</p>
+          </NavLink>
+          <NavLink
+            to={`/arena/create/template`}
+            style={noPadStyle}
+            activeStyle={activeTextStyle}
+            exact
+          >
+            <IoMdCreate style={{ height: 26, width: 26 }} />
+            <p style={{ marginLeft: 10 }}>Sprint Template</p>
+          </NavLink>
+        </div>
       </div>
 
-      {user.instructor === true && athletes.length !== 0 ? (
-        <React.Fragment>
-          <p style={(activeTextStyle, { marginLeft: 12, marginTop: 10 })}>
-            <img
-              src={red}
-              height="30"
-              width="30"
-              style={{ marginBottom: 6 }}
-              alt="pareto-learn"
-            />
+      {user.instructor === true ? (
+        <div style={{ marginTop: 14 }}>
+          <NavLink
+            to={`/mentorship`}
+            style={textStyle}
+            activeStyle={activeTextStyle}
+            exact
+          >
+            <img src={red} height="30" width="30" alt="pareto-learn" />
             &ensp; {I18n.get("mentorship")}
-          </p>
+          </NavLink>
 
           {/* Experience/Quick Info Below */}
           <div className="small-overflow">
             {athletes.map((relationship, idx) => {
               return (
-                <NavLink to={`/mentorship/${relationship.id}`} key={idx}>
+                <NavLink
+                  to={`/mentorship/${relationship.id}`}
+                  key={idx}
+                  style={noPadStyle}
+                  activeStyle={activeTextStyle}
+                  exact
+                >
                   <div
                     className="flex"
                     style={{
-                      fontSize: 16,
-                      color: "white",
-                      padding: 8,
+                      fontSize: 14,
+                      alignItems: "center",
                     }}
                   >
-                    <p style={{ marginTop: 6, marginLeft: 18 }}>
-                      {idx + 1}. {relationship.mentee.fName}{" "}
-                      {relationship.mentee.lName}
+                    <FaHandsHelping
+                      style={{ height: 26, width: 26, marginRight: 8 }}
+                    />
+                    <p>
+                      {relationship.mentee.fName} {relationship.mentee.lName}
                     </p>
                   </div>
                 </NavLink>
               );
             })}
           </div>
-        </React.Fragment>
+        </div>
       ) : null}
       {user.instructor !== true ? (
-        <div>
+        <React.Fragment>
           {/* Experience/Quick Info Below */}
-          <div style={{ marginTop: 15, marginLeft: 3 }}>
+          <div style={{ marginLeft: 3 }}>
             <NavLink
               to="/training"
               style={textStyle}
@@ -249,12 +320,8 @@ const LeftNav = (props) => {
               <p style={{ marginLeft: 10 }}>{I18n.get("interviewing")}</p>
             </NavLink>
           </div>
-        </div>
+        </React.Fragment>
       ) : null}
-
-      <div style={{ flex: "0 0 4px" }} />
-
-      <div style={{ flex: "0 0 4px" }} />
 
       <NavLink
         to="/context-builder"
@@ -273,10 +340,6 @@ const LeftNav = (props) => {
         &ensp;{I18n.get("library")}
       </NavLink>
 
-      <div style={{ flex: "0 0 4px" }} />
-
-      <div style={{ flex: "0 0 4px" }} />
-
       <NavLink
         to={`/profile/edit/${user.id}`}
         style={textStyle}
@@ -290,12 +353,18 @@ const LeftNav = (props) => {
           alt="context-builder"
           style={{ marginBottom: 6 }}
         />
-        &ensp;Edit Profile
+        &ensp;Profile
       </NavLink>
 
       <div style={{ flex: "0 0 4px" }} />
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
         {renderLanguageDropdown()}
       </div>
 

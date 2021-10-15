@@ -118,7 +118,7 @@ function LearnDashboard(props) {
         aria-labelledby="loading"
         aria-describedby="Please wait while the page loads"
       >
-        <PaywallModal {...props} />
+        <PaywallModal {...props} open={props.user.learningPurchase} />
       </Dialog>
     </div>
   );
