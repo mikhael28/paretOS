@@ -32,19 +32,17 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
   const classes = useStyles();
-
   return (
     <React.Fragment>
       {props.logo || props.slug || props.img.options ? (
         <HtmlTooltip title={props.summary}>
           <div
             className={classNames("context-card", "block")}
-            onClick={() => {
-              if (props.openLink) {
-                let win = window.open(props.url, "_blank");
-                win.focus();
-              }
-            }}
+            onClick={() =>
+              window.location.pathname !== "/context-builder"
+                ? props.openExternalModal(props.url)
+                : null
+            }
           >
             <CardActionArea>
               {props.url !== "na" ? (

@@ -25,13 +25,13 @@ import CreateSprintTemplate from "./arena/CreateSprintTemplate";
 import LearnDashboard from "./learn/LearnDashboard";
 import Messaging from "./components/Messaging";
 import Room from "./containers/Room";
+import PomodoroDashboard from "./containers/PomodoroDashboard/PomodoroDashboard";
 import WorkRise from "./intl/ug/WorkRise";
 import MentorDashboard from "./mentorship/MentorDashboard";
 
 export default ({ childProps }) => (
-  <Switch>
-    <AppliedRoute path="/" exact component={Home} props={childProps} />
-
+	<Switch>
+		<AppliedRoute path="/" exact component={Home} props={childProps} />
     <AppliedRoute path="/order" exact component={Order} props={childProps} />
     <UnauthenticatedRoute
       path="/login"
@@ -166,8 +166,14 @@ export default ({ childProps }) => (
       component={WorkRise}
       props={childProps}
     />
+        <AuthenticatedRoute
+			path="/pomodoro-dashboard"
+			exact
+			component={PomodoroDashboard}
+			props={childProps}
+		/>
 
-    {/* Finally, catch all unmatched routes */}
-    <Route component={NotFound} />
-  </Switch>
+		{/* Finally, catch all unmatched routes */}
+		<Route component={NotFound} />
+	</Switch>
 );

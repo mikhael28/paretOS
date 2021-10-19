@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { History, LocationState } from "history";
 import logo from '../assets/Pareto_Lockup-White.png';
 import { I18n } from '@aws-amplify/core';
 import Button from 'react-bootstrap/lib/Button';
@@ -7,11 +8,14 @@ import marketing from '../assets/marketing.png';
 import propTypes from 'prop-types';
 
 /**
- * This is the Landing page component, that has the testimonials from theoretically real users.
- * @TODO Issue #69
+ * This is the Landing page component, that has the testimonials from members of our community.
  */
 
-function Landing(props) {
+interface HistoryProps {
+  history: History<LocationState>;
+}
+
+function Landing<RouteComponentProps>(props: HistoryProps) {
   const [testimonials, setTestimonials] = useState([
     {
       name: 'Leonard Ugorji',
