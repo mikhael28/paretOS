@@ -516,9 +516,8 @@ function Sprint(props) {
               <div className="col-xs-12 col-sm-6">
                 <Board
                   users={props.redux.sprint[activeSprintId].teams}
-                  paginate={paginate}
-                  setPaginate={setPaginate}
-                  user={props.user}
+                  itemsPerPage={paginate}
+                  currentUser={props.user}
                   history={props.history}
                 />
               </div>

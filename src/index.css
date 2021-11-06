@@ -370,12 +370,18 @@ input[type="file"] {
 
 .rank-header {
 	color: rgb(37, 38, 39);
-	font-size: 20px;
+	background-color: #eee;
+	font-size: 16px;
 	font-weight: bold;
 }
+
 .data:first-child {
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: bold;
+}
+
+.data, .data2 {
+	font-size: 16px;
 }
 
 .data2:hover {
@@ -385,6 +391,10 @@ input[type="file"] {
 
 .my-rank {
 	background-color: rgb(0, 170, 212);
+}
+
+.my-rank:hover {
+	background-color: rgb(0, 185, 231)!important;
 }
 
 .fake-bullet {
