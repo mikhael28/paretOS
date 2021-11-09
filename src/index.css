@@ -426,7 +426,7 @@ input[type="file"] {
 	height: 100%;
 }
 
-.dais-image {
+.profile-image {
 	width: calc(100% - 30px);
 	height: calc(100% - 30px);
 	margin: 0px 15px;

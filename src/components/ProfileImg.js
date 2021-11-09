@@ -1,6 +1,11 @@
+/**
+ * @component ProfileImage
+ * @desc Displays either the user's current profile image or a generic image if none exists
+ * @param {Prop} profileImg-the profile image object
+ */
 export function ProfileImg({ profileImg }) {
     return (
-        <div className="dais-image">
+        <div className="profile-image">
         {profileImg ? 
             <img src={profileImg} width="100%" height="100%" /> : 
             <>

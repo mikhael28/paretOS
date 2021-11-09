@@ -2,9 +2,10 @@ import { useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import Table from "react-bootstrap/lib/Table";
 import { ProfileImg } from "./ProfileImg";
+import { PageNavigation } from "./PageNavigation";
+
 /**
- * @class Leaderboard
- * @TODO Issue #75
+ * @component Leaderboard
  * @desc Compares the score property of each user object and displays in an interactive table
  * @param {Prop} users-an array of objects with name and score properties
  * @param {Prop} itemsPerPage-integer to determine how many users to display on each page
@@ -14,27 +15,36 @@ import { ProfileImg } from "./ProfileImg";
 
 function Leaderboard({ users, itemsPerPage, currentUser, history }) {
 
-  const sortedUsers = users.sort((a, b) => b.score - a.score);
+  // Set state for leaderboard rankings and display order, calculate users for podium
+  const sortedUsers = users.sort(sortDescending);
   const initialRanks = sortedUsers.map((user, i) => {
     user.page = getPage(i + 1); 
     user.rank = i > 0 && user.score == sortedUsers[i - 1].score ? sortedUsers[i - 1].rank : i + 1; 
     return user;
   });
-
   const topThree = initialRanks.length > 3 ? initialRanks.slice(0,3) : initialRanks.slice(0);
-  const currentPage = 1;
-  const maxPages = getPage(users.length);
-
   const [ranking, setRanking] = useState(initialRanks);
   const [asc, setAsc] = useState(false);
+
+  // Set state for results page
+  const maxPages = getPage(users.length);
+  const currentPage = getPage(initialRanks.findIndex(({ id }) => id === currentUser.id) + 1);
   const [pages, setPages] = useState({ currentPage, maxPages });
+
+  /**
+   * @function sortDescending
+   * @desc Sorts the ranking by score, in descending order
+   */
+     function sortDescending(a, b) {
+      return b.score - a.score;
+    };
 
   /**
    * @function sortUsersByScore
    * @desc Sorts the ranking by score either ascending or descending
    */
   function sortUsersByScore() {
-    const tempRanking = [...ranking].sort((a,b) => b.score - a.score);
+    const tempRanking = [...ranking].sort(sortDescending);
     if (asc) {
       const newRanking = tempRanking.map(addPage);
       setAsc(false);
@@ -71,7 +81,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
       else {
         const newRanking = users.map(addPage);
         setRanking(newRanking);
-        setPages({ currentPage: 1, maxPages: getPage(users.length) })
+        setPages({ currentPage: getPage(initialRanks.findIndex(({ id }) => id === currentUser.id)), maxPages: getPage(users.length) })
       }
    }
 
@@ -112,21 +122,22 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
 
   /**
    * @function addPage
-   * @desc Gets the page number of an item based on items per page
+   * @desc Adjust the page of a user based on their current index in the array
    * @param user - the user object
    * @param index - the index in the array
    */
   function addPage(user, index) {
-     user.page = getPage(index + 1);
-     return user;
+    const { email, fName, github, id, lName, missions, percentage, phone, planning, rank, review, score } = user;
+    const page = getPage(index + 1);
+    return { email, fName, github, id, lName, missions, page, percentage, phone, planning, rank, review, score };
   }  
 
   return (
       <div style={{ margin: '25px 10px' }}>
         <h2>{I18n.get("leaderboard")}</h2>
         <div className="leaderboard-container">
-          <Podium topUsers={topThree}></Podium>
-          <div className="table-container" style={{flexShrink: "1"}}>
+          {ranking.some(({ score }) => score > 0) ? <Podium topUsers={topThree} removeNullScores={false}></Podium> : null}
+          <div className="table-container" style={{ flexShrink: "1" }}>
             <form onChange={filterRank} style={{ paddingBottom: '10px' }}>
               <input className="form-control" type="search" name="search" placeholder="Filter by name..." />
             </form>
@@ -134,67 +145,57 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
               <tbody>
                 <tr>
                   <td className="rank-header text-center" onClick={sortUsersByScore}>
-                    {" "}
-                    {I18n.get("rank")}{" "}
+                    {I18n.get("rank")}
                   </td>
                   <td className="rank-header" onClick={sortUsersByScore}>
-                    {" "}
-                    {I18n.get("name")}{" "}
+                    {I18n.get("name")}
                   </td>
                   <td className="rank-header text-center" onClick={sortUsersByScore}>
-                    {" "}
-                    {I18n.get("score")}{" "}
+                    {I18n.get("score")}
                   </td>
                 </tr>
-                { ranking.map((user, i) => user.page === pages.currentPage ? 
+                {ranking.map((user, i) => user.page === pages.currentPage ? 
                   (
                     <tr
                       className={currentUser.id === user.id ? "my-rank" : ""}
                       key={i}
                     >
-                      <td className="data text-center">{i > 0 && user.rank == ranking[i - 1].rank ? '-' : user.rank}</td>
+                      <td className="data text-center">
+                        {i > 0 && user.rank == ranking[i - 1].rank ? '-' : user.rank}
+                      </td>
                       <td
-                        onClick={() =>
-                          history.push(`/profile/${user.id}`)
-                        }
+                        onClick={() =>history.push(`/profile/${user.id}`)}
                         className="data2"
                       >
                         {user.fName} {user.lName.substr(0,1).toUpperCase()}.
                       </td>
-                      <td className="data text-center">{user.score} pts</td>  
+                      <td className="data text-center">
+                        {user.score} pts
+                      </td>  
                     </tr>
                   ) : null 
                 )}
               </tbody>
             </Table>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              {pages.currentPage <= 1 ? null : (
-                <p className="decrement" onClick={decreasePage}>
-                  {I18n.get("back")}
-                </p>
-              )}
-              {pages.currentPage <= 1 ? null : (
-                <p onClick={decreasePage}> {pages.currentPage - 1}</p>
-              )}
-              {pages.maxPages == 1 ? null : <p> {pages.currentPage}</p>}
-              {pages.currentPage < pages.maxPages ? (
-                <p onClick={increasePage}> {pages.currentPage + 1}</p>
-              ) : null}
-              {pages.currentPage < pages.maxPages ? (
-                <p className="increment" onClick={increasePage}>
-                  {I18n.get("next")}
-                </p>
-              ) : null }
-            </div>
+            {pages.maxPages > 1 ? 
+              <PageNavigation 
+                currentPage={pages.currentPage} 
+                maxPages={pages.maxPages} 
+                increasePage={increasePage} 
+                decreasePage={decreasePage} 
+              /> : null }
           </div>
         </div>
       </div>
   );
 }
 
-function Podium({topUsers}) {
+function Podium({ topUsers, removeNullScores }) {
 
   const sortedTopUsers = [];
+  if (removeNullScores) {
+    topUsers = topUsers.filter(({ score }) => score > 0);
+  }
   topUsers.forEach((user, i) => {
     i % 2 > 0 ? sortedTopUsers.push(user) : sortedTopUsers.unshift(user);
   })
@@ -209,7 +210,7 @@ function Podium({topUsers}) {
 
 }
 
-function Dais({user, rank, ranks}) {
+function Dais({ user, rank, ranks }) {
 
   const platformWidth = Math.round(100 / ranks);
   const platformHeight = Math.round(200 * (ranks - rank + 2) / (ranks * 3 + 3));
@@ -224,7 +225,7 @@ function Dais({user, rank, ranks}) {
             <div className="dais-image-container">
               <div className="dais-image-lockup">
                 <ProfileImg profileImg={user.profileImg ? user.profileImg : null} />
-                <div className="dais-image-label" style={{ verticalAlign: "middle", textAlign: "center"}}>
+                <div className="dais-image-label" style={{ verticalAlign: "middle", textAlign: "center" }}>
                   {user.fName}
                 </div>
               </div>
