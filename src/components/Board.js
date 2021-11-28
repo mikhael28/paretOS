@@ -1,267 +1,240 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import Table from "react-bootstrap/lib/Table";
+import { ProfileImg } from "./ProfileImg";
+import { PageNavigation } from "./PageNavigation";
+
 /**
- * @class Leaderboard
- * @TODO Issue #75
- * @desc Compares the score property of each user object
+ * @component Leaderboard
+ * @desc Compares the score property of each user object and displays in an interactive table
  * @param {Prop} users-an array of objects with name and score properties
- * @param {Prop} paginate-integer to determine how many users to display on each page
+ * @param {Prop} itemsPerPage-integer to determine how many users to display on each page
+ * @param {Prop} currentUser-currently logged in user
+ * @param {Prop} history-array of recent pages/views visited
  */
-class Leaderboard extends Component {
-  constructor(props) {
-    super(props);
 
-    this.sortUsersByScore = this.sortUsersByScore.bind(this);
-    this.sortUsersByName = this.sortUsersByName.bind(this);
-    this.filterRank = this.filterRank.bind(this);
-    this.increasePage = this.increasePage.bind(this);
-    this.decreasePage = this.decreasePage.bind(this);
+function Leaderboard({ users, itemsPerPage, currentUser, history }) {
 
-    this.state = {
-      users: this.props.users,
-      ranking: [],
-      asc: false,
-      alph: false,
-      page: 1,
-      pageMax: 1,
+  // Set state for leaderboard rankings and display order, calculate users for podium
+  const sortedUsers = users.sort(sortDescending);
+  const initialRanks = sortedUsers.map((user, i) => {
+    user.page = getPage(i + 1); 
+    user.rank = i > 0 && user.score == sortedUsers[i - 1].score ? sortedUsers[i - 1].rank : i + 1; 
+    return user;
+  });
+  const topThree = initialRanks.length > 3 ? initialRanks.slice(0,3) : initialRanks.slice(0);
+  const [ranking, setRanking] = useState(initialRanks);
+  const [asc, setAsc] = useState(false);
+
+  // Set state for results page
+  const maxPages = getPage(users.length);
+  const currentPage = getPage(initialRanks.findIndex(({ id }) => id === currentUser.id) + 1);
+  const [pages, setPages] = useState({ currentPage, maxPages });
+
+  /**
+   * @function sortDescending
+   * @desc Sorts the ranking by score, in descending order
+   */
+     function sortDescending(a, b) {
+      return b.score - a.score;
     };
-  }
-
-  /**
-   * @function componentDidMount
-   * @desc Sorts users by score then adds a ranking key to each user object when the component loads. Then sets the ranking state
-   */
-  componentDidMount() {
-    const ranking = this.state.users;
-    const paginate = this.props.paginate;
-    ranking.sort(this.compareScore).reverse();
-    ranking.map((user, index) => (user.rank = index + 1));
-    ranking.map(
-      (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-    );
-    this.setState({ pageMax: ranking[ranking.length - 1].page });
-    this.setState({ ranking: ranking });
-  }
-
-  UNSAFE_componentWillReceiveProps(props) {
-    this.setState({ users: props.users });
-    const ranking = props.users;
-    const paginate = this.props.paginate;
-    ranking.sort(this.compareScore).reverse();
-    ranking.map((user, index) => (user.rank = index + 1));
-    ranking.map(
-      (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-    );
-    this.setState({ pageMax: ranking[ranking.length - 1].page });
-    this.setState({ ranking: ranking });
-  }
-
-  /**
-   * @function compareScore
-   * @desc Compares the score property of each user object
-   * @param {Object, Object} user
-   */
-  compareScore(a, b) {
-    if (a.score < b.score) return -1;
-    if (a.score > b.score) return 1;
-    return 0;
-  }
-
-  /**
-   * @function compareName
-   * @desc Compares the name property of each user object alphabetically
-   * @param {Object, Object} user
-   */
-  compareName(a, b) {
-    if (a.fName < b.fName) return -1;
-    if (a.fName > b.fName) return 1;
-    return 0;
-  }
 
   /**
    * @function sortUsersByScore
    * @desc Sorts the ranking by score either ascending or descending
    */
-  sortUsersByScore() {
-    const ranking = this.state.ranking;
-    const paginate = this.props.paginate;
-    if (this.state.asc === true) {
-      ranking.sort(this.compareScore).reverse();
-      ranking.map(
-        (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-      );
-      this.setState({ ranking: ranking });
-      this.setState({ asc: false });
-      this.setState({ alph: false });
-    } else {
-      ranking.sort(this.compareScore);
-      ranking.map(
-        (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-      );
-      this.setState({ ranking: ranking });
-      this.setState({ asc: true });
-      this.setState({ alph: false });
+  function sortUsersByScore() {
+    const tempRanking = [...ranking].sort(sortDescending);
+    if (asc) {
+      const newRanking = tempRanking.map(addPage);
+      setAsc(false);
+      setRanking(newRanking);
     }
-  }
-
-  /**
-   * @function sortUsersByName
-   * @desc Sorts the ranking by name alphabetically either ascending or descending
-   */
-  sortUsersByName() {
-    const ranking = this.state.ranking;
-    const paginate = this.props.paginate;
-    if (this.state.alph === true) {
-      ranking.sort(this.compareName).reverse();
-      ranking.map(
-        (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-      );
-      this.setState({ ranking: ranking });
-      this.setState({ alph: false });
-      this.setState({ asc: true });
-    } else {
-      ranking.sort(this.compareName);
-      ranking.map(
-        (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-      );
-      this.setState({ ranking: ranking });
-      this.setState({ alph: true });
-      this.setState({ asc: true });
+    else {
+      const newRanking = tempRanking.reverse().map(addPage);
+      setAsc(true);
+      setRanking(newRanking);
     }
-  }
+  };
 
   /**
    * @function filterRank
    * @desc Filters through the ranking to find matches and sorts all matches by score
    * @param {String} search input
-   */
-  filterRank(e) {
-    const ranking = this.state.users;
-    const paginate = this.props.paginate;
-    const newRanking = [];
-    const inputLength = e.target.value.length;
-    for (var i = 0; i < ranking.length; i++) {
-      const str = ranking[i].fName.slice(0, inputLength).toLowerCase();
-      if (str === e.target.value.toLowerCase()) {
-        newRanking.push(ranking[i]);
+   */   
+   function filterRank(e) {
+      const inputLength = e.target.value.length;
+      const filteredRanking = [];
+      if (inputLength > 0) {
+        users.forEach(user => {
+          const str = user.fName.substr(0,inputLength).toLowerCase();
+          if (str === e.target.value.toLowerCase()) {
+            filteredRanking.push(user);
+          }
+        });
+        filteredRanking.sort((a,b) => asc ? a.score - b.score : b.score - a.score);
+        const newRanking = filteredRanking.map(addPage);
+        const [currentPage, maxPages] = [1, getPage(newRanking.length)];
+        setRanking(newRanking);
+        setPages({ currentPage, maxPages });
       }
-    }
-    newRanking.sort(this.compareScore).reverse();
-    newRanking.map(
-      (user, index) => (user.page = Math.ceil((index + 1) / paginate))
-    );
-    this.setState({ ranking: newRanking });
-    this.setState({ page: 1 });
-    this.setState({ pageMax: newRanking[newRanking.length - 1].page });
-  }
+      else {
+        const newRanking = users.map(addPage);
+        setRanking(newRanking);
+        setPages({ currentPage: getPage(initialRanks.findIndex(({ id }) => id === currentUser.id)), maxPages: getPage(users.length) })
+      }
+   }
 
   /**
    * @function increasePage
    * @desc Increments page by one
    * @param {Event} Click
    */
-  increasePage(e) {
-    let page = this.state.page;
-    if (page < this.state.pageMax) {
-      page += 1;
+  function increasePage(e) {
+    let { currentPage, maxPages } = pages;
+    if (currentPage < maxPages) { 
+      currentPage += 1; 
+      setPages({ currentPage, maxPages });
     }
-    this.setState({ page: page });
   }
 
   /**
-   * @function increasePage
+   * @function decreasePage
    * @desc Decrements page by one
    * @param {Event} Click
    */
-  decreasePage(e) {
-    let page = this.state.page;
-    if (page > 1) {
-      page -= 1;
+  function decreasePage(e) {
+    let { currentPage, maxPages } = pages;
+    if (currentPage > 1) { 
+      currentPage -= 1; 
+      setPages({ currentPage, maxPages });
     }
-    this.setState({ page: page });
   }
 
   /**
-   * @function render
-   * @desc renders jsx
+   * @function getPage
+   * @desc Gets the page number of an item based on items per page
+   * @param itemNumber - number of the item to get the page of
    */
-  render() {
-    return (
-      <div style={{ marginRight: 25, marginTop: 20 }}>
+  function getPage(itemNumber) {
+    return Math.ceil(itemNumber / itemsPerPage);
+  }  
+
+  /**
+   * @function addPage
+   * @desc Adjust the page of a user based on their current index in the array
+   * @param user - the user object
+   * @param index - the index in the array
+   */
+  function addPage(user, index) {
+    const { email, fName, github, id, lName, missions, percentage, phone, planning, rank, review, score } = user;
+    const page = getPage(index + 1);
+    return { email, fName, github, id, lName, missions, page, percentage, phone, planning, rank, review, score };
+  }  
+
+  return (
+      <div style={{ margin: '25px 10px' }}>
         <h2>{I18n.get("leaderboard")}</h2>
-        <Table bordered condensed hover responsive>
-          <tbody>
-            <tr>
-              <td colSpan="3">
-                <form onChange={this.filterRank}>
-                  {I18n.get("name")}:{" "}
-                  <input type="search" name="search" placeholder="Search" />
-                </form>
-              </td>
-            </tr>
-            <tr>
-              <td
-                className="rank-header sortScore"
-                onClick={this.sortUsersByScore}
-              >
-                {" "}
-                {I18n.get("rank")}{" "}
-              </td>
-              <td
-                className="rank-header sortAlpha"
-                onClick={this.sortUsersByName}
-              >
-                {" "}
-                {I18n.get("name")}{" "}
-              </td>
-              <td className="rank-header" onClick={this.sortUsersByScore}>
-                {" "}
-                {I18n.get("score")}{" "}
-              </td>
-            </tr>
-            {this.state.ranking.map((user, index) => (
-              <tr
-                className={this.props.user.id === user.id ? "my-rank" : ""}
-                key={index}
-              >
-                {user.page == this.state.page ? (
-                  <td className="data">{user.rank}</td>
-                ) : null}
-                {user.page == this.state.page ? (
-                  <td
-                    onClick={() =>
-                      this.props.history.push(`/profile/${user.id}`)
-                    }
-                    className="data2"
-                  >
-                    {user.fName}
+        <div className="leaderboard-container">
+          {ranking.some(({ score }) => score > 0) ? <Podium topUsers={topThree} removeNullScores={false}></Podium> : null}
+          <div className="table-container" style={{ flexShrink: "1" }}>
+            <form onChange={filterRank} style={{ paddingBottom: '10px' }}>
+              <input className="form-control" type="search" name="search" placeholder="Filter by name..." />
+            </form>
+            <Table bordered condensed hover responsive>
+              <tbody>
+                <tr>
+                  <td className="rank-header text-center" onClick={sortUsersByScore}>
+                    {I18n.get("rank")}
                   </td>
-                ) : null}
-                {user.page == this.state.page ? (
-                  <td className="data">{user.score}</td>
-                ) : null}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <p className="decrement" onClick={this.decreasePage}>
-            {I18n.get("back")}
-          </p>
-          {this.state.page == 1 ? null : (
-            <p onClick={this.decreasePage}> {this.state.page - 1}</p>
-          )}
-          <p> {this.state.page}</p>
-          {this.state.page < this.state.pageMax ? (
-            <p onClick={this.increasePage}> {this.state.page + 1}</p>
-          ) : null}
-          <p className="increment" onClick={this.increasePage}>
-            {I18n.get("next")}
-          </p>
+                  <td className="rank-header" onClick={sortUsersByScore}>
+                    {I18n.get("name")}
+                  </td>
+                  <td className="rank-header text-center" onClick={sortUsersByScore}>
+                    {I18n.get("score")}
+                  </td>
+                </tr>
+                {ranking.map((user, i) => user.page === pages.currentPage ? 
+                  (
+                    <tr
+                      className={currentUser.id === user.id ? "my-rank" : ""}
+                      key={i}
+                    >
+                      <td className="data text-center">
+                        {i > 0 && user.rank == ranking[i - 1].rank ? '-' : user.rank}
+                      </td>
+                      <td
+                        onClick={() =>history.push(`/profile/${user.id}`)}
+                        className="data2"
+                      >
+                        {user.fName} {user.lName.substr(0,1).toUpperCase()}.
+                      </td>
+                      <td className="data text-center">
+                        {user.score} pts
+                      </td>  
+                    </tr>
+                  ) : null 
+                )}
+              </tbody>
+            </Table>
+            {pages.maxPages > 1 ? 
+              <PageNavigation 
+                currentPage={pages.currentPage} 
+                maxPages={pages.maxPages} 
+                increasePage={increasePage} 
+                decreasePage={decreasePage} 
+              /> : null }
+          </div>
         </div>
       </div>
-    );
-  }
+  );
 }
+
+function Podium({ topUsers, removeNullScores }) {
+
+  const sortedTopUsers = [];
+  if (removeNullScores) {
+    topUsers = topUsers.filter(({ score }) => score > 0);
+  }
+  topUsers.forEach((user, i) => {
+    i % 2 > 0 ? sortedTopUsers.push(user) : sortedTopUsers.unshift(user);
+  })
+
+  return (
+    <div className="podium-padding-wrapper">
+      <div className="podium-container">
+        {sortedTopUsers.map((user, i) => <Dais key={i} id={i} user={user} rank={user.rank} ranks={topUsers.length} />)}
+      </div>
+    </div>
+  )
+
+}
+
+function Dais({ user, rank, ranks }) {
+
+  const platformWidth = Math.round(100 / ranks);
+  const platformHeight = Math.round(200 * (ranks - rank + 2) / (ranks * 3 + 3));
+  const profileHeight = (100 - platformHeight) + '%';
+  const altProfileHeight = Math.round(200 * (rank - 1) / (ranks * 3 + 3)) + '%';
+  const profileHeightCalc = "calc(min(80px + "+altProfileHeight+", " + profileHeight + "))";
+
+    return (
+      <div className="podium-dais" style={{ width: platformWidth + "%" }}>
+        <div style={{ height: "100%" , width: "100%" }}>
+          <div className="dais-user" style={{ height: profileHeightCalc }}>
+            <div className="dais-image-container">
+              <div className="dais-image-lockup">
+                <ProfileImg profileImg={user.profileImg ? user.profileImg : null} />
+                <div className="dais-image-label" style={{ verticalAlign: "middle", textAlign: "center" }}>
+                  {user.fName}
+                </div>
+              </div>
+            </div> 
+          </div>
+          <div className="dais-platform" style={{ height: platformHeight + "%" }}>{rank}</div>
+        </div>
+      </div>
+    )
+}
+
 export default Leaderboard;

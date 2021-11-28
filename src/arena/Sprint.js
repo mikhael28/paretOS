@@ -513,16 +513,15 @@ function Sprint(props) {
           </TabPanel>
           <TabPanel value={key} index={2} style={{ margin: -30 }}>
             <div className="row">
-              <div className="col-xs-12 col-sm-6">
+              <div className="col-xs-12 col-sm-7">
                 <Board
                   users={props.redux.sprint[activeSprintId].teams}
-                  paginate={paginate}
-                  setPaginate={setPaginate}
-                  user={props.user}
+                  itemsPerPage={paginate}
+                  currentUser={props.user}
                   history={props.history}
                 />
               </div>
-              <div className="col-xs-12 col-sm-6">
+              <div className="col-xs-12 col-sm-5" style={{ marginTop: '20px' }}>
                 <Analytics
                   missions={
                     props.redux.sprint[activeSprintId].teams[index].missions
