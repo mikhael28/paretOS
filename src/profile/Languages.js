@@ -29,15 +29,12 @@ useEffect ( () => {
     // what we did above, was the get the user id from the navigation bar
     let user = fetchUser(userId);
     setState(user);
-
 },[])
 
    // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
 const handleChange = (e) => {
-    console.log("value: ",e.target.value);
-    console.log("id: ",e.target.id);
   setState({
       ...state,
       [e.target.value]: e.target.value,
@@ -60,17 +57,12 @@ const handleChange = (e) => {
       let body = {
         defaultLanguage: defaultLanguage,
     };
-      // console.log(props.id) works fine
-     // console.log(body) works fine {defaultLanguage: "en"}
     try {
       const response = await API.put("pareto", `/users/${props.id}`, {
       body,
       });
-      console.log(response);
       {user: response};
-     //console.log({user : response})
-    } catch (e) {
-      console.log(e);
+   } catch (e) {
     }setIsLoading(isLoading);
   };
 
@@ -95,7 +87,6 @@ const handleChange = (e) => {
             <FormControl 
               componentClass="select"
               onChange={handleChange}
-              value={props.value}
             >
               <option value="en">Choose Here</option>
               <option value="en">English</option>

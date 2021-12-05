@@ -68,13 +68,6 @@ export default class EditProfile extends Component {
     });
   }
 
-
-  closeTour = () => {
-    this.setState({
-      isTourOpen: false,
-    });
-  };
-
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
@@ -395,7 +388,7 @@ export default class EditProfile extends Component {
 
            <Languages  
              id = {this.state.id}
-             user = {this.user}
+             user = {this.state.user}
            />  
       </div>
     );
