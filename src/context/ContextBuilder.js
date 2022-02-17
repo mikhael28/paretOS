@@ -30,25 +30,23 @@ function ContextBuilder({ sanitySchemas }) {
 
     return (
       <div className="context-cards">
-        {Children.toArray(
-          topics.map((topic) => {
-            const link = topic.type === "hub" ? "hubs" : "context";
-            const img = builder.image(topic.mainImage.asset._ref);
+        {topics.map((topic) => {
+          const link = topic.type === "hub" ? "hubs" : "context";
+          const img = builder.image(topic.mainImage.asset._ref);
 
-            return (
-              <div
-                className={newCardClass}
-                onClick={() => history.push(`/${link}/${topic.slug.current}`)}
-              >
-                <ContextObject
-                  img={img}
-                  title={topic.title}
-                  summary={topic.summary}
-                />
-              </div>
-            );
-          })
-        )}
+          return (
+            <div
+              className={newCardClass}
+              onClick={() => history.push(`/${link}/${topic.slug.current}`)}
+            >
+              <ContextObject
+                img={img}
+                title={topic.title}
+                summary={topic.summary}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -87,21 +85,21 @@ function ContextBuilder({ sanitySchemas }) {
         <Tabs
           value={value}
           onChange={(_, newValue) => setValue(newValue)}
-          aria-label="simple tabs example"
+          aria-label="Select the topics you wish to see in this group of tab"
         >
-          <Tab label={I18n.get("cityByCity")} style={{ fontSize: 18 }} />
-          <Tab label={I18n.get("findingWork")} style={{ fontSize: 18 }} />
           <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />
+          <Tab label={I18n.get("findingWork")} style={{ fontSize: 18 }} />
+          <Tab label={I18n.get("cityByCity")} style={{ fontSize: 18 }} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} className = "tabPanelCont">
-        {renderTopicsList(sanitySchemas.hubSchemas)}
+      <TabPanel value={value} index={0} className="tabPanelCont">
+        {renderTopicsList(sanitySchemas.technicalSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={1} className = "tabPanelCont">
+      <TabPanel value={value} index={1} className="tabPanelCont">
         {renderTopicsList(sanitySchemas.economicSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={2} className = "tabPanelCont">
-        {renderTopicsList(sanitySchemas.technicalSchemas)}
+      <TabPanel value={value} index={2} className="tabPanelCont">
+        {renderTopicsList(sanitySchemas.hubSchemas)}
       </TabPanel>
 
       <Tour
