@@ -14,6 +14,7 @@ import { errorToast } from "../libs/toasts";
 import Tour from "reactour";
 import question from "../assets/help.png";
 import "react-quill/dist/quill.snow.css";
+import Languages from "../profile/Languages";
 
 /**
  * These are the forms where you can edit your profile.
@@ -67,12 +68,6 @@ export default class EditProfile extends Component {
     });
   }
 
-  closeTour = () => {
-    this.setState({
-      isTourOpen: false,
-    });
-  };
-
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
@@ -116,24 +111,6 @@ export default class EditProfile extends Component {
       console.log(e);
     }
   };
-
-  // This function updates the user profile's default language
-
-  updateLanguage = async () => {
-    let body = {
-      defaultLanguage: this.state.defaultLanguage,
-    };
-    try {
-      const response = await API.put("pareto", `/users/${this.state.id}`, {
-        body,
-      });
-      console.log(response);
-      this.setState({ user: response });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   // This function updates the user profile object with a PUT, and updates with a new project
 
   addProject = async () => {
@@ -409,49 +386,10 @@ export default class EditProfile extends Component {
 
         <br />
 
-        {/* Here we are updating our default language */}
-
-        <FormGroup controlId="defaultLanguage" bsSize="large">
-          <ControlLabel>Default Language</ControlLabel>
-          <div className="flex">
-            <FormControl
-              componentClass="select"
-              onChange={this.handleChange}
-              value={this.state.defaultLanguage}
-            >
-              <option value="en">Choose Here</option>
-              <option value="en">English</option>
-              <option value="lg">Luganda</option>
-              <option value="ac">Acholi</option>
-              <option value="es">Spanish</option>
-              <option value="ptbr">Portuguese</option>
-              <option value="hi">Hindi</option>
-            </FormControl>
-            <LoaderButton
-              align="center"
-              block
-              type="submit"
-              style={{ width: 90 }}
-              // disabled={!this.validateForm()}
-              onClick={this.updateLanguage}
-              isLoading={this.state.isLoading}
-              text="Save"
-              loadingText="Updating..."
-            />
-          </div>
-        </FormGroup>
-
-        <Button onClick={() => this.props.history.push("/settings/password")}>
-          Change Password
-        </Button>
-
-        <Tour
-          steps={steps}
-          isOpen={this.state.isTourOpen}
-          onRequestClose={this.closeTour}
-        // showCloseButton={true}
-        // rewindOnClose={false}
-        />
+           <Languages  
+             id = {this.state.id}
+             user = {this.state.user}
+           />  
       </div>
     );
   }
