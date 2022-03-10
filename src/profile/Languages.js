@@ -4,7 +4,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import Button from "react-bootstrap/lib/Button";
 import Tour from "reactour";
 import { I18n, USER_AGENT_HEADER } from "@aws-amplify/core";

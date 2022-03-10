@@ -13,7 +13,7 @@ import Storage from "@aws-amplify/storage";
 import { errorToast } from "../libs/toasts";
 import Tour from "reactour";
 import question from "../assets/help.png";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import Languages from "../profile/Languages";
 
 /**
