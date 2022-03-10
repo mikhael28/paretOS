@@ -2,17 +2,11 @@ node_modules
 build
 .DS_Store
 .eslintcache
-<<<<<<< HEAD
-
 amplify-build-config.json
-=======
-	@@ -20,26 +19,5 @@ amplify-build-config.json
->>>>>>> 5e878ef72d91e18f9be2744e9a19e452b438db54
 amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 package-lock.json
-yarn.lock
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

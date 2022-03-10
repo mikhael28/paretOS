@@ -6,14 +6,14 @@ import Button from "react-bootstrap/lib/Button";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import Image from "react-bootstrap/lib/Image";
 import LoaderButton from "../components/LoaderButton";
-import uuidv4 from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Storage from "@aws-amplify/storage";
 import { errorToast } from "../libs/toasts";
 import Tour from "reactour";
 import question from "../assets/help.png";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import Languages from "../profile/Languages";
 
 /**

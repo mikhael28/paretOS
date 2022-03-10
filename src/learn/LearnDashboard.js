@@ -7,7 +7,7 @@ import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import { errorToast, successToast } from "../libs/toasts";
 import PaywallModal from "./PaywallModal";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import { I18n } from "@aws-amplify/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -96,12 +96,12 @@ function LearnDashboard(props) {
         </div>
         <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
           <FormGroup controlId="note" bsSize="large" className="overflow">
-            <ReactQuill
+            {/* <ReactQuill
               value={note}
               onChange={handleRichChange}
               style={{ font: 20 }}
               onBlur={editNote}
-            />
+            /> */}
           </FormGroup>
         </div>
       </div>

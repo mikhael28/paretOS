@@ -4,7 +4,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import uuid from "uuid/v4";
+import { v4 as uuidv4 } from 'uuid';
 import API from "@aws-amplify/api";
 import sanity from "../libs/sanity";
 import { errorToast } from "../libs/toasts";
@@ -90,7 +90,7 @@ function CreateSprintTemplate(props) {
     });
 
     let body = {
-      id: uuid.v4(),
+      id: uuidv4(),
       title: title,
       author: `${props.user.fName} ${props.user.lName}`,
       authorId: props.user.id,

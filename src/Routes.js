@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./profile/Login";
@@ -23,7 +22,6 @@ import CreateUser from "./profile/CreateUser";
 import Sprint from "./arena/Sprint";
 import CreateSprintTemplate from "./arena/CreateSprintTemplate";
 import LearnDashboard from "./learn/LearnDashboard";
-import Messaging from "./components/Messaging";
 import Room from "./containers/Room";
 import PomodoroDashboard from "./containers/PomodoroDashboard/PomodoroDashboard";
 import WorkRise from "./intl/ug/WorkRise";
@@ -103,12 +101,6 @@ export default ({ childProps }) => (
       path="/training/:id"
       exact
       component={ExperienceModule}
-      props={childProps}
-    />
-    <AuthenticatedRoute
-      path="/chat"
-      exact
-      component={Messaging}
       props={childProps}
     />
     <AppliedRoute path="/chat/:id" exact component={Room} props={childProps} />

@@ -16,8 +16,6 @@ import { errorToast } from "../libs/toasts";
 import question from "../assets/help.png";
 import Tour from "reactour";
 import classNames from "classnames";
-import API, { graphqlOperation } from "@aws-amplify/api";
-import { createMessage } from "../graphql/mutations";
 import {
   Accordion,
   AccordionItem,
@@ -108,7 +106,6 @@ function Sprint(props) {
     )}, "sprintId": "${props.redux.sprint[activeSprintId].id}" }`;
     try {
       props.ws.send(updatedSprintData);
-      await API.graphql(graphqlOperation(createMessage, { input }));
       setLoading(false);
     } catch (e) {
       errorToast(e);

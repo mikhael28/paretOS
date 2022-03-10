@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import uuidv4 from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import Auth from "@aws-amplify/auth";
 import API from "@aws-amplify/api";
 import { errorToast, successToast } from "../libs/toasts";
