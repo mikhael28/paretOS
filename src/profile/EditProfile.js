@@ -383,9 +383,7 @@ export default class EditProfile extends Component {
             </div>
           ) : null}
         </div>
-
         <br />
-
            <Languages  
              id = {this.state.id}
              user = {this.state.user}

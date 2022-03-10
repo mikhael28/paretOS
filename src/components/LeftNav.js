@@ -127,6 +127,24 @@ const LeftNav = (props) => {
 
             <MenuItem
               exact
+              key={1.4}
+              onClick={() => {
+                I18n.setLanguage("ngpg");
+                updateState({
+                  chosenLanguage: {
+                    name: "Nigerian Pidgin",
+                    image:
+                      "https://cdn.countryflags.com/thumbs/nigeria/flag-400.png",
+                  },
+                });
+              }}
+            >
+              <Glyphicon glyph="glyphicon glyphicon-cog" />
+              &ensp; Nigeria(Pidgin)
+            </MenuItem>
+
+            <MenuItem
+              exact
               key={1.5}
               onClick={() => {
                 I18n.setLanguage("hi");
