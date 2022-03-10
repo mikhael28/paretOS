@@ -48,6 +48,7 @@ const LeftNav = (props) => {
             fontSize: 14,
             backgroundColor: "rgb(37, 38, 39)",
             border: "none",
+            textAlign: "left",
           }}
           onClick={(e) => {
             e.stopPropagation();
@@ -171,7 +172,7 @@ const LeftNav = (props) => {
         <Image
           src={
             user.picture ||
-            "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
+            "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
           }
           height="40"
           width="40"

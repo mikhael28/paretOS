@@ -402,6 +402,7 @@ class App extends Component {
 
   handleLogout = async (event) => {
     event.preventDefault();
+    localStorage.removeItem("sanity");
     await Auth.signOut();
     this.userHasAuthenticated(false);
     this.props.history.push("/login");
