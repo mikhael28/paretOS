@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
+import Spinner from "./components/Spinner";
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
 const Signup = lazy(() => import("./profile/Signup"));
@@ -35,7 +36,7 @@ const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 export default ({ childProps }) => (
-  <Suspense fallback={<p>Loading...</p>}>
+  <Suspense fallback={<Spinner />}>
     <Switch>
       <AppliedRoute path="/" exact component={Home} props={childProps} />
       <AppliedRoute path="/order" exact component={Order} props={childProps} />
