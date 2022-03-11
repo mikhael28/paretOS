@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import Table from "react-bootstrap/lib/Table";
 import { ProfileImg } from "./ProfileImg";
@@ -13,7 +13,31 @@ import { PageNavigation } from "./PageNavigation";
  * @param {Prop} history-array of recent pages/views visited
  */
 
-function Leaderboard({ users, itemsPerPage, currentUser, history }) {
+export type User = {
+  page: number,
+  rank: number,
+  score: number,
+  id: number,
+  fName: string,
+  lName: string,
+  email: string,
+  github: string,
+  missions: Array<Object>,
+  percentage: number,
+  phone: string, 
+  planning: string, 
+  review: string,
+  profileImg?: File,
+};
+
+export interface BoardProps {
+  users: Array<User>,
+  itemsPerPage: number,
+  currentUser: User,
+  history: Array<String>
+};
+
+function Leaderboard({ users, itemsPerPage, currentUser, history }: BoardProps) {
 
   // Set state for leaderboard rankings and display order, calculate users for podium
   const sortedUsers = users.sort(sortDescending);
@@ -35,7 +59,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @function sortDescending
    * @desc Sorts the ranking by score, in descending order
    */
-     function sortDescending(a, b) {
+     function sortDescending(a: User, b: User) {
       return b.score - a.score;
     };
 
@@ -44,9 +68,9 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @desc Sorts the ranking by score either ascending or descending
    */
   function sortUsersByScore() {
-    const tempRanking = [...ranking].sort(sortDescending);
+    const tempRanking: Array<User> = [...ranking].sort(sortDescending);
     if (asc) {
-      const newRanking = tempRanking.map(addPage);
+      const newRanking: Array<User> = tempRanking.map(addPage);
       setAsc(false);
       setRanking(newRanking);
     }
@@ -62,13 +86,14 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @desc Filters through the ranking to find matches and sorts all matches by score
    * @param {String} search input
    */   
-   function filterRank(e) {
-      const inputLength = e.target.value.length;
-      const filteredRanking = [];
+   function filterRank(e: React.FormEvent<HTMLFormElement>) {
+      const input: any = e.currentTarget;
+      const inputLength: number = input?.value.length;
+      const filteredRanking: Array<User> = [];
       if (inputLength > 0) {
         users.forEach(user => {
-          const str = user.fName.substr(0,inputLength).toLowerCase();
-          if (str === e.target.value.toLowerCase()) {
+          const str = user.fName.substring(0, inputLength).toLowerCase();
+          if (str === input?.value.toLowerCase()) {
             filteredRanking.push(user);
           }
         });
@@ -90,7 +115,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @desc Increments page by one
    * @param {Event} Click
    */
-  function increasePage(e) {
+  function increasePage() {
     let { currentPage, maxPages } = pages;
     if (currentPage < maxPages) { 
       currentPage += 1; 
@@ -103,7 +128,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @desc Decrements page by one
    * @param {Event} Click
    */
-  function decreasePage(e) {
+  function decreasePage() {
     let { currentPage, maxPages } = pages;
     if (currentPage > 1) { 
       currentPage -= 1; 
@@ -116,7 +141,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @desc Gets the page number of an item based on items per page
    * @param itemNumber - number of the item to get the page of
    */
-  function getPage(itemNumber) {
+  function getPage(itemNumber: number) {
     return Math.ceil(itemNumber / itemsPerPage);
   }  
 
@@ -126,7 +151,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
    * @param user - the user object
    * @param index - the index in the array
    */
-  function addPage(user, index) {
+  function addPage(user: User, index: number) {
     const { email, fName, github, id, lName, missions, percentage, phone, planning, rank, review, score } = user;
     const page = getPage(index + 1);
     return { email, fName, github, id, lName, missions, page, percentage, phone, planning, rank, review, score };
@@ -135,13 +160,13 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
   return (
       <div style={{ margin: '25px 10px' }}>
         <h2>{I18n.get("leaderboard")}</h2>
-        <div className="leaderboard-container">
+        <div className="leaderboard-container" title="Leaderboard">
           {ranking.some(({ score }) => score > 0) ? <Podium topUsers={topThree} removeNullScores={false}></Podium> : null}
-          <div className="table-container" style={{ flexShrink: "1" }}>
+          <div className="table-container" style={{ flexShrink: 1 } }>
             <form onChange={filterRank} style={{ paddingBottom: '10px' }}>
               <input className="form-control" type="search" name="search" placeholder="Filter by name..." />
             </form>
-            <Table bordered condensed hover responsive>
+            <Table bordered condensed hover responsive data-testid="leaderboard-table">
               <tbody>
                 <tr>
                   <td className="rank-header text-center" onClick={sortUsersByScore}>
@@ -159,6 +184,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
                     <tr
                       className={currentUser.id === user.id ? "my-rank" : ""}
                       key={i}
+                      data-testid="leaderboard-row"
                     >
                       <td className="data text-center">
                         {i > 0 && user.rank == ranking[i - 1].rank ? '-' : user.rank}
@@ -167,7 +193,7 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
                         onClick={() =>history.push(`/profile/${user.id}`)}
                         className="data2"
                       >
-                        {user.fName} {user.lName.substr(0,1).toUpperCase()}.
+                        {user.fName + " " + user.lName.substring(0,1).toUpperCase() + "."}
                       </td>
                       <td className="data text-center">
                         {user.score} pts
@@ -190,9 +216,13 @@ function Leaderboard({ users, itemsPerPage, currentUser, history }) {
   );
 }
 
-function Podium({ topUsers, removeNullScores }) {
+type PodiumProps = {
+  topUsers: Array<User>,
+  removeNullScores: boolean,
+}
+function Podium({ topUsers, removeNullScores }: PodiumProps) {
 
-  const sortedTopUsers = [];
+  const sortedTopUsers: Array<User> = [];
   if (removeNullScores) {
     topUsers = topUsers.filter(({ score }) => score > 0);
   }
@@ -210,7 +240,13 @@ function Podium({ topUsers, removeNullScores }) {
 
 }
 
-function Dais({ user, rank, ranks }) {
+type DaisProps = {
+  user: User,
+  rank: number, 
+  ranks: number,
+  id: number,
+}
+function Dais({ user, rank, ranks }: DaisProps) {
 
   const platformWidth = Math.round(100 / ranks);
   const platformHeight = Math.round(200 * (ranks - rank + 2) / (ranks * 3 + 3));
