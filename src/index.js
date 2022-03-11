@@ -1,4 +1,3 @@
-import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
@@ -58,13 +57,11 @@ Storage.configure({
 });
 
 ReactDOM.render(
-  <Suspense fallback={<p>Loading...</p>}>
-    <Router>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Router>
-  </Suspense>,
+  <Router>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>,
   document.getElementById("root")
 );
 

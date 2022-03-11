@@ -1,6 +1,6 @@
 {
   "name": "paretOS",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@aws-amplify/api": "^4.0.33",
@@ -13,8 +13,6 @@
     "@sanity/image-url": "^1.0.1",
     "@sentry/react": "^6.18.2",
     "@sentry/tracing": "^6.18.2",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.0",
     "@types/react": "^17.0.30",
