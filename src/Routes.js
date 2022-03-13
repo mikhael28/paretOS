@@ -1,6 +1,9 @@
 import { lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import Spinner from "./components/Spinner";
+import AppliedRoute from "./components/AppliedRoute";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
 const Signup = lazy(() => import("./profile/Signup"));
@@ -15,13 +18,6 @@ const NotFound = lazy(() => import("./containers/NotFound"));
 const EditProfile = lazy(() => import("./profile/EditProfile"));
 const Languages = lazy(() => import("./profile/Languages"));
 const ArenaDashboard = lazy(() => import("./arena/Sprints"));
-const AppliedRoute = lazy(() => import("./components/AppliedRoute"));
-const AuthenticatedRoute = lazy(() =>
-  import("./components/AuthenticatedRoute")
-);
-const UnauthenticatedRoute = lazy(() =>
-  import("./components/UnauthenticatedRoute")
-);
 const ContextBuilder = lazy(() => import("./context/ContextBuilder"));
 const ContextPage = lazy(() => import("./context/ContextPage"));
 const CreateUser = lazy(() => import("./profile/CreateUser"));
