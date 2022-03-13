@@ -1,5 +1,4 @@
 import { I18n } from "@aws-amplify/core";
-import React from "react";
 import { Link } from "react-router-dom";
 import { quotes } from "../libs/quotes";
 import logo from "../assets/Pareto_Lockup-01.png";

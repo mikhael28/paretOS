@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import API from "@aws-amplify/api";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import BillingForm from "./BillingForm";
@@ -16,7 +16,6 @@ export default class Order extends Component {
 
     this.state = {
       isLoading: false,
-      stripeKey: null,
     };
   }
 

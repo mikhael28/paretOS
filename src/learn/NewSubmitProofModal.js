@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+// /* eslint-disable no-unused-vars */
+import { useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
+import { I18n } from "@aws-amplify/core";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
-import { I18n } from "@aws-amplify/core";
-import { uploadToS3 } from "../libs/s3";
+import uploadToS3 from "../libs/s3";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
@@ -26,9 +27,8 @@ export default function SubmitProof({
   const [experienceId, setExperienceId] = useState("");
   const [formData, setFormData] = useState({ github: "", athleteNotes: "" });
 
-  const validateForm = () => {
-    return formData.athleteNotes.length > 0 && formData.github.length > 0;
-  };
+  const validateForm = () =>
+    formData.athleteNotes.length > 0 && formData.github.length > 0;
 
   const handleChange = (event) => {
     setFormData({

@@ -45,6 +45,7 @@ function Modal({ children, childProps, open, onClose }) {
       onClick={handleClick}
       onKeyUp={handleKeyup}
       ref={backgroundRef}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
     >
       {/* Modal content */}

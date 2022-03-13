@@ -1,4 +1,5 @@
 import cloneDeep from "lodash.clonedeep";
+
 export const COMPLETE_SPRINT_TASK = "COMPLETE_SPRINT_TASK";
 export const NEXT_DAY = "NEXT_DAY";
 export const GET_ACTIVE_SPRINT_DATA = "GET_ACTIVE_SPRINT_DATA";
@@ -10,7 +11,7 @@ export const PLANNING_FORMS = "PLANNING_FORMS";
  * Most of the Sprint business logic is here - including calculating an updated sprint, when an achievement has been completed.
  */
 
-export let missions = {
+export const missions = {
   dailyScore: 0,
   dailyCompletion: 0,
   missions: [
@@ -202,6 +203,8 @@ export let missions = {
   ],
 };
 
+// @TODO: Could be a place for pulling out testable state
+// eslint-disable-next-line no-unused-vars
 const initialState = [
   {
     id: "String",
@@ -269,9 +272,9 @@ function sprint(state = [], action) {
       ].proofLink = action.payload.key;
 
       // update daily score, imperfect with local objects
-      newTeams[action.payload.index].missions[action.payload.day].dailyScore =
-        newTeams[action.payload.index].missions[action.payload.day].dailyScore +
-        10;
+      newTeams[action.payload.index].missions[
+        action.payload.day
+      ].dailyScore += 10;
 
       // finding number of completed tasks
 
@@ -279,7 +282,7 @@ function sprint(state = [], action) {
       newTeams[action.payload.index].missions[action.payload.day].missions.map(
         (mission) => {
           if (mission.completed === true) {
-            completedTasks = completedTasks + 1;
+            completedTasks += 1;
           }
         }
       );
@@ -294,8 +297,7 @@ function sprint(state = [], action) {
           .length;
 
       // weekly score updated
-      newTeams[action.payload.index].score =
-        newTeams[action.payload.index].score + 10;
+      newTeams[action.payload.index].score += 10;
 
       // weekly completion
 

@@ -5,6 +5,7 @@ import API from "@aws-amplify/api";
  * @TODO Issue #48
  */
 
+// eslint-disable-next-line import/prefer-default-export
 export async function createExperience(params) {
   const { expId, userId, type, title, description } = params;
   let achievement = {

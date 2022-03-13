@@ -2,6 +2,7 @@
  * Intrnationalization strings.
  * @TODO Issue #31
  */
+// eslint-disable-next-line import/prefer-default-export
 export const strings = {
   en: {
     appTitle1: "Pareto",
@@ -27,7 +28,7 @@ export const strings = {
 		career & build the habits necessary to achieve great things in life.`,
     thirdLanding: `Our mission is to provide the 20% of software that will give you 80% of the benefits that modern technology gives you.`,
 
-    //profile
+    // profile
     saving: "Saving...",
     saveProfile: "Save Profile",
     firstName: "First Name",
@@ -300,7 +301,7 @@ export const strings = {
     secondLanding: `Yubbe maber ki pyem ki luremi ka cubu cwinyi no iti i kwan mi lubu tic ma cwinyi maru.`,
     thirdLanding:
       "No ngec mi tiyu ki jemi mapatpat make yubu plogram mi computer, yubi product ni macel ma kabeddu i portfolio ni, ki bene kwan pwony ma pire tek tutwal i tic mi computer science irom karu peny mi ikom computer maber.",
-    //profile
+    // profile
     saving: "Ti gwoko...",
     saveProfile: "Gwok Profile ni",
     firstName: "nying me dini",
@@ -562,7 +563,7 @@ export const strings = {
 		career.`,
     thirdLanding: `Learn how to use the tools of a developer, build your first product for your portfolio, and learn essential computer
 		science to ace the technical interview.`,
-    //interface
+    // interface
     createNewUser: "Crear Nuevo Usuario",
     userDirectory: "Directorio de Usuarios",
     matchUsers: "Emparejar Usuarios",
@@ -830,7 +831,7 @@ export const strings = {
       "Nga wetegekera omulimu gwo omupya ng'omuziimbi wa pulogulaamu z'okubyuma bikalimagezi, embalilila n'empaka bigya kuyamba osigala kumulamwa.",
     thirdLanding:
       "Yiiga engeri y'okokozesezamu ebikozesebwa abawandiisi ba pulogulaamu z'ebyuma bikalimagezi era owandiike pulogulaamu yo esose osobole okuzimba portifolio yo,ela oyiige n'ebyenkizo mu ssomo lya computer science osobole okuyiita technical yintaviyu.",
-    //profile
+    // profile
     saving: "Okusseviinga...",
     saveProfile: "Sseviinga Profile",
     firstName: "Elinya enzungu",
@@ -1087,7 +1088,8 @@ export const strings = {
     newPassword: "Nova Senha",
     confirm: "Confirmar Senha",
     confirmationCode: "Código de Confirmação",
-    checkEmail: "Por favor, cheque seu email para resgatar seu código de confirmação.",
+    checkEmail:
+      "Por favor, cheque seu email para resgatar seu código de confirmação.",
     resetPassword: "Redefinir Senha",
 
     lowerArena: "A Arena",
@@ -1099,7 +1101,7 @@ export const strings = {
     thirdLanding: `Aprenda como utilizar as melhores ferramentas de um desenvolvedor, construa o primeiro produto para seu portifólio, e ganhe conhecimentos essênciais para
 		se sair bem nas entrevistas técnicas`,
 
-    //profile
+    // profile
     saving: "Salvando...",
     saveProfile: "Salvar Perfil",
     firstName: "Primeiro Nome",
@@ -1206,7 +1208,8 @@ export const strings = {
     projectIdeas: "Notas do Projeto e Ideias",
     noIdeasYet:
       "Nenhuma ideia de projeto ainda? Clique no botão abaixo e crie uma.",
-    noProjectsYet: "Clique no botão '+' para adicionar um projeto ao seu perfil.",
+    noProjectsYet:
+      "Clique no botão '+' para adicionar um projeto ao seu perfil.",
     enterNewProjectIdea: "Entrar com nova ideia de projeto",
     save: "Salvar",
     githubRepository: "Repositório do Github",
@@ -1374,7 +1377,7 @@ export const strings = {
 		career & build the habits necessary to achieve great things in life.`,
     thirdLanding: `Our mission is to provide the 20% of software that will give you 80% of the benefits that modern technology gives you.`,
 
-    //profile
+    // profile
     saving: "Saving...",
     saveProfile: "Save Profile",
     firstName: "First Name",
@@ -1479,8 +1482,7 @@ export const strings = {
     projects: "Projects",
     projectName: "Project Name",
     projectIdeas: "Project Notes & Ideas",
-    noIdeasYet:
-      "No project ideas yet? Abeg click di button below to add one.",
+    noIdeasYet: "No project ideas yet? Abeg click di button below to add one.",
     noProjectsYet: "Abeg click di plus button to add project to your profile.",
     enterNewProjectIdea: "Enter New Project Idea",
     save: "Save",
@@ -1649,7 +1651,7 @@ export const strings = {
     secondLanding: `जब आप प्रशिक्षण लेते हैं तो संरचना, जवाबदेही और मैत्रीपूर्ण प्रतिस्पर्धा आपको प्रेरित करती रहेगी. करियर और जीवन में महान चीजें हासिल करने के लिए आवश्यक आदतों का निर्माण करें.`,
     thirdLanding: `हमारा मिशन २०% सॉफ़्टवेयर प्रदान करना है जो आपको आधुनिक तकनीक से मिलने वाले ८०% लाभ देगा.`,
 
-    //profile
+    // profile
     saving: "सेविंग...",
     saveProfile: "सेव प्रोफाइल",
     firstName: "पहला नाम",
@@ -1756,7 +1758,8 @@ export const strings = {
     projectIdeas: "प्रोजेक्ट्स नोट्स और आइडिया",
     noIdeasYet:
       "अभी तक कोई प्रोजेक्ट्स आइडिया नहीं है? कृपया नीचे दिए गए बटन पर क्लिक करें.",
-    noProjectsYet: "कृपया अपनी प्रोफ़ाइल के किसी प्रोजेक्ट के प्लस बटन पर क्लिक करें.",
+    noProjectsYet:
+      "कृपया अपनी प्रोफ़ाइल के किसी प्रोजेक्ट के प्लस बटन पर क्लिक करें.",
     enterNewProjectIdea: "नया प्रोजेक्ट आइडिया दर्ज करें",
     save: "सेव",
     githubRepository: "GitHub रिपॉजिटरी",
@@ -1772,8 +1775,7 @@ export const strings = {
     loading: "लोड हो रहा है",
     selectTemplate: "अपना स्प्रिंट टेम्पलेट चुनें",
     selectPlayers: "अपने प्रतिस्पर्धी चुनें",
-    trashTalkPSA:
-      "वैकल्पिक: अपने प्रतियोगिता के लिए एक प्रेरित संदेश भेजे.",
+    trashTalkPSA: "वैकल्पिक: अपने प्रतियोगिता के लिए एक प्रेरित संदेश भेजे.",
     viewProof: "सबूत देखें",
     noProof: "कोई सबूत प्रस्तुत नहीं किया गया",
     arenaNav: "एरिना",
@@ -1899,5 +1901,4 @@ export const strings = {
     termsOfService:
       "This is a dummy Terms of Service: The following sets forth the agreement (this “Agreement”) between you and Send Me a Sample Limited (“Send Me a Sample”, “we” or “us”) under which you may enable and use the Send Me a Sample platform (the “Software” or the “Send Me a Sample Service”), including, without limitation, all or any part of any content, visual interfaces, images, information, graphics, design, compilation, computer code, products, software, services, and all other elements of the Send Me a Sample Service and other materials that are provided by or in connection with the Send Me a Sample Service (“Send Me a Sample Materials”). You acknowledge that, prior to creating an account, enabling any related skill or data capture form and using the platform, you have read and understood the terms of this agreement, without modification. By using the software, you agree to be bound by the terms of this agreement and to comply with all applicable laws and regulations. If you do not agree to these terms, do not use the platform. You can review the most current version of this Agreement by visiting www.sendmeasample.net The most current version will supersede all previous versions. By continuing to use the Send Me a Sample Service after changes are made, you agree to be bound by such changes. You also acknowledge that you have read and understood the Privacy Policy which explains how we will use any personal data you give us when enabling or using the Sent Me a Sample Service.",
   },
-
 };

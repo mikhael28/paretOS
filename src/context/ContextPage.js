@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import ContextObject from "./ContextObject";
-import sanity from "../libs/sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import Skeleton from "react-loading-skeleton";
 import Image from "react-bootstrap/lib/Image";
-import help from "../assets/help.png";
 import BlockContent from "@sanity/block-content-to-react";
-import add from "../assets/add.png";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
-import SuggestionModal from "./SuggestionModal";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import {
@@ -20,8 +15,13 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-import "react-accessible-accordion/dist/fancy-example.css";
+import SuggestionModal from "./SuggestionModal";
+import add from "../assets/add.png";
+import help from "../assets/help.png";
+import sanity from "../libs/sanity";
+import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
+import "react-accessible-accordion/dist/fancy-example.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -92,7 +92,8 @@ function ContextPage(props) {
     let tempNews = [];
     let tempAssorted = [];
     if (tempPath[1] === "hubs") {
-      links.map((link, idx) => {
+      console.log(links);
+      links.map((link) => {
         if (
           link.type === "community" ||
           link.type === "education" ||
@@ -124,21 +125,21 @@ function ContextPage(props) {
       let schema = tempPath[2];
       let sObj;
       // possible to refactor??
-      props.sanitySchemas.technicalSchemas.map((obj, idx) => {
+      props.sanitySchemas.technicalSchemas.map((obj) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
           setLoading(false);
         }
       });
-      props.sanitySchemas.economicSchemas.map((obj, idx) => {
+      props.sanitySchemas.economicSchemas.map((obj) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
           setLoading(false);
         }
       });
-      props.sanitySchemas.hubSchemas.map((obj, idx) => {
+      props.sanitySchemas.hubSchemas.map((obj) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
@@ -187,7 +188,7 @@ function ContextPage(props) {
       </div>
 
       {renderType === "hubs" ? (
-        <React.Fragment>
+        <>
           <BlockContent blocks={schemaObject.body} />
 
           <h3>Local Communities & Meetups</h3>
@@ -207,7 +208,7 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {community.map((item, i) => {
+              {community.map((item) => {
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -221,11 +222,11 @@ function ContextPage(props) {
                 }
 
                 return (
-                  <React.Fragment key={i}>
+                  <React.Fragment key={item._id}>
                     {loading === true ? (
-                      <React.Fragment>
+                      <>
                         <Skeleton width={250} height={200} />
-                      </React.Fragment>
+                      </>
                     ) : (
                       <ContextObject
                         {...item}
@@ -256,7 +257,7 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {support.map((item, i) => {
+              {support.map((item) => {
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -270,11 +271,11 @@ function ContextPage(props) {
                 }
                 if (item.type === "incubators" || item.type === "vc") {
                   return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <React.Fragment>
+                        <>
                           <Skeleton width={250} height={200} />
-                        </React.Fragment>
+                        </>
                       ) : (
                         <ContextObject
                           {...item}
@@ -306,7 +307,7 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {companies.map((item, i) => {
+              {companies.map((item) => {
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -320,11 +321,11 @@ function ContextPage(props) {
                 }
                 if (item.type === "companies" || item.type === "marketplace") {
                   return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <React.Fragment>
+                        <>
                           <Skeleton width={250} height={200} />
-                        </React.Fragment>
+                        </>
                       ) : (
                         <ContextObject
                           {...item}
@@ -356,7 +357,7 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {news.map((item, i) => {
+              {news.map((item) => {
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -370,11 +371,11 @@ function ContextPage(props) {
                 }
                 if (item.type === "news") {
                   return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <React.Fragment>
+                        <>
                           <Skeleton width={250} height={200} />
-                        </React.Fragment>
+                        </>
                       ) : (
                         <ContextObject
                           {...item}
@@ -406,7 +407,7 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {assorted.map((item, i) => {
+              {assorted.map((item) => {
                 function urlFor(source) {
                   return builder.image(source);
                 }
@@ -420,11 +421,11 @@ function ContextPage(props) {
                 }
                 if (item.type === "news") {
                   return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <React.Fragment>
+                        <>
                           <Skeleton width={250} height={200} />
-                        </React.Fragment>
+                        </>
                       ) : (
                         <ContextObject
                           {...item}
@@ -439,11 +440,11 @@ function ContextPage(props) {
               })}
             </div>
           )}
-        </React.Fragment>
+        </>
       ) : null}
       {/* This is the render for non-city based pages. */}
       {renderType === "generic" ? (
-        <React.Fragment>
+        <>
           <h2>{schemaObject.description}</h2>
           <Accordion allowMultipleExpanded allowZeroExpanded>
             <AccordionItem>
@@ -460,7 +461,7 @@ function ContextPage(props) {
             Pareto curated resources below - tap or click to open in a new tab.
           </h3>
           <div className="context-cards">
-            {items.map((item, i) => {
+            {items.map((item) => {
               function urlFor(source) {
                 return builder.image(source);
               }
@@ -473,11 +474,11 @@ function ContextPage(props) {
                 url = urlFor(item.logo.asset._ref);
               }
               return (
-                <React.Fragment key={i}>
+                <React.Fragment key={item._id}>
                   {loading === true ? (
-                    <React.Fragment>
+                    <>
                       <Skeleton width={250} height={200} />
-                    </React.Fragment>
+                    </>
                   ) : (
                     <ContextObject
                       {...item}
@@ -490,7 +491,7 @@ function ContextPage(props) {
               );
             })}
           </div>
-        </React.Fragment>
+        </>
       ) : null}
       {/* Modal Component */}
       <Dialog
@@ -559,7 +560,7 @@ function ContextPage(props) {
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
-        showCloseButton={true}
+        showCloseButton
         rewindOnClose={false}
       />
     </div>

@@ -4,28 +4,28 @@ import { I18n } from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import { withRouter } from "react-router-dom";
 import Image from "react-bootstrap/lib/Image";
-import Routes from "./Routes";
-import question from "./assets/help.png";
-import { errorToast } from "./libs/toasts";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import Tour from "reactour";
+import "toasted-notes/src/styles.css";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
+import ReconnectingWebSocket from "reconnecting-websocket";
+import { GrLogout } from "react-icons/gr";
+import * as Sentry from "@sentry/react";
+import sortby from "lodash.sortby";
+import { strings } from "./libs/strings";
+import BottomNav from "./components/BottomNav";
+import sanity from "./libs/sanity";
+import LoadingModal from "./components/LoadingModal";
 import {
   getActiveSprintData,
   getInitialSprintData,
   putUpdatedSprintData,
 } from "./state/sprints";
-import Tour from "reactour";
-import "toasted-notes/src/styles.css";
-import Dialog from "@material-ui/core/Dialog";
-import LoadingModal from "./components/LoadingModal";
-import sanity from "./libs/sanity";
-import Slide from "@material-ui/core/Slide";
-import BottomNav from "./components/BottomNav";
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { strings } from "./libs/strings";
-import { GrLogout } from "react-icons/gr";
-import * as Sentry from "@sentry/react";
-import sortby from "lodash.sortby";
+import { errorToast } from "./libs/toasts";
+import question from "./assets/help.png";
+import Routes from "./Routes";
 import LeftNav from "./components/LeftNav";
 import { getUser } from "./state/profile";
 
@@ -47,14 +47,12 @@ class App extends Component {
     this.state = {
       isAuthenticated: false,
       isAuthenticating: true,
-      showLoadingModal: true,
       username: "",
       user: { id: "8020", fName: "Vilfredo", lName: "Pareto" },
       training: {},
       product: {},
       interviewing: {},
       sprints: [],
-      sprint: {},
       session: {},
       athletes: [],
       coaches: [],
@@ -80,10 +78,11 @@ class App extends Component {
       sanityProduct: [],
       sanityInterview: [],
     };
-    this.wsClient = "";
+    // this.wsClient = "";
   }
 
   // initial websocket timeout duration as a class variable
+  // eslint-disable-next-line react/no-unused-class-component-methods
   timeout = 5000;
 
   closeTour = () => {
@@ -245,18 +244,18 @@ class App extends Component {
 
     let sprintString = sprintStrings.join("&");
 
-    var wsClient = new ReconnectingWebSocket(
+    let wsClient = new ReconnectingWebSocket(
       `wss://2los2emuze.execute-api.us-east-1.amazonaws.com/Prod?${sprintString}`
     );
 
     let that = this; // caching 'this'
-    var connectInterval;
+    let connectInterval;
 
     wsClient.onopen = () => {
       console.log("Connected");
       this.setState({ ws: wsClient });
       that.timeout = 250; // reset timer to 250 on open of websocket connection
-      clearTimeout(connectInterval); //clear interval on onOpen of websocket connection
+      clearTimeout(connectInterval); // clear interval on onOpen of websocket connection
 
       setInterval(function () {
         console.log("Firing Ping");
@@ -300,7 +299,7 @@ class App extends Component {
         e.reason
       );
 
-      that.timeout = that.timeout + that.timeout; // increment retry interval
+      that.timeout += that.timeout; // increment retry interval
       connectInterval = setTimeout(this.check, Math.min(10000, that.timeout)); // call check function after timeout
     };
 
@@ -417,6 +416,7 @@ class App extends Component {
   };
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const Onboarding = withRouter(({ location: { pathname }, history }) => {
       const steps = [
         {
@@ -449,7 +449,7 @@ class App extends Component {
           steps={steps}
           isOpen={this.state.isTourOpen}
           onRequestClose={this.closeTour}
-          showCloseButton={true}
+          showCloseButton
           update={pathname}
           rewindOnClose={false}
         />
@@ -494,8 +494,9 @@ class App extends Component {
     return (
       !this.state.isAuthenticating && (
         <Sentry.ErrorBoundary
+          // eslint-disable-next-line no-unused-vars
           fallback={({ error, componentStack, resetError }) => (
-            <React.Fragment>
+            <>
               <div>
                 Dear user, you have (sadly) encountered an error. The error is
                 written out for you below, but it's probably useless to you. If
@@ -508,12 +509,12 @@ class App extends Component {
               <button onClick={() => window.location.replace("/")}>
                 Click here to reset!
               </button>
-            </React.Fragment>
+            </>
           )}
         >
-          <React.Fragment>
+          <>
             {this.state.isAuthenticated ? (
-              <React.Fragment>
+              <>
                 <div className="sticky-logout" onClick={this.handleLogout}>
                   <GrLogout />
                 </div>
@@ -547,14 +548,14 @@ class App extends Component {
                     <BottomNav user={this.state.user} />
                   </div>
                 </div>
-              </React.Fragment>
+              </>
             ) : (
               <Routes childProps={childProps} />
             )}
             <Onboarding
               isOpen={this.state.isTourOpen}
               onRequestClose={this.closeTour}
-              showCloseButton={true}
+              showCloseButton
             />
             <Dialog
               style={{
@@ -563,31 +564,29 @@ class App extends Component {
               open={this.state.loading}
               TransitionComponent={Transition}
               keepMounted
-              disableEscapeKeyDown={true}
-              fullScreen={true}
-              fullWidth={true}
-              disableBackdropClick={true}
+              disableEscapeKeyDown
+              fullScreen
+              fullWidth
+              disableBackdropClick
               hideBackdrop={false}
               aria-labelledby="loading"
               aria-describedby="Please wait while the page loads"
             >
               <LoadingModal />
             </Dialog>
-          </React.Fragment>
+          </>
         </Sentry.ErrorBoundary>
       )
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    redux: state.redux,
-  };
-};
+const mapStateToProps = (state) => ({
+  redux: state.redux,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
       getActiveSprintData: (data) => getActiveSprintData(data),
       getInitialSprintData: (data) => getInitialSprintData(data),
@@ -596,6 +595,5 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatch
   );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

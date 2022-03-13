@@ -20,10 +20,9 @@ class BillingForm extends Component {
       isProcessing: false,
       isCardComplete: false,
       street: "",
-      street2: "",
+      // street2: "",
       city: "",
       zip: "",
-      email: "",
     };
   }
 
@@ -51,13 +50,10 @@ class BillingForm extends Component {
     event.preventDefault();
 
     const { name } = this.state;
-    console.log("Stripe data: ", name);
 
     this.setState({ isProcessing: true });
 
     const { token, error } = await this.props.stripe.createToken({ name });
-    console.log("Token: ", token);
-    console.log("Error? ", error);
 
     this.setState({ isProcessing: false });
 

@@ -1,4 +1,3 @@
-import React from "react";
 import classNames from "classnames";
 import { GrAchievement } from "react-icons/gr";
 import { GiCoins } from "react-icons/gi";
@@ -26,7 +25,6 @@ export default function ExperienceSummary(props) {
         textAlign: "center",
         cursor: "pointer",
         flexDirection: "column",
-     
       }}
       onClick={() => props.history.push(`/training/${props.id}`)}
     >

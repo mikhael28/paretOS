@@ -10,8 +10,8 @@ import {
   CarouselProvider,
   Slider,
   Slide,
-  ButtonBack,
-  ButtonNext,
+  // ButtonBack,
+  // ButtonNext,
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import { bindActionCreators } from "redux";
@@ -55,7 +55,7 @@ function Analytics(props) {
                   // tickFormat specifies how ticks should be displayed
                   tickFormat={(x) => `${x * 100}%`}
                 />
-                <VictoryStack colorScale={"warm"}>
+                <VictoryStack colorScale="warm">
                   <VictoryBar
                     data={props.missions}
                     x="quarter"
@@ -75,12 +75,8 @@ function Analytics(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {};
-};
+const mapStateToProps = () => ({});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({}, dispatch);
-};
+const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Analytics);

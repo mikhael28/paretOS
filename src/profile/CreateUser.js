@@ -1,15 +1,14 @@
+import Auth from "@aws-amplify/auth";
+import API from "@aws-amplify/api";
+import { v4 as uuidv4 } from "uuid";
 import { Component } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import { v4 as uuidv4 } from 'uuid';
-import Auth from "@aws-amplify/auth";
-import API from "@aws-amplify/api";
 import { errorToast, successToast } from "../libs/toasts";
-import { notepadIntro } from "../libs/static";
+import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
-import { countries } from "../libs/static";
 /**
  * Functionality for new user signup, creating their profile.
  * @TODO Onboarding emails Issue #24
@@ -24,14 +23,13 @@ export default class CreateUser extends Component {
 
     this.state = {
       isLoading: false,
-      email: "",
       fName: "",
       lName: "",
-      phone: 1,
       city: "",
       state: "US",
       github: "",
-      acceptedTOS: false,
+      // @TODO: Update terms of service, have the modal be meaningful
+      // acceptedTOS: false,
       type: "mentee",
       showTermsOfService: false,
     };
@@ -212,9 +210,12 @@ export default class CreateUser extends Component {
                     onChange={this.handleChange}
                     value={this.state.state}
                   >
-                    {countries.map((country, index) => {
-                      return <option key={index} value={country.code}>{country.name}</option>
-                    })}
+                    {countries.map((country, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <option key={index} value={country.code}>
+                        {country.name}
+                      </option>
+                    ))}
                   </FormControl>
                 </FormGroup>
                 <FormGroup controlId="github" bsSize="large">

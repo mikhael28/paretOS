@@ -2,18 +2,17 @@ import ReactDOM from "react-dom";
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import Storage from "@aws-amplify/storage";
-import { I18n } from "@aws-amplify/core";
 import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
 import reducer from "./state/index";
 import "./index.css";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
