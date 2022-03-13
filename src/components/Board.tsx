@@ -13,6 +13,12 @@ import { PageNavigation } from "./PageNavigation";
  * @param {Prop} history-array of recent pages/views visited
  */
 
+interface PlanningField {
+  name: string,
+  code: string, 
+  content: string
+}
+
 export type User = {
   page: number,
   rank: number,
@@ -25,7 +31,7 @@ export type User = {
   missions: Array<Object>,
   percentage: number,
   phone: string, 
-  planning: string, 
+  planning: Array<PlanningField>, 
   review: string,
   profileImg?: File,
 };

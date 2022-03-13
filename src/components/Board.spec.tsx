@@ -26,12 +26,12 @@ describe("sortUsersByScore", () => {
 
 function testUsers():Array<User> {
   const users:Array<User> = [
-    {page: 1, rank: 1,  score: 1000, id: 1, fName: 'First', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
-    {page: 1, rank: 2,  score: 900, id: 2, fName: 'Second', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
-    {page: 1, rank: 3,  score: 800, id: 3, fName: 'Third', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
-    {page: 2, rank: 4,  score: 700, id: 4, fName: 'A', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
-    {page: 2, rank: 5,  score: 600, id: 5, fName: 'A', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
-    {page: 2, rank: 6,  score: 500, id: 6, fName: 'Current', lName: 'User', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: '123', review: '123'},
+    {page: 1, rank: 1,  score: 1000, id: 1, fName: 'First', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
+    {page: 1, rank: 2,  score: 900, id: 2, fName: 'Second', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
+    {page: 1, rank: 3,  score: 800, id: 3, fName: 'Third', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
+    {page: 2, rank: 4,  score: 700, id: 4, fName: 'A', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
+    {page: 2, rank: 5,  score: 600, id: 5, fName: 'A', lName: 'B', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
+    {page: 2, rank: 6,  score: 500, id: 6, fName: 'Current', lName: 'User', email: 'aaaa', github: 'aaa', missions: [], percentage: 100, phone: '123', planning: [{name: 'a', code: 'b', content: ""}], review: '123'},
   ]
   return users;
 }
