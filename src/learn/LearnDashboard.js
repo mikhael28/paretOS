@@ -1,4 +1,3 @@
-// /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { init } from "pell";
 import API from "@aws-amplify/api";
@@ -23,38 +22,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  */
 
 function LearnDashboard(props) {
-  const [note, setNote] = useState("");
-  const editor = null;
   const [html, setHtml] = useState(null);
-  const [noteLoading, setNoteLoading] = useState(false);
 
   useEffect(() => {
-    init({
-      element: document.getElementById("editor"),
-      onChange: (html) => setHtml({ html }),
-      actions: ["bold", "underline", "italic"],
-    });
+    if (html === null) {
+      const editor = init({
+        element: document.getElementById("editor"),
+        onChange: (html) => {
+          console.log(html);
+          setHtml(html);
+        },
+        actions: ["bold", "underline", "italic"],
+      });
+      setHtml(props.user.notes[0] ?? []);
+      editor.content.innerHTML = props.user.notes[0];
+    }
   }, []);
-
-  useEffect(() => {
-    setNote(props.user.notes[0]);
-  }, []);
-
-  function handleRichChange(value) {
-    setNote(value);
-  }
 
   async function editNote() {
-    setNoteLoading(true);
-
     try {
       await API.put("pareto", `/users/${props.user.id}`, {
         body: {
-          notes: [note],
+          notes: [html],
         },
       });
-      setNoteLoading(false);
-      successToast("Your journal was saved.");
+      successToast("Journal saved 👍");
     } catch (e) {
       errorToast(e, props.user);
     }
@@ -106,16 +98,10 @@ function LearnDashboard(props) {
         </div>
         <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
           <FormGroup controlId="note" bsSize="large" className="overflow">
-            {/* <ReactQuill
-              value={note}
-              onChange={handleRichChange}
-              style={{ font: 20 }}
-              onBlur={editNote}
-            /> */}
-            <h3>Editor</h3>
-            <div id="editor" className="pell" />
-            <h3>HTML Output</h3>
-            <div id="html-output">{html}</div>
+            <h3>Journal</h3>
+            <div id="editor" className="pell" onBlur={editNote} />
+            {/* <h3>HTML Output</h3>
+            <div id="html-output">{html}</div> */}
           </FormGroup>
         </div>
       </div>

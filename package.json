@@ -41,7 +41,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
-    "react-spring": "^9.4.3",
+    "react-spring": "8.0.27",
     "react-stripe-elements": "^1.6.0",
     "reactour": "^1.18.7",
     "reconnecting-websocket": "^4.4.0",
@@ -83,6 +83,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/pell": "^1.0.1",
     "@types/uuid": "^8.3.4",
     "cypress": "^9.1.1",
     "eslint": "^8.11.0",

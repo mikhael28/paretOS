@@ -1,4 +1,3 @@
-// /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -7,8 +6,8 @@ import Modal from "react-bootstrap/lib/Modal";
 import Button from "react-bootstrap/lib/Button";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
-import uploadToS3 from "../libs/s3";
+// import { errorToast, successToast } from "../libs/toasts";
+// import uploadToS3 from "../libs/s3";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
@@ -20,11 +19,11 @@ export default function SubmitProof({
   handleClose,
   markSubmitted,
   activeExperience,
-  mongoExperience,
+  // mongoExperience,
 }) {
   const [isChanging, setChanging] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [experienceId, setExperienceId] = useState("");
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [experienceId, setExperienceId] = useState("");
   const [formData, setFormData] = useState({ github: "", athleteNotes: "" });
 
   const validateForm = () =>
@@ -37,23 +36,23 @@ export default function SubmitProof({
     });
   };
 
-  const onChange = async (e) => {
-    const file = e.target.files[0];
-    let fileType = e.target.files[0].name.split(".");
+  // const onChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   let fileType = e.target.files[0].name.split(".");
 
-    // the name to save is the id of the experience_01 or whatever the number is.
-    try {
-      await uploadToS3(
-        `${mongoExperience.id}${activeExperience.priority}`,
-        file,
-        fileType[1]
-      );
+  //   // the name to save is the id of the experience_01 or whatever the number is.
+  //   try {
+  //     await uploadToS3(
+  //       `${mongoExperience.id}${activeExperience.priority}`,
+  //       file,
+  //       fileType[1]
+  //     );
 
-      successToast("Proof successfully uploaded.");
-    } catch (err) {
-      errorToast(err);
-    }
-  };
+  //     successToast("Proof successfully uploaded.");
+  //   } catch (err) {
+  //     errorToast(err);
+  //   }
+  // };
 
   return (
     <div>
@@ -90,6 +89,7 @@ export default function SubmitProof({
             <LoaderButton
               block
               onClick={() => {
+                setChanging(true);
                 markSubmitted(
                   activeExperience,
                   formData.github,
@@ -99,6 +99,7 @@ export default function SubmitProof({
                   athleteNotes: "",
                   github: "",
                 });
+                setChanging(false);
               }}
               bsSize="large"
               text={I18n.get("submitProof")}
