@@ -4,7 +4,6 @@ const initialState = null;
 function profile(state = initialState, action) {
   switch (action.type) {
     case GET_USER:
-      console.log("Initial profile state init");
       return { ...action.user };
     default:
       return state;

@@ -1,16 +1,16 @@
-import React, { Children, useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Image from "react-bootstrap/lib/Image";
-import sanity from "../libs/sanity";
 import { I18n } from "@aws-amplify/core";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import help from "../assets/help.png";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
-import ContextObject from "./ContextObject";
 import classNames from "classnames";
+import ContextObject from "./ContextObject";
+import help from "../assets/help.png";
+import sanity from "../libs/sanity";
 import TabPanel from "../components/TabPanel.js";
 
 const builder = imageUrlBuilder(sanity);
@@ -23,10 +23,10 @@ const builder = imageUrlBuilder(sanity);
 function ContextBuilder({ sanitySchemas }) {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState(0);
+  const history = useHistory();
 
   const renderTopicsList = (topics) => {
     const newCardClass = classNames("context-card", "second-step-library");
-    const history = useHistory();
 
     return (
       <div className="context-cards">
@@ -106,7 +106,7 @@ function ContextBuilder({ sanitySchemas }) {
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
-        showCloseButton={true}
+        showCloseButton
         rewindOnClose={false}
       />
     </div>

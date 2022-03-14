@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
-import logo from "../assets/Pareto_Lockup-01.png";
 import { Button, InputLabel, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
+import logo from "../assets/Pareto_Lockup-01.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {

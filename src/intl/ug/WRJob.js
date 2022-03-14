@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/lib/Button";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaCheck, FaMoneyCheck } from "react-icons/fa";
+import { FaCheck, FaMoneyCheck, FaMapMarkerAlt } from "react-icons/fa";
 import classNames from "classnames";
 
 /**
@@ -23,17 +22,17 @@ export default function Job(props) {
     >
       <div className="flex-down">
         {props.job.title.length < 39 ? (
-          <React.Fragment>
+          <>
             <h3>{newTitle}</h3>
-          </React.Fragment>
+          </>
         ) : (
           <h3>{props.job.title.substring(0, 39)}...</h3>
         )}
 
         {newDescription.length < 49 ? (
-          <React.Fragment>
+          <>
             <p>{newDescription}</p>
-          </React.Fragment>
+          </>
         ) : (
           <p>{props.job.description.substring(0, 49)}...</p>
         )}
@@ -43,7 +42,7 @@ export default function Job(props) {
         <div className="flex-between">
           <p>Location</p>
           <p>
-            <i class="fa fa-map-marker">
+            <i className="fa fa-map-marker">
               <FaMapMarkerAlt />
             </i>
             {props.job.job_location.length > 10
@@ -56,7 +55,7 @@ export default function Job(props) {
           <p>UGX</p>
 
           <p>
-            <i class="fa c">
+            <i className="fa c">
               <FaMoneyCheck />
             </i>
             {Number(props.job.rate).toLocaleString()}
@@ -67,7 +66,7 @@ export default function Job(props) {
           <p>Job Type</p>
 
           <p>
-            <i class="fa fa-check">
+            <i className="fa fa-check">
               <FaCheck />
             </i>
             {props.job.type}

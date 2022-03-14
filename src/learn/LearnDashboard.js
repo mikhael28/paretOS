@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import ExperienceSummary from "./ExperienceSummary";
+import { init } from "pell";
 import API from "@aws-amplify/api";
 import classNames from "classnames";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
+import { I18n } from "@aws-amplify/core";
 import { errorToast, successToast } from "../libs/toasts";
 import PaywallModal from "./PaywallModal";
-// import ReactQuill from "react-quill";
-import { I18n } from "@aws-amplify/core";
+import ExperienceSummary from "./ExperienceSummary";
+import "pell/dist/pell.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,28 +22,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  */
 
 function LearnDashboard(props) {
-  const [note, setNote] = useState("");
-  const [noteLoading, setNoteLoading] = useState(false);
+  const [html, setHtml] = useState(null);
 
   useEffect(() => {
-    setNote(props.user.notes[0]);
+    if (html === null) {
+      const editor = init({
+        element: document.getElementById("editor"),
+        onChange: (html) => {
+          console.log(html);
+          setHtml(html);
+        },
+        actions: ["bold", "underline", "italic"],
+      });
+      setHtml(props.user.notes[0] ?? []);
+      editor.content.innerHTML = props.user.notes[0];
+    }
   }, []);
 
-  function handleRichChange(value) {
-    setNote(value);
-  }
-
   async function editNote() {
-    setNoteLoading(true);
-
     try {
       await API.put("pareto", `/users/${props.user.id}`, {
         body: {
-          notes: [note],
+          notes: [html],
         },
       });
-      setNoteLoading(false);
-      successToast("Your journal was saved.");
+      successToast("Journal saved 👍");
     } catch (e) {
       errorToast(e, props.user);
     }
@@ -57,26 +61,24 @@ function LearnDashboard(props) {
         >
           <h2>{I18n.get("myMentors")}</h2>
           <div className="exp-cards" style={{ justifyContent: "start" }}>
-            {props.coaches.map((coach, index) => {
-              return (
-                <div
-                  className="exp-card"
-                  style={{ display: "flex", justifyContent: "flex-start" }}
-                  key={index}
-                >
-                  <img
-                    src={coach.mentor.picture}
-                    height="50"
-                    width="50"
-                    alt="Profile"
-                  />
-                  <p style={{ marginTop: 14, paddingLeft: 10 }}>
-                    {" "}
-                    {coach.mentor.fName} {coach.mentor.lName}
-                  </p>
-                </div>
-              );
-            })}
+            {props.coaches.map((coach) => (
+              <div
+                className="exp-card"
+                style={{ display: "flex", justifyContent: "flex-start" }}
+                key={coach._id}
+              >
+                <img
+                  src={coach.mentor.picture}
+                  height="50"
+                  width="50"
+                  alt="Profile"
+                />
+                <p style={{ marginTop: 14, paddingLeft: 10 }}>
+                  {" "}
+                  {coach.mentor.fName} {coach.mentor.lName}
+                </p>
+              </div>
+            ))}
           </div>
           <div>
             <h2>{I18n.get("myCareer")}</h2>
@@ -96,12 +98,10 @@ function LearnDashboard(props) {
         </div>
         <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
           <FormGroup controlId="note" bsSize="large" className="overflow">
-            {/* <ReactQuill
-              value={note}
-              onChange={handleRichChange}
-              style={{ font: 20 }}
-              onBlur={editNote}
-            /> */}
+            <h3>Journal</h3>
+            <div id="editor" className="pell" onBlur={editNote} />
+            {/* <h3>HTML Output</h3>
+            <div id="html-output">{html}</div> */}
           </FormGroup>
         </div>
       </div>
@@ -112,8 +112,8 @@ function LearnDashboard(props) {
         open={props.user.learningPurchase === false}
         TransitionComponent={Transition}
         keepMounted
-        disableEscapeKeyDown={true}
-        disableBackdropClick={true}
+        disableEscapeKeyDown
+        disableBackdropClick
         hideBackdrop={false}
         aria-labelledby="loading"
         aria-describedby="Please wait while the page loads"

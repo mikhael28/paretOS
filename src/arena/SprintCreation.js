@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
-import LoaderButton from "../components/LoaderButton";
+import { v4 as uuidv4 } from "uuid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -8,13 +7,14 @@ import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Calendar from "react-calendar";
-import { getActiveSprintData } from "../state/sprints";
-import cloneDeep from "lodash.clonedeep";
-import "react-calendar/dist/Calendar.css";
-import { errorToast, successToast } from "../libs/toasts";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import Button from "react-bootstrap/lib/Button";
+import Calendar from "react-calendar";
+import cloneDeep from "lodash.clonedeep";
+import { getActiveSprintData } from "../state/sprints";
+import { errorToast, successToast } from "../libs/toasts";
+import LoaderButton from "../components/LoaderButton";
+import "react-calendar/dist/Calendar.css";
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
@@ -164,7 +164,7 @@ function SprintCreation(props) {
           cloneDeep(finalDBMission),
         ],
       };
-    
+
       databasedTeams.push(dbTeam);
     });
     let body = {
@@ -192,46 +192,46 @@ function SprintCreation(props) {
     }
     setLoading(false);
   }
+  // eslint-disable-next-line no-unused-vars
   function validateForm() {
     let result;
-    console.log(Date.now(startDate) - 5000 < Date.now(new Date()) + 4000000);
+    // console.log(Date.now(startDate) - 5000 < Date.now(new Date()) + 4000000);
     if (Date.now(startDate) - 5000 < Date.now(new Date())) {
       result = true;
     } else {
       result = false;
     }
-    console.log(result);
+    // console.log(result);
     return result;
   }
   function renderMissionOptions(missions) {
-    return missions.map((mission, i) => {
-      return (
-        <option key={i} data-value={JSON.stringify(mission)}>
-          {mission.title}
-        </option>
-      );
-    });
+    return missions.map((mission, i) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <option key={i} data-value={JSON.stringify(mission)}>
+        {mission.title}
+      </option>
+    ));
   }
   function renderPlayerOptions(data) {
-    return data.map((playr, index) => {
-      return (
-        <option key={index} data-value={JSON.stringify(playr)}>
-          {playr.fName} {playr.lName}
-        </option>
-      );
-    });
+    return data.map((playr, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <option key={index} data-value={JSON.stringify(playr)}>
+        {playr.fName} {playr.lName}
+      </option>
+    ));
   }
 
-  function handleChange(value, input) {
+  // eslint-disable-next-line no-unused-vars
+  function handleChange(value, _input) {
     let parsedJSON = JSON.parse(value);
     setChosenMissions(parsedJSON);
   }
 
   function onInput(e) {
     if (e.target.nextSibling.id === "players-datalist") {
-      var input = document.getElementById("players-input");
-      var opts = document.getElementById(e.target.nextSibling.id).childNodes;
-      for (var i = 0; i < opts.length; i++) {
+      let input = document.getElementById("players-input");
+      let opts = document.getElementById(e.target.nextSibling.id).childNodes;
+      for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {
           // An item was selected from the list!
           // yourCallbackHere()
@@ -240,9 +240,9 @@ function SprintCreation(props) {
         }
       }
     } else if (e.target.nextSibling.id === "sprint-options") {
-      var input = document.getElementById("sprints-input");
-      var opts = document.getElementById(e.target.nextSibling.id).childNodes;
-      for (var i = 0; i < opts.length; i++) {
+      let input = document.getElementById("sprints-input");
+      let opts = document.getElementById(e.target.nextSibling.id).childNodes;
+      for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {
           // An item was selected from the list!
           // yourCallbackHere()
@@ -285,7 +285,7 @@ function SprintCreation(props) {
           list="sprint-options"
           placeholder={I18n.get("pleaseChooseAnOption")}
           disabled={loading}
-        ></FormControl>
+        />
         <datalist id="sprint-options">
           {renderMissionOptions(missions)}
         </datalist>
@@ -304,36 +304,34 @@ function SprintCreation(props) {
           list="players-datalist"
           placeholder={I18n.get("pleaseChooseAnOption")}
           disabled={loading}
-        ></FormControl>
+        />
         <datalist id="players-datalist">
           {renderPlayerOptions(players)}
         </datalist>
       </FormGroup>
-      {chosenPlayers.map((chosen, idx) => {
-        return (
-          <div key={idx} className="block">
-            <p>
-              {chosen.fName} {chosen.lName}
-              <Button
-                onClick={() => removeChosenPlayer(chosen)}
-                bsSize="large"
-                style={{
-                  float: "right",
-                  marginTop: "-5px",
-                  paddingTop: "10px",
-                  paddingBottom: "10px",
-                  backgroundColor: "white",
-                  color: "red",
-                }}
-              >
-                <Glyphicon glyph="glyphicon glyphicon-remove" />
-              </Button>
-            </p>
-          </div>
-        );
-      })}
+      {chosenPlayers.map((chosen) => (
+        <div key={chosen.id} className="block">
+          <p>
+            {chosen.fName} {chosen.lName}
+            <Button
+              onClick={() => removeChosenPlayer(chosen)}
+              bsSize="large"
+              style={{
+                float: "right",
+                marginTop: "-5px",
+                paddingTop: "10px",
+                paddingBottom: "10px",
+                backgroundColor: "white",
+                color: "red",
+              }}
+            >
+              <Glyphicon glyph="glyphicon glyphicon-remove" />
+            </Button>
+          </p>
+        </div>
+      ))}
       <Calendar
-        onChange={(value, event) => {
+        onChange={(value) => {
           setStartDate(value);
           setReady(true);
         }}
@@ -342,8 +340,8 @@ function SprintCreation(props) {
         minDetail="month"
         // minDate={new Date()}
         maxDate={new Date(Date.now() + 2592000000)}
-        tileDisabled={({ date, view }) => date.getDay() !== 1}
-        showNeighboringMonth={true}
+        tileDisabled={({ date }) => date.getDay() !== 1}
+        showNeighboringMonth
       />
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
       <LoaderButton
@@ -357,18 +355,15 @@ function SprintCreation(props) {
     </div>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    profile: state.profile,
-    redux: state,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+  redux: state,
+});
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
-      getActiveSprintData: (sprint) => getActiveSprintData(),
+      getActiveSprintData: () => getActiveSprintData(),
     },
     dispatch
   );
-};
 export default connect(mapStateToProps, mapDispatchToProps)(SprintCreation);

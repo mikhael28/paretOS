@@ -1,6 +1,7 @@
 /**
  * Motivational quotes used in loading screen.
  */
+// eslint-disable-next-line import/prefer-default-export
 export const quotes = [
   {
     author: "Steve Martin",

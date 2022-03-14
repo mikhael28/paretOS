@@ -1,4 +1,3 @@
-import React from "react";
 import toast from "toasted-notes";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
@@ -8,7 +7,7 @@ import logo from "../assets/Pareto-Red-01.png";
  * @TODO Issue #30
  */
 
-export function errorToast(err, user) {
+export function errorToast(err) {
   toast.notify(
     ({ onClose }) => (
       <div style={{ display: "flex" }} className="block">

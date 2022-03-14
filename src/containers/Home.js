@@ -1,4 +1,3 @@
-import React from "react";
 import Dashboard from "../arena/ArenaDashboard";
 import Landing from "./Landing";
 
@@ -8,12 +7,12 @@ import Landing from "./Landing";
 
 export default function Home(props) {
   return (
-    <React.Fragment>
+    <>
       {props.isAuthenticated ? (
         <Dashboard {...props} />
       ) : (
         <Landing history={props.history} />
       )}
-    </React.Fragment>
+    </>
   );
 }

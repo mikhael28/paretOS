@@ -10,6 +10,7 @@ import io from "socket.io-client";
  * @returns
  */
 
+// eslint-disable-next-line no-unused-vars
 const Room = (props) => {
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -84,9 +85,7 @@ const Room = (props) => {
   function handleNegotiationNeededEvent(userID) {
     peerRef.current
       .createOffer()
-      .then((offer) => {
-        return peerRef.current.setLocalDescription(offer);
-      })
+      .then((offer) => peerRef.current.setLocalDescription(offer))
       .then(() => {
         const payload = {
           target: userID,
@@ -110,12 +109,8 @@ const Room = (props) => {
             peerRef.current.addTrack(track, userStream.current)
           );
       })
-      .then(() => {
-        return peerRef.current.createAnswer();
-      })
-      .then((answer) => {
-        return peerRef.current.setLocalDescription(answer);
-      })
+      .then(() => peerRef.current.createAnswer())
+      .then((answer) => peerRef.current.setLocalDescription(answer))
       .then(() => {
         const payload = {
           target: incoming.caller,

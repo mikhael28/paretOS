@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image from "react-bootstrap/lib/Image";
 import { I18n } from "@aws-amplify/core";
-import ArenaDashboard from "./Sprints";
 import Tour from "reactour";
+import ArenaDashboard from "./Sprints";
 import question from "../assets/help.png";
 import logo from "../assets/Pareto_Lockup-01.png";
 
@@ -11,14 +11,7 @@ import logo from "../assets/Pareto_Lockup-01.png";
  *
  */
 
-const HomeDashboard = ({
-  sprints,
-  history,
-  user,
-  fetchMenteeSprints,
-  messages,
-  updateMessages,
-}) => {
+function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const steps = [
@@ -92,6 +85,6 @@ const HomeDashboard = ({
       />
     </div>
   );
-};
+}
 
 export default HomeDashboard;

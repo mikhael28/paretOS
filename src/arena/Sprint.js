@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import {
-  completeSprintTask,
-  nextDay,
-  getActiveSprintData,
-  updatePlanningForms,
-} from "../state/sprints";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
-import Analytics from "./Analytics";
-import ArenaProofModal from "../components/ArenaProofModal";
-import { errorToast } from "../libs/toasts";
-import question from "../assets/help.png";
 import Tour from "reactour";
 import classNames from "classnames";
 import {
@@ -24,11 +14,21 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import Board from "../components/Board";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import TabPanel from "../components/TabPanel.js";
+import Board from "../components/Board.tsx";
+import question from "../assets/help.png";
+import { errorToast } from "../libs/toasts";
+import ArenaProofModal from "../components/ArenaProofModal";
+import Analytics from "./Analytics";
+import {
+  completeSprintTask,
+  nextDay,
+  getActiveSprintData,
+  updatePlanningForms,
+} from "../state/sprints";
+import TabPanel from "../components/TabPanel";
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
  * @TODO The indexing in multiplayer games seems to be off - investigate.
@@ -56,6 +56,7 @@ function Sprint(props) {
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState("submit");
   const [index, setIndex] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const [paginate, setPaginate] = useState(10);
   const [key, setKey] = useState(1);
   const [dynamicForms, setDynamicForms] = useState([]);
@@ -68,8 +69,8 @@ function Sprint(props) {
     let tempObj = { ...dynamicForms };
 
     for (const obj in tempObj) {
-      if (tempObj[obj]["code"] === event.target.id) {
-        tempObj[obj]["content"] = event.target.value;
+      if (tempObj[obj].code === event.target.id) {
+        tempObj[obj].content = event.target.value;
       }
     }
     setDynamicForms(tempObj);
@@ -79,20 +80,8 @@ function Sprint(props) {
     setDynamicForms(props.redux.sprint[activeSprintId].teams[index].planning);
   }, []);
 
-  async function handleChange(
-    mission,
-    idx,
-    day,
-    key,
-    activeSprintIndex,
-    message
-  ) {
+  async function handleChange(mission, idx, day, key, activeSprintIndex) {
     setLoading(true);
-    const input = {
-      channelID: "1",
-      author: `Pareto League`,
-      body: message.trim(),
-    };
     props.completeSprintTask({
       mission,
       idx,
@@ -150,7 +139,7 @@ function Sprint(props) {
   }
 
   useEffect(() => {
-    async function fetchSprint(id) {
+    async function fetchSprint() {
       let lengua;
       let str = I18n.get("close");
       if (str === "Close") {
@@ -240,10 +229,10 @@ function Sprint(props) {
 
   return (
     <div>
-      {loadingPage == true ? (
+      {loadingPage === true ? (
         <div>{I18n.get("loading")}</div>
       ) : (
-        <React.Fragment>
+        <>
           <div className="flex">
             <h1>Pareto Arena </h1>
             <Image
@@ -263,46 +252,45 @@ function Sprint(props) {
             style={{ backgroundColor: "white", color: "black" }}
           >
             <Tabs value={key} onChange={handleSelect} aria-label="sprint tabs">
-              <Tab label={"Plan"} style={{ fontSize: 18 }} />
-              <Tab label={"Compete"} style={{ fontSize: 18 }} />
-              <Tab label={"Leaderboard"} style={{ fontSize: 18 }} />
+              <Tab label="Plan" style={{ fontSize: 18 }} />
+              <Tab label="Compete" style={{ fontSize: 18 }} />
+              <Tab label="Leaderboard" style={{ fontSize: 18 }} />
             </Tabs>
           </AppBar>
           <TabPanel value={key} index={0} style={{ margin: -30 }}>
-            <React.Fragment>
+            <>
               {props.redux.sprint[activeSprintId].teams[index].planning.map(
-                (form, i) => {
-                  return (
-                    <div key={i}>
-                      <h3>{form.name}</h3>
-                      <div className="flex">
-                        <textarea
-                          id={form.code}
-                          value={dynamicForms[i].content}
-                          onChange={handleDynamicForms}
-                          className="planning-forms"
-                        />
-                        <button
-                          onClick={() =>
-                            savePlanning(
-                              activeSprintId,
-                              index,
-                              i,
-                              dynamicForms[i].content
-                            )
-                          }
-                        >
-                          Save
-                        </button>
-                      </div>
+                (form, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <div key={i}>
+                    <h3>{form.name}</h3>
+                    <div className="flex">
+                      <textarea
+                        id={form.code}
+                        value={dynamicForms[i].content}
+                        onChange={handleDynamicForms}
+                        className="planning-forms"
+                      />
+                      <button
+                        onClick={() =>
+                          savePlanning(
+                            activeSprintId,
+                            index,
+                            i,
+                            dynamicForms[i].content
+                          )
+                        }
+                      >
+                        Save
+                      </button>
                     </div>
-                  );
-                }
+                  </div>
+                )
               )}
-            </React.Fragment>
+            </>
           </TabPanel>
           <TabPanel value={key} index={1} style={{ margin: -30 }}>
-            <React.Fragment>
+            <>
               <div>
                 <h2>My Stats</h2>
 
@@ -368,6 +356,7 @@ function Sprint(props) {
                         return (
                           <div
                             className={flexCardClass}
+                            // eslint-disable-next-line react/no-array-index-key
                             key={i}
                             style={{
                               display: "flex",
@@ -377,15 +366,15 @@ function Sprint(props) {
                           >
                             <div>
                               {lengua !== "en" ? (
-                                <React.Fragment>
+                                <>
                                   <h3>{mission.esTitle}</h3>
                                   <p>{mission.esDescription}</p>
-                                </React.Fragment>
+                                </>
                               ) : (
-                                <React.Fragment>
+                                <>
                                   <h3>{mission.title}</h3>
                                   <p>{mission.description}</p>
-                                </React.Fragment>
+                                </>
                               )}
                             </div>
                             <Button
@@ -417,6 +406,7 @@ function Sprint(props) {
                         return (
                           <div
                             className={flexCardClass}
+                            // eslint-disable-next-line react/no-array-index-key
                             key={id}
                             style={{
                               display: "flex",
@@ -426,15 +416,15 @@ function Sprint(props) {
                           >
                             <div>
                               {lengua !== "en" ? (
-                                <React.Fragment>
+                                <>
                                   <h3>{mission.esTitle}</h3>
                                   <p>{mission.esDescription}</p>
-                                </React.Fragment>
+                                </>
                               ) : (
-                                <React.Fragment>
+                                <>
                                   <h3>{mission.title}</h3>
                                   <p>{mission.description}</p>
-                                </React.Fragment>
+                                </>
                               )}
                             </div>
 
@@ -471,18 +461,17 @@ function Sprint(props) {
                       <div className="flex">
                         {props.redux.sprint[activeSprintId].teams[
                           index
-                        ].missions.map((mission, idx) => {
-                          return (
-                            <Button
-                              onClick={() => {
-                                setDay(idx);
-                              }}
-                              key={idx}
-                            >
-                              Day {idx + 1}
-                            </Button>
-                          );
-                        })}
+                        ].missions.map((mission, idx) => (
+                          <Button
+                            onClick={() => {
+                              setDay(idx);
+                            }}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={idx}
+                          >
+                            Day {idx + 1}
+                          </Button>
+                        ))}
                       </div>
                       <div className="flex">
                         {props.user.admin === true ? (
@@ -506,7 +495,7 @@ function Sprint(props) {
                   </AccordionItemPanel>
                 </AccordionItem>
               </Accordion>
-            </React.Fragment>
+            </>
           </TabPanel>
           <TabPanel value={key} index={2} style={{ margin: -30 }}>
             <div className="row">
@@ -518,7 +507,7 @@ function Sprint(props) {
                   history={props.history}
                 />
               </div>
-              <div className="col-xs-12 col-sm-5" style={{ marginTop: '20px' }}>
+              <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>
                 <Analytics
                   missions={
                     props.redux.sprint[activeSprintId].teams[index].missions
@@ -544,20 +533,18 @@ function Sprint(props) {
             user={props.user}
           />
           <Tour steps={steps} isOpen={isTourOpen} onRequestClose={closeTour} />
-        </React.Fragment>
+        </>
       )}
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    redux: state,
-  };
-};
+const mapStateToProps = (state) => ({
+  redux: state,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
       completeSprintTask: (task) => completeSprintTask(task),
       nextDay: () => nextDay(),
@@ -566,6 +553,5 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatch
   );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sprint);

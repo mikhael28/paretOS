@@ -6,7 +6,7 @@ import WRJob from "./WRJob";
  * @TODO Issue #67
  */
 
-export default function WorkRise(props) {
+export default function WorkRise() {
   const [jobs, setJobs] = useState([]);
   const [fetching, setFetching] = useState(true);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -45,9 +45,9 @@ export default function WorkRise(props) {
         <h1>Work & Rise Jobs</h1>
         <div className="context-cards">
           {feedbackMessage.length > 0 && <h2>{feedbackMessage}</h2>}
-          {jobs.map((job, index) => {
-            return <WRJob job={job} key={index} />;
-          })}
+          {jobs.map((job) => (
+            <WRJob job={job} key={job.id} />
+          ))}
         </div>
       </div>
     )

@@ -1,13 +1,9 @@
-import React from "react";
 import { bindActionCreators } from "redux";
-import Button from "react-bootstrap/lib/Button";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { getActiveSprintData } from "../state/sprints";
 import { I18n } from "@aws-amplify/core";
-import { BiRun } from "react-icons/bi";
 import classNames from "classnames";
 import API from "@aws-amplify/api";
+import { getActiveSprintData } from "../state/sprints";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -46,49 +42,47 @@ function Sprints(props) {
             <div className="exp-cards">
               {props.sprints
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((sprint, index) => {
-                  return (
-                    <div
-                      className={newClassName}
-                      key={index}
-                      style={{ cursor: "pointer", textAlign: "center" }}
-                      onClick={() =>
-                        props.history.push(`/arena/sprints/${sprint.id}`)
-                      }
-                    >
-                      <div>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {index === 0
-                            ? "Most Recent Sprint"
-                            : "Sprint" + " " + (index + 1)}
-                        </h4>
+                .map((sprint, index) => (
+                  <div
+                    className={newClassName}
+                    key={sprint.id}
+                    style={{ cursor: "pointer", textAlign: "center" }}
+                    onClick={() =>
+                      props.history.push(`/arena/sprints/${sprint.id}`)
+                    }
+                  >
+                    <div>
+                      <h4 style={{ fontWeight: "bold" }}>
+                        {index === 0
+                          ? "Most Recent Sprint"
+                          : `Sprint ${index + 1}`}
+                      </h4>
 
-                        <p>
-                          {I18n.get("starts")}:{" "}
-                          {new Date(sprint.startDate).getUTCMonth() + 1}/
-                          {new Date(sprint.startDate).getUTCDate()}/
-                          {new Date(sprint.startDate).getUTCFullYear()}
-                          <br />
-                          {I18n.get("finishes")}:{" "}
-                          {new Date(sprint.endDate).getUTCMonth() + 1}/
-                          {new Date(sprint.endDate).getUTCDate()}/
-                          {new Date(sprint.endDate).getUTCFullYear()}
-                        </p>
-                      </div>
-
-                      {props.user.admin === true ? (
-                        <button
-                          onClick={async () => {
-                            await API.del("pareto", `/sprints/${sprint.id}`);
-                            await props.fetchMenteeSprints(props.user.id);
-                          }}
-                        >
-                          {I18n.get("delete")}
-                        </button>
-                      ) : null}
+                      <p>
+                        {I18n.get("starts")}:{" "}
+                        {new Date(sprint.startDate).getUTCMonth() + 1}/
+                        {new Date(sprint.startDate).getUTCDate()}/
+                        {new Date(sprint.startDate).getUTCFullYear()}
+                        <br />
+                        {I18n.get("finishes")}:{" "}
+                        {new Date(sprint.endDate).getUTCMonth() + 1}/
+                        {new Date(sprint.endDate).getUTCDate()}/
+                        {new Date(sprint.endDate).getUTCFullYear()}
+                      </p>
                     </div>
-                  );
-                })}
+
+                    {props.user.admin === true ? (
+                      <button
+                        onClick={async () => {
+                          await API.del("pareto", `/sprints/${sprint.id}`);
+                          await props.fetchMenteeSprints(props.user.id);
+                        }}
+                      >
+                        {I18n.get("delete")}
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
             </div>
           ) : null}
         </div>
@@ -97,19 +91,16 @@ function Sprints(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    redux: state,
-  };
-};
+const mapStateToProps = (state) => ({
+  redux: state,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
       getActiveSprintData: (data) => getActiveSprintData(data),
     },
     dispatch
   );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sprints);

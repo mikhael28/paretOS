@@ -6,10 +6,10 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import Button from "react-bootstrap/lib/Button";
+import { API } from "@aws-amplify/api";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import { generateEmail } from "../libs/errorEmail";
-import { API } from "@aws-amplify/api";
 
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
@@ -31,14 +31,11 @@ export default function SuggestionModal({ schema, user, handleClose }) {
     });
   };
 
-  const validateForm = () => {
-    return (
-      formData.title.length > 0 &&
-      formData.description.length > 0 &&
-      formData.url.length > 0 &&
-      formData.type.length > 0
-    );
-  };
+  const validateForm = () =>
+    formData.title.length > 0 &&
+    formData.description.length > 0 &&
+    formData.url.length > 0 &&
+    formData.type.length > 0;
 
   const handleSubmit = async (event) => {
     event.preventDefault();

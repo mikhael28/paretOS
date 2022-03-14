@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ExternalSiteModal(props) {
   const [loading, setLoading] = useState(true);
@@ -11,11 +11,10 @@ export default function ExternalSiteModal(props) {
 
   function checkUrlFrameOptions(siteUrl) {
     return fetch(
-      "https://header-inspector.repalash.workers.dev/?" +
-        new URLSearchParams({
-          apiurl: siteUrl,
-          headers: "x-frame-options",
-        }),
+      `https://header-inspector.repalash.workers.dev/?${new URLSearchParams({
+        apiurl: siteUrl,
+        headers: "x-frame-options",
+      })}`,
       {
         method: "GET",
       }
@@ -26,6 +25,7 @@ export default function ExternalSiteModal(props) {
         // deny all requests
         if (xFrameOp === "deny") return false;
         // deny if different origin
+        // eslint-disable-next-line no-restricted-globals
         if (xFrameOp === "sameorigin" && json.origin !== location.origin)
           return false;
         return true;
@@ -71,7 +71,7 @@ export default function ExternalSiteModal(props) {
               width="600px"
               height="600px"
               src={props.url}
-            ></iframe>
+            />
           )}
         </div>
       )}
