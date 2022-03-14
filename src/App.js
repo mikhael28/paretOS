@@ -16,10 +16,9 @@ import {
 } from "./state/sprints";
 import Tour from "reactour";
 import "toasted-notes/src/styles.css";
-import Dialog from "@material-ui/core/Dialog";
 import LoadingModal from "./components/LoadingModal";
 import sanity from "./libs/sanity";
-import Slide from "@material-ui/core/Slide";
+import { Slide, Dialog } from "@mui/material";
 import BottomNav from "./components/BottomNav";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { strings } from "./libs/strings";

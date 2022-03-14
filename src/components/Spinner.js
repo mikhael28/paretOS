@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +17,7 @@ export default function Spinner() {
 
   return (
     <div className={classes.root}>
-      <CircularProgress style={{ color: "#339c51" }} />
+      <CircularProgress sx={{ color: "#339c51" }} />
     </div>
   );
 }

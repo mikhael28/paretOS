@@ -14,6 +14,7 @@ import reducer from "./state/index";
 import "./index.css";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -33,6 +34,7 @@ Sentry.init({
 });
 
 const store = createStore(reducer);
+const theme = createTheme();
 
 Amplify.configure(awsmobile);
 API.configure({
@@ -59,7 +61,9 @@ Storage.configure({
 ReactDOM.render(
   <Router>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </Router>,
   document.getElementById("root")

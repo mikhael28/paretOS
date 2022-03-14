@@ -1,11 +1,8 @@
 import React from "react";
 import { bindActionCreators } from "redux";
-import Button from "react-bootstrap/lib/Button";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { getActiveSprintData } from "../state/sprints";
 import { I18n } from "@aws-amplify/core";
-import { BiRun } from "react-icons/bi";
 import classNames from "classnames";
 import API from "@aws-amplify/api";
 

@@ -25,9 +25,7 @@ import {
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
 import Board from "../components/Board";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import { AppBar, Tabs, Tab } from "@mui/material";
 import TabPanel from "../components/TabPanel.js";
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -518,7 +516,7 @@ function Sprint(props) {
                   history={props.history}
                 />
               </div>
-              <div className="col-xs-12 col-sm-5" style={{ marginTop: '20px' }}>
+              <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>
                 <Analytics
                   missions={
                     props.redux.sprint[activeSprintId].teams[index].missions
