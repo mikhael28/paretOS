@@ -1,12 +1,9 @@
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Tooltip from "@material-ui/core/Tooltip";
+import React from "react";
+import { CardActionArea, CardContent, CardMedia, Tooltip } from "@mui/material";
+import { makeStyles, withStyles } from "@mui/styles";
 import classNames from "classnames";
 
-// eslint-disable-next-line no-unused-vars
-const HtmlTooltip = withStyles((theme) => ({
+const HtmlTooltip = withStyles(() => ({
   tooltip: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",

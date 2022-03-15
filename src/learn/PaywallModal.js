@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import DialogContent from "@material-ui/core/DialogContent";
+import { DialogContent } from "@mui/material";
 import Button from "react-bootstrap/lib/Button";
 import Order from "./Order";
 

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import { DialogActions } from "@material-ui/core";
+import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";

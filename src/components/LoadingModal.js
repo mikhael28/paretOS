@@ -1,6 +1,5 @@
 import React from "react";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import { DialogContent, DialogContentText } from "@mui/material";
 import { quotes } from "../libs/quotes";
 
 const randomIndex = Math.floor(Math.random() * Math.floor(quotes.length));

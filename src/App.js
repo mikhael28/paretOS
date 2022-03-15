@@ -7,13 +7,11 @@ import Image from "react-bootstrap/lib/Image";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Tour from "reactour";
-import "toasted-notes/src/styles.css";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
+import { Slide, Dialog } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
 import sanity from "./libs/sanity";
@@ -23,11 +21,12 @@ import {
   getInitialSprintData,
   putUpdatedSprintData,
 } from "./state/sprints";
-import { errorToast } from "./libs/toasts";
-import question from "./assets/help.png";
-import Routes from "./Routes";
+import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { getUser } from "./state/profile";
+import { errorToast } from "./libs/toasts";
+import Routes from "./Routes";
+import question from "./assets/help.png";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
