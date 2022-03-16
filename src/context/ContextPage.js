@@ -3,9 +3,7 @@ import imageUrlBuilder from "@sanity/image-url";
 import Skeleton from "react-loading-skeleton";
 import Image from "react-bootstrap/lib/Image";
 import BlockContent from "@sanity/block-content-to-react";
-import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import Button from "@material-ui/core/Button";
+import { Slide, Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import {

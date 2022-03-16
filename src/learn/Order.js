@@ -1,7 +1,7 @@
 import { Component } from "react";
 import API from "@aws-amplify/api";
 import { Elements, StripeProvider } from "react-stripe-elements";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
 import { successToast } from "../libs/toasts";
 import { createExperience } from "../libs/createExperience";

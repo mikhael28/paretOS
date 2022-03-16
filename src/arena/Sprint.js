@@ -14,21 +14,19 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Board from "../components/Board.tsx";
-import question from "../assets/help.png";
+import { AppBar, Tabs, Tab } from "@mui/material";
+import Board from "../components/Board";
+import TabPanel from "../components/TabPanel.js";
 import { errorToast } from "../libs/toasts";
-import ArenaProofModal from "../components/ArenaProofModal";
+import question from "../assets/help.png";
 import Analytics from "./Analytics";
+import ArenaProofModal from "../components/ArenaProofModal";
 import {
   completeSprintTask,
-  nextDay,
   getActiveSprintData,
+  nextDay,
   updatePlanningForms,
 } from "../state/sprints";
-import TabPanel from "../components/TabPanel";
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
  * @TODO The indexing in multiplayer games seems to be off - investigate.

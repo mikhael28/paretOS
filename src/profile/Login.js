@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
-import { Button, InputLabel, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,10 +16,8 @@ const useStyles = makeStyles((theme) => ({
       width: 300,
     },
     "& .MuiFormLabel-root": {
-      marginTop: theme.spacing(3),
-      fontSize: 18,
+      fontSize: 16,
       color: "#000",
-      fontWeight: "bold",
     },
     "& .MuiInputBase-input": {
       fontSize: 16,
@@ -81,12 +79,12 @@ const Login = ({
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <InputLabel>{I18n.get("email")}</InputLabel>
           <TextField
             id="email"
-            variant="outlined"
+            variant="standard"
             size="medium"
             autoFocus
+            label={I18n.get("email")}
             {...register("email", {
               required: "email is required",
               pattern: {
@@ -97,14 +95,14 @@ const Login = ({
           />
           <span className="error">{errors.email && errors.email.message}</span>
         </div>
-
+        <br />
         <div>
-          <InputLabel>{I18n.get("password")}</InputLabel>
           <TextField
             id="password"
-            variant="outlined"
+            variant="standard"
             size="medium"
             type="password"
+            label={I18n.get("password")}
             {...register("password", {
               required: "password is required",
               minLength: {
