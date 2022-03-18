@@ -1,20 +1,40 @@
-import Button from "react-bootstrap/lib/Button";
+import { Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 
-export default ({
-  isLoading,
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiButtonBase-root": {
+      marginTop: theme.spacing(1),
+      fontSize: 16,
+    },
+  },
+}));
+
+export default function LoaderButton({
   text,
   loadingText,
+  isLoading,
+  disabled,
   className = "",
-  disabled = false,
-  ...props
-}) => (
-  <Button
-    className={`LoaderButton ${className}`}
-    disabled={disabled || isLoading}
-    {...props}
-  >
-    {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
-    {!isLoading ? text : loadingText}
-  </Button>
-);
+  type = "button",
+  color = "primary",
+  variant = "contained",
+}) {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <Button
+        className={`LoaderButton ${className}`}
+        disabled={disabled || isLoading}
+        type={type}
+        color={color}
+        variant={variant}
+      >
+        {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
+        {!isLoading ? text : loadingText}
+      </Button>
+    </div>
+  );
+}

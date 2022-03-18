@@ -6,6 +6,7 @@ import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
+import LoaderButton from "../components/LoaderButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const Login = ({
   userHasAuthenticated,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [disabled] = useState(false);
   const classes = useStyles();
   const {
     register,
@@ -128,9 +130,15 @@ const Login = ({
         </div>
 
         <div>
-          <Button variant="contained" color="primary" type="submit">
-            {isLoading ? I18n.get("loggingIn") : I18n.get("login")}
-          </Button>
+          <LoaderButton
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={disabled}
+            isLoading={isLoading}
+            text={I18n.get("signup")}
+            loadingText={I18n.get("loggingIn")}
+          />
         </div>
       </form>
     </div>
