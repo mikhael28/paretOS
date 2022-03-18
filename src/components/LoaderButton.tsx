@@ -1,7 +1,7 @@
 import { Button, Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
-import { buttonType, buttonVariant, color } from "../@types";
+import { buttonType, buttonVariant, color } from "../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
