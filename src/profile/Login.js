@@ -131,13 +131,13 @@ const Login = ({
 
         <div>
           <LoaderButton
-            variant="contained"
-            color="primary"
-            type="submit"
-            disabled={disabled}
-            isLoading={isLoading}
-            text={I18n.get("signup")}
+            text={I18n.get("login")}
             loadingText={I18n.get("loggingIn")}
+            isLoading={isLoading}
+            disabled={disabled}
+            type="submit"
+            color="primary"
+            variant="contained"
           />
         </div>
       </form>
