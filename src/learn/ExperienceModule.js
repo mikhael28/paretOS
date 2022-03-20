@@ -56,6 +56,7 @@ class ExperienceModule extends Component {
         id: "",
       },
       openReviewModal: false,
+      showPaywallDialog: this.props.user.learningPurchase === false,
       experienceId: "",
       // this shows the proof submission modal, which needs work
       showSubmitModal: false,
@@ -476,19 +477,24 @@ class ExperienceModule extends Component {
             style={{
               margin: "auto",
             }}
-            open={this.props.user.learningPurchase === false}
+            open={this.state.showPaywallDialog}
             TransitionComponent={Transition}
             keepMounted
-            disableEscapeKeyDown
-            disableBackdropClick
             hideBackdrop={false}
             aria-labelledby="loading"
             aria-describedby="Please wait while the page loads"
+            onClose={(event, reason) => {
+              if (
+                reason !== "backdropClick" &&
+                reason !== "escapeKeyDown" &&
+                this.props.user.learningPurchase === false
+              ) {
+                this.setState({ ...this.state, showPaywallDialog: false });
+                history.push("/");
+              }
+            }}
           >
-            <PaywallModal
-              {...this.props}
-              open={this.props.user.learningPurchase}
-            />
+            <PaywallModal {...this.props} open={this.state.showPaywallDialog} />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (

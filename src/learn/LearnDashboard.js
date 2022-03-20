@@ -22,6 +22,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function LearnDashboard(props) {
   const [html, setHtml] = useState(null);
+  const [showPaywallDialog, setShowPaywallDialog] = useState(
+    props.user.learningPurchase === false
+  );
 
   useEffect(() => {
     if (html === null) {
@@ -108,16 +111,20 @@ function LearnDashboard(props) {
         style={{
           margin: "auto",
         }}
-        open={props.user.learningPurchase === false}
+        open={showPaywallDialog}
         TransitionComponent={Transition}
         keepMounted
-        disableEscapeKeyDown
-        disableBackdropClick
         hideBackdrop={false}
         aria-labelledby="loading"
         aria-describedby="Please wait while the page loads"
+        onClose={(event, reason) => {
+          if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
+            setShowPaywallDialog(false);
+            history.push("/");
+          }
+        }}
       >
-        <PaywallModal {...props} open={props.user.learningPurchase} />
+        <PaywallModal {...props} open={showPaywallDialog} />
       </Dialog>
     </div>
   );

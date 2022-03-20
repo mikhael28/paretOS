@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { DialogContent } from "@mui/material";
 import Button from "react-bootstrap/lib/Button";
 import Order from "./Order";
@@ -21,21 +20,7 @@ function LoadingModal(props) {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  const history = useHistory();
   const modalRef = useRef();
-
-  useEffect(() => {
-    let handleModalClose = (event) => {
-      if (props.open === false && !modalRef.current?.contains(event.target)) {
-        history.push("/");
-      }
-    };
-    document.addEventListener("mousedown", handleModalClose);
-
-    return () => {
-      document.removeEventListener("mousedown", handleModalClose);
-    };
-  }, [showPayment]);
 
   return (
     <>
