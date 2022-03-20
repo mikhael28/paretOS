@@ -76,6 +76,7 @@ class App extends Component {
       sanityTraining: [],
       sanityProduct: [],
       sanityInterview: [],
+      dialogOpen: true,
     };
     // this.wsClient = "";
   }
@@ -490,6 +491,34 @@ class App extends Component {
       sanitySchemas: this.state.sanitySchemas,
       coaches: this.state.coaches,
     };
+
+    function DialogMigrate({
+      children,
+      disableBackdropClick,
+      disableEscapeKeyDown,
+      onClose,
+      ...rest
+    }) {
+      const handleClose = (event, reason) => {
+        if (disableBackdropClick && reason === "backdropClick") {
+          return false;
+        }
+
+        if (disableEscapeKeyDown && reason === "escapeKeyDown") {
+          return false;
+        }
+
+        if (typeof onClose === "function") {
+          onClose();
+        }
+      };
+
+      return (
+        <Dialog onClose={handleClose} {...rest}>
+          {children}
+        </Dialog>
+      );
+    }
     return (
       !this.state.isAuthenticating && (
         <Sentry.ErrorBoundary
@@ -556,7 +585,7 @@ class App extends Component {
               onRequestClose={this.closeTour}
               showCloseButton
             />
-            <Dialog
+            <DialogMigrate
               style={{
                 margin: "auto",
               }}
@@ -564,15 +593,19 @@ class App extends Component {
               TransitionComponent={Transition}
               keepMounted
               disableEscapeKeyDown
+              disableBackdropClick
               fullScreen
               fullWidth
-              disableBackdropClick
+              onClose={() => {
+                // Whatever you want to run here on close.
+                this.state.dialogOpen = true;
+              }}
               hideBackdrop={false}
               aria-labelledby="loading"
               aria-describedby="Please wait while the page loads"
             >
               <LoadingModal />
-            </Dialog>
+            </DialogMigrate>
           </>
         </Sentry.ErrorBoundary>
       )
