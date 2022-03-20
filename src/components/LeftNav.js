@@ -125,7 +125,7 @@ function LeftNav(props) {
 
           <MenuItem
             exact
-            key={1.4}
+            key={1.5}
             onClick={() => {
               I18n.setLanguage("ngpg");
               updateState({
@@ -143,7 +143,7 @@ function LeftNav(props) {
 
           <MenuItem
             exact
-            key={1.5}
+            key={1.6}
             onClick={() => {
               I18n.setLanguage("hi");
               updateState({
