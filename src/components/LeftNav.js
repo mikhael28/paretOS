@@ -54,7 +54,6 @@ function LeftNav(props) {
       >
         <div style={{ marginLeft: 4 }}>
           <MenuItem
-            exact
             key={1.1}
             onClick={() => {
               I18n.setLanguage("lg");
@@ -71,7 +70,6 @@ function LeftNav(props) {
             &ensp; Luganda
           </MenuItem>
           <MenuItem
-            exact
             key={1.2}
             onClick={() => {
               I18n.setLanguage("es");
@@ -88,7 +86,6 @@ function LeftNav(props) {
             &ensp; Spanish
           </MenuItem>
           <MenuItem
-            exact
             key={1.3}
             onClick={() => {
               I18n.setLanguage("en");
@@ -106,7 +103,6 @@ function LeftNav(props) {
           </MenuItem>
 
           <MenuItem
-            exact
             key={1.4}
             onClick={() => {
               I18n.setLanguage("ptbr");
@@ -124,7 +120,6 @@ function LeftNav(props) {
           </MenuItem>
 
           <MenuItem
-            exact
             key={1.5}
             onClick={() => {
               I18n.setLanguage("ngpg");
@@ -142,7 +137,6 @@ function LeftNav(props) {
           </MenuItem>
 
           <MenuItem
-            exact
             key={1.6}
             onClick={() => {
               I18n.setLanguage("hi");
