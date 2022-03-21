@@ -566,7 +566,6 @@ class App extends Component {
               disableEscapeKeyDown
               fullScreen
               fullWidth
-              disableBackdropClick
               hideBackdrop={false}
               aria-labelledby="loading"
               aria-describedby="Please wait while the page loads"
