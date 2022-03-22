@@ -19,7 +19,6 @@ export type PlanningField = {
 };
 
 export interface User {
-  page: number;
   rank?: number;
   score: number;
   id: number;

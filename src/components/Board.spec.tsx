@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Leaderboard, { User } from "./Board";
+import Leaderboard from "./Board";
+import type { User } from "../types";
 
 describe("sortUsersByScore", () => {
   const users = testUsers();
@@ -33,7 +34,6 @@ describe("sortUsersByScore", () => {
 function testUsers(): Array<User> {
   const users: Array<User> = [
     {
-      page: 1,
       rank: 1,
       score: 1000,
       id: 1,
@@ -48,7 +48,6 @@ function testUsers(): Array<User> {
       review: "123",
     },
     {
-      page: 1,
       rank: 2,
       score: 900,
       id: 2,
@@ -63,7 +62,6 @@ function testUsers(): Array<User> {
       review: "123",
     },
     {
-      page: 1,
       rank: 3,
       score: 800,
       id: 3,
@@ -78,7 +76,6 @@ function testUsers(): Array<User> {
       review: "123",
     },
     {
-      page: 2,
       rank: 4,
       score: 700,
       id: 4,
@@ -93,7 +90,6 @@ function testUsers(): Array<User> {
       review: "123",
     },
     {
-      page: 2,
       rank: 5,
       score: 600,
       id: 5,
@@ -108,7 +104,6 @@ function testUsers(): Array<User> {
       review: "123",
     },
     {
-      page: 2,
       rank: 6,
       score: 500,
       id: 6,
