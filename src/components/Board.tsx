@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import Table from "react-bootstrap/lib/Table";
+import { User } from "../types";
 import ProfileImg from "./ProfileImg";
 import PageNavigation from "./PageNavigation";
 
@@ -14,35 +15,12 @@ import PageNavigation from "./PageNavigation";
  * @param {Prop} history-array of recent pages/views visited
  */
 
-interface PlanningField {
-  name: string;
-  code: string;
-  content: string;
-}
-
-export type User = {
-  page: number;
-  rank: number;
-  score: number;
-  id: number;
-  fName: string;
-  lName: string;
-  email: string;
-  github: string;
-  missions: Array<Object>;
-  percentage: number;
-  phone: string;
-  planning: Array<PlanningField>;
-  review: string;
-  profileImg?: File;
-};
-
-export interface BoardProps {
+export type BoardProps = {
   users: Array<User>;
   itemsPerPage: number;
   currentUser: User;
   history: Array<String>;
-}
+};
 
 function Leaderboard({
   users,
@@ -309,7 +287,7 @@ function Podium({ topUsers, removeNullScores }: PodiumProps) {
             key={user.id}
             id={i}
             user={user}
-            rank={user.rank}
+            rank={user.rank || 1}
             ranks={topUsers.length}
           />
         ))}
