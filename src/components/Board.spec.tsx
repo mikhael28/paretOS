@@ -55,7 +55,7 @@ describe("LEADERBOARD", () => {
     // TODO: add test. "displays 3 different podiums of varying heights"
     // TODO: add test. "displays the #1 scoring user on the tallest podium"
     // TODO: add test. "displays the #3 scoring user on the shorted podium"
-    // TODO: add test. "does not display the podiums if the viewport width is less than a certain value." (Use jestdom and getcomputedstyle?)
+    // TODO: add test. "does not display the podiums if no user has a score greater than 0."
   });
 });
 
