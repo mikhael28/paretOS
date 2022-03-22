@@ -29,7 +29,7 @@ function Leaderboard({
   history,
 }: BoardProps) {
   // Set state for leaderboard rankings and display order, calculate users for podium
-  const sortedUsers = users.sort(sortDescending);
+  const sortedUsers = [...users.sort(sortDescending)];
   const initialRanks = sortedUsers.map((user, i) => {
     user.page = getPage(i + 1);
     user.rank =
