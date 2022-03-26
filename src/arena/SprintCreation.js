@@ -344,15 +344,14 @@ function SprintCreation(props) {
         showNeighboringMonth
       />
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
-      <div onClick={() => createSprint()}>
         <LoaderButton
           style={{ width: 350 }}
           isLoading={loading}
           loadingText={I18n.get("saving")}
           text={I18n.get("create")}
           disabled={!ready}
+          onClick={() => createSprint()}
         />
-      </div>
     </div>
   );
 }
