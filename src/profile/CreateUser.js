@@ -231,7 +231,7 @@ export default class CreateUser extends Component {
           <LoaderButton
             align="center"
             block
-            bsSize="small"
+            size="small"
             type="submit"
             disabled={!this.validateForm()}
             onClick={() => this.setState({ showTermsOfService: true })}

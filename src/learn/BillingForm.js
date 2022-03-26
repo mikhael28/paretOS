@@ -114,7 +114,7 @@ class BillingForm extends Component {
         />
         <LoaderButton
           block
-          bsSize="large"
+          size="large"
           type="submit"
           text="Purchase"
           isLoading={loading}

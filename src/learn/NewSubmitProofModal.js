@@ -101,7 +101,7 @@ export default function SubmitProof({
                 });
                 setChanging(false);
               }}
-              bsSize="large"
+              size="large"
               text={I18n.get("submitProof")}
               loadingText={I18n.get("saving")}
               disabled={!validateForm()}
