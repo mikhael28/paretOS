@@ -340,7 +340,7 @@ function SprintCreation(props) {
         minDetail="month"
         // minDate={new Date()}
         maxDate={new Date(Date.now() + 2592000000)}
-        tileDisabled={({ date }) => date.getDay() !== 1}
+        // tileDisabled={({ date }) => date.getDay() !== 1}
         showNeighboringMonth
       />
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
