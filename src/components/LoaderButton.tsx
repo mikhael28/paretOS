@@ -2,6 +2,23 @@ import { Button, Theme, ButtonProps } from "@mui/material";
 import { makeStyles, useTheme } from "@mui/styles";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
 
+// Custom sub-component to access theme and build/export useStyles
+// Prevents React from generating a new useStyles function each time the component is rendered
+const UseStyles = () => {
+  const theme: Theme = useTheme();
+
+  const useStyles = makeStyles({
+    root: {
+      "& .MuiButtonBase-root": {
+        marginTop: theme.spacing(1),
+        fontSize: 16,
+      },
+    },
+  });
+
+  return useStyles;
+};
+
 // Extend existing ButtonProps type to allow for our custom props
 interface CustomButtonProps extends ButtonProps {
   props: ButtonProps;
@@ -22,17 +39,7 @@ export default function LoaderButton({
   variant = "contained",
   ...props
 }: CustomButtonProps) {
-  const theme: Theme = useTheme();
-
-  const useStyles = makeStyles({
-    root: {
-      "& .MuiButtonBase-root": {
-        marginTop: theme.spacing(1),
-        fontSize: 16,
-      },
-    },
-  });
-  const classes = useStyles();
+  const classes = UseStyles()();
 
   return (
     <div className={classes.root}>
