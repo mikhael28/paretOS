@@ -1,3 +1,7 @@
+:root {
+  --navigation-bg: rgb(34, 34, 34);
+  --navigation-color: rgb(242, 243, 243);
+}
 body {
   margin: 0;
   padding: 0;
@@ -9,15 +13,32 @@ body {
   background: rgb(255, 255, 254);
 }
 
+.dropdown-menu {
+  left: unset;
+  right: 0;
+  background: transparent;
+}
+
+.dropdown-menu > div {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
 /* global mobile style media query, primarily for navigation layout */
 
 .sticky-logout {
   position: fixed;
-  top: 36px;
-  right: 15px;
+  bottom: 22px;
+  left: 210px;
+  opacity: 0.6;
   cursor: pointer;
-  font-size: 36px;
-  z-index: 10;
+  font-size: 32px;
+  z-index: 999;
+  background-color: transparent;
+  color: white!important;
+  border-radius: 100px;
+  padding: 10px 8px 8px 14px;
+  line-height: 28px;
 }
 
 /* Typography */
@@ -76,13 +97,14 @@ input[type="file"] {
     position: fixed;
     z-index: 1;
     padding-top: 40px;
-    background-color: rgb(37, 38, 39);
+    background-color: var(--navigation-bg);
     -webkit-transform: translate3d(-100%, 0px, 0px);
     transform: translate3d(-100%, 0px, 0px);
     transition: all 0.5s ease 0s;
     -webkit-transition: all 0.5s ease 0s;
     visibility: hidden;
   }
+
   .sticky-chat {
     visibility: hidden;
   }
@@ -100,7 +122,7 @@ input[type="file"] {
     padding-top: -74px;
   }
   .root-padding {
-    padding-left: 244px;
+    padding-left: 280px;
     padding-right: 16px;
   }
   .sticky-nav {
@@ -110,15 +132,14 @@ input[type="file"] {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 232px;
+    width: 270px;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: rgb(37, 38, 39);
+    background-color: var(--navigation-bg);
     padding-top: 40px;
-    color: rgb(242, 243, 243);
-    border: 1px solid grey;
+    color: var(--navigation-color);
     list-style: none;
     transition: all 0.5s;
   }
@@ -176,24 +197,24 @@ input[type="file"] {
 /* Navigation and fixed elements styles */
 
 .sidenav a {
-  color: rgb(79, 101, 116);
+  color: var(--navigation-color);
   transition: 0.3s;
+  opacity: 0.6;
 }
 
 .sidenav a:hover {
   text-decoration: none;
-  color: rgb(79, 101, 116);
-  background-color: rgb(160, 160, 160);
+  opacity: 1;
 }
 
 .sidenav a:enabled {
   text-decoration: none;
-  color: rgb(79, 101, 116);
+  opacity: 1;
 }
 
 .sidenav h4 {
   padding-left: 20px;
-  color: rgb(37, 38, 39);
+  color: var(--navigation-bg);
 }
 
 .sidenav p {
@@ -203,7 +224,7 @@ input[type="file"] {
 .landing-page-nav {
   display: flex;
   justify-content: space-between;
-  background-color: rgb(37, 38, 39);
+  background-color: var(--navigation-bg);
   height: 55px;
 }
 
@@ -465,7 +486,7 @@ input[type="file"] {
 }
 
 .rank-header {
-  color: rgb(37, 38, 39);
+  color: var(--navigation-bg);
   background-color: #eee;
   font-size: 16px;
   font-weight: bold;

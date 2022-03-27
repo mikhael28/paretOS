@@ -514,8 +514,12 @@ class App extends Component {
           <>
             {this.state.isAuthenticated ? (
               <>
-                <div className="sticky-logout" onClick={this.handleLogout}>
-                  <GrLogout />
+                <div
+                  className="sticky-logout"
+                  style={{ filter: "invert()" }}
+                  onClick={this.handleLogout}
+                >
+                  <GrLogout style={{ height: "20px" }} />
                 </div>
 
                 <div className="root-padding">
