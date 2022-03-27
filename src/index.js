@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
@@ -33,7 +32,6 @@ Sentry.init({
 });
 
 const store = createStore(reducer);
-const theme = createTheme();
 
 Amplify.configure(awsmobile);
 API.configure({
@@ -60,9 +58,7 @@ Storage.configure({
 ReactDOM.render(
   <Router>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
+      <App />
     </Provider>
   </Router>,
   document.getElementById("root")
