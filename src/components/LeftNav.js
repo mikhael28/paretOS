@@ -60,7 +60,7 @@ function LeftNav(props) {
         style={{
           color: "white",
           fontSize: 14,
-          backgroundColor: "var(--navigation-bg)",
+          backgroundColor: "var(--navigation-bgColor)",
           backgroundImage: "none",
           border: "none",
           textAlign: "left",
