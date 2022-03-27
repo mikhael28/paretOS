@@ -41,7 +41,7 @@ function Sprints(props) {
           {props.sprints.length > 0 ? (
             <div className="exp-cards">
               {props.sprints
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
                 .map((sprint, index) => (
                   <div
                     className={newClassName}
@@ -52,11 +52,11 @@ function Sprints(props) {
                     }
                   >
                     <div>
-                      <h4 style={{ fontWeight: "bold" }}>
+                      <h3 style={{ fontWeight: "bold" }}>
                         {index === 0
                           ? "Most Recent Sprint"
-                          : `Sprint ${index + 1}`}
-                      </h4>
+                          : `Sprint ${props.sprints.length - index}`}
+                      </h3>
 
                       <p>
                         {I18n.get("starts")}:{" "}

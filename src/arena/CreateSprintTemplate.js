@@ -3,6 +3,7 @@ import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
+import { useTheme } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import API from "@aws-amplify/api";
@@ -57,6 +58,7 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function CreateSprintTemplate(props) {
+  const theme = useTheme();
   const [columns, setColumns] = useState({
     Options: {
       name: "Options",
@@ -180,8 +182,8 @@ function CreateSprintTemplate(props) {
                       ref={provided.innerRef}
                       style={{
                         background: snapshot.isDraggingOver
-                          ? "lightblue"
-                          : "lightgrey",
+                          ? theme.palette.grey[800]
+                          : theme.palette.background.paper,
                         padding: 4,
                         width: 250,
                         minHeight: 500,
@@ -204,8 +206,8 @@ function CreateSprintTemplate(props) {
                                 margin: "0 0 8px 0",
                                 minHeight: 50,
                                 backgroundColor: snapshot.isDragging
-                                  ? "#263B4A"
-                                  : "#456C86",
+                                  ? theme.palette.primary.main
+                                  : theme.palette.secondary.main,
                                 color: "white",
                                 ...provided.draggableProps.style,
                               }}
