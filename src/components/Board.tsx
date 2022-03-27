@@ -166,6 +166,7 @@ function Leaderboard({
             hover
             responsive
             data-testid="leaderboard-table"
+            style={{ borderColor: "rgb(34,34,34)" }}
           >
             <tbody>
               <tr>

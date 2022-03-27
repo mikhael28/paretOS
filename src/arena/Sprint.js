@@ -14,11 +14,12 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import { AppBar, Tabs, Tab } from "@mui/material";
+import { AppBar, Tabs, Tab, Box, useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
+import StatsBlock from "../components/StatsBlock";
 import { errorToast } from "../libs/toasts";
-import question from "../assets/help.png";
+import question from "../assets/question.svg";
 import Analytics from "./Analytics";
 import ArenaProofModal from "../components/ArenaProofModal";
 import {
@@ -39,9 +40,11 @@ import {
  * @returns
  */
 function Sprint(props) {
+  const theme = useTheme();
   const [status, setStatus] = useState("early");
   const [activeSprintId, setActiveSprintId] = useState(0);
-  const [day, setDay] = useState(0);
+  const [startDate, setStartDate] = useState(0);
+  const [displayDay, setDisplayDay] = useState(0);
   const [activeMission, setActiveMission] = useState({
     title: "",
     description: "",
@@ -58,6 +61,26 @@ function Sprint(props) {
   const [paginate, setPaginate] = useState(10);
   const [key, setKey] = useState(1);
   const [dynamicForms, setDynamicForms] = useState([]);
+
+  function getFormattedDay() {
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const month = startDate.getMonth();
+    const dayOfWeek = startDate.getDay();
+    const date = startDate.getDate();
+    return `${days[dayOfWeek]}, ${month + 1}/${date + 1}`;
+  }
+
+  function getDateRange() {
+    const beginMonth = startDate.getMonth();
+    const beginDate = startDate.getDate();
+    const end = new Date(startDate);
+    end.setDate(end.getDate() + 5);
+    const endMonth = end.getMonth();
+    const endDate = end.getDate();
+    return `${beginMonth + 1}/${beginDate + 1} - ${endMonth + 1}/${
+      endDate + 1
+    }`;
+  }
 
   function handleSelect(event, newValue) {
     setKey(newValue);
@@ -158,9 +181,9 @@ function Sprint(props) {
           }
         });
         setIndex(teamIndex);
-        let tempStatus;
         let currentTS = Date.now();
         let newTS = new Date(sprint.startDate);
+        setStartDate(newTS);
         let msDifferential = currentTS - newTS.getTime();
         // if ms < 0, then it is early
         // if ms > 0 && < 5 days * ms then its on time
@@ -168,29 +191,16 @@ function Sprint(props) {
         // 86400000 ms in one day
         // 432000000 in 5 days
         if (msDifferential < 0) {
-          tempStatus = "early";
           setStatus("early");
         } else if (msDifferential > 0 && msDifferential < 432000000) {
-          tempStatus = "active";
           setStatus("active");
         } else if (msDifferential > 432000000) {
-          tempStatus = "inactive";
           setStatus("inactive");
         }
 
         let msDailyDifferential = Math.floor(msDifferential / 86400000);
-        if (tempStatus === "active" && msDailyDifferential === 0) {
-          setDay(0);
-        } else if (tempStatus === "active" && msDailyDifferential === 1) {
-          setDay(1);
-        } else if (tempStatus === "active" && msDailyDifferential === 2) {
-          setDay(2);
-        } else if (tempStatus === "active" && msDailyDifferential === 3) {
-          setDay(3);
-        } else if (tempStatus === "active" && msDailyDifferential === 4) {
-          setDay(4);
-        } else if (tempStatus === "active" && msDailyDifferential === 5) {
-          setDay(5);
+        if (msDailyDifferential >= 0 && msDailyDifferential < 5) {
+          setDisplayDay(msDailyDifferential);
         }
       } catch (e) {
         errorToast(e, props.user);
@@ -231,36 +241,58 @@ function Sprint(props) {
         <div>{I18n.get("loading")}</div>
       ) : (
         <>
-          <div className="flex">
-            <h1>Pareto Arena </h1>
-            <Image
-              src={question}
-              onClick={() => {
-                setIsTourOpen(true);
+          <div style={{ padding: "16px 0px" }}>
+            <Box
+              sx={{
+                padding: "8px 16px",
+                background: "linear-gradient(70deg, #DE4665, #D95B35)",
               }}
-              height="40"
-              width="40"
-              circle
-              style={{ marginLeft: 4, marginTop: 34, cursor: "pointer" }}
-            />
+              className="flex"
+            >
+              <h1>
+                <b>Sprint</b>&nbsp;&nbsp;{getDateRange()}
+              </h1>
+              <Image
+                src={question}
+                onClick={() => {
+                  setIsTourOpen(true);
+                }}
+                height="16"
+                width="16"
+                circle
+                style={{
+                  opacity: 0.8,
+                  filter: theme.palette.mode === "dark" ? "invert()" : "",
+                  marginLeft: 8,
+                  cursor: "pointer",
+                }}
+              />
+            </Box>
           </div>
 
           <AppBar
             position="static"
-            style={{ backgroundColor: "white", color: "black" }}
+            style={{
+              boxShadow: "none",
+              backgroundImage: "none",
+              backgroundColor: "transparent",
+            }}
           >
             <Tabs value={key} onChange={handleSelect} aria-label="sprint tabs">
-              <Tab label="Plan" style={{ fontSize: 18 }} />
-              <Tab label="Compete" style={{ fontSize: 18 }} />
-              <Tab label="Leaderboard" style={{ fontSize: 18 }} />
+              <Tab label="Plan" style={{ fontSize: 16, letterSpacing: 3 }} />
+              <Tab label="Compete" style={{ fontSize: 16, letterSpacing: 3 }} />
+              <Tab
+                label="Leaderboard"
+                style={{ fontSize: 16, letterSpacing: 3 }}
+              />
             </Tabs>
           </AppBar>
-          <TabPanel value={key} index={0} style={{ margin: -30 }}>
+          <TabPanel value={key} index={0}>
             <>
               {props.redux.sprint[activeSprintId].teams[index].planning.map(
                 (form, i) => (
                   // eslint-disable-next-line react/no-array-index-key
-                  <div key={i}>
+                  <div className="input-group" key={i}>
                     <h3>{form.name}</h3>
                     <div className="flex">
                       <textarea
@@ -269,7 +301,7 @@ function Sprint(props) {
                         onChange={handleDynamicForms}
                         className="planning-forms"
                       />
-                      <button
+                      <Button
                         onClick={() =>
                           savePlanning(
                             activeSprintId,
@@ -280,15 +312,16 @@ function Sprint(props) {
                         }
                       >
                         Save
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )
               )}
             </>
           </TabPanel>
-          <TabPanel value={key} index={1} style={{ margin: -30 }}>
+          <TabPanel value={key} index={1}>
             <>
+              <h5>{getFormattedDay()}</h5>
               <div>
                 <h2>My Stats</h2>
 
@@ -296,45 +329,35 @@ function Sprint(props) {
                   style={{
                     display: "flex",
                     justifyContent: "start",
-                    marginTop: 16,
+                    margin: "16px -8px",
                     flexWrap: "wrap",
                   }}
                   className="first-step-arena"
                 >
-                  <div className="block">
-                    <p>
-                      {
-                        props.redux.sprint[activeSprintId].teams[index]
-                          .missions[day].dailyScore
-                      }{" "}
-                      {I18n.get("dailyPoints")}
-                    </p>
-                  </div>
-                  <div className="block">
-                    <p>
-                      {props.redux.sprint[activeSprintId].teams[index].missions[
-                        day
-                      ].dailyCompletion.toFixed(2)}
-                      % {I18n.get("daily")} CP
-                    </p>
-                  </div>
-
-                  <div className="block">
-                    <p>
-                      {props.redux.sprint[activeSprintId].teams[index].score}{" "}
-                      {I18n.get("weeklyPoints")}{" "}
-                    </p>
-                  </div>
-
-                  <div className="block">
-                    <p>
-                      {
-                        props.redux.sprint[activeSprintId].teams[index]
-                          .percentage
-                      }
-                      % {I18n.get("weekly")} CP
-                    </p>
-                  </div>
+                  <StatsBlock
+                    statName={I18n.get("dailyPoints")}
+                    score={
+                      props.redux.sprint[activeSprintId].teams[index].missions[
+                        displayDay
+                      ].dailyScore
+                    }
+                  />
+                  <StatsBlock
+                    statName={`${I18n.get("daily")} CP`}
+                    score={`${props.redux.sprint[activeSprintId].teams[
+                      index
+                    ].missions[displayDay].dailyCompletion.toFixed(2)}%`}
+                  />
+                  <StatsBlock
+                    statName={I18n.get("weeklyPoints")}
+                    score={
+                      props.redux.sprint[activeSprintId].teams[index].score
+                    }
+                  />
+                  <StatsBlock
+                    statName={`${I18n.get("weekly")} CP`}
+                    score={`${props.redux.sprint[activeSprintId].teams[index].percentage}%`}
+                  />
                 </div>
               </div>
 
@@ -348,7 +371,7 @@ function Sprint(props) {
                   <h2>{I18n.get("upcomingMission")}</h2>
                   <section className="context-cards">
                     {props.redux.sprint[activeSprintId].teams[index].missions[
-                      day
+                      displayDay
                     ].missions.map((mission, i) => {
                       if (mission.completed === false) {
                         return (
@@ -398,7 +421,7 @@ function Sprint(props) {
                   </h2>
                   <section className="context-cards">
                     {props.redux.sprint[activeSprintId].teams[index].missions[
-                      day
+                      displayDay
                     ].missions.map((mission, id) => {
                       if (mission.completed === true) {
                         return (
@@ -443,26 +466,32 @@ function Sprint(props) {
                   </section>{" "}
                 </div>
               </div>
-              <Accordion allowMultipleExpanded allowZeroExpanded>
+              <Accordion
+                style={{ margin: -16 }}
+                allowMultipleExpanded
+                allowZeroExpanded
+              >
                 <AccordionItem>
                   <AccordionItemHeading>
                     <AccordionItemButton>Time Travel</AccordionItemButton>
                   </AccordionItemHeading>
                   <AccordionItemPanel>
-                    <div>
-                      <p>Currently Day {day + 1}</p>
+                    <div className="options">
+                      <p>
+                        <b>Currently Day {displayDay + 1}</b>
+                      </p>
                       <p>
                         Click a button below to go back to a specific day and
                         add an update you forgot.
                       </p>
 
-                      <div className="flex">
+                      <div className="flex" style={{ paddingTop: 8 }}>
                         {props.redux.sprint[activeSprintId].teams[
                           index
                         ].missions.map((mission, idx) => (
                           <Button
                             onClick={() => {
-                              setDay(idx);
+                              setDisplayDay(idx);
                             }}
                             // eslint-disable-next-line react/no-array-index-key
                             key={idx}
@@ -495,7 +524,7 @@ function Sprint(props) {
               </Accordion>
             </>
           </TabPanel>
-          <TabPanel value={key} index={2} style={{ margin: -30 }}>
+          <TabPanel value={key} index={2}>
             <div className="row">
               <div className="col-xs-12 col-sm-7">
                 <Board
@@ -517,7 +546,7 @@ function Sprint(props) {
 
           <ArenaProofModal
             show={showProofModal}
-            day={day}
+            day={displayDay}
             activeMission={activeMission}
             activeIndex={activeIndex}
             handleChange={handleChange}
