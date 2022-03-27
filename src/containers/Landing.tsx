@@ -82,13 +82,16 @@ function Landing(props: any) {
               </div>
               <h3
                 className="text-center"
-                style={{ color: "var(--navigation-bg)", fontWeight: "bolder" }}
+                style={{
+                  color: "var(--navigation-bgColor)",
+                  fontWeight: "bolder",
+                }}
               >
                 {test.name}
               </h3>
               <p
                 className="text-center"
-                style={{ color: "var(--navigation-bg)" }}
+                style={{ color: "var(--navigation-bgColor)" }}
               >
                 {test.title}
               </p>
