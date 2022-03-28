@@ -485,7 +485,7 @@ function Sprint(props) {
                         add an update you forgot.
                       </p>
 
-                      <div className="flex" style={{ paddingTop: 8 }}>
+                      <div className="options-buttons">
                         {props.redux.sprint[activeSprintId].teams[
                           index
                         ].missions.map((mission, idx) => (

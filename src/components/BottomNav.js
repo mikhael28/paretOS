@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Tabs, Tab } from "@mui/material";
+import { Paper, Tabs, Tab, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
   GrAchievement,
@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 
 function BottomNav(props) {
   const classes = useStyles();
+  const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -38,29 +39,44 @@ function BottomNav(props) {
       >
         <Tab
           icon={<GrAchievement />}
-          style={{ fontSize: 20 }}
+          style={{
+            fontSize: 20,
+            filter: theme.palette.mode === "dark" ? "invert()" : "",
+          }}
           onClick={() => props.history.push("/")}
         />
         {props.user.instructor !== true ? (
           <Tab
             icon={<GrCli />}
-            style={{ fontSize: 20 }}
+            style={{
+              fontSize: 20,
+              filter: theme.palette.mode === "dark" ? "invert()" : "",
+            }}
             onClick={() => props.history.push("/training")}
           />
         ) : null}
         <Tab
           icon={<GrBook />}
-          style={{ fontSize: 20 }}
+          style={{
+            fontSize: 20,
+            filter: theme.palette.mode === "dark" ? "invert()" : "",
+          }}
           onClick={() => props.history.push("/context-builder")}
         />
         <Tab
           icon={<GrChat />}
-          style={{ fontSize: 20 }}
+          style={{
+            fontSize: 20,
+            filter: theme.palette.mode === "dark" ? "invert()" : "",
+          }}
           onClick={() => props.history.push("/chat")}
         />
         <Tab
           icon={<GrFingerPrint />}
-          style={{ fontSize: 20 }}
+          style={{
+            fontSize: 20,
+            filter: theme.palette.mode === "dark" ? "invert()" : "",
+          }}
           onClick={() => props.history.push(`/profile/edit/${props.user.id}`)}
         />
       </Tabs>

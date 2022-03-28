@@ -556,7 +556,9 @@ class App extends Component {
                 <>
                   <div
                     className="sticky-logout"
-                    style={{ filter: "invert()" }}
+                    style={{
+                      filter: theme.palette.mode === "dark" ? "invert()" : "",
+                    }}
                     onClick={this.handleLogout}
                   >
                     <GrLogout style={{ height: "20px" }} />
@@ -580,11 +582,17 @@ class App extends Component {
                           event.preventDefault();
                           this.setState({ isTourOpen: true });
                         }}
-                        height="65"
-                        width="65"
+                        height="40"
+                        width="40"
                         circle
                         className="sticky-btn"
-                        style={{ marginRight: 12, cursor: "pointer" }}
+                        style={{
+                          marginRight: 12,
+                          cursor: "pointer",
+                          filter: "grayscale(100%)",
+                          outline: "2px solid white",
+                          border: "2px solid transparent",
+                        }}
                       />
                     </div>
                     <div id="myBottomNav" className="bottom-nav">
