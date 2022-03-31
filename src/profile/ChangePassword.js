@@ -83,7 +83,7 @@ const ChangePassword = (props) => {
         <LoaderButton
           block
           type="submit"
-          bsSize="large"
+          size="large"
           text={I18n.get("confirm")}
           loadingText={I18n.get("confirming")}
           disabled={!validateForm}

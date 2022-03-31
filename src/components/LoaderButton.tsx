@@ -1,26 +1,31 @@
-import { Button, Theme } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { Button, Theme, ButtonProps } from "@mui/material";
+import { makeStyles, useTheme } from "@mui/styles";
 import Glyphicon from "react-bootstrap/lib/Glyphicon";
-import { buttonType, buttonVariant, color } from "../types";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    "& .MuiButtonBase-root": {
-      marginTop: theme.spacing(1),
-      fontSize: 16,
+// Custom sub-component to access theme and build/export useStyles
+// Prevents React from generating a new useStyles function each time the component is rendered
+const UseStyles = () => {
+  const theme: Theme = useTheme();
+
+  const useStyles = makeStyles({
+    root: {
+      "& .MuiButtonBase-root": {
+        marginTop: theme.spacing(1),
+        fontSize: 16,
+      },
     },
-  },
-}));
+  });
 
-interface ButtonProps {
+  return useStyles;
+};
+
+// Extend existing ButtonProps type to allow for our custom props
+interface CustomButtonProps extends ButtonProps {
+  props: ButtonProps;
   text: string;
   loadingText: string;
   isLoading: boolean;
   disabled: boolean;
-  className?: string;
-  type: buttonType;
-  color: color;
-  variant: buttonVariant;
 }
 
 export default function LoaderButton({
@@ -32,8 +37,9 @@ export default function LoaderButton({
   type = "button",
   color = "primary",
   variant = "contained",
-}: ButtonProps) {
-  const classes = useStyles();
+  ...props
+}: CustomButtonProps) {
+  const classes = UseStyles()();
 
   return (
     <div className={classes.root}>
@@ -43,6 +49,7 @@ export default function LoaderButton({
         type={type}
         color={color}
         variant={variant}
+        {...props}
       >
         {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
         {!isLoading ? text : loadingText}

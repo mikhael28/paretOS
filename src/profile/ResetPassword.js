@@ -77,7 +77,7 @@ const ResetPassword = () => {
       <LoaderButton
         block
         type="submit"
-        bsSize="large"
+        size="large"
         loadingText={I18n.get("sending")}
         text={I18n.get("sendConfirmation")}
         isLoading={state.isSendingCode}
@@ -118,7 +118,7 @@ const ResetPassword = () => {
       <LoaderButton
         block
         type="submit"
-        bsSize="large"
+        size="large"
         text={I18n.get("confirm")}
         loadingText={I18n.get("confirming")}
         isLoading={state.isConfirming}

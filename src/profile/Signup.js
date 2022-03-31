@@ -83,7 +83,7 @@ const Signup = () => {
       </FormGroup>
       <LoaderButton
         block
-        bsSize="large"
+        size="large"
         disabled={!validateConfirmationForm()}
         type="submit"
         isLoading={isLoading}
@@ -131,7 +131,7 @@ const Signup = () => {
       </FormGroup>
       <LoaderButton
         block
-        bsSize="large"
+        size="large"
         disabled={!validateForm()}
         type="submit"
         isLoading={isLoading}

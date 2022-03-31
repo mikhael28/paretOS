@@ -109,7 +109,7 @@ export default function ArenaProofModal({
                     setFormData({ ...formData, key: "" });
                     handleClose();
                   }}
-                  bsSize="large"
+                  size="large"
                   text={I18n.get("submitProof")}
                   loadingText={I18n.get("creating")}
                   // ? Is there a reason this is commented?
