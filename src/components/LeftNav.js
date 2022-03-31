@@ -355,7 +355,7 @@ function LeftNav(props) {
 
       <NavLink
         to="/context-builder"
-        style={subheadingStyle}
+        style={headingStyle}
         activeStyle={activeStyle}
         className="third-step"
         exact
