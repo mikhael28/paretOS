@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Image from "react-bootstrap/lib/Image";
+import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import ArenaDashboard from "./Sprints";
-import question from "../assets/help.png";
+import question from "../assets/question.svg";
 import logo from "../assets/Pareto_Lockup-01.png";
 
 /**
@@ -13,6 +14,8 @@ import logo from "../assets/Pareto_Lockup-01.png";
 
 function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
   const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const theme = useTheme();
 
   const steps = [
     {
@@ -36,7 +39,11 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
           alt="Pareto"
           height="45"
           width="180"
-          style={{ marginTop: 33 }}
+          style={{
+            marginTop: 33,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
         />
 
         <h1
@@ -47,7 +54,7 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
             fontSize: 40,
           }}
         >
-          Arena
+          &nbsp;Arena
         </h1>
         <Image
           src={question}
@@ -55,18 +62,20 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
             event.preventDefault();
             setIsTourOpen(true);
           }}
-          height="40"
-          width="40"
+          height="16"
+          width="16"
           circle
           style={{
             cursor: "pointer",
             marginTop: 30,
             marginLeft: 6,
+            opacity: 0.8,
+            filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
         />
       </div>
       <div className="row">
-        <div className="col-xs-12 col-sm-5">
+        <div className="col-xs-12">
           <ArenaDashboard
             sprints={sprints}
             history={history}

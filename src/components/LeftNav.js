@@ -3,57 +3,84 @@ import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
 import DropdownButton from "react-bootstrap/lib/DropdownButton";
 import MenuItem from "react-bootstrap/lib/MenuItem";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
 import { BiRun } from "react-icons/bi";
 import white from "../assets/Pareto_Lockup-White.png";
-import blue from "../assets/Pareto-Blue-01.png";
-import red from "../assets/Pareto-Red-01.png";
 
 function LeftNav(props) {
   const { chosenLanguage, user, updateState, athletes } = props;
 
-  const textStyle = {
-    color: "rgb(79, 101, 116)",
+  const headingStyle = {
     textDecoration: "none",
-    fontSize: 20,
-    marginLeft: 12,
-    marginTop: 14,
+    fontSize: 15,
+    fontWeight: 600,
+    marginLeft: 16,
+    marginRight: 16,
+    marginTop: 48,
+    paddingTop: 8,
+    textTransform: "uppercase",
+    letterSpacing: "2.5px",
   };
-  const noPadStyle = {
-    color: "rgb(79, 101, 116)",
-    fontSize: 18,
+  const subheadingStyle = {
+    fontSize: 15,
     marginTop: 14,
-    marginLeft: 26,
+    marginLeft: 16,
     display: "flex",
   };
-  const activeTextStyle = {
-    color: "rgb(243, 247, 249)",
+  const activeStyle = {
+    opacity: 1,
     textDecoration: "none",
   };
 
+  const langStyle = {
+    backgroundColor: "black",
+    color: white,
+    padding: "3px",
+  };
+
+  const langTitle = (
+    <Image
+      src={chosenLanguage.image}
+      height="22"
+      width="22"
+      circle
+      style={{ position: "relative", zIndex: "999" }}
+    />
+  );
+
+  // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
   const renderLanguageDropdown = () => (
-    <div style={{ marginLeft: 14 }}>
-      <Image src={chosenLanguage.image} height="26" width="26" circle />
+    <div style={{ display: "flex", alignItems: "center" }}>
       <DropdownButton
         key={1}
-        title={`${chosenLanguage.name}`}
+        title={langTitle}
         id="pick-service"
         style={{
           color: "white",
           fontSize: 14,
-          backgroundColor: "rgb(37, 38, 39)",
+          backgroundColor: "var(--navigation-bgColor)",
+          backgroundImage: "none",
           border: "none",
           textAlign: "left",
+          maxWidth: "40px",
+          minWidth: "unset",
         }}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <div style={{ marginLeft: 4 }}>
+        <div
+          style={{
+            background: "black",
+            marginTop: "-5px",
+            marginBottom: "-5px",
+            padding: "8px 6px",
+          }}
+        >
           <MenuItem
+            style={langStyle}
             key={1.1}
             onClick={() => {
               I18n.setLanguage("lg");
@@ -66,10 +93,10 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; Luganda
+            Luganda
           </MenuItem>
           <MenuItem
+            style={langStyle}
             key={1.2}
             onClick={() => {
               I18n.setLanguage("es");
@@ -82,10 +109,10 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; Spanish
+            Spanish
           </MenuItem>
           <MenuItem
+            style={langStyle}
             key={1.3}
             onClick={() => {
               I18n.setLanguage("en");
@@ -98,11 +125,11 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; English
+            English
           </MenuItem>
 
           <MenuItem
+            style={langStyle}
             key={1.4}
             onClick={() => {
               I18n.setLanguage("ptbr");
@@ -115,12 +142,12 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; Portuguese(Brazil)
+            Portugeuse (BR)
           </MenuItem>
 
           <MenuItem
             key={1.5}
+            style={langStyle}
             onClick={() => {
               I18n.setLanguage("ngpg");
               updateState({
@@ -132,12 +159,12 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; Nigeria(Pidgin)
+            Nigeria (Pidgin)
           </MenuItem>
 
           <MenuItem
             key={1.6}
+            style={langStyle}
             onClick={() => {
               I18n.setLanguage("hi");
               updateState({
@@ -149,8 +176,7 @@ function LeftNav(props) {
               });
             }}
           >
-            <Glyphicon glyph="glyphicon glyphicon-cog" />
-            &ensp; Hindi(India)
+            Hindi
           </MenuItem>
         </div>
       </DropdownButton>
@@ -159,87 +185,94 @@ function LeftNav(props) {
 
   return (
     <div id="mySidenav" className="sidenav">
-      <div style={{ marginLeft: 10, display: "flex" }}>
-        <Image
-          src={
-            user.picture ||
-            "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-          }
-          height="40"
-          width="40"
-          circle
-        />
-        <p
+      <div
+        style={{
+          marginLeft: 16,
+          marginRight: 16,
+          display: "flex",
+          width: "calc(100% - 32px)",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <div
           style={{
-            color: "white",
-            fontSize: 18,
-            backgroundColor: "rgb(37, 38, 39)",
-            border: "none",
-            marginTop: 6,
-            marginLeft: 12,
+            display: "flex",
+            flexWrap: "nowrap",
+            justifyContent: "flex-start",
           }}
         >
-          {user.fName}
-        </p>
+          <Image
+            src={
+              user.picture ||
+              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+            }
+            height="40"
+            width="40"
+            circle
+          />
+          <p
+            style={{
+              fontSize: 18,
+              border: "none",
+              marginTop: 6,
+              marginLeft: 12,
+              fontWeight: 600,
+            }}
+          >
+            {user.fName}
+          </p>
+        </div>
+        {renderLanguageDropdown()}
       </div>
-
       <div style={{ marginTop: 10 }}>
         <NavLink
           to="/"
-          style={textStyle}
+          style={headingStyle}
           className="flex"
-          activeStyle={activeTextStyle}
+          activeStyle={activeStyle}
           exact
         >
-          <img
-            src={red}
-            height="30"
-            width="30"
-            alt="pareto blue"
-            className="first-step"
-          />
-          &ensp;{" "}
-          <p style={{ marginTop: 4, marginLeft: 3 }}>{I18n.get("arena")}</p>
+          <p
+            style={{
+              fontWeight: "600",
+              opacity: 1,
+              marginTop: 4,
+              marginLeft: 3,
+            }}
+          >
+            {I18n.get("arena")}
+          </p>
         </NavLink>
-
-        <div
-          style={{
-            // marginLeft: 22,
-            fontSize: 14,
-            color: "white",
-          }}
+        <NavLink
+          to="/arena/create/sprints"
+          style={subheadingStyle}
+          activeStyle={activeStyle}
+          exact
         >
-          <NavLink
-            to="/arena/create/sprints"
-            style={noPadStyle}
-            activeStyle={activeTextStyle}
-            exact
-          >
-            <BiRun style={{ height: 26, width: 26 }} />
-            <p style={{ marginLeft: 10 }}>{I18n.get("startSprint")}</p>
-          </NavLink>
-          <NavLink
-            to="/arena/create/template"
-            style={noPadStyle}
-            activeStyle={activeTextStyle}
-            exact
-          >
-            <IoMdCreate style={{ height: 26, width: 26 }} />
-            <p style={{ marginLeft: 10 }}>Sprint Template</p>
-          </NavLink>
-        </div>
+          <BiRun style={{ height: 26, width: 26 }} />
+          <p style={{ marginLeft: 10 }}>{I18n.get("startSprint")}</p>
+        </NavLink>
+        <NavLink
+          to="/arena/create/template"
+          style={subheadingStyle}
+          activeStyle={activeStyle}
+          exact
+        >
+          <IoMdCreate style={{ height: 26, width: 26 }} />
+          <p style={{ marginLeft: 10 }}>Sprint Template</p>
+        </NavLink>
       </div>
 
       {user.instructor === true ? (
         <div style={{ marginTop: 14 }}>
           <NavLink
             to="/mentorship"
-            style={textStyle}
-            activeStyle={activeTextStyle}
+            style={headingStyle}
+            activeStyle={activeStyle}
             exact
           >
-            <img src={red} height="30" width="30" alt="pareto-learn" />
-            &ensp; {I18n.get("mentorship")}
+            {I18n.get("mentorship")}
           </NavLink>
 
           {/* Experience/Quick Info Below */}
@@ -248,8 +281,8 @@ function LeftNav(props) {
               <NavLink
                 to={`/mentorship/${relationship.id}`}
                 key={relationship.id}
-                style={noPadStyle}
-                activeStyle={activeTextStyle}
+                style={subheadingStyle}
+                activeStyle={activeStyle}
                 exact
               >
                 <div
@@ -275,19 +308,12 @@ function LeftNav(props) {
       <div style={{ marginLeft: 3 }}>
         <NavLink
           to="/training"
-          style={textStyle}
+          style={headingStyle}
           className="flex"
-          activeStyle={activeTextStyle}
+          activeStyle={activeStyle}
           exact
         >
-          <img
-            src={blue}
-            height="30"
-            width="30"
-            alt="pareto blue"
-            className="first-step"
-          />
-          &ensp; <p style={{ marginTop: 4 }}>{I18n.get("basicTraining")}</p>
+          <p style={{ marginTop: 4 }}>{I18n.get("basicTraining")}</p>
         </NavLink>
       </div>
       <div
@@ -300,8 +326,8 @@ function LeftNav(props) {
       >
         <NavLink
           to={`/training/${user.apprenticeshipId}`}
-          style={noPadStyle}
-          activeStyle={activeTextStyle}
+          style={subheadingStyle}
+          activeStyle={activeStyle}
           exact
         >
           <AiFillCode style={{ height: 26, width: 26 }} />
@@ -309,8 +335,8 @@ function LeftNav(props) {
         </NavLink>
         <NavLink
           to={`/training/${user.productId}`}
-          style={noPadStyle}
-          activeStyle={activeTextStyle}
+          style={subheadingStyle}
+          activeStyle={activeStyle}
           exact
         >
           <FaTools style={{ height: 26, width: 26 }} />
@@ -318,8 +344,8 @@ function LeftNav(props) {
         </NavLink>
         <NavLink
           to={`/training/${user.masteryId}`}
-          style={noPadStyle}
-          activeStyle={activeTextStyle}
+          style={subheadingStyle}
+          activeStyle={activeStyle}
           exact
         >
           <IoMdSchool style={{ height: 26, width: 26 }} />
@@ -329,48 +355,23 @@ function LeftNav(props) {
 
       <NavLink
         to="/context-builder"
-        style={textStyle}
-        activeStyle={activeTextStyle}
+        style={subheadingStyle}
+        activeStyle={activeStyle}
         className="third-step"
         exact
       >
-        <img
-          src={blue}
-          height="30"
-          width="30"
-          alt="context-builder"
-          style={{ marginBottom: 6 }}
-        />
         &ensp;{I18n.get("library")}
       </NavLink>
 
       <NavLink
         to={`/profile/edit/${user.id}`}
-        style={textStyle}
-        activeStyle={activeTextStyle}
+        style={headingStyle}
+        activeStyle={activeStyle}
         exact
       >
-        <img
-          src={blue}
-          height="30"
-          width="30"
-          alt="context-builder"
-          style={{ marginBottom: 6 }}
-        />
         &ensp;Profile
       </NavLink>
-
       <div style={{ flex: "0 0 4px" }} />
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: 10,
-        }}
-      >
-        {renderLanguageDropdown()}
-      </div>
 
       {/* <div className="fourth-step">
         <Pomodoro />
@@ -380,10 +381,13 @@ function LeftNav(props) {
 
       <img
         src={white}
-        height="50"
-        width="200"
-        style={{ position: "fixed", bottom: 20, left: 15 }}
+        width="120"
+        style={{ opacity: 0.6, position: "fixed", bottom: 30, left: 16 }}
         alt="pareto logo"
+        // eslint-disable-next-line no-return-assign
+        onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+        // eslint-disable-next-line no-return-assign
+        onMouseLeave={(e) => (e.currentTarget.style.opacity = 0.6)}
       />
     </div>
   );

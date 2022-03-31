@@ -11,7 +11,7 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
-import { Slide, Dialog } from "@mui/material";
+import { Slide, Dialog, Box, ThemeProvider, createTheme } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
 import sanity from "./libs/sanity";
@@ -39,6 +39,37 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Internalization Rerender - Issue #6
  */
 
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#DE4665",
+      dark: "#DE4665",
+    },
+    secondary: {
+      main: "#DE4665",
+      dark: "#DE4665",
+    },
+    background: {
+      paper: "rgb(34, 34, 34)",
+      default: "rgb(0, 0, 0)",
+    },
+    text: {
+      secondary: "rgb(255, 255, 255)",
+      primary: "rgb(242, 243, 243)",
+    },
+  },
+  typography: {
+    fontSize: 14,
+    h1: {
+      fontSize: "3rem",
+      fontWeight: 300,
+    },
+    button: {
+      fontWeight: 800,
+    },
+  },
+});
 class App extends Component {
   constructor(props) {
     super(props);
@@ -492,88 +523,110 @@ class App extends Component {
     };
     return (
       !this.state.isAuthenticating && (
-        <Sentry.ErrorBoundary
-          // eslint-disable-next-line no-unused-vars
-          fallback={({ error, componentStack, resetError }) => (
-            <>
-              <div>
-                Dear user, you have (sadly) encountered an error. The error is
-                written out for you below, but it's probably useless to you. If
-                you are just interested in moving past this unfortunate
-                incident, click the button below to reload the page and start
-                fresh.
-              </div>
-              <div>{error.toString()}</div>
-              <div>{componentStack}</div>
-              <button onClick={() => window.location.replace("/")}>
-                Click here to reset!
-              </button>
-            </>
-          )}
-        >
-          <>
-            {this.state.isAuthenticated ? (
+        <ThemeProvider theme={theme}>
+          <Sentry.ErrorBoundary
+            // eslint-disable-next-line no-unused-vars
+            fallback={({ error, componentStack, resetError }) => (
               <>
-                <div className="sticky-logout" onClick={this.handleLogout}>
-                  <GrLogout />
+                <div>
+                  Dear user, you have (sadly) encountered an error. The error is
+                  written out for you below, but it's probably useless to you.{" "}
+                  If you are just interested in moving past this unfortunate
+                  incident, click the button below to reload the page and start
+                  fresh.
                 </div>
-
-                <div className="root-padding">
-                  <LeftNav
-                    chosenLanguage={this.state.chosenLanguage}
-                    updateState={this.setState.bind(this)}
-                    user={this.state.user}
-                    athletes={this.state.athletes}
-                  />
-
-                  <Routes childProps={childProps} />
-                </div>
-                <div className="sticky-nav">
-                  <div className="sticky-chat">
-                    <Image
-                      src={question}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        this.setState({ isTourOpen: true });
-                      }}
-                      height="65"
-                      width="65"
-                      circle
-                      className="sticky-btn"
-                      style={{ marginRight: 12, cursor: "pointer" }}
-                    />
-                  </div>
-                  <div id="myBottomNav" className="bottom-nav">
-                    <BottomNav user={this.state.user} />
-                  </div>
-                </div>
+                <div>{error.toString()}</div>
+                <div>{componentStack}</div>
+                <button onClick={() => window.location.replace("/")}>
+                  Click here to reset!
+                </button>
               </>
-            ) : (
-              <Routes childProps={childProps} />
             )}
-            <Onboarding
-              isOpen={this.state.isTourOpen}
-              onRequestClose={this.closeTour}
-              showCloseButton
-            />
-            <Dialog
-              style={{
-                margin: "auto",
+          >
+            <Box
+              sx={{
+                width: "100vw",
+                height: "100vh",
+                bgcolor: "background.default",
+                color: "text.primary",
+                overflow: "scroll",
               }}
-              open={this.state.loading}
-              TransitionComponent={Transition}
-              keepMounted
-              disableEscapeKeyDown
-              fullScreen
-              fullWidth
-              hideBackdrop={false}
-              aria-labelledby="loading"
-              aria-describedby="Please wait while the page loads"
             >
-              <LoadingModal />
-            </Dialog>
-          </>
-        </Sentry.ErrorBoundary>
+              {this.state.isAuthenticated ? (
+                <>
+                  <div
+                    className="sticky-logout"
+                    style={{
+                      filter: theme.palette.mode === "dark" ? "invert()" : "",
+                    }}
+                    onClick={this.handleLogout}
+                  >
+                    <GrLogout style={{ height: "20px" }} />
+                  </div>
+
+                  <div className="root-padding">
+                    <LeftNav
+                      chosenLanguage={this.state.chosenLanguage}
+                      updateState={this.setState.bind(this)}
+                      user={this.state.user}
+                      athletes={this.state.athletes}
+                    />
+
+                    <Routes childProps={childProps} />
+                  </div>
+                  <div className="sticky-nav">
+                    <div className="sticky-chat">
+                      <Image
+                        src={question}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          this.setState({ isTourOpen: true });
+                        }}
+                        height="40"
+                        width="40"
+                        circle
+                        className="sticky-btn"
+                        style={{
+                          marginRight: 12,
+                          cursor: "pointer",
+                          filter: "grayscale(100%)",
+                          outline: "2px solid white",
+                          border: "2px solid transparent",
+                        }}
+                      />
+                    </div>
+                    <div id="myBottomNav" className="bottom-nav">
+                      <BottomNav user={this.state.user} />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Routes childProps={childProps} />
+              )}
+              <Onboarding
+                isOpen={this.state.isTourOpen}
+                onRequestClose={this.closeTour}
+                showCloseButton
+              />
+              <Dialog
+                style={{
+                  margin: "auto",
+                }}
+                open={this.state.loading}
+                TransitionComponent={Transition}
+                keepMounted
+                disableEscapeKeyDown
+                fullScreen
+                fullWidth
+                hideBackdrop={false}
+                aria-labelledby="loading"
+                aria-describedby="Please wait while the page loads"
+              >
+                <LoadingModal />
+              </Dialog>
+            </Box>
+          </Sentry.ErrorBoundary>
+        </ThemeProvider>
       )
     );
   }

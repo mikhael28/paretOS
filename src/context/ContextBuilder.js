@@ -78,7 +78,11 @@ function ContextBuilder({ sanitySchemas }) {
       </h1>
       <AppBar
         position="static"
-        style={{ backgroundColor: "white", color: "black" }}
+        style={{
+          boxShadow: "none",
+          backgroundImage: "none",
+          backgroundColor: "transparent",
+        }}
       >
         <Tabs
           value={value}
