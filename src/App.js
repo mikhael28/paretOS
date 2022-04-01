@@ -7,7 +7,6 @@ import Image from "react-bootstrap/lib/Image";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Tour from "reactour";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
 import sortby from "lodash.sortby";
@@ -274,7 +273,7 @@ class App extends Component {
 
     let sprintString = sprintStrings.join("&");
 
-    let wsClient = new ReconnectingWebSocket(
+    let wsClient = new WebSocket(
       `wss://2los2emuze.execute-api.us-east-1.amazonaws.com/Prod?${sprintString}`
     );
 
