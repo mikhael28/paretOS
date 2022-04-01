@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
@@ -41,6 +41,7 @@ const Login = ({
   setLoading,
   userHasAuthenticated,
 }) => {
+  const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
   const classes = useStyles();
@@ -75,15 +76,19 @@ const Login = ({
           alt="Pareto"
           height="45"
           width="180"
-          style={{ marginTop: 32 }}
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
         />
       </div>
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div style={{ backgroundColor: "#ccc" }}>
           <TextField
             id="email"
-            variant="standard"
+            variant="filled"
             size="medium"
             autoFocus
             label={I18n.get("email")}
@@ -98,10 +103,10 @@ const Login = ({
           <span className="error">{errors.email && errors.email.message}</span>
         </div>
         <br />
-        <div>
+        <div style={{ backgroundColor: "#ccc" }}>
           <TextField
             id="password"
-            variant="standard"
+            variant="filled"
             size="medium"
             type="password"
             label={I18n.get("password")}

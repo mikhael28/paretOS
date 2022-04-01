@@ -94,6 +94,14 @@ input[type="file"] {
   width: 100%;
 }
 
+/* temporary styles to override bootstrap conflicts with MUI */
+/* TODO: remove once bootstrap is completely gone */
+a.MuiButton-root:hover,
+a.MuiButton-root:focus {
+  color: rgb(222, 70, 101)!important
+}
+
+
 /* mobile/tablet styling */
 
 @media screen and (max-width: 768px) {

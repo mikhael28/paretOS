@@ -7,11 +7,13 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import HelpBlock from "react-bootstrap/lib/HelpBlock";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
+import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 
 const Signup = () => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
@@ -68,7 +70,11 @@ const Signup = () => {
           alt="Pareto"
           height="45"
           width="180"
-          style={{ marginTop: 32 }}
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
         />
       </div>
       <FormGroup controlId="confirmationCode" bsSize="large">
@@ -101,7 +107,11 @@ const Signup = () => {
           alt="Pareto"
           height="45"
           width="180"
-          style={{ marginTop: 32 }}
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
         />
       </div>
       <FormGroup controlId="email" bsSize="large">
