@@ -282,15 +282,12 @@ export default class EditProfile extends Component {
                 </Button>
 
                 <LoaderButton
-                  align="center"
-                  block
-                  size="small"
                   type="submit"
                   // disabled={!this.validateForm()}
                   onClick={this.updateBio}
                   isLoading={this.state.isLoading}
                   text="Update Summary"
-                  loadingText="Creation"
+                  loadingText="Loading"
                 />
               </div>
             </>
