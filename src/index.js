@@ -21,15 +21,18 @@ import "./index.css";
  * @TODO Lazy Loading Issue #20
  */
 
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    // integrations: [],
+    integrations: [new Integrations.BrowserTracing()],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
+}
 
 const store = createStore(reducer);
 
