@@ -13,16 +13,19 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     width: 300,
 
+    "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
+      backgroundColor: theme.palette.background.paper,
+    },
     "& .MuiTextField-root": {
       width: 300,
     },
     "& .MuiFormLabel-root": {
       fontSize: 16,
-      color: "#000",
+      color: theme.palette.primary.main,
     },
     "& .MuiInputBase-input": {
       fontSize: 16,
-      color: "#000",
+      color: theme.palette.primary.main,
     },
     "& .MuiButtonBase-root": {
       marginTop: theme.spacing(1),
@@ -85,7 +88,7 @@ const Login = ({
       </div>
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-        <div style={{ backgroundColor: "#ccc" }}>
+        <div>
           <TextField
             id="email"
             variant="filled"
@@ -103,7 +106,7 @@ const Login = ({
           <span className="error">{errors.email && errors.email.message}</span>
         </div>
         <br />
-        <div style={{ backgroundColor: "#ccc" }}>
+        <div>
           <TextField
             id="password"
             variant="filled"
