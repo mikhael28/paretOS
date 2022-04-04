@@ -7,7 +7,8 @@ import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { FaTimes } from "react-icons/fa";
+import { useTheme } from "@mui/material";
 import Button from "react-bootstrap/lib/Button";
 import Calendar from "react-calendar";
 import cloneDeep from "lodash.clonedeep";
@@ -15,11 +16,14 @@ import { getActiveSprintData } from "../state/sprints";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 import "react-calendar/dist/Calendar.css";
+
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
+  const theme = useTheme();
+
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
@@ -306,23 +310,30 @@ function SprintCreation(props) {
       </FormGroup>
       {chosenPlayers.map((chosen) => (
         <div key={chosen.id} className="block">
-          <p>
+          {/* TODO: evaluate if these inline styles should apply to all blocks & move to index.css */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 0,
+            }}
+          >
             {chosen.fName} {chosen.lName}
             <Button
               onClick={() => removeChosenPlayer(chosen)}
               bsSize="large"
               style={{
-                float: "right",
-                marginTop: "-5px",
-                paddingTop: "10px",
-                paddingBottom: "10px",
-                backgroundColor: "white",
-                color: "red",
+                padding: "0px 5px",
+                margin: "3px 0px auto 0px",
+                backgroundColor: theme.palette.background.paper,
+                backgroundImage: "unset",
+                minWidth: "max-content",
               }}
             >
-              <Glyphicon glyph="glyphicon glyphicon-remove" />
+              <FaTimes />
             </Button>
-          </p>
+          </div>
         </div>
       ))}
       <Calendar
