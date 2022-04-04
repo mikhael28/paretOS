@@ -640,7 +640,7 @@ a.MuiButton-root:focus {
 
 /* button styles */
 
-.LoaderButton .spinning.glyphicon {
+.LoaderButton .spinning {
   margin-right: 7px;
   top: 2px;
   animation: spin 1s infinite linear;

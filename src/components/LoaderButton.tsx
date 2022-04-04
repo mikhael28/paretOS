@@ -1,6 +1,6 @@
 import { Button, Theme, ButtonProps } from "@mui/material";
 import { makeStyles, useTheme } from "@mui/styles";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { MdAutorenew } from "react-icons/md";
 
 // Custom sub-component to access theme and build/export useStyles
 // Prevents React from generating a new useStyles function each time the component is rendered
@@ -54,7 +54,7 @@ export default function LoaderButton({
         variant={variant}
         {...props}
       >
-        {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
+        {isLoading && <MdAutorenew className="spinning" />}
         {!isLoading ? text : loadingText}
       </Button>
     </div>
