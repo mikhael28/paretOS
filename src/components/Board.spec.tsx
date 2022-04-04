@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Leaderboard from "./Board";
 import type { User } from "../types";
@@ -6,7 +6,7 @@ import type { User } from "../types";
 describe("LEADERBOARD", () => {
   const users = testUsers();
 
-  describe("Leaderboard Table:", () => {
+  describe("Leaderboard Table with 3 users per page and a current user", () => {
     beforeEach(() => {
       render(
         <Leaderboard
@@ -26,14 +26,72 @@ describe("LEADERBOARD", () => {
     it("displays a table with three users if itemsperpage is set to 3 users", () => {
       expect(screen.getAllByTestId("leaderboard-row").length).toEqual(3);
     });
-    // TODO: add test. "correctly increments and decrements pages"
-    // TODO: add test. "initially displays the leaderboard table in descending score order"
-    // TODO: add test. "reacts to a click on the "name" column header by sorting the initial state leaderboard table by descending name order"
-    // TODO: add test. "reacts to a click on "score" column header by sorting the initial state leaderboard table by ascending score order"
-    // TODO: add test. "reacts to a click on the "rank" column header by sorting the initial state leaderboard by ascending score order"
-    // TODO: add test. "reacts intelligently to new sortby properties. if descending score order is also descending name order, clicking the 'name' column results in sorting by ascending name order."
-    // TODO: add test. "correctly filters the user array based on a given filter phrase."
-    // TODO: add test. "filters according to a combination of first name plus the first letter of last name. ('John S.' would fit the filter 's'.)"
+    it("decrements and increments page", () => {
+      // go to previous page
+      fireEvent.click(screen.getByText(/back/));
+      let rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/1000/);
+      expect(rows[1]).toHaveTextContent(/900/);
+      expect(rows[2]).toHaveTextContent(/800/);
+      // go to next page
+      fireEvent.click(screen.getByText(/next/));
+      rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/700/);
+      expect(rows[1]).toHaveTextContent(/600/);
+      expect(rows[2]).toHaveTextContent(/500/);
+    });
+  });
+
+  describe("Leaderboard Table with all users per page", () => {
+    beforeEach(() => {
+      render(
+        <Leaderboard
+          users={users}
+          itemsPerPage={6}
+          currentUser={users[3]}
+          history={[]}
+        />
+      );
+    });
+    it("initially displays the table in descending score order", () => {
+      const rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/1000/);
+      expect(rows[1]).toHaveTextContent(/900/);
+      expect(rows[2]).toHaveTextContent(/800/);
+    });
+    it("clicking on 'name' column header sorts by ascending name order", () => {
+      fireEvent.click(screen.getByText(/name/i));
+      const rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/Third/);
+      expect(rows[1]).toHaveTextContent(/Second/);
+      expect(rows[2]).toHaveTextContent(/First/);
+    });
+    it("clicking on 'score' column header sorts by ascending score order", () => {
+      fireEvent.click(screen.getByText(/score/i));
+      const rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/500/i);
+      expect(rows[1]).toHaveTextContent(/600/i);
+      expect(rows[2]).toHaveTextContent(/700/i);
+    });
+    it("clicking on 'rank' column header sorts by ascending score order", () => {
+      fireEvent.click(screen.getByText(/rank/i));
+      const rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows[0]).toHaveTextContent(/500 pts/i);
+      expect(rows[1]).toHaveTextContent(/600 pts/i);
+      expect(rows[2]).toHaveTextContent(/700 pts/i);
+    });
+    // ! this test fails because fireEvent.change function
+    // ! doesn't seem to change the value of the input element
+    it("filters the leaderboard based on a given filter phrase", () => {
+      const inputEl = screen.getByPlaceholderText(/Filter by name/);
+      fireEvent.change(inputEl, {
+        value: "Adam",
+      });
+      expect(inputEl).toHaveValue("Adam");
+      const rows = screen.getAllByTestId("leaderboard-row");
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toHaveTextContent(/Adam/i);
+    });
   });
 
   describe("Leaderboard Podium:", () => {
@@ -107,7 +165,7 @@ function testUsers(): Array<User> {
       rank: 4,
       score: 700,
       id: 4,
-      fName: "A",
+      fName: "Alfred",
       lName: "B",
       email: "aaaa",
       github: "aaa",
@@ -121,7 +179,7 @@ function testUsers(): Array<User> {
       rank: 5,
       score: 600,
       id: 5,
-      fName: "A",
+      fName: "Adam",
       lName: "B",
       email: "aaaa",
       github: "aaa",
