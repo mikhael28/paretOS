@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ListGroup from "react-bootstrap/lib/ListGroup";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { ImCheckmark } from "react-icons/im";
+import { FaSearch } from "react-icons/fa";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import API from "@aws-amplify/api";
@@ -299,14 +301,14 @@ class ExperienceModule extends Component {
               <div className="second-step-exp">
                 {mongoExperience[topic.priority].approved === true &&
                 mongoExperience[topic.priority].completed === true ? (
-                  <Glyphicon glyph="glyphicon glyphicon-ok" />
+                  <ImCheckmark />
                 ) : null}
                 {mongoExperience[topic.priority].completed === true &&
                 mongoExperience[topic.priority].approved === false ? (
-                  <Glyphicon glyph="glyphicon glyphicon-search" />
+                  <FaSearch />
                 ) : null}
                 {mongoExperience[topic.priority].completed === false ? (
-                  <Glyphicon glyph="glyphicon glyphicon-unchecked" />
+                  <MdCheckBoxOutlineBlank />
                 ) : null}
               </div>
             ) : null}
