@@ -1,4 +1,3 @@
-import React from "react";
 import { DialogContent, useTheme } from "@mui/material";
 import { quotes } from "../libs/quotes";
 

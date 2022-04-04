@@ -275,9 +275,8 @@ function SprintCreation(props) {
     <div>
       <h1>{I18n.get("startSprint")}</h1>
       <p>{I18n.get("sprintDescription")} </p>
-      <FormGroup controlId="chosenMissions">
+      <FormGroup>
         <ControlLabel>{I18n.get("selectTemplate")}</ControlLabel>
-
         <FormControl
           onInput={onInput}
           componentClass="input"
@@ -289,13 +288,9 @@ function SprintCreation(props) {
         <datalist id="sprint-options">
           {renderMissionOptions(missions)}
         </datalist>
-        {/* <FormControl componentClass="select" onChange={handleChange}>
-          <option value="select">{I18n.get("pleaseChooseAnOption")}</option>
-          {renderMissionOptions(missions)}
-        </FormControl> */}
       </FormGroup>
 
-      <FormGroup controlId="players">
+      <FormGroup>
         <ControlLabel>{I18n.get("selectPlayers")}</ControlLabel>
         <FormControl
           onInput={onInput}

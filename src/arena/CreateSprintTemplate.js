@@ -172,6 +172,8 @@ function CreateSprintTemplate(props) {
                 flexDirection: "column",
                 alignItems: "center",
               }}
+              // hack to remove console warning, fix later
+              key={Math.random()}
             >
               <h2>{column.name}</h2>
               <div style={{ margin: 8 }} className="overflow">
