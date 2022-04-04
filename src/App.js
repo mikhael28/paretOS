@@ -274,26 +274,30 @@ class App extends Component {
     let sprintString = sprintStrings.join("&");
 
     let wsClient = new WebSocket(
-      `wss://2los2emuze.execute-api.us-east-1.amazonaws.com/Prod?${sprintString}`
+      `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`
     );
+
+    // console.log(wsClient);
 
     let that = this; // caching 'this'
     let connectInterval;
 
     wsClient.onopen = () => {
-      console.log("Connected");
+      // console.log("Connected");
       this.setState({ ws: wsClient });
       that.timeout = 250; // reset timer to 250 on open of websocket connection
       clearTimeout(connectInterval); // clear interval on onOpen of websocket connection
 
+      // console.log(wsClient);
+
       setInterval(function () {
-        console.log("Firing Ping");
+        // console.log("Firing Ping");
         wsClient.send(`{"action":"sendmessage", "data":"ping" }`);
       }, 400000);
     };
 
     wsClient.onmessage = (message) => {
-      console.log("Received data: ", JSON.parse(message.data));
+      // console.log("Received data: ", JSON.parse(message.data));
       let tempSprintData = JSON.parse(message.data);
       // this check is to see whether the websocket connection successfully retrieved the latest state.
       // if there are too many extraneous connections, through ping error or otherwise - the function to distribute state across connections will fail
@@ -308,18 +312,19 @@ class App extends Component {
         }
         newerSprintArray[tempVar] = tempSprintData;
         try {
-          console.log("Formatted Sprint Array: ", newerSprintArray);
+          // console.log("Formatted Sprint Array: ", newerSprintArray);
           this.setState({ sprints: newerSprintArray });
           this.props.putUpdatedSprintData(newerSprintArray);
         } catch (e) {
-          console.log("onmessage error", e);
+          // console.log("onmessage error", e);
         }
       } else {
-        alert(tempSprintData.message);
+        // alert(tempSprintData.message);
       }
     };
 
     wsClient.onclose = (e) => {
+      // we are trying to reconnect again if offline, with a limited backoff period
       console.log(
         `Socket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
@@ -333,12 +338,17 @@ class App extends Component {
     };
 
     wsClient.onerror = (err) => {
-      console.log("Socket encountered error: ", err.message);
+      alert("Socket encountered error: ", err.message);
       console.log("Closing Socket");
 
       wsClient.close();
     };
   };
+
+  // potential way of closing a particular connectionID
+  // componentWillUnmount() {
+  //   this.state.ws.close(88, "uuid");
+  // }
 
   check = () => {
     const { ws } = this.state;
@@ -527,15 +537,15 @@ class App extends Component {
             // eslint-disable-next-line no-unused-vars
             fallback={({ error, componentStack, resetError }) => (
               <>
-                <div>
+                <p>
                   Dear user, you have (sadly) encountered an error. The error is
                   written out for you below, but it's probably useless to you.{" "}
                   If you are just interested in moving past this unfortunate
                   incident, click the button below to reload the page and start
                   fresh.
-                </div>
-                <div>{error.toString()}</div>
-                <div>{componentStack}</div>
+                </p>
+                <p>{error.toString()}</p>
+                <p>{componentStack}</p>
                 <button onClick={() => window.location.replace("/")}>
                   Click here to reset!
                 </button>

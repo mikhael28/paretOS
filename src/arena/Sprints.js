@@ -8,7 +8,6 @@ import { getActiveSprintData } from "../state/sprints";
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
  * @TODO Issue #55
- * @TODO Issue #91
  * @param {Object} props Includes the sprints object, from childProps.
  * @returns {JSX}
  */
