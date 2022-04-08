@@ -235,6 +235,23 @@ function Sprint(props) {
   ];
   let flexCardClass = classNames("context-card", "block", "second-step-arena");
 
+  let allMissions = [];
+  let finishedMissions = []; // completed daily missions
+  let upcomingMissions = []; // uncompleted daily missions
+
+  // wait till the page is done loading
+  if (loadingPage !== true) {
+    allMissions =
+      props.redux.sprint[activeSprintId].teams[index].missions[displayDay]
+        .missions || []; // default to empty array
+
+    [...allMissions].forEach((mission) =>
+      mission.completed
+        ? finishedMissions.push(mission)
+        : upcomingMissions.push(mission)
+    );
+  }
+
   return (
     <div>
       {loadingPage === true ? (
@@ -367,104 +384,105 @@ function Sprint(props) {
                   flexWrap: "wrap",
                 }}
               >
-                <div>
+                <section>
                   <h2>{I18n.get("upcomingMission")}</h2>
-                  <section className="context-cards">
-                    {props.redux.sprint[activeSprintId].teams[index].missions[
-                      displayDay
-                    ].missions.map((mission, i) => {
-                      if (mission.completed === false) {
-                        return (
-                          <div
-                            className={flexCardClass}
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={i}
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <div>
-                              {lengua !== "en" ? (
-                                <>
-                                  <h3>{mission.esTitle}</h3>
-                                  <p>{mission.esDescription}</p>
-                                </>
-                              ) : (
-                                <>
-                                  <h3>{mission.title}</h3>
-                                  <p>{mission.description}</p>
-                                </>
-                              )}
-                            </div>
-                            <Button
-                              onClick={() => {
-                                setShowProofModal(true);
-                                setActiveIndex(i);
-                                setActiveMission(mission);
-                              }}
-                              disabled={status !== "active"}
-                            >
-                              {I18n.get("markAsComplete")}
-                            </Button>
+                  {upcomingMissions.length > 0 ? (
+                    <ul className="context-cards">
+                      {upcomingMissions.map((mission, i) => (
+                        <li
+                          className={flexCardClass}
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={i}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div>
+                            {lengua !== "en" ? (
+                              <>
+                                <h3>{mission.esTitle}</h3>
+                                <p>{mission.esDescription}</p>
+                              </>
+                            ) : (
+                              <>
+                                <h3>{mission.title}</h3>
+                                <p>{mission.description}</p>
+                              </>
+                            )}
                           </div>
-                        );
-                      }
-                    })}
-                  </section>
-                </div>
+                          <Button
+                            onClick={() => {
+                              setShowProofModal(true);
+                              setActiveIndex(i);
+                              setActiveMission(mission);
+                            }}
+                            disabled={status !== "active"}
+                          >
+                            {I18n.get("markAsComplete")}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ marginTop: "1.5rem" }}>
+                      You have completed all the available achievements for
+                      today.
+                    </p>
+                  )}
+                </section>
 
-                <div>
+                <section>
                   <h2 className="third-step-arena">
                     {I18n.get("finishedMissions")}
                   </h2>
-                  <section className="context-cards">
-                    {props.redux.sprint[activeSprintId].teams[index].missions[
-                      displayDay
-                    ].missions.map((mission, id) => {
-                      if (mission.completed === true) {
-                        return (
-                          <div
-                            className={flexCardClass}
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={id}
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "space-between",
+                  {finishedMissions.length > 0 ? (
+                    <ul className="context-cards">
+                      {finishedMissions.map((mission, id) => (
+                        <li
+                          className={flexCardClass}
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={id}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div>
+                            {lengua !== "en" ? (
+                              <>
+                                <h3>{mission.esTitle}</h3>
+                                <p>{mission.esDescription}</p>
+                              </>
+                            ) : (
+                              <>
+                                <h3>{mission.title}</h3>
+                                <p>{mission.description}</p>
+                              </>
+                            )}
+                          </div>
+
+                          <Button
+                            onClick={() => {
+                              setActiveIndex(id);
+                              setActiveMission(mission);
+                              setView("review");
+                              setShowProofModal(true);
                             }}
                           >
-                            <div>
-                              {lengua !== "en" ? (
-                                <>
-                                  <h3>{mission.esTitle}</h3>
-                                  <p>{mission.esDescription}</p>
-                                </>
-                              ) : (
-                                <>
-                                  <h3>{mission.title}</h3>
-                                  <p>{mission.description}</p>
-                                </>
-                              )}
-                            </div>
-
-                            <Button
-                              onClick={() => {
-                                setActiveIndex(id);
-                                setActiveMission(mission);
-                                setView("review");
-                                setShowProofModal(true);
-                              }}
-                            >
-                              {I18n.get("seeTheProof")}
-                            </Button>
-                          </div>
-                        );
-                      }
-                    })}
-                  </section>{" "}
-                </div>
+                            {I18n.get("seeTheProof")}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ marginTop: "1.5rem" }}>
+                      You have not reported any achievements yet today.
+                    </p>
+                  )}
+                </section>
               </div>
               <Accordion
                 style={{ margin: -16 }}
