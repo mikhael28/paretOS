@@ -8,13 +8,13 @@ Live at https://paret0.com
 
 A multiplayer, competitive habit tracking competition where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
 
-![The Pareto Arena](/screenshots/sprint.png "The Pareto Arena")
+![The Pareto Arena](/screenshots/new_sprint.png "The Pareto Arena")
 
 ## Pareto Learning
 
 Focus on learning the 20% of a skill that gives you 80% of the value. In the ParetOS, we start with offering Full-Stack JavaScript Development as a proof of concept for mentorship-guided, self-study learning through building. Included is a fully featured curriculum for you to start from the basics of creating a GitHub account, through building your first project and tackling technical interviews.
 
-![Learn Full-Stack JS](/screenshots/learning.png "Pareto Learning - JavaScript")
+![Learn Full-Stack JS](/screenshots/new_learning.png "Pareto Learning - JavaScript")
 
 ## Mentorship
 
@@ -26,7 +26,7 @@ More effective than almost anything towards helping people thrive in life is men
 
 A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way. We encourage people to introduce themselves in our Discussions thread, so that we can add new regions, cities and countries to our Library for our community to contribute towards.
 
-![Library of Context](/screenshots/context.png "The Library of Context")
+![Library of Context](/screenshots/new_context.png "The Library of Context")
 
 ## We are live folks
 
