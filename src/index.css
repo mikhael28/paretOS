@@ -319,6 +319,7 @@ a.MuiButton-root:focus {
 .flex-apart {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .flex-evenly {
@@ -385,7 +386,8 @@ a.MuiButton-root:focus {
 }
 
 .highlight-block {
-  padding: 8px;
+  font-size: 16px;
+  padding: 16px;
   border-radius: 3px;
   background: linear-gradient(70deg, var(--primary), var(--secondary));
   color: white;
@@ -640,7 +642,7 @@ a.MuiButton-root:focus {
 
 /* button styles */
 
-.LoaderButton .spinning.glyphicon {
+.LoaderButton .spinning {
   margin-right: 7px;
   top: 2px;
   animation: spin 1s infinite linear;
