@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Leaderboard from "./Board";
+import Leaderboard from "../components/Board";
 import type { User } from "../types";
 
 describe("LEADERBOARD", () => {
