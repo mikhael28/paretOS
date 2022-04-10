@@ -17,7 +17,7 @@ const ExperienceModule = lazy(() => import("./learn/ExperienceModule"));
 const SprintCreation = lazy(() => import("./arena/SprintCreation"));
 const NotFound = lazy(() => import("./containers/NotFound"));
 const EditProfile = lazy(() => import("./profile/EditProfile"));
-const Languages = lazy(() => import("./profile/Languages"));
+const LanguageSelector = lazy(() => import("./profile/LanguageSelector"));
 const ArenaDashboard = lazy(() => import("./arena/Sprints"));
 const ContextBuilder = lazy(() => import("./context/ContextBuilder"));
 const ContextPage = lazy(() => import("./context/ContextPage"));
@@ -136,7 +136,7 @@ export default ({ childProps }) => (
       <AuthenticatedRoute
         path="/profile/languages/:id"
         exact
-        component={Languages}
+        component={LanguageSelector}
         props={childProps}
       />
       <AppliedRoute

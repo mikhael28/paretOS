@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
@@ -8,9 +9,16 @@ import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
 import { BiRun } from "react-icons/bi";
 import white from "../assets/Pareto_Lockup-White.png";
+import { availableLanguages, updateLanguage } from "../libs/languages";
+import LanguageContext from "../LanguageContext";
 
 function LeftNav(props) {
-  const { chosenLanguage, user, updateState, athletes } = props;
+  const { language, setLanguage } = useContext(LanguageContext);
+  const { user, athletes } = props;
+
+  const handleSetLanguage = (language) => {
+    setLanguage(language);
+  };
 
   const headingStyle = {
     textDecoration: "none",
@@ -42,7 +50,7 @@ function LeftNav(props) {
 
   const langTitle = (
     <Image
-      src={chosenLanguage.image}
+      src={language.image}
       height="22"
       width="22"
       circle
@@ -79,105 +87,21 @@ function LeftNav(props) {
             padding: "8px 6px",
           }}
         >
-          <MenuItem
-            style={langStyle}
-            key={1.1}
-            onClick={() => {
-              I18n.setLanguage("lg");
-              updateState({
-                chosenLanguage: {
-                  name: "Lugandan",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/uganda/flag-square-250.png",
-                },
-              });
-            }}
-          >
-            Luganda
-          </MenuItem>
-          <MenuItem
-            style={langStyle}
-            key={1.2}
-            onClick={() => {
-              I18n.setLanguage("es");
-              updateState({
-                chosenLanguage: {
-                  name: "Spanish",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/spain/flag-400.png",
-                },
-              });
-            }}
-          >
-            Spanish
-          </MenuItem>
-          <MenuItem
-            style={langStyle}
-            key={1.3}
-            onClick={() => {
-              I18n.setLanguage("en");
-              updateState({
-                chosenLanguage: {
-                  name: "English",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png",
-                },
-              });
-            }}
-          >
-            English
-          </MenuItem>
-
-          <MenuItem
-            style={langStyle}
-            key={1.4}
-            onClick={() => {
-              I18n.setLanguage("ptbr");
-              updateState({
-                chosenLanguage: {
-                  name: "Portuguese",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/brazil/flag-400.png",
-                },
-              });
-            }}
-          >
-            Portugeuse (BR)
-          </MenuItem>
-
-          <MenuItem
-            key={1.5}
-            style={langStyle}
-            onClick={() => {
-              I18n.setLanguage("ngpg");
-              updateState({
-                chosenLanguage: {
-                  name: "Nigerian Pidgin",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/nigeria/flag-400.png",
-                },
-              });
-            }}
-          >
-            Nigeria (Pidgin)
-          </MenuItem>
-
-          <MenuItem
-            key={1.6}
-            style={langStyle}
-            onClick={() => {
-              I18n.setLanguage("hi");
-              updateState({
-                chosenLanguage: {
-                  name: "Hindi",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/india/flag-400.png",
-                },
-              });
-            }}
-          >
-            Hindi
-          </MenuItem>
+          {availableLanguages.map((language) => (
+            <MenuItem
+              style={langStyle}
+              key={language.code}
+              onClick={() => {
+                updateLanguage({
+                  language,
+                  id: user.id,
+                  setLanguage: handleSetLanguage,
+                });
+              }}
+            >
+              {language.name}
+            </MenuItem>
+          ))}
         </div>
       </DropdownButton>
     </div>

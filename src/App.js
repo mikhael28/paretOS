@@ -27,6 +27,7 @@ import { getUser } from "./state/profile";
 import { errorToast } from "./libs/toasts";
 import Routes from "./Routes";
 import question from "./assets/help.png";
+import { availableLanguages } from "./libs/languages";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -104,12 +105,7 @@ class App extends Component {
       ws: "",
       experiences: [],
       messages: [],
-      chosenLanguage: {
-        name: "English",
-        code: "en",
-        image:
-          "https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png",
-      },
+      chosenLanguage: availableLanguages[0],
       sanityTraining: [],
       sanityProduct: [],
       sanityInterview: [],
@@ -162,11 +158,11 @@ class App extends Component {
         this.props.getUser(user[0]);
         this.setState({ user: user[0] });
         if (user[0].defaultLanguage) {
+          const language = availableLanguages.find(
+            (x) => x.code === user[0].defaultLanguage
+          );
           this.setState({
-            chosenLanguage: {
-              ...this.state.chosenLanguage,
-              code: user[0].defaultLanguage,
-            },
+            chosenLanguage: language || "en",
           });
           I18n.setLanguage(user[0].defaultLanguage);
         }
