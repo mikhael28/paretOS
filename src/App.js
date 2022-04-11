@@ -369,9 +369,12 @@ class App extends Component {
         const query = `*[_type == 'project']`;
         const query1 = `*[_type == 'economic']`;
         const query2 = `*[_type == 'hubs' && !(_id in path("drafts.**"))]`;
-        const projectSchemas = await sanity.fetch(query);
-        const economicSchemas = await sanity.fetch(query1);
-        const hubsSchemas = await sanity.fetch(query2);
+        const [projectSchemas, economicSchemas, hubsSchemas] =
+          await Promise.all([
+            sanity.fetch(query),
+            sanity.fetch(query1),
+            sanity.fetch(query2),
+          ]);
 
         let sanitySchemas = {
           technicalSchemas: projectSchemas,
