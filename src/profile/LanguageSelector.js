@@ -27,52 +27,49 @@ const LanguageSelector = (props) => {
     });
   };
   return (
-    <div>
+    <FormGroup controlId="defaultLanguage" bsSize="large">
       {/* Here we are updating our default language */}
-
-      <FormGroup controlId="defaultLanguage" bsSize="large">
-        <ControlLabel>Default Language</ControlLabel>
-        <div className="flex">
-          {isLoading ? (
-            <>
-              <FormControl
-                name="newLanguage"
-                componentClass="select"
-                onChange={handleChange}
-              >
-                <option value="">
-                  Please wait - saving language preferences.
-                </option>
-              </FormControl>
-              <MdAutorenew
-                style={{ margin: 8, height: "100%" }}
-                className="loading-icon spinning"
-              />
-            </>
-          ) : (
+      <ControlLabel>Default Language</ControlLabel>
+      <div className="flex">
+        {isLoading ? (
+          <>
             <FormControl
               name="newLanguage"
               componentClass="select"
               onChange={handleChange}
-              defaultValue={language.code}
-              value={language.code}
             >
-              {availableLanguages.map(({ code, name }) =>
-                code === language.code ? (
-                  <option key={code} value={code} selected>
-                    {name}
-                  </option>
-                ) : (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                )
-              )}
+              <option value="">
+                Please wait - saving language preferences.
+              </option>
             </FormControl>
-          )}
-        </div>
-      </FormGroup>
-    </div>
+            <MdAutorenew
+              style={{ margin: 8, height: "100%" }}
+              className="loading-icon spinning"
+            />
+          </>
+        ) : (
+          <FormControl
+            name="newLanguage"
+            componentClass="select"
+            onChange={handleChange}
+            defaultValue={language.code}
+            value={language.code}
+          >
+            {availableLanguages.map(({ code, name }) =>
+              code === language.code ? (
+                <option key={code} value={code} selected>
+                  {name}
+                </option>
+              ) : (
+                <option key={code} value={code}>
+                  {name}
+                </option>
+              )
+            )}
+          </FormControl>
+        )}
+      </div>
+    </FormGroup>
   );
 };
 export default LanguageSelector;
