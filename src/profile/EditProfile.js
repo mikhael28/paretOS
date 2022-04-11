@@ -13,7 +13,7 @@ import { errorToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 // import question from "../assets/help.png";
 // import "react-quill/dist/quill.snow.css";
-import Languages from "./Languages";
+import LanguageSelector from "./LanguageSelector";
 
 /**
  * These are the forms where you can edit your profile.
@@ -377,7 +377,7 @@ export default class EditProfile extends Component {
           ) : null}
         </div>
         <br />
-        <Languages id={this.state.id} user={this.state.user} />
+        <LanguageSelector id={this.state.id} user={this.state.user} />
       </div>
     );
   }

@@ -311,6 +311,7 @@ a.MuiButton-root:focus {
 
 .flex {
   display: flex;
+  align-items: center;
 }
 
 .flex-down {
@@ -659,7 +660,8 @@ a.MuiButton-root:focus {
 
 /* button styles */
 
-.LoaderButton .spinning {
+.LoaderButton .spinning,
+.loading-icon.spinning {
   margin-right: 7px;
   top: 2px;
   animation: spin 1s infinite linear;
