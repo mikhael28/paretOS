@@ -402,7 +402,7 @@ class ExperienceModule extends Component {
             style={{ marginLeft: 20, cursor: "pointer" }}
           />
         </h1>
-        <div style={{ display: "flex" }}>
+        <div className="experience-container flex">
           <ListGroup style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
               <section style={{ marginTop: -12, marginLeft: -4 }}>

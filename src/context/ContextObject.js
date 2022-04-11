@@ -34,14 +34,14 @@ export default function MediaCard(props) {
       {props.logo || props.slug || props.img.options ? (
         <HtmlTooltip title={props.summary}>
           <div
-            className={classNames("context-card", "block")}
+            className={classNames("block")}
             onClick={() =>
               window.location.pathname !== "/context-builder"
                 ? props.openExternalModal(props.url)
                 : null
             }
           >
-            <CardActionArea>
+            <CardActionArea style={{ height: "100%" }}>
               {props.url !== "na" ? (
                 <CardMedia
                   className={classes.media}

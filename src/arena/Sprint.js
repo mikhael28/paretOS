@@ -14,7 +14,7 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import { AppBar, Tabs, Tab, Box, useTheme } from "@mui/material";
+import { AppBar, Tabs, Tab, Paper, useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
 import StatsBlock from "../components/StatsBlock";
@@ -258,34 +258,27 @@ function Sprint(props) {
         <div>{I18n.get("loading")}</div>
       ) : (
         <>
-          <div style={{ padding: "16px 0px" }}>
-            <Box
-              sx={{
-                padding: "8px 16px",
-                background: "linear-gradient(70deg, #DE4665, #D95B35)",
+          <Paper sx={{ mt: -1 }} variant="filled" className="flex">
+            <h1>
+              <b>Sprint</b>&nbsp;&nbsp;{getDateRange()}
+            </h1>
+            <Image
+              src={question}
+              onClick={() => {
+                setIsTourOpen(true);
               }}
-              className="flex"
-            >
-              <h1>
-                <b>Sprint</b>&nbsp;&nbsp;{getDateRange()}
-              </h1>
-              <Image
-                src={question}
-                onClick={() => {
-                  setIsTourOpen(true);
-                }}
-                height="16"
-                width="16"
-                circle
-                style={{
-                  opacity: 0.8,
-                  filter: theme.palette.mode === "dark" ? "invert()" : "",
-                  marginLeft: 8,
-                  cursor: "pointer",
-                }}
-              />
-            </Box>
-          </div>
+              height={theme.spacing(2)}
+              width={theme.spacing(2)}
+              circle
+              style={{
+                opacity: 0.8,
+                filter: theme.palette.mode === "dark" ? "invert()" : "",
+                marginLeft: theme.spacing(1),
+                marginBottom: theme.spacing(2),
+                cursor: "pointer",
+              }}
+            />
+          </Paper>
 
           <AppBar
             position="static"
@@ -338,19 +331,13 @@ function Sprint(props) {
           </TabPanel>
           <TabPanel value={key} index={1}>
             <>
-              <h5>{getFormattedDay()}</h5>
-              <div>
+              <section>
+                <h5>{getFormattedDay()}</h5>
+              </section>
+              <section>
                 <h2>My Stats</h2>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "start",
-                    margin: "16px -8px",
-                    flexWrap: "wrap",
-                  }}
-                  className="first-step-arena"
-                >
+                <div className="first-step-arena stats-container flex">
                   <StatsBlock
                     statName={I18n.get("dailyPoints")}
                     score={
@@ -363,7 +350,7 @@ function Sprint(props) {
                     statName={`${I18n.get("daily")} CP`}
                     score={`${props.redux.sprint[activeSprintId].teams[
                       index
-                    ].missions[displayDay].dailyCompletion.toFixed(2)}%`}
+                    ].missions[displayDay].dailyCompletion.toFixed(0)}%`}
                   />
                   <StatsBlock
                     statName={I18n.get("weeklyPoints")}
@@ -373,117 +360,110 @@ function Sprint(props) {
                   />
                   <StatsBlock
                     statName={`${I18n.get("weekly")} CP`}
-                    score={`${props.redux.sprint[activeSprintId].teams[index].percentage}%`}
+                    score={`${props.redux.sprint[activeSprintId].teams[
+                      index
+                    ].percentage.toFixed(0)}%`}
                   />
                 </div>
-              </div>
+              </section>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                }}
-              >
-                <section>
-                  <h2>{I18n.get("upcomingMission")}</h2>
-                  {upcomingMissions.length > 0 ? (
-                    <ul className="context-cards">
-                      {upcomingMissions.map((mission, i) => (
-                        <li
-                          className={flexCardClass}
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={i}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
+              <section>
+                <h2>{I18n.get("upcomingMission")}</h2>
+                {upcomingMissions.length > 0 ? (
+                  <ul className="context-cards">
+                    {upcomingMissions.map((mission, i) => (
+                      <li
+                        className={flexCardClass}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={i}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>
+                          {lengua !== "en" ? (
+                            <>
+                              <h3>{mission.esTitle}</h3>
+                              <p>{mission.esDescription}</p>
+                            </>
+                          ) : (
+                            <>
+                              <h3>{mission.title}</h3>
+                              <p>{mission.description}</p>
+                            </>
+                          )}
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setShowProofModal(true);
+                            setActiveIndex(i);
+                            setActiveMission(mission);
+                          }}
+                          disabled={status !== "active"}
+                        >
+                          {I18n.get("markAsComplete")}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>
+                    You have completed all the available achievements for today.
+                  </p>
+                )}
+              </section>
+
+              <section>
+                <h2 className="third-step-arena">
+                  {I18n.get("finishedMissions")}
+                </h2>
+                {finishedMissions.length > 0 ? (
+                  <ul className="context-cards">
+                    {finishedMissions.map((mission, id) => (
+                      <li
+                        className={flexCardClass}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={id}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>
+                          {lengua !== "en" ? (
+                            <>
+                              <h3>{mission.esTitle}</h3>
+                              <p>{mission.esDescription}</p>
+                            </>
+                          ) : (
+                            <>
+                              <h3>{mission.title}</h3>
+                              <p>{mission.description}</p>
+                            </>
+                          )}
+                        </div>
+
+                        <Button
+                          onClick={() => {
+                            setActiveIndex(id);
+                            setActiveMission(mission);
+                            setView("review");
+                            setShowProofModal(true);
                           }}
                         >
-                          <div>
-                            {lengua !== "en" ? (
-                              <>
-                                <h3>{mission.esTitle}</h3>
-                                <p>{mission.esDescription}</p>
-                              </>
-                            ) : (
-                              <>
-                                <h3>{mission.title}</h3>
-                                <p>{mission.description}</p>
-                              </>
-                            )}
-                          </div>
-                          <Button
-                            onClick={() => {
-                              setShowProofModal(true);
-                              setActiveIndex(i);
-                              setActiveMission(mission);
-                            }}
-                            disabled={status !== "active"}
-                          >
-                            {I18n.get("markAsComplete")}
-                          </Button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p style={{ marginTop: "1.5rem" }}>
-                      You have completed all the available achievements for
-                      today.
-                    </p>
-                  )}
-                </section>
+                          {I18n.get("seeTheProof")}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>You have not reported any achievements yet today.</p>
+                )}
+              </section>
 
-                <section>
-                  <h2 className="third-step-arena">
-                    {I18n.get("finishedMissions")}
-                  </h2>
-                  {finishedMissions.length > 0 ? (
-                    <ul className="context-cards">
-                      {finishedMissions.map((mission, id) => (
-                        <li
-                          className={flexCardClass}
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={id}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div>
-                            {lengua !== "en" ? (
-                              <>
-                                <h3>{mission.esTitle}</h3>
-                                <p>{mission.esDescription}</p>
-                              </>
-                            ) : (
-                              <>
-                                <h3>{mission.title}</h3>
-                                <p>{mission.description}</p>
-                              </>
-                            )}
-                          </div>
-
-                          <Button
-                            onClick={() => {
-                              setActiveIndex(id);
-                              setActiveMission(mission);
-                              setView("review");
-                              setShowProofModal(true);
-                            }}
-                          >
-                            {I18n.get("seeTheProof")}
-                          </Button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p style={{ marginTop: "1.5rem" }}>
-                      You have not reported any achievements yet today.
-                    </p>
-                  )}
-                </section>
-              </div>
               <Accordion
                 style={{ margin: -16 }}
                 allowMultipleExpanded
