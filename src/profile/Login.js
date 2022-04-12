@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .MuiInputBase-input": {
       fontSize: 16,
-      color: theme.palette.primary.main,
     },
     "& .MuiButtonBase-root": {
       marginTop: theme.spacing(1),
