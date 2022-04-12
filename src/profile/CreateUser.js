@@ -30,7 +30,6 @@ const CreateUser = (props) => {
     type: "mentee",
     showTermsOfService: false,
   });
-  // console.log(state);
 
   const validateForm = () =>
     state.fName.length > 0 &&
@@ -55,9 +54,10 @@ const CreateUser = (props) => {
   };
 
   const handleChange = (event) => {
-    setState({
+    setState((prevState) => ({
+      ...prevState,
       [event.target.id]: event.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -68,7 +68,7 @@ const CreateUser = (props) => {
     const apprenticeshipId = uuidv4();
     const interviewingId = uuidv4();
     const beginId = uuidv4();
-    setState({ isLoading: true });
+    setState((prevState) => ({ ...prevState, isLoading: true }));
     let instructorStatus;
     if (state.type === "mentee") {
       instructorStatus = false;
@@ -143,7 +143,9 @@ const CreateUser = (props) => {
         open={state.showTermsOfService}
         isLoading={state.isLoading}
         onClickAgree={handleSubmit}
-        onClose={() => setState({ showTermsOfService: false })}
+        onClose={() =>
+          setState((prevState) => ({ ...prevState, showTermsOfService: false }))
+        }
       />
       <div className="profile-view-box">
         <div className="basic-info">
@@ -203,7 +205,12 @@ const CreateUser = (props) => {
           size="small"
           type="submit"
           disabled={!validateForm()}
-          onClick={() => setState({ showTermsOfService: true })}
+          onClick={() =>
+            setState((prevState) => ({
+              ...prevState,
+              showTermsOfService: true,
+            }))
+          }
           text="Create Account"
           loadingText="Creation"
         />

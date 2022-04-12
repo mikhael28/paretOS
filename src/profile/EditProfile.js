@@ -62,16 +62,16 @@ const EditProfile = () => {
       summary: response[0].summary,
       fName: response[0].fName,
       lName: response[0].lName,
-      // school: response[0].school,
     }));
   };
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
   const handleChange = (event) => {
-    setState({
+    setState((prevState) => ({
+      ...prevState,
       [event.target.id]: event.target.value,
-    });
+    }));
   };
 
   const updateBio = async (event) => {
