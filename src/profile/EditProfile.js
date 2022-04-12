@@ -54,7 +54,6 @@ const EditProfile = () => {
     userId = path[path.length - 1];
     // what we did above, was the get the user id from the navigation bar
     const response = await API.get("pareto", `/users/${userId}`);
-    // console.log(response);
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
     setState((prevState) => ({
       ...prevState,
