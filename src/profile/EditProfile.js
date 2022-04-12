@@ -54,7 +54,7 @@ const EditProfile = () => {
     userId = path[path.length - 1];
     // what we did above, was the get the user id from the navigation bar
     const response = await API.get("pareto", `/users/${userId}`);
-    console.log(response);
+    // console.log(response);
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
     setState((prevState) => ({
       ...prevState,
@@ -211,7 +211,9 @@ const EditProfile = () => {
 
               <h1>{state.user.fName}</h1>
               <Glyphicon
-                onClick={() => setState({ editName: true })}
+                onClick={() =>
+                  setState((prevState) => ({ ...prevState, editName: true }))
+                }
                 glyph="glyphicon glyphicon-pencil"
                 height="33"
                 width="33"
@@ -375,7 +377,11 @@ const EditProfile = () => {
               <FormControl value={state.github} onChange={handleChange} />
             </FormGroup>
             <div className="flex">
-              <Button onClick={() => setState({ addProject: false })}>
+              <Button
+                onClick={() =>
+                  setState((prevState) => ({ ...prevState, addProject: false }))
+                }
+              >
                 {I18n.get("cancel")}
               </Button>
 
