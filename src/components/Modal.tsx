@@ -3,10 +3,10 @@ import React, { useState, useEffect, ReactElement } from "react";
 /**
  * @component Modal
  * @desc A Modal/Popup component.
- * @param {Prop} children-an array of objects with name and score properties
- * @param {Prop} childProps-integer to determine how many users to display on each page
- * @param {Prop} open-currently logged in user
- * @param {Prop} onClose-array of recent pages/views visited
+ * @param {Prop} children-A React component
+ * @param {Prop} childProps-Props of children
+ * @param {Prop} open-Modal visibility property
+ * @param {Prop} onClose-onclose callback
  */
 
  export interface ModalProps {
@@ -59,6 +59,7 @@ function Modal({ children, childProps, open, onClose } : ModalProps) {
       onClick={handleClick}
       onKeyUp={handleKeyup}
       ref={backgroundRef}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
     >
       {/* Modal content */}
