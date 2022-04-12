@@ -1,12 +1,39 @@
-import React, { useState } from 'react';
-import Auth from '@aws-amplify/auth';
-import { I18n } from '@aws-amplify/core';
-import { Link } from 'react-router-dom';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import LoaderButton from '../components/LoaderButton';
-import logo from '../assets/Pareto_Lockup-01.png';
+import React, { useState } from "react";
+import Auth from "@aws-amplify/auth";
+import { I18n } from "@aws-amplify/core";
+import { Link } from "react-router-dom";
+import { Button, TextField, useTheme } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { makeStyles } from "@mui/styles";
+import logo from "../assets/Pareto_Lockup-01.png";
+import LoaderButton from "../components/LoaderButton";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(5),
+    width: 300,
+
+    "& .MuiTextField-root": {
+      width: 300,
+    },
+    "& .MuiFormLabel-root": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiInputBase-input": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme.spacing(1),
+      fontSize: 16,
+    },
+    "& .error": {
+      fontSize: 14,
+      color: "rgb(220, 66, 45)",
+    },
+  },
+}));
 
 const Login = ({
   initialFetch,
@@ -14,29 +41,23 @@ const Login = ({
   setLoading,
   userHasAuthenticated,
 }) => {
+  const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
+  const [disabled] = useState(false);
+  const classes = useStyles();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
 
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-  });
-
-  const validateForm = () => {
-    return values.email.length > 0 && values.password.length > 0;
-  };
-
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.id]: event.target.value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
     setLoading();
 
     setIsLoading(true);
 
     try {
-      const user = await Auth.signIn(values.email, values.password);
+      const user = await Auth.signIn(data.email, data.password);
       await initialFetch(user.username);
       userHasAuthenticated(true);
       setCloseLoading();
@@ -48,45 +69,82 @@ const Login = ({
   };
 
   return (
-    <div className='Form'>
-      <div className='flex-center'>
+    <div className="Form">
+      <div className="flex-center">
         <img
           src={logo}
-          alt='Pareto'
-          height='45'
-          width='180'
-          style={{ marginTop: 32 }}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
         />
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId='email' bsSize='large'>
-          <ControlLabel>{I18n.get('email')}</ControlLabel>
-          <FormControl
+      <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+        <div style={{ backgroundColor: "#ccc" }}>
+          <TextField
+            id="email"
+            variant="filled"
+            size="medium"
             autoFocus
-            type='email'
-            value={values.email}
-            onChange={handleChange}
+            label={I18n.get("email")}
+            {...register("email", {
+              required: "email is required",
+              pattern: {
+                value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
+                message: "invalid email address",
+              },
+            })}
           />
-        </FormGroup>
-        <FormGroup controlId='password' bsSize='large'>
-          <ControlLabel>{I18n.get('password')}</ControlLabel>
-          <FormControl
-            value={values.password}
-            onChange={handleChange}
-            type='password'
+          <span className="error">{errors.email && errors.email.message}</span>
+        </div>
+        <br />
+        <div style={{ backgroundColor: "#ccc" }}>
+          <TextField
+            id="password"
+            variant="filled"
+            size="medium"
+            type="password"
+            label={I18n.get("password")}
+            {...register("password", {
+              required: "password is required",
+              minLength: {
+                value: 8,
+                message: "minimum length is 8 characters",
+              },
+            })}
           />
-        </FormGroup>
-        <Link to='/login/reset'>{I18n.get('resetPassword')}</Link>
-        <LoaderButton
-          block
-          bsSize='large'
-          disabled={!validateForm()}
-          type='submit'
-          isLoading={isLoading}
-          text={I18n.get('login')}
-          loadingText={I18n.get('loggingIn')}
-        />
+          <span className="error">
+            {errors.password && errors.password.message}
+          </span>
+        </div>
+
+        <div>
+          <Button
+            component={Link}
+            to="/login/reset"
+            color="primary"
+            type="button"
+          >
+            {I18n.get("resetPassword")}
+          </Button>
+        </div>
+
+        <div>
+          <LoaderButton
+            text={I18n.get("login")}
+            loadingText={I18n.get("loggingIn")}
+            isLoading={isLoading}
+            disabled={disabled}
+            type="submit"
+            color="primary"
+            variant="contained"
+          />
+        </div>
       </form>
     </div>
   );

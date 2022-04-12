@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
-import Order from "./Order";
-import DialogContent from "@material-ui/core/DialogContent";
+import { DialogContent } from "@mui/material";
 import Button from "react-bootstrap/lib/Button";
+import Order from "./Order";
 
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.
@@ -21,33 +20,20 @@ function LoadingModal(props) {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  const history = useHistory();
   const modalRef = useRef();
 
-  useEffect(() => {
-    let handleModalClose = (event) => {
-      if (props.open === false && !modalRef.current?.contains(event.target)) {
-        history.push("/");
-      }
-    };
-    document.addEventListener("mousedown", handleModalClose);
-
-    return () => {
-      document.removeEventListener("mousedown", handleModalClose);
-    };
-  }, [showPayment]);
-
   return (
-    <React.Fragment>
+    <>
       <h1 style={{ textAlign: "center" }}>Pareto Full-Stack Starter Kit</h1>
       <iframe
         width="100%"
         height="160"
         src="https://www.youtube.com/embed/ukMisjPq7ec"
-        frameborder="0"
+        frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
+        allowFullScreen
         style={{ alignSelf: "center" }}
+        title="A video showing the Pareto Full Stack Starter Kit"
       />
       {showPayment === false ? (
         <DialogContent ref={modalRef} style={{ fontSize: 12 }}>
@@ -83,7 +69,7 @@ function LoadingModal(props) {
           </div>
         </DialogContent>
       )}
-    </React.Fragment>
+    </>
   );
 }
 

@@ -20,7 +20,7 @@ const ConfirmModal = (props) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Modal show={props.show} onHide={props.closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -56,7 +56,7 @@ const ConfirmModal = (props) => {
           <br />
           {props.mongoExperience[props.activeExperience.priority].coachNotes
             .length > 0 ? (
-            <React.Fragment>
+            <>
               <h3>{I18n.get("coachesNotes")}</h3>
               <p>
                 {
@@ -64,7 +64,7 @@ const ConfirmModal = (props) => {
                     .coachNotes
                 }
               </p>
-            </React.Fragment>
+            </>
           ) : (
             <FormGroup bsSize="large" controlId="coachNotes">
               <ControlLabel>{I18n.get("coachesNotes")}</ControlLabel>
@@ -82,7 +82,7 @@ const ConfirmModal = (props) => {
 
             {props.mongoExperience[props.activeExperience.priority].approved ===
             true ? null : (
-              <React.Fragment>
+              <>
                 {props.mongoExperience[props.activeExperience.priority]
                   .revisionsNeeded === false ? (
                   <Button
@@ -108,12 +108,12 @@ const ConfirmModal = (props) => {
                 >
                   {I18n.get("confirmAchievement")}
                 </Button>
-              </React.Fragment>
+              </>
             )}
           </div>
         </Modal.Footer>
       </Modal>
-    </React.Fragment>
+    </>
   );
 };
 export default ConfirmModal;

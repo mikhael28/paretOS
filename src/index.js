@@ -1,20 +1,18 @@
-import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import Storage from "@aws-amplify/storage";
-import { I18n } from "@aws-amplify/core";
 import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
 import reducer from "./state/index";
 import "./index.css";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -23,15 +21,18 @@ import { Integrations } from "@sentry/tracing";
  * @TODO Lazy Loading Issue #20
  */
 
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    // integrations: [],
+    integrations: [new Integrations.BrowserTracing()],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
+}
 
 const store = createStore(reducer);
 
@@ -58,13 +59,11 @@ Storage.configure({
 });
 
 ReactDOM.render(
-  <Suspense fallback={<p>Loading...</p>}>
-    <Router>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Router>
-  </Suspense>,
+  <Router>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>,
   document.getElementById("root")
 );
 

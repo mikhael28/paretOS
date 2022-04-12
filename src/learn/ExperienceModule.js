@@ -1,25 +1,23 @@
 import React, { Component } from "react";
-import ListGroup from "react-bootstrap/lib/ListGroup";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { ImCheckmark } from "react-icons/im";
+import { FaSearch } from "react-icons/fa";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import API from "@aws-amplify/api";
 import BlockContent from "@sanity/block-content-to-react";
-import NewSubmitModal from "./NewSubmitProofModal";
-import ApproveExperienceModal from "./ApproveExperienceModal";
-import sanity from "../libs/sanity";
-import { successToast, errorToast } from "../libs/toasts";
 import Skeleton from "react-loading-skeleton";
-import { generateEmail } from "../libs/errorEmail";
-import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
+import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
-import question from "../assets/help.png";
 import Tour from "reactour";
 import classNames from "classnames";
-import sortby from "lodash.sortby";
-import PaywallModal from "./PaywallModal";
 import { HiOutlineClipboardCheck } from "react-icons/hi";
+import PaywallModal from "./PaywallModal";
+import question from "../assets/help.png";
+import { generateEmail } from "../libs/errorEmail";
+import { successToast, errorToast } from "../libs/toasts";
+import ApproveExperienceModal from "./ApproveExperienceModal";
+import NewSubmitModal from "./NewSubmitProofModal";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -44,8 +42,6 @@ class ExperienceModule extends Component {
         lName: "",
         id: "8020",
       },
-      training: [],
-      product: [],
       activeExperience: {
         title: "",
         amount: 0,
@@ -61,6 +57,7 @@ class ExperienceModule extends Component {
         id: "",
       },
       openReviewModal: false,
+      showPaywallDialog: this.props.user.learningPurchase === false,
       experienceId: "",
       // this shows the proof submission modal, which needs work
       showSubmitModal: false,
@@ -288,6 +285,7 @@ class ExperienceModule extends Component {
       return (
         <div
           className={activeClass === true ? activeBlock : inactiveBlock}
+          // eslint-disable-next-line react/no-array-index-key
           key={i}
           onClick={() => {
             this.setState({
@@ -298,18 +296,18 @@ class ExperienceModule extends Component {
         >
           <div className="flex-apart">
             <h4>{title}</h4>
-            {mongoExperience["_01"] ? (
+            {mongoExperience._01 ? (
               <div className="second-step-exp">
                 {mongoExperience[topic.priority].approved === true &&
                 mongoExperience[topic.priority].completed === true ? (
-                  <Glyphicon glyph="glyphicon glyphicon-ok" />
+                  <ImCheckmark />
                 ) : null}
                 {mongoExperience[topic.priority].completed === true &&
                 mongoExperience[topic.priority].approved === false ? (
-                  <Glyphicon glyph="glyphicon glyphicon-search" />
+                  <FaSearch />
                 ) : null}
                 {mongoExperience[topic.priority].completed === false ? (
-                  <Glyphicon glyph="glyphicon glyphicon-unchecked" />
+                  <MdCheckBoxOutlineBlank />
                 ) : null}
               </div>
             ) : null}
@@ -325,35 +323,32 @@ class ExperienceModule extends Component {
   renderExperienceInfo(activeExperience, mongoExperience) {
     let newClassname = classNames("flex", "fifth-step-exp");
     if (mongoExperience === undefined) {
-      return <React.Fragment>Nothing</React.Fragment>;
-    } else {
-      return (
-        <div style={{ cursor: "pointer" }} className="hover-class">
-          {mongoExperience["_01"] ? (
-            <div className={newClassname}>
-              {mongoExperience[activeExperience.priority].completed ? (
-                <React.Fragment />
-              ) : (
-                <Button
-                  onClick={() => this.setState({ showSubmitModal: true })}
-                  style={{ marginTop: 16, marginRight: 10, fontSize: 16 }}
-                >
-                  <HiOutlineClipboardCheck /> {I18n.get("markAsComplete")}
-                </Button>
-              )}
-              {this.props.user.instructor === true &&
-              mongoExperience[activeExperience.priority].completed === true ? (
-                <Button
-                  onClick={() => this.setState({ openReviewModal: true })}
-                >
-                  <HiOutlineClipboardCheck /> {I18n.get("reviewWork")}
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      );
+      return <>Nothing</>;
     }
+    return (
+      <div style={{ cursor: "pointer" }} className="hover-class">
+        {mongoExperience._01 ? (
+          <div className={newClassname}>
+            {mongoExperience[activeExperience.priority].completed ? (
+              <></>
+            ) : (
+              <Button
+                onClick={() => this.setState({ showSubmitModal: true })}
+                style={{ marginTop: 16, marginRight: 10, fontSize: 16 }}
+              >
+                <HiOutlineClipboardCheck /> {I18n.get("markAsComplete")}
+              </Button>
+            )}
+            {this.props.user.instructor === true &&
+            mongoExperience[activeExperience.priority].completed === true ? (
+              <Button onClick={() => this.setState({ openReviewModal: true })}>
+                <HiOutlineClipboardCheck /> {I18n.get("reviewWork")}
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    );
   }
 
   handleCloseSubmit = () => {
@@ -406,8 +401,8 @@ class ExperienceModule extends Component {
             style={{ marginLeft: 20, cursor: "pointer" }}
           />
         </h1>
-        <div style={{ display: "flex" }}>
-          <ListGroup style={{ flexBasis: "30%" }} className="overflow">
+        <div className="experience-container flex">
+          <div style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
               <section style={{ marginTop: -12, marginLeft: -4 }}>
                 <h2 className="section-title">
@@ -442,7 +437,7 @@ class ExperienceModule extends Component {
                 )}
               </div>
             )}
-          </ListGroup>
+          </div>
           {this.state.isLoading === true ? (
             <div
               style={{
@@ -452,7 +447,7 @@ class ExperienceModule extends Component {
                 width: "100%",
               }}
             >
-              <Skeleton height={"100%"} width={"100%"} />
+              <Skeleton height="100%" width="100%" />
             </div>
           ) : (
             <div className={blockOverflow} style={{ flexBasis: "70%" }}>
@@ -483,25 +478,30 @@ class ExperienceModule extends Component {
             style={{
               margin: "auto",
             }}
-            open={this.props.user.learningPurchase === false}
+            open={this.state.showPaywallDialog}
             TransitionComponent={Transition}
             keepMounted
-            disableEscapeKeyDown={true}
-            disableBackdropClick={true}
             hideBackdrop={false}
             aria-labelledby="loading"
             aria-describedby="Please wait while the page loads"
+            onClose={(event, reason) => {
+              if (
+                reason !== "backdropClick" &&
+                reason !== "escapeKeyDown" &&
+                this.props.user.learningPurchase === false
+              ) {
+                this.setState({ ...this.state, showPaywallDialog: false });
+                history.push("/");
+              }
+            }}
           >
-            <PaywallModal
-              {...this.props}
-              open={this.props.user.learningPurchase}
-            />
+            <PaywallModal {...this.props} open={this.state.showPaywallDialog} />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (
-          <React.Fragment />
+          <></>
         ) : (
-          <React.Fragment>
+          <>
             <NewSubmitModal
               show={this.state.showSubmitModal}
               handleClose={this.handleCloseSubmit}
@@ -522,10 +522,10 @@ class ExperienceModule extends Component {
               steps={steps}
               isOpen={this.state.isTourOpen}
               onRequestClose={this.closeTour}
-              showCloseButton={true}
+              showCloseButton
               rewindOnClose={false}
             />
-          </React.Fragment>
+          </>
         )}
       </div>
     );

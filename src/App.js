@@ -4,30 +4,31 @@ import { I18n } from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import { withRouter } from "react-router-dom";
 import Image from "react-bootstrap/lib/Image";
-import Routes from "./Routes";
-import question from "./assets/help.png";
-import { errorToast } from "./libs/toasts";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import Tour from "reactour";
+import { GrLogout } from "react-icons/gr";
+import * as Sentry from "@sentry/react";
+import sortby from "lodash.sortby";
+import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
+import { strings } from "./libs/strings";
+import BottomNav from "./components/BottomNav";
+import sanity from "./libs/sanity";
+import LanguageContext from "./LanguageContext";
+import LoadingModal from "./components/LoadingModal";
 import {
   getActiveSprintData,
   getInitialSprintData,
   putUpdatedSprintData,
 } from "./state/sprints";
-import Tour from "reactour";
 import "toasted-notes/src/styles.css";
-import Dialog from "@material-ui/core/Dialog";
-import LoadingModal from "./components/LoadingModal";
-import sanity from "./libs/sanity";
-import Slide from "@material-ui/core/Slide";
-import BottomNav from "./components/BottomNav";
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { strings } from "./libs/strings";
-import { GrLogout } from "react-icons/gr";
-import * as Sentry from "@sentry/react";
-import sortby from "lodash.sortby";
 import LeftNav from "./components/LeftNav";
 import { getUser } from "./state/profile";
+import { errorToast } from "./libs/toasts";
+import Routes from "./Routes";
+import question from "./assets/help.png";
+import theme from "./libs/theme";
+import { availableLanguages } from "./libs/languages";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -40,6 +41,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Internalization Rerender - Issue #6
  */
 
+const languageProps = {
+  language: null,
+  setLanguage: () => {},
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -47,14 +53,12 @@ class App extends Component {
     this.state = {
       isAuthenticated: false,
       isAuthenticating: true,
-      showLoadingModal: true,
       username: "",
       user: { id: "8020", fName: "Vilfredo", lName: "Pareto" },
       training: {},
       product: {},
       interviewing: {},
       sprints: [],
-      sprint: {},
       session: {},
       athletes: [],
       coaches: [],
@@ -71,19 +75,16 @@ class App extends Component {
       ws: "",
       experiences: [],
       messages: [],
-      chosenLanguage: {
-        name: "Language",
-        image:
-          "https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png",
-      },
+      chosenLanguage: availableLanguages[0],
       sanityTraining: [],
       sanityProduct: [],
       sanityInterview: [],
     };
-    this.wsClient = "";
+    // this.wsClient = "";
   }
 
   // initial websocket timeout duration as a class variable
+  // eslint-disable-next-line react/no-unused-class-component-methods
   timeout = 5000;
 
   closeTour = () => {
@@ -127,6 +128,12 @@ class App extends Component {
         this.props.getUser(user[0]);
         this.setState({ user: user[0] });
         if (user[0].defaultLanguage) {
+          const language = availableLanguages.find(
+            (x) => x.code === user[0].defaultLanguage
+          );
+          this.setState({
+            chosenLanguage: language || "en",
+          });
           I18n.setLanguage(user[0].defaultLanguage);
         }
 
@@ -245,27 +252,31 @@ class App extends Component {
 
     let sprintString = sprintStrings.join("&");
 
-    var wsClient = new ReconnectingWebSocket(
-      `wss://2los2emuze.execute-api.us-east-1.amazonaws.com/Prod?${sprintString}`
+    let wsClient = new WebSocket(
+      `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`
     );
 
+    // console.log(wsClient);
+
     let that = this; // caching 'this'
-    var connectInterval;
+    let connectInterval;
 
     wsClient.onopen = () => {
-      console.log("Connected");
+      // console.log("Connected");
       this.setState({ ws: wsClient });
       that.timeout = 250; // reset timer to 250 on open of websocket connection
-      clearTimeout(connectInterval); //clear interval on onOpen of websocket connection
+      clearTimeout(connectInterval); // clear interval on onOpen of websocket connection
+
+      // console.log(wsClient);
 
       setInterval(function () {
-        console.log("Firing Ping");
+        // console.log("Firing Ping");
         wsClient.send(`{"action":"sendmessage", "data":"ping" }`);
       }, 400000);
     };
 
     wsClient.onmessage = (message) => {
-      console.log("Received data: ", JSON.parse(message.data));
+      // console.log("Received data: ", JSON.parse(message.data));
       let tempSprintData = JSON.parse(message.data);
       // this check is to see whether the websocket connection successfully retrieved the latest state.
       // if there are too many extraneous connections, through ping error or otherwise - the function to distribute state across connections will fail
@@ -280,18 +291,19 @@ class App extends Component {
         }
         newerSprintArray[tempVar] = tempSprintData;
         try {
-          console.log("Formatted Sprint Array: ", newerSprintArray);
+          // console.log("Formatted Sprint Array: ", newerSprintArray);
           this.setState({ sprints: newerSprintArray });
           this.props.putUpdatedSprintData(newerSprintArray);
         } catch (e) {
-          console.log("onmessage error", e);
+          // console.log("onmessage error", e);
         }
       } else {
-        alert(tempSprintData.message);
+        // alert(tempSprintData.message);
       }
     };
 
     wsClient.onclose = (e) => {
+      // we are trying to reconnect again if offline, with a limited backoff period
       console.log(
         `Socket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
@@ -300,17 +312,22 @@ class App extends Component {
         e.reason
       );
 
-      that.timeout = that.timeout + that.timeout; // increment retry interval
+      that.timeout += that.timeout; // increment retry interval
       connectInterval = setTimeout(this.check, Math.min(10000, that.timeout)); // call check function after timeout
     };
 
     wsClient.onerror = (err) => {
-      console.log("Socket encountered error: ", err.message);
+      alert("Socket encountered error: ", err.message);
       console.log("Closing Socket");
 
       wsClient.close();
     };
   };
+
+  // potential way of closing a particular connectionID
+  // componentWillUnmount() {
+  //   this.state.ws.close(88, "uuid");
+  // }
 
   check = () => {
     const { ws } = this.state;
@@ -331,9 +348,12 @@ class App extends Component {
         const query = `*[_type == 'project']`;
         const query1 = `*[_type == 'economic']`;
         const query2 = `*[_type == 'hubs' && !(_id in path("drafts.**"))]`;
-        const projectSchemas = await sanity.fetch(query);
-        const economicSchemas = await sanity.fetch(query1);
-        const hubsSchemas = await sanity.fetch(query2);
+        const [projectSchemas, economicSchemas, hubsSchemas] =
+          await Promise.all([
+            sanity.fetch(query),
+            sanity.fetch(query1),
+            sanity.fetch(query2),
+          ]);
 
         let sanitySchemas = {
           technicalSchemas: projectSchemas,
@@ -416,7 +436,12 @@ class App extends Component {
     this.setState({ loading: false });
   };
 
+  updateLanguage = ({ name, code, image }) => {
+    this.setState({ chosenLanguage: { name, code, image } });
+  };
+
   render() {
+    // eslint-disable-next-line no-unused-vars
     const Onboarding = withRouter(({ location: { pathname }, history }) => {
       const steps = [
         {
@@ -449,7 +474,7 @@ class App extends Component {
           steps={steps}
           isOpen={this.state.isTourOpen}
           onRequestClose={this.closeTour}
-          showCloseButton={true}
+          showCloseButton
           update={pathname}
           rewindOnClose={false}
         />
@@ -491,103 +516,128 @@ class App extends Component {
       sanitySchemas: this.state.sanitySchemas,
       coaches: this.state.coaches,
     };
+    languageProps.language = this.state.chosenLanguage;
+    languageProps.setLanguage = this.updateLanguage;
+
     return (
       !this.state.isAuthenticating && (
-        <Sentry.ErrorBoundary
-          fallback={({ error, componentStack, resetError }) => (
-            <React.Fragment>
-              <div>
-                Dear user, you have (sadly) encountered an error. The error is
-                written out for you below, but it's probably useless to you. If
-                you are just interested in moving past this unfortunate
-                incident, click the button below to reload the page and start
-                fresh.
-              </div>
-              <div>{error.toString()}</div>
-              <div>{componentStack}</div>
-              <button onClick={() => window.location.replace("/")}>
-                Click here to reset!
-              </button>
-            </React.Fragment>
-          )}
-        >
-          <React.Fragment>
-            {this.state.isAuthenticated ? (
-              <React.Fragment>
-                <div className="sticky-logout" onClick={this.handleLogout}>
-                  <GrLogout />
-                </div>
-
-                <div className="root-padding">
-                  <LeftNav
-                    chosenLanguage={this.state.chosenLanguage}
-                    updateState={this.setState.bind(this)}
-                    user={this.state.user}
-                    athletes={this.state.athletes}
-                  />
-
-                  <Routes childProps={childProps} />
-                </div>
-                <div className="sticky-nav">
-                  <div className="sticky-chat">
-                    <Image
-                      src={question}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        this.setState({ isTourOpen: true });
-                      }}
-                      height="65"
-                      width="65"
-                      circle
-                      className="sticky-btn"
-                      style={{ marginRight: 12, cursor: "pointer" }}
-                    />
+        <ThemeProvider theme={theme}>
+          <LanguageContext.Provider value={languageProps}>
+            <Sentry.ErrorBoundary
+              // eslint-disable-next-line no-unused-vars
+              fallback={({ error, componentStack, resetError }) => (
+                <>
+                  <div>
+                    Dear user, you have (sadly) encountered an error. The error
+                    is written out for you below, but it's probably useless to
+                    you. If you are just interested in moving past this
+                    unfortunate incident, click the button below to reload the
+                    page and start fresh.
                   </div>
-                  <div id="myBottomNav" className="bottom-nav">
-                    <BottomNav user={this.state.user} />
-                  </div>
-                </div>
-              </React.Fragment>
-            ) : (
-              <Routes childProps={childProps} />
-            )}
-            <Onboarding
-              isOpen={this.state.isTourOpen}
-              onRequestClose={this.closeTour}
-              showCloseButton={true}
-            />
-            <Dialog
-              style={{
-                margin: "auto",
-              }}
-              open={this.state.loading}
-              TransitionComponent={Transition}
-              keepMounted
-              disableEscapeKeyDown={true}
-              fullScreen={true}
-              fullWidth={true}
-              disableBackdropClick={true}
-              hideBackdrop={false}
-              aria-labelledby="loading"
-              aria-describedby="Please wait while the page loads"
+                  <div>{error.toString()}</div>
+                  <div>{componentStack}</div>
+                  <button onClick={() => window.location.replace("/")}>
+                    Click here to reset!
+                  </button>
+                </>
+              )}
             >
-              <LoadingModal />
-            </Dialog>
-          </React.Fragment>
-        </Sentry.ErrorBoundary>
+              <Box
+                sx={{
+                  width: "100vw",
+                  height: "100vh",
+                  bgcolor: "background.default",
+                  color: "text.primary",
+                  overflow: "scroll",
+                }}
+              >
+                {this.state.isAuthenticated ? (
+                  <>
+                    <div
+                      className="sticky-logout"
+                      style={{
+                        filter: theme.palette.mode === "dark" ? "invert()" : "",
+                      }}
+                      onClick={this.handleLogout}
+                    >
+                      <GrLogout style={{ height: "20px" }} />
+                    </div>
+
+                    <div className="root-padding">
+                      <LeftNav
+                        chosenLanguage={this.state.chosenLanguage}
+                        updateState={this.setState.bind(this)}
+                        user={this.state.user}
+                        athletes={this.state.athletes}
+                      />
+
+                      <Routes childProps={childProps} />
+                    </div>
+                    <div className="sticky-nav">
+                      <div className="sticky-chat">
+                        <Image
+                          src={question}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            this.setState({ isTourOpen: true });
+                          }}
+                          height="40"
+                          width="40"
+                          circle
+                          className="sticky-btn"
+                          style={{
+                            marginRight: 12,
+                            cursor: "pointer",
+                            filter: "grayscale(100%)",
+                            outline: "2px solid white",
+                            border: "2px solid transparent",
+                          }}
+                        />
+                      </div>
+                      <div id="myBottomNav" className="bottom-nav">
+                        <BottomNav user={this.state.user} />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <Routes childProps={childProps} />
+                )}
+                <Onboarding
+                  isOpen={this.state.isTourOpen}
+                  onRequestClose={this.closeTour}
+                  showCloseButton
+                />
+                <Dialog
+                  style={{
+                    margin: "auto",
+                  }}
+                  open={this.state.loading}
+                  TransitionComponent={Transition}
+                  keepMounted
+                  disableEscapeKeyDown
+                  fullScreen
+                  fullWidth
+                  hideBackdrop={false}
+                  aria-labelledby="loading"
+                  aria-describedby="Please wait while the page loads"
+                >
+                  <LoadingModal />
+                </Dialog>
+              </Box>
+            </Sentry.ErrorBoundary>
+          </LanguageContext.Provider>
+        </ThemeProvider>
       )
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    redux: state.redux,
-  };
-};
+const mapStateToProps = (state) => ({
+  redux: state.redux,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
       getActiveSprintData: (data) => getActiveSprintData(data),
       getInitialSprintData: (data) => getInitialSprintData(data),
@@ -596,6 +646,5 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatch
   );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

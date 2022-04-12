@@ -19,13 +19,10 @@ const ChangePassword = (props) => {
     confirmPassword: "",
   });
 
-  const validateForm = () => {
-    return (
-      state.oldPassword.length > 0 &&
-      state.password.length > 0 &&
-      state.password === state.confirmPassword
-    );
-  };
+  const validateForm = () =>
+    state.oldPassword.length > 0 &&
+    state.password.length > 0 &&
+    state.password === state.confirmPassword;
 
   const handleChange = (event) => {
     setState({
@@ -43,12 +40,8 @@ const ChangePassword = (props) => {
 
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      await Auth.changePassword(
-        currentUser, 
-        state.oldPassword, 
-        state.password
-      );
-      successToast('Password successfully changed.');
+      await Auth.changePassword(currentUser, state.oldPassword, state.password);
+      successToast("Password successfully changed.");
       props.history.push("/");
     } catch (e) {
       errorToast(e);
@@ -90,7 +83,7 @@ const ChangePassword = (props) => {
         <LoaderButton
           block
           type="submit"
-          bsSize="large"
+          size="large"
           text={I18n.get("confirm")}
           loadingText={I18n.get("confirming")}
           disabled={!validateForm}

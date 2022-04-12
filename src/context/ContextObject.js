@@ -1,12 +1,9 @@
 import React from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Tooltip from "@material-ui/core/Tooltip";
+import { CardActionArea, CardContent, CardMedia, Tooltip } from "@mui/material";
+import { makeStyles, withStyles } from "@mui/styles";
 import classNames from "classnames";
 
-const HtmlTooltip = withStyles((theme) => ({
+const HtmlTooltip = withStyles(() => ({
   tooltip: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
@@ -33,18 +30,18 @@ const useStyles = makeStyles({
 export default function MediaCard(props) {
   const classes = useStyles();
   return (
-    <React.Fragment>
+    <>
       {props.logo || props.slug || props.img.options ? (
         <HtmlTooltip title={props.summary}>
           <div
-            className={classNames("context-card", "block")}
+            className={classNames("block")}
             onClick={() =>
               window.location.pathname !== "/context-builder"
                 ? props.openExternalModal(props.url)
                 : null
             }
           >
-            <CardActionArea>
+            <CardActionArea style={{ height: "100%" }}>
               {props.url !== "na" ? (
                 <CardMedia
                   className={classes.media}
@@ -59,6 +56,6 @@ export default function MediaCard(props) {
           </div>
         </HtmlTooltip>
       ) : null}
-    </React.Fragment>
+    </>
   );
 }

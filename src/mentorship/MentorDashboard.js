@@ -1,8 +1,8 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getUser } from "../state/profile";
 import { I18n } from "@aws-amplify/core";
+import { getUser } from "../state/profile";
 import Athlete from "./Athlete";
 
 /**
@@ -19,20 +19,18 @@ function MentorDashboard(props) {
         curriculum by your mentees.
       </p>
       {props.athletes.length > 0 ? (
-        <React.Fragment>
+        <>
           <h2>{I18n.get("myMentees")}</h2>
           <div className="exp-cards" style={{ justifyContent: "start" }}>
-            {props.athletes.map((athlete, idx) => {
-              return (
-                <Athlete
-                  athlete={athlete.mentee}
-                  key={idx}
-                  history={props.history}
-                />
-              );
-            })}
+            {props.athletes.map((athlete) => (
+              <Athlete
+                athlete={athlete.mentee}
+                key={athlete._id}
+                history={props.history}
+              />
+            ))}
           </div>
-        </React.Fragment>
+        </>
       ) : (
         <div>
           <h2>{I18n.get("myMentees")}</h2>
@@ -43,19 +41,16 @@ function MentorDashboard(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    redux: state.redux,
-  };
-};
+const mapStateToProps = (state) => ({
+  redux: state.redux,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
     {
       getUser: () => getUser(),
     },
     dispatch
   );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MentorDashboard);

@@ -30,8 +30,11 @@
     />
     <!-- <link rel="preload" href="index.css" as="style"> -->
     <!-- <link rel="preload" href="%PUBLIC_URL%/FuturaStdBook.woff" as="font"> -->
-	<meta name="theme-color" content="#ffffff" />
-	<meta name="description" content="The ParetOS is a browser-based operating system designed to maximize human potential. Our vision is to provide the 20% of software that provides 80% of the benefits of modern technology." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="The ParetOS is a browser-based operating system designed to maximize human potential. Our vision is to provide the 20% of software that provides 80% of the benefits of modern technology."
+    />
     <style type="text/css">
       html,
       body {
@@ -46,16 +49,18 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- The 'defer' keyword is for not having to worry about waiting for DOM events to being AFTER dowloading the script - you are allowed to allow DOM events to fire in parallel to the  script finishes downloading.-->
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      defer
     />
     <title>ParetOS</title>
-    
-    <script src="https://js.stripe.com/v3/" defer ></script>
+
+    <script src="https://js.stripe.com/v3/" defer></script>
   </head>
   <body>
     <noscript> You need to enable JavaScript to run this app. </noscript>
-     <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

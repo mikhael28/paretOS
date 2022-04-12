@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
-import { errorToast } from "../libs/toasts";
 import { Link } from "react-router-dom";
 import {
   Accordion,
@@ -14,6 +13,7 @@ import {
 import { AiOutlineGithub } from "react-icons/ai";
 import Skeleton from "react-loading-skeleton";
 import classNames from "classnames";
+import { errorToast } from "../libs/toasts";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.
@@ -21,7 +21,7 @@ import classNames from "classnames";
  * @TODO GH Issue #10 https://github.com/mikhael28/paretOS/issues/10
  */
 
-function Profile(props) {
+function Profile() {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
@@ -73,17 +73,17 @@ function Profile(props) {
       {loading === true ? (
         <section style={{ marginTop: -12 }}>
           <h2 className="section-title">
-            <Skeleton height={60} width={"100%"} />
+            <Skeleton height={60} width="100%" />
           </h2>
           <h2 className="section-title">
-            <Skeleton height={120} width={"100%"} />
+            <Skeleton height={120} width="100%" />
           </h2>
           <h2 className="section-title">
-            <Skeleton height={200} width={"100%"} />
+            <Skeleton height={200} width="100%" />
           </h2>
         </section>
       ) : (
-        <React.Fragment>
+        <>
           <div className="flex">
             <Image
               src={
@@ -114,27 +114,24 @@ function Profile(props) {
             className={blockCardClass}
             style={{ marginLeft: 10, justifyContent: "flex-start" }}
           >
-            {experiences.map((experience, index) => {
-              return (
-                <div
-                  style={{ textAlign: "center", marginLeft: 20 }}
-                  key={index}
-                  className="exp-card"
-                >
-                  <h3>{experience.type}</h3>
-                  <p>
-                    {I18n.get("achievements")}: {experience.achievements} / 15
-                  </p>
-                  <p>
-                    {I18n.get("points")}: {experience.xpEarned} /{" "}
-                    {experience.xp}
-                  </p>
-                  <Link to={`/training/${experience.id}`}>
-                    {I18n.get("viewExperience")}
-                  </Link>
-                </div>
-              );
-            })}
+            {experiences.map((experience) => (
+              <div
+                style={{ textAlign: "center", marginLeft: 20 }}
+                key={experience._id}
+                className="exp-card"
+              >
+                <h3>{experience.type}</h3>
+                <p>
+                  {I18n.get("achievements")}: {experience.achievements} / 15
+                </p>
+                <p>
+                  {I18n.get("points")}: {experience.xpEarned} / {experience.xp}
+                </p>
+                <Link to={`/training/${experience.id}`}>
+                  {I18n.get("viewExperience")}
+                </Link>
+              </div>
+            ))}
           </div>
 
           {sprints.length > 0 ? (
@@ -144,15 +141,15 @@ function Profile(props) {
                 Note: UI needs work, refer to this{" "}
                 <a
                   href="https://github.com/mikhael28/paretOS/issues/9"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   GH Issue
                 </a>
               </p>
-              {sprints.map((sprint, i) => {
+              {sprints.map((sprint) => {
                 let activeTeam;
-                sprint.teams.forEach((team, index) => {
+                sprint.teams.forEach((team) => {
                   if (profile.id === team.id) {
                     activeTeam = team;
                   }
@@ -181,14 +178,13 @@ function Profile(props) {
                           </AccordionItemButton>
                         </AccordionItemHeading>
                         <AccordionItemPanel>
-                          {activeTeam.planning.map((plan, idx) => {
-                            return (
-                              <div key={idx}>
-                                <h3>{plan.name}</h3>
-                                <p>{plan.content}</p>
-                              </div>
-                            );
-                          })}
+                          {activeTeam.planning.map((plan, idx) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <div key={idx}>
+                              <h3>{plan.name}</h3>
+                              <p>{plan.content}</p>
+                            </div>
+                          ))}
                         </AccordionItemPanel>
                       </AccordionItem>
                     </Accordion>
@@ -200,14 +196,13 @@ function Profile(props) {
                           </AccordionItemButton>
                         </AccordionItemHeading>
                         <AccordionItemPanel>
-                          {activeTeam.review.map((plan, idx) => {
-                            return (
-                              <div key={idx}>
-                                <h3>{plan.name}</h3>
-                                <p>{plan.content}</p>
-                              </div>
-                            );
-                          })}
+                          {activeTeam.review.map((plan, idx) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <div key={idx}>
+                              <h3>{plan.name}</h3>
+                              <p>{plan.content}</p>
+                            </div>
+                          ))}
                         </AccordionItemPanel>
                       </AccordionItem>
                     </Accordion>
@@ -216,7 +211,7 @@ function Profile(props) {
               })}
             </div>
           ) : null}
-        </React.Fragment>
+        </>
       )}
     </div>
   );
