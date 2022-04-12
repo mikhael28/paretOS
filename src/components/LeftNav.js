@@ -1,13 +1,12 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
-import DropdownButton from "react-bootstrap/lib/DropdownButton";
-import MenuItem from "react-bootstrap/lib/MenuItem";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
 import { BiRun } from "react-icons/bi";
+import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext from "../LanguageContext";
@@ -15,6 +14,22 @@ import LanguageContext from "../LanguageContext";
 function LeftNav(props) {
   const { language, setLanguage } = useContext(LanguageContext);
   const { user, athletes } = props;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedCode, setSelectedCode] = useState(language.code);
+  const open = Boolean(anchorEl);
+
+  const handleClickListItem = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event, code) => {
+    setSelectedCode(code);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleSetLanguage = (language) => {
     setLanguage(language);
@@ -42,68 +57,46 @@ function LeftNav(props) {
     textDecoration: "none",
   };
 
-  const langStyle = {
-    backgroundColor: "black",
-    color: white,
-    padding: "3px",
-  };
-
-  const langTitle = (
-    <Image
-      src={language.image}
-      height="22"
-      width="22"
-      circle
-      style={{ position: "relative", zIndex: "999" }}
-    />
-  );
-
   // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
   const renderLanguageDropdown = () => (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <DropdownButton
-        key={1}
-        title={langTitle}
-        id="pick-service"
-        style={{
-          color: "white",
-          fontSize: 14,
-          backgroundColor: "var(--navigation-bgColor)",
-          backgroundImage: "none",
-          border: "none",
-          textAlign: "left",
-          maxWidth: "40px",
-          minWidth: "unset",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
+      <IconButton
+        onClick={handleClickListItem}
+        size="small"
+        sx={{ ml: 2 }}
+        aria-controls={open ? "language-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+      >
+        <Avatar sx={{ width: 24, height: 24 }} src={language.image} />
+      </IconButton>
+      <Menu
+        id="language-menu-button"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "language-button",
+          role: "listbox",
         }}
       >
-        <div
-          style={{
-            background: "black",
-            marginTop: "-5px",
-            marginBottom: "-5px",
-            padding: "8px 6px",
-          }}
-        >
-          {availableLanguages.map((language) => (
-            <MenuItem
-              style={langStyle}
-              key={language.code}
-              onClick={() => {
-                updateLanguage({
-                  language,
-                  id: user.id,
-                  setLanguage: handleSetLanguage,
-                });
-              }}
-            >
-              {language.name}
-            </MenuItem>
-          ))}
-        </div>
-      </DropdownButton>
+        {availableLanguages.map((language) => (
+          <MenuItem
+            key={language.code}
+            selected={language.code === selectedCode}
+            onClick={(e) => {
+              handleMenuItemClick(e, language.code);
+              updateLanguage({
+                language,
+                id: user.id,
+                setLanguage: handleSetLanguage,
+              });
+            }}
+          >
+            {language.name}
+          </MenuItem>
+        ))}
+      </Menu>
     </div>
   );
 

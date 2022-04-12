@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ListGroup from "react-bootstrap/lib/ListGroup";
 import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
@@ -403,7 +402,7 @@ class ExperienceModule extends Component {
           />
         </h1>
         <div className="experience-container flex">
-          <ListGroup style={{ flexBasis: "30%" }} className="overflow">
+          <div style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
               <section style={{ marginTop: -12, marginLeft: -4 }}>
                 <h2 className="section-title">
@@ -438,7 +437,7 @@ class ExperienceModule extends Component {
                 )}
               </div>
             )}
-          </ListGroup>
+          </div>
           {this.state.isLoading === true ? (
             <div
               style={{
