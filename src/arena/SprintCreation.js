@@ -8,8 +8,7 @@ import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { FaTimes } from "react-icons/fa";
-import { useTheme } from "@mui/material";
-import Button from "react-bootstrap/lib/Button";
+import { IconButton } from "@mui/material";
 import Calendar from "react-calendar";
 import cloneDeep from "lodash.clonedeep";
 import { getActiveSprintData } from "../state/sprints";
@@ -22,8 +21,6 @@ import "react-calendar/dist/Calendar.css";
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
-  const theme = useTheme();
-
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
@@ -320,19 +317,13 @@ function SprintCreation(props) {
             }}
           >
             {chosen.fName} {chosen.lName}
-            <Button
+            <IconButton
+              size="small"
+              style={{ padding: 7 }}
               onClick={() => removeChosenPlayer(chosen)}
-              bsSize="large"
-              style={{
-                padding: "0px 5px",
-                margin: "3px 0px auto 0px",
-                backgroundColor: theme.palette.background.paper,
-                backgroundImage: "unset",
-                minWidth: "max-content",
-              }}
             >
-              <FaTimes />
-            </Button>
+              <FaTimes style={{ transform: "scale(1.4)" }} />
+            </IconButton>
           </div>
         </div>
       ))}
