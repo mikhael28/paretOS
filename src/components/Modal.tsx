@@ -9,14 +9,14 @@ import React, { useState, useEffect, ReactElement } from "react";
  * @param {Prop} onClose-onclose callback
  */
 
- export interface ModalProps {
-  children: ReactElement,
-  childProps: object,
-  open: boolean,
-  onClose: () => void,
-};
+export interface ModalProps {
+  children: ReactElement;
+  childProps: object;
+  open: boolean;
+  onClose: () => void;
+}
 
-function Modal({ children, childProps, open, onClose } : ModalProps) {
+function Modal({ children, childProps, open, onClose }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const backgroundRef = React.createRef<HTMLDivElement>();
 
@@ -46,8 +46,7 @@ function Modal({ children, childProps, open, onClose } : ModalProps) {
   }, [open]);
 
   useEffect(() => {
-    if (backgroundRef?.current)
-    {
+    if (backgroundRef?.current) {
       backgroundRef.current.focus();
     }
   }, [isOpen]);
