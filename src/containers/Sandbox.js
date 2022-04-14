@@ -1,9 +1,11 @@
 /* eslint-disable react/self-closing-comp */
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getUser } from "../state/profile";
+// eslint-disable-next-line import/no-cycle
+import { routes } from "../Routes.js";
 import "ninja-keys";
 
 /**
@@ -14,62 +16,22 @@ function Sandbox() {
   const ninjaKeys = useRef(null);
   const history = useHistory();
 
-  const [hotkeys, setHotkeys] = useState([
-    {
-      id: "Home",
-      title: "Open Home",
-      hotkey: "cmd+h",
-      mdIcon: "home",
-      handler: () => {
-        history.push("/");
-      },
-    },
-    {
-      id: "Open Projects",
-      title: "Open Projects",
-      hotkey: "cmd+p",
-      mdIcon: "apps",
-      handler: () => {
-        console.log("navigation to projects");
-      },
-    },
-    {
-      id: "Theme",
-      title: "Change theme...",
-      mdIcon: "desktop_windows",
-      children: [
-        {
-          id: "Light Theme",
-          title: "Change theme to Light",
-          mdIcon: "light_mode",
-          handler: () => {
-            console.log("theme light");
-          },
-        },
-        {
-          id: "Dark Theme",
-          title: "Change theme to Dark",
-          mdIcon: "dark_mode",
-          keywords: "lol",
-          handler: () => {
-            console.log("theme dark");
-          },
-        },
-      ],
-    },
-  ]);
-
   useEffect(() => {
+    let routeHotkeys = routes.map((route) => ({
+      id: route.name,
+      title: route.name,
+      handler: () => {
+        history.push(route.path);
+      },
+    }));
+    // setHotkeys(routeHotkeys);
     if (ninjaKeys.current) {
-      ninjaKeys.current.data = hotkeys;
+      ninjaKeys.current.data = routeHotkeys;
     }
   }, []);
 
-  console.log(setHotkeys);
-
   return (
     <div>
-      <p>Hello world</p>
       <h2>Hit "Cmd+K" or "Ctrl+K"</h2>
       <h3>Actions logged to console in demo</h3>
       <ninja-keys ref={ninjaKeys}></ninja-keys>

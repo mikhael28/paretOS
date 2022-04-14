@@ -32,6 +32,37 @@ const PomodoroDashboard = lazy(() =>
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
+export const routes = [
+  {
+    path: "/context-builder",
+    name: "Library",
+  },
+  {
+    path: "/arena",
+    name: "Library",
+  },
+  {
+    path: "/arena/create/sprints",
+    name: "Start a Sprint",
+  },
+  {
+    path: "/arena/create/template",
+    name: "Create Sprint Template",
+  },
+  {
+    path: "/training",
+    name: "Learning Dashboard",
+  },
+  {
+    path: "/sandbox",
+    name: "Sandbox",
+  },
+  {
+    path: "/mentorship",
+    name: "Mentorship Dashboard",
+  },
+];
+
 export default ({ childProps }) => (
   <Suspense fallback={<Spinner />}>
     <Switch>
