@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
@@ -59,17 +60,16 @@ Storage.configure({
 });
 
 ReactDOM.render(
-  <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Router>,
+  <StrictMode>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
+  </StrictMode>,
   document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
 // @TODO register service worker for full PWA, currently disabled while in alpha
 serviceWorkerRegistration.unregister();
 

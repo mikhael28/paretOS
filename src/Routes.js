@@ -10,6 +10,7 @@ const Login = lazy(() => import("./profile/Login"));
 const Signup = lazy(() => import("./profile/Signup"));
 const ResetPassword = lazy(() => import("./profile/ResetPassword"));
 const ChangePassword = lazy(() => import("./profile/ChangePassword"));
+// eslint-ignore import/no-cycle
 const Sandbox = lazy(() => import("./containers/Sandbox"));
 const Order = lazy(() => import("./learn/Order"));
 const Profile = lazy(() => import("./mentorship/MenteeProfile"));

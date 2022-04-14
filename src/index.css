@@ -727,6 +727,28 @@ a.MuiButton-root:focus {
   background: #777!important;
 }
 
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: .5em .5em 0;
+}
+
+summary {
+  font-weight: bold;
+  margin: -.5em -.5em 0;
+  padding: .5em;
+  cursor: pointer;
+}
+
+details[open] {
+  padding: .5em;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: .5em;
+}
+
 .btn:hover {
   background: linear-gradient(70deg, #db6e4d, #e0526e);
   color: white;

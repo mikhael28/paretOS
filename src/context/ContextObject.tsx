@@ -1,24 +1,21 @@
-import React from "react";
 import { CardActionArea, CardContent, CardMedia, Tooltip } from "@mui/material";
-import { makeStyles, withStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import classNames from "classnames";
-
-const HtmlTooltip = withStyles(() => ({
-  tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    fontSize: 20,
-    border: "1px solid #dadde9",
-  },
-}))(Tooltip);
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 250,
+    backgroundColor: "black",
   },
   media: {
     height: 140,
+  },
+  tooltip: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: 40,
+    border: "1px solid #dadde9",
   },
 });
 
@@ -32,8 +29,8 @@ export default function MediaCard(props) {
   return (
     <>
       {props.logo || props.slug || props.img.options ? (
-        <HtmlTooltip title={props.summary}>
-          <div
+        <Tooltip title={props.summary} className={classes.tooltip}>
+          <figure
             className={classNames("block")}
             onClick={() =>
               window.location.pathname !== "/context-builder"
@@ -50,11 +47,11 @@ export default function MediaCard(props) {
                 />
               ) : null}
               <CardContent>
-                <p style={{ fontSize: 20 }}>{props.title}</p>
+                <figcaption style={{ fontSize: 20 }}>{props.title}</figcaption>
               </CardContent>
             </CardActionArea>
-          </div>
-        </HtmlTooltip>
+          </figure>
+        </Tooltip>
       ) : null}
     </>
   );

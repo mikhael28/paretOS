@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import Image from "react-bootstrap/lib/Image";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
@@ -41,7 +40,7 @@ function LeftNav(props) {
     fontWeight: 600,
     marginLeft: 16,
     marginRight: 16,
-    marginTop: 48,
+    marginTop: 24,
     paddingTop: 8,
     textTransform: "uppercase",
     letterSpacing: "2.5px",
@@ -119,15 +118,14 @@ function LeftNav(props) {
             justifyContent: "flex-start",
           }}
         >
-          <Image
+          <Avatar
+            sx={{ width: 24, height: 24 }}
             src={
               user.picture ||
               "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             }
-            height="40"
-            width="40"
-            circle
           />
+
           <p
             style={{
               fontSize: 18,
@@ -290,9 +288,14 @@ function LeftNav(props) {
       </NavLink>
       <div style={{ flex: "0 0 4px" }} />
 
-      {/* <div className="fourth-step">
-        <Pomodoro />
-      </div> */}
+      <NavLink
+        to="/sandbox"
+        style={headingStyle}
+        activeStyle={activeStyle}
+        exact
+      >
+        &ensp;Sandbox
+      </NavLink>
 
       <div style={{ flex: "0 0 16px" }} />
 
