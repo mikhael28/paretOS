@@ -10,6 +10,7 @@ const Login = lazy(() => import("./profile/Login"));
 const Signup = lazy(() => import("./profile/Signup"));
 const ResetPassword = lazy(() => import("./profile/ResetPassword"));
 const ChangePassword = lazy(() => import("./profile/ChangePassword"));
+// eslint-ignore import/no-cycle
 const Sandbox = lazy(() => import("./containers/Sandbox"));
 const Order = lazy(() => import("./learn/Order"));
 const Profile = lazy(() => import("./mentorship/MenteeProfile"));
@@ -31,37 +32,6 @@ const PomodoroDashboard = lazy(() =>
 );
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
-
-export const routes = [
-  {
-    path: "/context-builder",
-    name: "Library",
-  },
-  {
-    path: "/arena",
-    name: "Library",
-  },
-  {
-    path: "/arena/create/sprints",
-    name: "Start a Sprint",
-  },
-  {
-    path: "/arena/create/template",
-    name: "Create Sprint Template",
-  },
-  {
-    path: "/training",
-    name: "Learning Dashboard",
-  },
-  {
-    path: "/sandbox",
-    name: "Sandbox",
-  },
-  {
-    path: "/mentorship",
-    name: "Mentorship Dashboard",
-  },
-];
 
 export default ({ childProps }) => (
   <Suspense fallback={<Spinner />}>
