@@ -541,7 +541,7 @@ function Sprint(props) {
                         ))}
                       </div>
                       <div className="flex">
-                        {props.user.admin === false ? (
+                        {props.user.admin === true ? (
                           <div>
                             <p>Status: {status}</p>
                             <div>
