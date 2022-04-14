@@ -6,14 +6,6 @@ import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import Tour from "reactour";
 import classNames from "classnames";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
-import "react-accessible-accordion/dist/fancy-example.css";
 import { AppBar, Tabs, Tab, Paper, useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
@@ -464,62 +456,52 @@ function Sprint(props) {
                 )}
               </section>
 
-              <Accordion
-                style={{ margin: -16 }}
-                allowMultipleExpanded
-                allowZeroExpanded
-              >
-                <AccordionItem>
-                  <AccordionItemHeading>
-                    <AccordionItemButton>Time Travel</AccordionItemButton>
-                  </AccordionItemHeading>
-                  <AccordionItemPanel>
-                    <div className="options">
-                      <p>
-                        <b>Currently Day {displayDay + 1}</b>
-                      </p>
-                      <p>
-                        Click a button below to go back to a specific day and
-                        add an update you forgot.
-                      </p>
+              <details>
+                <summary>Time Travel</summary>
+                <div className="options">
+                  <p>
+                    <b>Currently Day {displayDay + 1}</b>
+                  </p>
+                  <p>
+                    Click a button below to go back to a specific day and add an
+                    update you forgot.
+                  </p>
 
-                      <div className="options-buttons">
-                        {props.redux.sprint[activeSprintId].teams[
-                          index
-                        ].missions.map((mission, idx) => (
-                          <Button
-                            onClick={() => {
-                              setDisplayDay(idx);
-                            }}
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={idx}
-                          >
-                            Day {idx + 1}
+                  <div className="options-buttons">
+                    {props.redux.sprint[activeSprintId].teams[
+                      index
+                    ].missions.map((mission, idx) => (
+                      <Button
+                        onClick={() => {
+                          setDisplayDay(idx);
+                        }}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={idx}
+                      >
+                        Day {idx + 1}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="flex">
+                    {props.user.admin === true ? (
+                      <div>
+                        <p>Status: {status}</p>
+                        <div className="flex-apart">
+                          <Button onClick={() => setStatus("early")}>
+                            Set to Early
                           </Button>
-                        ))}
+                          <Button onClick={() => setStatus("active")}>
+                            Set to Active
+                          </Button>
+                          <Button onClick={() => setStatus("inactive")}>
+                            Set to Inactive
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex">
-                        {props.user.admin === true ? (
-                          <div>
-                            <p>Status: {status}</p>
-                            <div className="flex-apart">
-                              <Button onClick={() => setStatus("early")}>
-                                Set to Early
-                              </Button>
-                              <Button onClick={() => setStatus("active")}>
-                                Set to Active
-                              </Button>
-                              <Button onClick={() => setStatus("inactive")}>
-                                Set to Inactive
-                              </Button>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </AccordionItemPanel>
-                </AccordionItem>
-              </Accordion>
+                    ) : null}
+                  </div>
+                </div>
+              </details>
             </>
           </TabPanel>
           <TabPanel value={key} index={2}>
