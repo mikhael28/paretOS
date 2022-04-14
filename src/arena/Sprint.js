@@ -5,17 +5,6 @@ import { connect } from "react-redux";
 import Image from "react-bootstrap/lib/Image";
 import Tour from "reactour";
 import classNames from "classnames";
-<<<<<<< refs/remotes/mikhael28/main
-import { AppBar, Tabs, Tab, Paper, useTheme } from "@mui/material";
-=======
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
-import "react-accessible-accordion/dist/fancy-example.css";
 import {
   AppBar,
   Tabs,
@@ -25,7 +14,6 @@ import {
   Button,
   Chip,
 } from "@mui/material";
->>>>>>> change buttons to mui Button and Chip
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
 import StatsBlock from "../components/StatsBlock";
@@ -491,83 +479,46 @@ function Sprint(props) {
                     update you forgot.
                   </p>
 
-<<<<<<< refs/remotes/mikhael28/main
                   <div className="options-buttons">
                     {props.redux.sprint[activeSprintId].teams[
                       index
                     ].missions.map((mission, idx) => (
-                      <Button
+                      <Chip
+                        label={`Day ${idx + 1}`}
+                        variant="options"
+                        status={displayDay === idx ? "selected" : null}
                         onClick={() => {
                           setDisplayDay(idx);
                         }}
                         // eslint-disable-next-line react/no-array-index-key
                         key={idx}
-                      >
-                        Day {idx + 1}
-                      </Button>
+                      />
                     ))}
                   </div>
                   <div className="flex">
-                    {props.user.admin === true ? (
+                    {props.user.admin === false ? (
                       <div>
                         <p>Status: {status}</p>
-                        <div className="flex-apart">
-                          <Button onClick={() => setStatus("early")}>
-                            Set to Early
-                          </Button>
-                          <Button onClick={() => setStatus("active")}>
-                            Set to Active
-                          </Button>
-                          <Button onClick={() => setStatus("inactive")}>
-                            Set to Inactive
-                          </Button>
-                        </div>
-=======
-                      <div className="options-buttons">
-                        {props.redux.sprint[activeSprintId].teams[
-                          index
-                        ].missions.map((mission, idx) => (
+                        <div>
                           <Chip
-                            label={`Day ${idx + 1}`}
+                            label="Set to Early"
                             variant="options"
-                            status={displayDay === idx ? "selected" : null}
-                            onClick={() => {
-                              setDisplayDay(idx);
-                            }}
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={idx}
+                            status={status === "early" ? "selected" : null}
+                            onClick={() => setStatus("early")}
                           />
-                        ))}
-                      </div>
-                      <div className="flex">
-                        {props.user.admin === true ? (
-                          <div>
-                            <p>Status: {status}</p>
-                            <div>
-                              <Chip
-                                label="Set to Early"
-                                variant="options"
-                                status={status === "early" ? "selected" : null}
-                                onClick={() => setStatus("early")}
-                              />
-                              <Chip
-                                label="Set to Active"
-                                variant="options"
-                                status={status === "active" ? "selected" : null}
-                                onClick={() => setStatus("active")}
-                              />
-                              <Chip
-                                label="Set to Inactive"
-                                variant="options"
-                                status={
-                                  status === "inactive" ? "selected" : null
-                                }
-                                onClick={() => setStatus("inactive")}
-                              />
-                            </div>
-                          </div>
-                        ) : null}
->>>>>>> change buttons to mui Button and Chip
+                          <Chip
+                            label="Set to Active"
+                            variant="options"
+                            status={status === "active" ? "selected" : null}
+                            onClick={() => setStatus("active")}
+                          />
+                          <Chip
+                            label="Set to Inactive"
+                            variant="options"
+                            status={status === "inactive" ? "selected" : null}
+                            onClick={() => setStatus("inactive")}
+                          />
+                        </div>
                       </div>
                     ) : null}
                   </div>
