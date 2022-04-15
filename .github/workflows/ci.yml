@@ -1,0 +1,39 @@
+name: Pareto CI
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  run-test-suites:
+    runs-on: ubuntu-latest
+
+    env:
+      TEST_FIXTURE_USERNAME: ${{secrets.TEST_FIXTURE_USERNAME}}
+      TEST_FIXTURE_PASSWORD: ${{secrets.TEST_FIXTURE_PASSWORD}}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with: 
+          node-version: ${{ matrix.node-version }}     
+
+      - name: Install dependencies   
+        run: yarn install
+
+      - name: Run unit tests
+        run: yarn test:unit
+
+      - name: Launch server and run integration tests
+        run: |
+          yarn start &
+          sleep 20 &&
+          curl http://localhost:3000 &&
+          yarn test:integration
