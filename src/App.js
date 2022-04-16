@@ -140,7 +140,7 @@ class App extends Component {
     ];
     const socketOptions = { updateState: false };
     if (this.state.initialLoadComplete === false) {
-      console.log("getting user data...");
+      console.log("getting user data....");
       let startTime = new Date(Date.now()).getTime();
       let endTime;
       const user = await fetchUser(username).then((res) => {
