@@ -67,7 +67,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "test:unit": "CI=true react-scripts test --env=jsdom",
-    "test:integration": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout=30000 -r ts-node/register './tests/integration/*.ts'",
+    "test:integration": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout=60000 -r ts-node/register './tests/integration/*.ts'",
     "eject": "react-scripts eject",
     "serve": "serve -s build"
   },
@@ -89,6 +89,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.3.1",
     "@types/uuid": "8.3.4",
+    "@types/websocket": "^1.0.5",
     "chai": "^4.3.6",
     "dotenv": "^16.0.0",
     "eslint": "^8.11.0",
