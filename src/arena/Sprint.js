@@ -495,33 +495,30 @@ function Sprint(props) {
                       />
                     ))}
                   </div>
-                  <div className="flex">
-                    {props.user.admin === false ? (
-                      <div>
-                        <p>Status: {status}</p>
-                        <div>
-                          <Chip
-                            label="Set to Early"
-                            variant="options"
-                            status={status === "early" ? "selected" : null}
-                            onClick={() => setStatus("early")}
-                          />
-                          <Chip
-                            label="Set to Active"
-                            variant="options"
-                            status={status === "active" ? "selected" : null}
-                            onClick={() => setStatus("active")}
-                          />
-                          <Chip
-                            label="Set to Inactive"
-                            variant="options"
-                            status={status === "inactive" ? "selected" : null}
-                            onClick={() => setStatus("inactive")}
-                          />
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
+
+                  {props.user.admin === true ? (
+                    <>
+                      <p>Status: {status}</p>
+                      <Chip
+                        label="Set to Early"
+                        variant="options"
+                        status={status === "early" ? "selected" : null}
+                        onClick={() => setStatus("early")}
+                      />
+                      <Chip
+                        label="Set to Active"
+                        variant="options"
+                        status={status === "active" ? "selected" : null}
+                        onClick={() => setStatus("active")}
+                      />
+                      <Chip
+                        label="Set to Inactive"
+                        variant="options"
+                        status={status === "inactive" ? "selected" : null}
+                        onClick={() => setStatus("inactive")}
+                      />
+                    </>
+                  ) : null}
                 </div>
               </details>
             </>
