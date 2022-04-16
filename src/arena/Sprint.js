@@ -2,11 +2,18 @@ import React, { useEffect, useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import Tour from "reactour";
 import classNames from "classnames";
-import { AppBar, Tabs, Tab, Paper, useTheme } from "@mui/material";
+import {
+  AppBar,
+  Tabs,
+  Tab,
+  Paper,
+  useTheme,
+  Button,
+  Chip,
+} from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
 import StatsBlock from "../components/StatsBlock";
@@ -20,6 +27,7 @@ import {
   nextDay,
   updatePlanningForms,
 } from "../state/sprints";
+
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
  * @TODO The indexing in multiplayer games seems to be off - investigate.
@@ -31,6 +39,7 @@ import {
  * @TODO Can the 'My Stats' header by updated to look any better? Can the stats tabs look a bit sharper? What does NBA look like?
  * @returns
  */
+
 function Sprint(props) {
   const theme = useTheme();
   const [status, setStatus] = useState("early");
@@ -304,6 +313,7 @@ function Sprint(props) {
                         className="planning-forms"
                       />
                       <Button
+                        variant="gradient"
                         onClick={() =>
                           savePlanning(
                             activeSprintId,
@@ -388,6 +398,7 @@ function Sprint(props) {
                           )}
                         </div>
                         <Button
+                          variant="gradient"
                           onClick={() => {
                             setShowProofModal(true);
                             setActiveIndex(i);
@@ -439,6 +450,7 @@ function Sprint(props) {
                         </div>
 
                         <Button
+                          variant="gradient"
                           onClick={() => {
                             setActiveIndex(id);
                             setActiveMission(mission);
@@ -471,35 +483,42 @@ function Sprint(props) {
                     {props.redux.sprint[activeSprintId].teams[
                       index
                     ].missions.map((mission, idx) => (
-                      <Button
+                      <Chip
+                        label={`Day ${idx + 1}`}
+                        variant="options"
+                        status={displayDay === idx ? "selected" : null}
                         onClick={() => {
                           setDisplayDay(idx);
                         }}
                         // eslint-disable-next-line react/no-array-index-key
                         key={idx}
-                      >
-                        Day {idx + 1}
-                      </Button>
+                      />
                     ))}
                   </div>
-                  <div className="flex">
-                    {props.user.admin === true ? (
-                      <div>
-                        <p>Status: {status}</p>
-                        <div className="flex-apart">
-                          <Button onClick={() => setStatus("early")}>
-                            Set to Early
-                          </Button>
-                          <Button onClick={() => setStatus("active")}>
-                            Set to Active
-                          </Button>
-                          <Button onClick={() => setStatus("inactive")}>
-                            Set to Inactive
-                          </Button>
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
+
+                  {props.user.admin === true ? (
+                    <>
+                      <p>Status: {status}</p>
+                      <Chip
+                        label="Set to Early"
+                        variant="options"
+                        status={status === "early" ? "selected" : null}
+                        onClick={() => setStatus("early")}
+                      />
+                      <Chip
+                        label="Set to Active"
+                        variant="options"
+                        status={status === "active" ? "selected" : null}
+                        onClick={() => setStatus("active")}
+                      />
+                      <Chip
+                        label="Set to Inactive"
+                        variant="options"
+                        status={status === "inactive" ? "selected" : null}
+                        onClick={() => setStatus("inactive")}
+                      />
+                    </>
+                  ) : null}
                 </div>
               </details>
             </>
