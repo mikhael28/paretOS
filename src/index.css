@@ -58,7 +58,7 @@ section {
 
 .stats-container.flex {
   display: flex;
-  justify-content: start!important;
+  justify-content: flex-start!important;
   margin: 8px -8px;
   flex-wrap: wrap;
 }
