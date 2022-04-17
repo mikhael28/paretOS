@@ -1,10 +1,15 @@
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
-import Button from "react-bootstrap/lib/Button";
+import { Button } from "@mui/material";
 
-import { EnMission, Mission as IMission, Missions } from "../interface";
+import {
+  EnMission,
+  GenMission,
+  Mission as IMission,
+  Missions,
+} from "../interface";
 
-interface Props
+interface MissionProps
   extends Pick<
     Missions,
     | "lengua"
@@ -14,7 +19,7 @@ interface Props
     | "setShowProofModal"
     | "missionBtnText"
   > {
-  mission: IMission | EnMission;
+  mission: GenMission;
   id: number;
 }
 
@@ -30,7 +35,7 @@ function Mission({
   setShowProofModal,
   setView,
   id,
-}: Props) {
+}: MissionProps) {
   let flexCardClass = classNames("context-card", "block", "second-step-arena");
   return (
     <li
@@ -57,6 +62,8 @@ function Mission({
       </div>
 
       <Button
+        style={{ fontSize: "1.5rem" }}
+        variant="contained"
         onClick={() => {
           setActiveIndex(id);
           setActiveMission(mission as unknown as EnMission);

@@ -1,12 +1,12 @@
 import { I18n } from "@aws-amplify/core";
 
-import { Missions as IMissions } from "../interface";
+import { Missions as MissionsProps } from "../interface";
 import Mission from "./Mission";
 
 /**
  * This component is used for a missions' section
  */
-function Missions(props: IMissions) {
+function Missions(props: MissionsProps) {
   const { missions } = props;
   return (
     <section>

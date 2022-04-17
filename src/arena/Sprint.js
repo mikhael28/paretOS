@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+// import Image from "react-bootstrap/lib/Image";
 import Tour from "reactour";
+// import classNames from "classnames";
 import { useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
@@ -35,6 +37,7 @@ import ArenaDynamicForms from "./ArenaDynamicForms";
  * @TODO Can the 'My Stats' header by updated to look any better? Can the stats tabs look a bit sharper? What does NBA look like?
  * @returns
  */
+
 function Sprint(props) {
   const theme = useTheme();
   const [status, setStatus] = useState("early");
@@ -57,10 +60,6 @@ function Sprint(props) {
   const [paginate, setPaginate] = useState(10);
   const [key, setKey] = useState(1);
   const [dynamicForms, setDynamicForms] = useState([]);
-
-  function handleSelect(event, newValue) {
-    setKey(newValue);
-  }
 
   function handleDynamicForms(event) {
     let tempObj = { ...dynamicForms };
@@ -218,11 +217,7 @@ function Sprint(props) {
             setIsTourOpen={setIsTourOpen}
           />
 
-          <ArenaTabsHeader
-            handleSelect={handleSelect}
-            key={key}
-            setKey={setKey}
-          />
+          <ArenaTabsHeader setValue={setKey} value={key} />
 
           <TabPanel value={key} index={0}>
             <ArenaDynamicForms

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-import Button from "react-bootstrap/lib/Button";
+import { Button, useTheme } from "@mui/material";
 
-interface Props {
+interface ArenaDynamicFormProps {
   index: number;
   plannings: any[];
   activeSprintId: number;
@@ -25,7 +25,9 @@ function ArenaDynamicForms({
   dynamicForms,
   handleDynamicForms,
   savePlanning,
-}: Props) {
+}: ArenaDynamicFormProps) {
+  const theme = useTheme();
+
   return (
     <>
       {plannings.map((form, i) => (
@@ -39,9 +41,15 @@ function ArenaDynamicForms({
               className="planning-forms"
             />
             <Button
+              variant="contained"
               onClick={() =>
                 savePlanning(activeSprintId, index, i, dynamicForms[i].content)
               }
+              sx={{
+                padding: `${theme.spacing(1)} ${theme.spacing(3)}`,
+                minWidth: "180px",
+                fontSize: "1.4rem",
+              }}
             >
               Save
             </Button>

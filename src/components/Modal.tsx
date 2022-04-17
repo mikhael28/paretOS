@@ -1,23 +1,34 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect, ReactElement } from "react";
 
 /**
- * A Modal/Popup component.
+ * @component Modal
+ * @desc A Modal/Popup component.
+ * @param {Prop} children-A React component
+ * @param {Prop} childProps-Props of children
+ * @param {Prop} open-Modal visibility property
+ * @param {Prop} onClose-onclose callback
  */
 
-function Modal({ children, childProps, open, onClose }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const backgroundRef = React.createRef();
+export interface ModalProps {
+  children: ReactElement;
+  childProps: object;
+  open: boolean;
+  onClose: () => void;
+}
 
-  const handleClick = (event) => {
+function Modal({ children, childProps, open, onClose }: ModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const backgroundRef = React.createRef<HTMLDivElement>();
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     // close if clicking outside
-    if (backgroundRef.current === event.target) {
+    if (backgroundRef.current === e.target) {
       handleClose();
     }
   };
 
-  const handleKeyup = (event) => {
-    const key = event.key || event.keyCode;
+  const handleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = e.key || e.keyCode;
 
     if (["Escape", "Esc", 27].includes(key)) {
       handleClose();
@@ -35,7 +46,9 @@ function Modal({ children, childProps, open, onClose }) {
   }, [open]);
 
   useEffect(() => {
-    backgroundRef.current.focus();
+    if (backgroundRef?.current) {
+      backgroundRef.current.focus();
+    }
   }, [isOpen]);
 
   return (
@@ -55,12 +68,5 @@ function Modal({ children, childProps, open, onClose }) {
     </div>
   );
 }
-
-Modal.propTypes = {
-  children: PropTypes.element,
-  childProps: PropTypes.object,
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-};
 
 export default Modal;

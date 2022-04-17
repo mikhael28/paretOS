@@ -15,7 +15,7 @@ interface ActivePersonReview {
   name: string;
 }
 
-interface Props {
+interface ArenaStatsProps {
   activePerson: {
     email: string;
     fName: string;
@@ -37,7 +37,7 @@ interface Props {
  * @param {Object} activePerson logged in user
  * @param {number} displayDay index of the day to display
  */
-function ArenaStats({ activePerson, displayDay }: Props) {
+function ArenaStats({ activePerson, displayDay }: ArenaStatsProps) {
   return (
     <section>
       <h2>My Stats</h2>

@@ -1,7 +1,10 @@
+/* eslint-disable react/no-array-index-key */
 import { Dispatch, SetStateAction } from "react";
-import Button from "react-bootstrap/lib/Button";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material";
 
-interface Props {
+interface DetailsProps {
   displayDay: number;
   missions: any[];
   admin: boolean;
@@ -26,7 +29,11 @@ function Details({
   status,
   setDisplayDay,
   setStatus,
-}: Props) {
+}: DetailsProps) {
+  const theme = useTheme();
+
+  const statues = ["early", "active", "inactive"];
+
   return (
     <details>
       <summary>Time Travel</summary>
@@ -42,11 +49,33 @@ function Details({
         <div className="options-buttons">
           {missions.map((mission, idx) => (
             <Button
-              onClick={() => {
-                setDisplayDay(idx);
-              }}
-              // eslint-disable-next-line react/no-array-index-key
+              // variant="gradient" // fixme: this is supposed to work but unfortunately it doesn't. This is related to custom typings for variants in the file ./src/types/custom_types/mui.d.ts. It's also related to the fact that the variant="gradient" is not a valid prop for the button component(at the moment).
+              variant="text"
+              onClick={() => setDisplayDay(idx)}
               key={idx}
+              sx={{
+                backgroundColor: `${
+                  displayDay === idx
+                    ? "rgba(255, 255, 255, 0.44)"
+                    : "rgba(255, 255, 255, 0.16)"
+                }`,
+                color: "rgb(242, 243, 243)",
+                fontSize: theme.spacing(2),
+                padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+                marginRight: theme.spacing(1.2),
+                borderRadius: theme.shape.borderRadius,
+                transition: "all 0.2s ease-in-out",
+
+                "&:hover": {
+                  backgroundColor: `${
+                    displayDay === idx
+                      ? "rgba(255, 255, 255, 0.44)"
+                      : "rgba(255, 255, 255, 0.16)"
+                  }`,
+                  color: "rgb(242, 243, 243)",
+                  opacity: 0.8,
+                },
+              }}
             >
               Day {idx + 1}
             </Button>
@@ -56,15 +85,14 @@ function Details({
           {admin === true ? (
             <div>
               <p>Status: {status}</p>
-              <div className="flex-apart">
-                <Button onClick={() => setStatus("early")}>Set to Early</Button>
-                <Button onClick={() => setStatus("active")}>
-                  Set to Active
-                </Button>
-                <Button onClick={() => setStatus("inactive")}>
-                  Set to Inactive
-                </Button>
-              </div>
+              {statues.map((s) => (
+                <Chip
+                  key={s}
+                  label={`Set to ${s[0].toUpperCase()}${s.slice(1)}`} // change the first Letter to uppercase
+                  variant={`${status === s ? "filled" : "outlined"}`}
+                  onClick={() => setStatus(s)}
+                />
+              ))}
             </div>
           ) : null}
         </div>

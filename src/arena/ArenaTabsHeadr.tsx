@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import { AppBar, Tabs, Tab } from "@mui/material";
 
-interface Props {
-  key: number;
-  setKey: Dispatch<SetStateAction<number>>;
+interface ArenaTabsHeaderProps {
+  setValue: Dispatch<SetStateAction<number>>;
+  value: any;
 }
 
 /**
@@ -12,22 +12,22 @@ interface Props {
  * @param {function} setKey function to set the key
  */
 
-// FIXME: seleted tab is not highlighted
-function ArenaTabsHeader({ key, setKey }: Props) {
+function ArenaTabsHeader({ setValue, value }: ArenaTabsHeaderProps) {
   function handleSelect(event: SyntheticEvent, newValue: number) {
-    setKey(newValue);
+    setValue(newValue);
   }
 
   return (
     <AppBar
       position="static"
       style={{
+        marginTop: "0.5rem",
         boxShadow: "none",
         backgroundImage: "none",
         backgroundColor: "transparent",
       }}
     >
-      <Tabs value={key} onChange={handleSelect} aria-label="sprint tabs">
+      <Tabs value={value} onChange={handleSelect} aria-label="sprint tabs">
         <Tab label="Plan" style={{ fontSize: 16, letterSpacing: 3 }} />
         <Tab label="Compete" style={{ fontSize: 16, letterSpacing: 3 }} />
         <Tab label="Leaderboard" style={{ fontSize: 16, letterSpacing: 3 }} />
