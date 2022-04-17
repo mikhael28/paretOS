@@ -1,6 +1,13 @@
 import { useState } from "react";
 import Button from "react-bootstrap/lib/Button";
-import Modal from "react-bootstrap/lib/Modal";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+} from "@mui/material";
+import { MdClose } from "react-icons/md";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -70,72 +77,95 @@ export default function ArenaProofModal({
   };
 
   return (
-    <div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{I18n.get("submitProof")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {view === "submit" ? (
-            <>
-              <FormGroup bsSize="large" controlId="trashTalk">
-                <ControlLabel>{I18n.get("trashTalkPSA")}</ControlLabel>
-                <FormControl
-                  type="text"
-                  onChange={handleChange}
-                  value={formData.trashTalk}
-                />
-              </FormGroup>
-              <h3>{I18n.get("attachment")}</h3>
-              <input type="file" onChange={(evt) => onChange(evt)} />
-              <br />
-              <div className="flex">
-                <Button onClick={handleClose}>{I18n.get("close")}</Button>
-                <LoaderButton
-                  onClick={() => {
-                    propsHandleChange(
-                      activeMission,
-                      activeIndex,
-                      day,
-                      formData.key,
-                      activeSprintId,
-                      `${user.fName} just completed ${activeMission.title}.${
-                        formData.trashTalk.length > 0
-                          ? `They also said: "${formData.trashTalk}"`
-                          : ""
-                      } `
-                    );
-                    setFormData({ trashTalk: "" });
-                    setFormData({ ...formData, key: "" });
-                    handleClose();
-                  }}
-                  size="large"
-                  text={I18n.get("submitProof")}
-                  loadingText={I18n.get("creating")}
-                  // ? Is there a reason this is commented?
-                  // disabled={!this.validateForm()}
-                  isLoading={loading}
-                />
-              </div>
-            </>
+    <Dialog
+      style={{
+        margin: "auto",
+      }}
+      fullWidth
+      open={show}
+      onClose={handleClose}
+      keepMounted
+      hideBackdrop={false}
+    >
+      <DialogTitle>
+        {I18n.get("submitProof")}
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <MdClose />
+        </IconButton>
+      </DialogTitle>
+      {view === "submit" ? (
+        <>
+          <DialogContent>
+            <FormGroup bsSize="large" controlId="trashTalk">
+              <ControlLabel>{I18n.get("trashTalkPSA")}</ControlLabel>
+              <FormControl
+                type="text"
+                onChange={handleChange}
+                value={formData.trashTalk}
+              />
+            </FormGroup>
+            <h3>{I18n.get("attachment")}</h3>
+            <input type="file" onChange={(evt) => onChange(evt)} />
+            <br />
+            <DialogActions
+              style={{
+                padding: "0",
+                display: "inline-flex",
+                alignItems: "end",
+              }}
+            >
+              <Button onClick={handleClose}>{I18n.get("close")}</Button>
+              <LoaderButton
+                onClick={() => {
+                  propsHandleChange(
+                    activeMission,
+                    activeIndex,
+                    day,
+                    formData.key,
+                    activeSprintId,
+                    `${user.fName} just completed ${activeMission.title}.${
+                      formData.trashTalk.length > 0
+                        ? `They also said: "${formData.trashTalk}"`
+                        : ""
+                    } `
+                  );
+                  setFormData({ trashTalk: "" });
+                  setFormData({ ...formData, key: "" });
+                  handleClose();
+                }}
+                size="medium"
+                text={I18n.get("submitProof")}
+                loadingText={I18n.get("creating")}
+                // ? Is there a reason this is commented?
+                // disabled={!this.validateForm()}
+                isLoading={loading}
+              />
+            </DialogActions>
+          </DialogContent>
+        </>
+      ) : (
+        <DialogContent>
+          {activeMission.proofLink !== "" ? (
+            <a
+              href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {I18n.get("viewProof")}
+            </a>
           ) : (
-            <div>
-              {activeMission.proofLink !== "" ? (
-                <a
-                  href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {I18n.get("viewProof")}
-                </a>
-              ) : (
-                <p>{I18n.get("noProof")}</p>
-              )}
-            </div>
+            <p>{I18n.get("noProof")}</p>
           )}
-        </Modal.Body>
-        <Modal.Footer />
-      </Modal>
-    </div>
+        </DialogContent>
+      )}
+    </Dialog>
   );
 }
