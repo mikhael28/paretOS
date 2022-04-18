@@ -21,6 +21,14 @@ import {
   getInitialSprintData,
   putUpdatedSprintData,
 } from "./state/sprints";
+import {
+  fetchUser,
+  fetchStarterKitSanity,
+  fetchStarterKitExperience,
+  fetchCoaches,
+  fetchCoachingRoster,
+  fetchSanitySchemas,
+} from "./libs/initialFetch";
 import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { getUser } from "./state/profile";
@@ -67,6 +75,7 @@ class App extends Component {
       relationships: [],
       isTourOpen: false,
       loading: false,
+      initialLoadComplete: false,
       sanitySchemas: {
         technicalSchemas: [],
         economicSchemas: [],
@@ -99,8 +108,6 @@ class App extends Component {
     I18n.putVocabularies(strings);
 
     try {
-      await this.fetchSanitySchemas();
-
       const session = await Auth.currentSession();
       this.setState({
         username: session.idToken.payload.sub,
@@ -122,131 +129,111 @@ class App extends Component {
   }
 
   initialFetch = async (username) => {
-    try {
-      const user = await API.get("pareto", `/users/${username}`);
+    let newState = {};
+    const path = this.props.location.pathname;
+
+    // Fetch only the data needed for that page
+    const [context, training, arena] = [
+      path.includes("context-builder"),
+      path.includes("training"),
+      !path.includes("context-builder") && !path.includes("training"),
+    ];
+    const socketOptions = { updateState: false };
+    if (this.state.initialLoadComplete === false) {
+      const user = await fetchUser(username);
       if (user.length > 0) {
-        this.props.getUser(user[0]);
-        this.setState({ user: user[0] });
-        if (user[0].defaultLanguage) {
-          const language = availableLanguages.find(
-            (x) => x.code === user[0].defaultLanguage
+        const currentUser = user[0];
+        try {
+          this.props.getUser(currentUser);
+          newState.user = currentUser;
+          if (currentUser.defaultLanguage) {
+            const language = availableLanguages.find(
+              (x) => x.code === currentUser.defaultLanguage
+            );
+            newState.chosenLanguage = language || "en";
+            I18n.setLanguage(currentUser.defaultLanguage);
+          }
+          socketOptions.user = currentUser;
+          const results = await Promise.all(
+            [
+              context && fetchStarterKitSanity(),
+              context && fetchSanitySchemas(),
+              training && fetchStarterKitExperience(currentUser.id),
+              arena && this.connectSocketToSprint(socketOptions),
+              fetchCoaches(currentUser.id),
+              currentUser.instructor === true &&
+                fetchCoachingRoster(currentUser.id),
+            ].filter((x) => x !== false)
           );
-          this.setState({
-            chosenLanguage: language || "en",
+
+          results
+            .filter((r) => r !== false)
+            .forEach((item) => {
+              const { success, ...rest } = item;
+              if (success === true) {
+                newState = { ...newState, ...rest };
+              }
+            });
+          newState.isAuthenticated = true;
+          this.setState({ ...newState }, () => this.setCloseLoading());
+        } catch (e) {
+          console.log(e.toString());
+          if (e.toString() === "Error: Network Error") {
+            console.log("Successfully identified network error");
+          }
+        }
+      }
+      try {
+        // Load content that will be needed in other areas.
+        let afterState = {};
+        afterState.loading = false;
+        const afterResults = await Promise.all([
+          !context && fetchStarterKitSanity(),
+          !context && fetchSanitySchemas(),
+          !training && fetchStarterKitExperience(this.state.user.id),
+          !arena && this.connectSocketToSprint(socketOptions),
+        ]);
+        afterResults
+          .filter((r) => r !== false)
+          .forEach((item) => {
+            const { success, ...rest } = item;
+            if (success === true) {
+              afterState = { ...afterState, ...rest };
+            }
           });
-          I18n.setLanguage(user[0].defaultLanguage);
+        this.setState({ ...afterState }, () =>
+          this.setState({ initialLoadComplete: true })
+        );
+      } catch (e) {
+        console.log(e.toString());
+        if (e.toString() === "Error: Network Error") {
+          console.log("Successfully identified network error");
         }
-
-        // if (user[0].learningPurchase === true || user[0].instructor === true) {
-        await this.fetchStarterKitExperience(user[0].id);
-        await this.fetchStarterKitSanity();
-        // }
-
-        await this.fetchCoaches(user[0].id);
-        if (user[0].instructor === true) {
-          await this.fetchCoachingRoster(user[0].id);
-        }
-
-        await this.connectSocketToSprint();
-
-        this.userHasAuthenticated(true);
-        this.setCloseLoading();
-      }
-    } catch (e) {
-      console.log(e.toString());
-      if (e.toString() === "Error: Network Error") {
-        console.log("Successfully identified network error");
       }
     }
   };
 
-  fetchStarterKitSanity = async () => {
+  connectSocketToSprint = async ({ user, updateState }) => {
+    let result = { success: false, sprints: null };
     try {
-      let storedTrainingSanity = localStorage.getItem("trainingSanity");
-      let storedProductSanity = localStorage.getItem("productSanity");
-      let storedInterviewSanity = localStorage.getItem("interviewSanity");
+      const sprints = await API.get("pareto", `/sprints/mentee/${user.id}`);
+      result.success = true;
+      result.sprints = sprints;
 
-      if (storedTrainingSanity === null) {
-        const trainingData = await sanity.fetch(
-          `*[_type == 'apprenticeExperienceSchema']`
-        );
-        const interviewData = await sanity.fetch(
-          `*[_type == 'interviewSchema']`
-        );
-        const productData = await sanity.fetch(
-          `*[_type == 'productExperienceSchema']`
-        );
-
-        let sortedTraining = sortby(trainingData, "priority");
-        let sortedInterview = sortby(interviewData, "priority");
-        let sortedProduct = sortby(productData, "priority");
-
-        this.setState({
-          sanityTraining: sortedTraining,
-          sanityInterview: sortedInterview,
-          sanityProduct: sortedProduct,
-        });
-
-        localStorage.setItem("trainingSanity", JSON.stringify(sortedTraining));
-        localStorage.setItem("productSanity", JSON.stringify(sortedProduct));
-        localStorage.setItem(
-          "interviewSanity",
-          JSON.stringify(sortedInterview)
-        );
-      } else {
-        this.setState({
-          sanityTraining: JSON.parse(storedTrainingSanity),
-          sanityInterview: JSON.parse(storedInterviewSanity),
-          sanityProduct: JSON.parse(storedProductSanity),
-        });
+      if (updateState === true) {
+        this.props.getInitialSprintData(sprints);
+        this.setState({ sprints: sprints });
+      }
+      if (sprints.length === 0) {
+        return result;
       }
     } catch (e) {
-      console.log("Error fetching Sanity Experience: ", e);
-    }
-  };
-
-  fetchStarterKitExperience = async (id) => {
-    try {
-      let experiences = await API.get("pareto", `/experience/user/${id}`);
-      let product;
-      let apprenticeship;
-      let interviewing;
-
-      experiences.forEach((exp) => {
-        if (exp.type === "Product") {
-          product = exp;
-        } else if (exp.type === "Apprenticeship") {
-          apprenticeship = exp;
-        } else if (exp.type === "Interviewing") {
-          interviewing = exp;
-        }
-      });
-      this.setState({
-        training: apprenticeship,
-        product: product,
-        interviewing: interviewing,
-        experiences: experiences,
-      });
-    } catch (e) {
-      console.log("Error fetching experience: ", e);
-    }
-  };
-
-  connectSocketToSprint = async () => {
-    const sprints = await API.get(
-      "pareto",
-      `/sprints/mentee/${this.state.user.id}`
-    );
-    this.props.getInitialSprintData(sprints);
-    this.setState({ sprints: sprints });
-
-    if (sprints.length === 0) {
-      return;
+      console.error(e);
     }
 
     let sprintStrings = [];
 
-    sprints.map((spr, idx) => {
+    result.sprints.map((spr, idx) => {
       sprintStrings.push(`key${idx}=${spr.id}`);
     });
 
@@ -269,7 +256,7 @@ class App extends Component {
 
       // console.log(wsClient);
 
-      setInterval(function () {
+      setInterval(() => {
         // console.log("Firing Ping");
         wsClient.send(`{"action":"sendmessage", "data":"ping" }`);
       }, 400000);
@@ -322,6 +309,7 @@ class App extends Component {
 
       wsClient.close();
     };
+    return result;
   };
 
   // potential way of closing a particular connectionID
@@ -337,38 +325,10 @@ class App extends Component {
       ws.readyState === WebSocket.CLOSED ||
       ws.readyState === WebSocket.CLOSING
     ) {
-      this.connectSocketToSprint(); // check if ws instance is closed - if so, reconnect
-    }
-  };
-
-  fetchSanitySchemas = async () => {
-    try {
-      let existingSanityData = localStorage.getItem("sanity");
-      if (existingSanityData === null) {
-        const query = `*[_type == 'project']`;
-        const query1 = `*[_type == 'economic']`;
-        const query2 = `*[_type == 'hubs' && !(_id in path("drafts.**"))]`;
-        const [projectSchemas, economicSchemas, hubsSchemas] =
-          await Promise.all([
-            sanity.fetch(query),
-            sanity.fetch(query1),
-            sanity.fetch(query2),
-          ]);
-
-        let sanitySchemas = {
-          technicalSchemas: projectSchemas,
-          economicSchemas: economicSchemas,
-          hubSchemas: hubsSchemas,
-        };
-        this.setState({
-          sanitySchemas: sanitySchemas,
-        });
-        localStorage.setItem("sanity", JSON.stringify(sanitySchemas));
-      } else {
-        this.setState({ sanitySchemas: JSON.parse(existingSanityData) });
-      }
-    } catch (e) {
-      errorToast(e);
+      this.connectSocketToSprint({
+        user: this.state.user,
+        updateState: true,
+      }); // check if ws instance is closed - if so, reconnect
     }
   };
 
@@ -378,31 +338,6 @@ class App extends Component {
       this.setState({ sprints: menteeSprints });
     } catch (e) {
       errorToast(e);
-    }
-  };
-
-  fetchCoachingRoster = async (id) => {
-    try {
-      let athletes = await API.get("pareto", `/relationship/mentor/${id}`);
-      this.setState({ athletes: athletes });
-    } catch (e) {
-      console.log("Error fetching athletes");
-    }
-  };
-
-  fetchCoaches = async (id) => {
-    try {
-      let existingCoaches = localStorage.getItem("coaches");
-      if (existingCoaches === null) {
-        let coaches = await API.get("pareto", `/relationship/mentee/${id}`);
-        this.setState({ coaches: coaches });
-        localStorage.setItem("coaches", JSON.stringify(coaches));
-      } else {
-        // check for empty arrays
-        this.setState({ coaches: JSON.parse(existingCoaches) });
-      }
-    } catch (e) {
-      console.log("Error fetching athletes");
     }
   };
 
