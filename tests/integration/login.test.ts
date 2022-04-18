@@ -11,7 +11,7 @@ const url = "http://localhost:3000";
 let browser;
 let page;
 
-describe("Login page", () => {
+describe("Login Page:", () => {
   before(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
