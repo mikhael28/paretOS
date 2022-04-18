@@ -118,12 +118,20 @@ class App extends Component {
       await this.initialFetch(session.idToken.payload.sub);
     } catch (e) {
       if (e === "No current user") {
-        this.setCloseLoading();
+        const result = await fetchSanitySchemas();
+        if (result.success) {
+          this.setState({ sanitySchemas: result.sanitySchemas }, () =>
+            this.setCloseLoading()
+          );
+        } else {
+          // TODO: If success === false, redirect to a page indicating a app error and to try again later (not the 404 not found page)
+          this.setCloseLoading();
+        }
       }
       if (e !== "No current user") {
         errorToast(e, this.state.user);
+        this.setCloseLoading();
       }
-      this.setState({ loading: false });
     }
     this.setState({ isAuthenticating: false });
   }
