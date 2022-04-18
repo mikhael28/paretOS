@@ -3,7 +3,8 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import Button from "react-bootstrap/lib/Button";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+// import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { BsPencil, BsPlusLg } from "react-icons/bs";
 // import Image from "react-bootstrap/lib/Image";
 import { v4 as uuidv4 } from "uuid";
 import API from "@aws-amplify/api";
@@ -209,14 +210,13 @@ const EditProfile = () => {
               />
 
               <h1>{state.user.fName}</h1>
-              <Glyphicon
+              <BsPencil
                 onClick={() =>
                   setState((prevState) => ({ ...prevState, editName: true }))
                 }
-                glyph="glyphicon glyphicon-pencil"
                 height="33"
                 width="33"
-                style={{ marginTop: 54, marginLeft: 6, cursor: "pointer" }}
+                style={{ marginTop: 0, marginLeft: 20, cursor: "pointer" }}
               />
               {/* <Image
                 src={question}
@@ -308,17 +308,14 @@ const EditProfile = () => {
             <div className="block">
               <p>
                 {state.user.summary}{" "}
-                <Glyphicon
+                <BsPencil
                   onClick={() =>
                     setState((prevState) => ({
                       ...prevState,
                       summaryCheck: true,
                     }))
                   }
-                  glyph="glyphicon glyphicon-pencil"
-                  height="33"
-                  width="33"
-                  style={{ marginLeft: 6, cursor: "pointer" }}
+                  style={{ marginLeft: 20, cursor: "pointer" }}
                 />
               </p>
             </div>
@@ -330,16 +327,13 @@ const EditProfile = () => {
       <div>
         <h2 className="third-step-home">
           {I18n.get("projects")}{" "}
-          <Glyphicon
+          <BsPlusLg
             onClick={() =>
               setState((prevState) => ({
                 addProject: !prevState.addProject,
               }))
             }
-            glyph="glyphicon glyphicon-plus"
-            height="33"
-            width="33"
-            style={{ marginLeft: 4, cursor: "pointer", marginTop: 2 }}
+            style={{ marginLeft: 50, cursor: "pointer", marginTop: 2 }}
           />
         </h2>
         {state.user.projects.length < 1 ? (
