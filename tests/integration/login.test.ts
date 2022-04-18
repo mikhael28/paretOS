@@ -24,15 +24,15 @@ describe("Login Page:", () => {
 
   it("should allow a user to log in and log out", async () => {
     await page.waitForSelector("#email");
+    console.log(`username:${username}, password:${password}`);
     await page.type("#email", username);
     await page.type("#password", password);
     await page.click("[type='submit']");
     await page.waitForSelector(".sticky-logout");
     const logout = await page.$(".sticky-logout");
-    expect(typeof logout === "undefined").to.equal(false);
     if (typeof logout === "undefined") {
       await page.screenshot({ path: "login-failure.png" });
     }
-    await page.click(".sticky-logout");
+    expect(typeof logout === "undefined").to.equal(false);
   });
 });

@@ -12,18 +12,13 @@ jobs:
       TEST_FIXTURE_USERNAME: ${{secrets.TEST_FIXTURE_USERNAME}}
       TEST_FIXTURE_PASSWORD: ${{secrets.TEST_FIXTURE_PASSWORD}}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [14.x, 16.x]
-
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with: 
-          node-version: ${{ matrix.node-version }}     
+          node-version: 16   
           cache: 'yarn'
 
       - name: Install dependencies   
