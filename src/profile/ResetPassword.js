@@ -1,15 +1,51 @@
 import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import { Link } from "react-router-dom";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
-import HelpBlock from "react-bootstrap/lib/HelpBlock";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { makeStyles } from "@mui/styles";
+import {
+  Typography,
+  FormLabel,
+  Container,
+  FormHelperText,
+  TextField,
+  Link,
+} from "@mui/material";
 import LoaderButton from "../components/LoaderButton";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(5),
+    width: 300,
+
+    "& .MuiTextField-root": {
+      width: 300,
+    },
+    "& .MuiFormLabel-root": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiInputBase-input": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme.spacing(1),
+      fontSize: 16,
+    },
+    "& .error": {
+      fontSize: 14,
+      color: "rgb(220, 66, 45)",
+    },
+    "& .MuiFormHelperText-root": {
+      fontSize: 16,
+      color: "#808080",
+    },
+  },
+}));
+
 const ResetPassword = () => {
+  const classes = useStyles();
+
   const [state, setState] = useState({
     code: "",
     email: "",
@@ -64,75 +100,100 @@ const ResetPassword = () => {
   };
 
   const renderRequestCodeForm = () => (
-    <form onSubmit={handleSendCodeClick}>
-      <FormGroup bsSize="large" controlId="email">
-        <ControlLabel>{I18n.get("email")}</ControlLabel>
-        <FormControl
-          autoFocus
-          type="email"
-          value={state.email}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <LoaderButton
-        block
-        type="submit"
-        size="large"
-        loadingText={I18n.get("sending")}
-        text={I18n.get("sendConfirmation")}
-        isLoading={state.isSendingCode}
-        disabled={!validateEmailForm()}
-      />
-    </form>
+    <div className="Form">
+      <form className={classes.root} onSubmit={handleSendCodeClick}>
+        <FormLabel>{I18n.get("email")}</FormLabel>
+        <div style={{ backgroundColor: "#ccc" }}>
+          <TextField
+            id="email"
+            variant="filled"
+            size="medium"
+            autoFocus
+            label={I18n.get("email")}
+            value={state.email}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <LoaderButton
+            loadingText={I18n.get("sending")} //
+            text={I18n.get("sendConfirmation")} //
+            isLoading={state.isSendingCode} //
+            disabled={!validateEmailForm()} //
+            type="submit"
+            color="primary"
+            variant="contained"
+          />
+        </div>
+      </form>
+    </div>
   );
 
   const renderConfirmationForm = () => (
-    <form onSubmit={handleConfirmClick}>
-      <FormGroup bsSize="large" controlId="code">
-        <ControlLabel>{I18n.get("confirmationCode")}</ControlLabel>
-        <FormControl
-          autoFocus
-          type="tel"
-          value={state.code}
-          onChange={handleChange}
-        />
-        <HelpBlock>{I18n.get("checkEmail")}</HelpBlock>
-      </FormGroup>
-      <hr />
-      <FormGroup bsSize="large" controlId="password">
-        <ControlLabel>{I18n.get("newPassword")}</ControlLabel>
-        <FormControl
-          type="password"
-          value={state.password}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup bsSize="large" controlId="confirmPassword">
-        <ControlLabel>{I18n.get("confirm")}</ControlLabel>
-        <FormControl
-          type="password"
-          onChange={handleChange}
-          value={state.confirmPassword}
-        />
-      </FormGroup>
-      <LoaderButton
-        block
-        type="submit"
-        size="large"
-        text={I18n.get("confirm")}
-        loadingText={I18n.get("confirming")}
-        isLoading={state.isConfirming}
-        disabled={!validateResetForm()}
-      />
-    </form>
+    <div className="Form">
+      <Container>
+        <form className={classes.root} onSubmit={handleConfirmClick}>
+          <div style={{ backgroundColor: "#ccc" }}>
+            <TextField
+              id="code"
+              variant="filled"
+              size="medium"
+              autoFocus
+              label={I18n.get("confirmationCode")}
+              type="tel"
+              value={state.code}
+              onChange={handleChange}
+            />
+          </div>
+          <FormHelperText>{I18n.get("checkEmail")}</FormHelperText>
+          <hr />
+          <div style={{ backgroundColor: "#ccc" }}>
+            <TextField
+              id="password"
+              variant="filled"
+              size="medium"
+              autoFocus
+              label={I18n.get("newPassword")}
+              type="password"
+              value={state.password}
+              onChange={handleChange}
+            />
+          </div>
+          <br />
+          <div style={{ backgroundColor: "#ccc" }}>
+            <TextField
+              id="confirmPassword"
+              variant="filled"
+              size="medium"
+              autoFocus
+              label={I18n.get("confirm")}
+              type="password"
+              value={state.confirmPassword}
+              onChange={handleChange}
+            />
+          </div>
+          <LoaderButton
+            block
+            type="submit"
+            size="large"
+            text={I18n.get("confirm")}
+            loadingText={I18n.get("confirming")}
+            isLoading={state.isConfirming}
+            disabled={!validateResetForm()}
+          />
+        </form>
+      </Container>
+    </div>
   );
 
   const renderSuccessMessage = () => (
     <div className="success">
-      <Glyphicon glyph="ok" />
+      <Typography variant="h1">{I18n.get("Success!")}</Typography>
       <p>Your password has been reset.</p>
       <p>
-        <Link to="/login">Click here to login with your new credentials.</Link>
+        <Link href="/login">
+          Click here to login with your new credentials.
+        </Link>
       </p>
     </div>
   );
