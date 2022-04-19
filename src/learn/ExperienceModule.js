@@ -6,7 +6,6 @@ import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
 import API from "@aws-amplify/api";
 import BlockContent from "@sanity/block-content-to-react";
-import Skeleton from "react-loading-skeleton";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -405,7 +404,7 @@ class ExperienceModule extends Component {
           <div style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
               <section style={{ marginTop: -12, marginLeft: -4 }}>
-                <h2 className="section-title">
+                {/* <h2 className="section-title">
                   <Skeleton height={100} width={860} />
                 </h2>
 
@@ -426,7 +425,7 @@ class ExperienceModule extends Component {
                 </h2>
                 <h2 className="section-title">
                   <Skeleton height={100} width={520} />
-                </h2>
+                </h2> */}
               </section>
             ) : (
               <div>
@@ -447,7 +446,7 @@ class ExperienceModule extends Component {
                 width: "100%",
               }}
             >
-              <Skeleton height="100%" width="100%" />
+              {/* <Skeleton height="100%" width="100%" /> */}
             </div>
           ) : (
             <div className={blockOverflow} style={{ flexBasis: "70%" }}>

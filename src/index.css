@@ -58,7 +58,7 @@ section {
 
 .stats-container.flex {
   display: flex;
-  justify-content: start!important;
+  justify-content: flex-start!important;
   margin: 8px -8px;
   flex-wrap: wrap;
 }
@@ -725,6 +725,28 @@ a.MuiButton-root:focus {
 .options .btn-default:hover
 .options .btn-default:active {
   background: #777!important;
+}
+
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: .5em .5em 0;
+}
+
+summary {
+  font-weight: bold;
+  margin: -.5em -.5em 0;
+  padding: .5em;
+  cursor: pointer;
+}
+
+details[open] {
+  padding: .5em;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: .5em;
 }
 
 .btn:hover {

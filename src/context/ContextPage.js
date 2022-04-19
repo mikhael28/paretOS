@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
-import Skeleton from "react-loading-skeleton";
 import Image from "react-bootstrap/lib/Image";
 import BlockContent from "@sanity/block-content-to-react";
 import { Slide, Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
 import SuggestionModal from "./SuggestionModal";
 import add from "../assets/add.png";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
-import "react-accessible-accordion/dist/fancy-example.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -222,9 +213,7 @@ function ContextPage(props) {
                 return (
                   <React.Fragment key={item._id}>
                     {loading === true ? (
-                      <>
-                        <Skeleton width={250} height={200} />
-                      </>
+                      <></>
                     ) : (
                       <ContextObject
                         {...item}
@@ -271,9 +260,7 @@ function ContextPage(props) {
                   return (
                     <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <>
-                          <Skeleton width={250} height={200} />
-                        </>
+                        <></>
                       ) : (
                         <ContextObject
                           {...item}
@@ -321,9 +308,7 @@ function ContextPage(props) {
                   return (
                     <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <>
-                          <Skeleton width={250} height={200} />
-                        </>
+                        <></>
                       ) : (
                         <ContextObject
                           {...item}
@@ -371,9 +356,7 @@ function ContextPage(props) {
                   return (
                     <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <>
-                          <Skeleton width={250} height={200} />
-                        </>
+                        <></>
                       ) : (
                         <ContextObject
                           {...item}
@@ -421,9 +404,7 @@ function ContextPage(props) {
                   return (
                     <React.Fragment key={item._id}>
                       {loading === true ? (
-                        <>
-                          <Skeleton width={250} height={200} />
-                        </>
+                        <></>
                       ) : (
                         <ContextObject
                           {...item}
@@ -444,16 +425,10 @@ function ContextPage(props) {
       {renderType === "generic" ? (
         <>
           <h2>{schemaObject.description}</h2>
-          <Accordion allowMultipleExpanded allowZeroExpanded>
-            <AccordionItem>
-              <AccordionItemHeading>
-                <AccordionItemButton>Read Overview</AccordionItemButton>
-              </AccordionItemHeading>
-              <AccordionItemPanel>
-                <BlockContent blocks={schemaObject.body} />
-              </AccordionItemPanel>
-            </AccordionItem>
-          </Accordion>
+          <details>
+            <summary>Read Overview</summary>
+            <BlockContent blocks={schemaObject.body} />
+          </details>
 
           <h3>
             Pareto curated resources below - tap or click to open in a new tab.
@@ -474,9 +449,7 @@ function ContextPage(props) {
               return (
                 <React.Fragment key={item._id}>
                   {loading === true ? (
-                    <>
-                      <Skeleton width={250} height={200} />
-                    </>
+                    <></>
                   ) : (
                     <ContextObject
                       {...item}

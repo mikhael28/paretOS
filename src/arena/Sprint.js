@@ -2,22 +2,12 @@ import React, { useEffect, useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Button from "react-bootstrap/lib/Button";
-import Image from "react-bootstrap/lib/Image";
+// import Image from "react-bootstrap/lib/Image";
 import Tour from "reactour";
-import classNames from "classnames";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
-import "react-accessible-accordion/dist/fancy-example.css";
-import { AppBar, Tabs, Tab, Paper, useTheme } from "@mui/material";
+// import classNames from "classnames";
+import { useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
-import StatsBlock from "../components/StatsBlock";
 import { errorToast } from "../libs/toasts";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
@@ -28,6 +18,14 @@ import {
   nextDay,
   updatePlanningForms,
 } from "../state/sprints";
+import { steps, updateSprintData } from "./utils";
+import Missions from "./Missions/Index";
+import getFormattedDay from "../utils/getFormattedDay";
+import ArenaTabsHeader from "./ArenaTabsHeadr";
+import Details from "./Details";
+import ArenaStats from "./ArenaStats";
+import ArenaDateHeader from "./ArenaDateHeader";
+import ArenaDynamicForms from "./ArenaDynamicForms";
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
  * @TODO The indexing in multiplayer games seems to be off - investigate.
@@ -39,6 +37,7 @@ import {
  * @TODO Can the 'My Stats' header by updated to look any better? Can the stats tabs look a bit sharper? What does NBA look like?
  * @returns
  */
+
 function Sprint(props) {
   const theme = useTheme();
   const [status, setStatus] = useState("early");
@@ -61,30 +60,6 @@ function Sprint(props) {
   const [paginate, setPaginate] = useState(10);
   const [key, setKey] = useState(1);
   const [dynamicForms, setDynamicForms] = useState([]);
-
-  function getFormattedDay() {
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-    const month = startDate.getMonth();
-    const dayOfWeek = startDate.getDay();
-    const date = startDate.getDate();
-    return `${days[dayOfWeek]}, ${month + 1}/${date + 1}`;
-  }
-
-  function getDateRange() {
-    const beginMonth = startDate.getMonth();
-    const beginDate = startDate.getDate();
-    const end = new Date(startDate);
-    end.setDate(end.getDate() + 5);
-    const endMonth = end.getMonth();
-    const endDate = end.getDate();
-    return `${beginMonth + 1}/${beginDate + 1} - ${endMonth + 1}/${
-      endDate + 1
-    }`;
-  }
-
-  function handleSelect(event, newValue) {
-    setKey(newValue);
-  }
 
   function handleDynamicForms(event) {
     let tempObj = { ...dynamicForms };
@@ -111,14 +86,12 @@ function Sprint(props) {
       index,
       activeSprintIndex,
     });
-    let updatedSprintData = `{"action":"sendmessage", "data":${JSON.stringify(
-      props.redux.sprint[activeSprintId]
-    )}, "sprintId": "${props.redux.sprint[activeSprintId].id}" }`;
+
     try {
-      props.ws.send(updatedSprintData);
-      setLoading(false);
-    } catch (e) {
-      errorToast(e);
+      await updateSprintData(props.redux.sprint[activeSprintId], props.ws);
+    } catch (error) {
+      errorToast(error);
+    } finally {
       setLoading(false);
     }
   }
@@ -138,15 +111,11 @@ function Sprint(props) {
       content,
     });
 
-    let updatedSprintData = `{"action":"sendmessage", "data":${JSON.stringify(
-      props.redux.sprint[activeSprintId]
-    )}, "sprintId": "${props.redux.sprint[activeSprintId].id}" }`;
-
     try {
-      props.ws.send(updatedSprintData);
+      await updateSprintData(props.redux.sprint[activeSprintId], props.ws);
       setLoading(false);
-    } catch (e) {
-      alert(e);
+    } catch (error) {
+      alert(error);
     }
   }
 
@@ -219,22 +188,6 @@ function Sprint(props) {
     fetchSprint(sprintId);
   }, []);
 
-  const steps = [
-    {
-      selector: ".first-step-arena",
-      content: `${I18n.get("arenaFirst")}`,
-    },
-    {
-      selector: ".second-step-arena",
-      content: `${I18n.get("arenaSecond")}`,
-    },
-    {
-      selector: ".third-step-arena",
-      content: `${I18n.get("arenaThird")}`,
-    },
-  ];
-  let flexCardClass = classNames("context-card", "block", "second-step-arena");
-
   let allMissions = [];
   let finishedMissions = []; // completed daily missions
   let upcomingMissions = []; // uncompleted daily missions
@@ -258,270 +211,75 @@ function Sprint(props) {
         <div>{I18n.get("loading")}</div>
       ) : (
         <>
-          <Paper sx={{ mt: -1 }} variant="filled" className="flex">
-            <h1>
-              <b>Sprint</b>&nbsp;&nbsp;{getDateRange()}
-            </h1>
-            <Image
-              src={question}
-              onClick={() => {
-                setIsTourOpen(true);
-              }}
-              height={theme.spacing(2)}
-              width={theme.spacing(2)}
-              circle
-              style={{
-                opacity: 0.8,
-                filter: theme.palette.mode === "dark" ? "invert()" : "",
-                marginLeft: theme.spacing(1),
-                marginBottom: theme.spacing(2),
-                cursor: "pointer",
-              }}
-            />
-          </Paper>
+          <ArenaDateHeader
+            startDate={startDate}
+            question={question}
+            setIsTourOpen={setIsTourOpen}
+          />
 
-          <AppBar
-            position="static"
-            style={{
-              boxShadow: "none",
-              backgroundImage: "none",
-              backgroundColor: "transparent",
-            }}
-          >
-            <Tabs value={key} onChange={handleSelect} aria-label="sprint tabs">
-              <Tab label="Plan" style={{ fontSize: 16, letterSpacing: 3 }} />
-              <Tab label="Compete" style={{ fontSize: 16, letterSpacing: 3 }} />
-              <Tab
-                label="Leaderboard"
-                style={{ fontSize: 16, letterSpacing: 3 }}
-              />
-            </Tabs>
-          </AppBar>
+          <ArenaTabsHeader setValue={setKey} value={key} />
+
           <TabPanel value={key} index={0}>
-            <>
-              {props.redux.sprint[activeSprintId].teams[index].planning.map(
-                (form, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div className="input-group" key={i}>
-                    <h3>{form.name}</h3>
-                    <div className="flex">
-                      <textarea
-                        id={form.code}
-                        value={dynamicForms[i].content}
-                        onChange={handleDynamicForms}
-                        className="planning-forms"
-                      />
-                      <Button
-                        onClick={() =>
-                          savePlanning(
-                            activeSprintId,
-                            index,
-                            i,
-                            dynamicForms[i].content
-                          )
-                        }
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  </div>
-                )
-              )}
-            </>
+            <ArenaDynamicForms
+              index={index}
+              activeSprintId={activeSprintId}
+              plannings={
+                props.redux.sprint[activeSprintId].teams[index].planning
+              }
+              dynamicForms={dynamicForms}
+              handleDynamicForms={handleDynamicForms}
+              savePlanning={savePlanning}
+            />
           </TabPanel>
+
           <TabPanel value={key} index={1}>
             <>
               <section>
-                <h5>{getFormattedDay()}</h5>
-              </section>
-              <section>
-                <h2>My Stats</h2>
-
-                <div className="first-step-arena stats-container flex">
-                  <StatsBlock
-                    statName={I18n.get("dailyPoints")}
-                    score={
-                      props.redux.sprint[activeSprintId].teams[index].missions[
-                        displayDay
-                      ].dailyScore
-                    }
-                  />
-                  <StatsBlock
-                    statName={`${I18n.get("daily")} CP`}
-                    score={`${props.redux.sprint[activeSprintId].teams[
-                      index
-                    ].missions[displayDay].dailyCompletion.toFixed(0)}%`}
-                  />
-                  <StatsBlock
-                    statName={I18n.get("weeklyPoints")}
-                    score={
-                      props.redux.sprint[activeSprintId].teams[index].score
-                    }
-                  />
-                  <StatsBlock
-                    statName={`${I18n.get("weekly")} CP`}
-                    score={`${props.redux.sprint[activeSprintId].teams[
-                      index
-                    ].percentage.toFixed(0)}%`}
-                  />
-                </div>
+                <h5>{getFormattedDay(startDate)}</h5>
               </section>
 
-              <section>
-                <h2>{I18n.get("upcomingMission")}</h2>
-                {upcomingMissions.length > 0 ? (
-                  <ul className="context-cards">
-                    {upcomingMissions.map((mission, i) => (
-                      <li
-                        className={flexCardClass}
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={i}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div>
-                          {lengua !== "en" ? (
-                            <>
-                              <h3>{mission.esTitle}</h3>
-                              <p>{mission.esDescription}</p>
-                            </>
-                          ) : (
-                            <>
-                              <h3>{mission.title}</h3>
-                              <p>{mission.description}</p>
-                            </>
-                          )}
-                        </div>
-                        <Button
-                          onClick={() => {
-                            setShowProofModal(true);
-                            setActiveIndex(i);
-                            setActiveMission(mission);
-                          }}
-                          disabled={status !== "active"}
-                        >
-                          {I18n.get("markAsComplete")}
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>
-                    You have completed all the available achievements for today.
-                  </p>
-                )}
-              </section>
+              <ArenaStats
+                activePerson={props.redux.sprint[activeSprintId].teams[index]}
+                displayDay={displayDay}
+              />
 
-              <section>
-                <h2 className="third-step-arena">
-                  {I18n.get("finishedMissions")}
-                </h2>
-                {finishedMissions.length > 0 ? (
-                  <ul className="context-cards">
-                    {finishedMissions.map((mission, id) => (
-                      <li
-                        className={flexCardClass}
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={id}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div>
-                          {lengua !== "en" ? (
-                            <>
-                              <h3>{mission.esTitle}</h3>
-                              <p>{mission.esDescription}</p>
-                            </>
-                          ) : (
-                            <>
-                              <h3>{mission.title}</h3>
-                              <p>{mission.description}</p>
-                            </>
-                          )}
-                        </div>
+              <Missions
+                headText="upcomingMission"
+                missions={upcomingMissions}
+                emptyMisionsMessage="You have completed all the available achievements for today."
+                lengua={lengua}
+                missionBtnText="markAsComplete"
+                setShowProofModal={setShowProofModal}
+                setActiveIndex={setActiveIndex}
+                setActiveMission={setActiveMission}
+              />
 
-                        <Button
-                          onClick={() => {
-                            setActiveIndex(id);
-                            setActiveMission(mission);
-                            setView("review");
-                            setShowProofModal(true);
-                          }}
-                        >
-                          {I18n.get("seeTheProof")}
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>You have not reported any achievements yet today.</p>
-                )}
-              </section>
+              <Missions
+                headClassName="third-step-arena"
+                headText="finishedMissions"
+                missions={finishedMissions}
+                emptyMisionsMessage="You have not reported any achievements yet today."
+                lengua={lengua}
+                missionBtnText="seeTheProof"
+                setActiveIndex={setActiveIndex}
+                setActiveMission={setActiveMission}
+                setView={setView}
+                setShowProofModal={setShowProofModal}
+              />
 
-              <Accordion
-                style={{ margin: -16 }}
-                allowMultipleExpanded
-                allowZeroExpanded
-              >
-                <AccordionItem>
-                  <AccordionItemHeading>
-                    <AccordionItemButton>Time Travel</AccordionItemButton>
-                  </AccordionItemHeading>
-                  <AccordionItemPanel>
-                    <div className="options">
-                      <p>
-                        <b>Currently Day {displayDay + 1}</b>
-                      </p>
-                      <p>
-                        Click a button below to go back to a specific day and
-                        add an update you forgot.
-                      </p>
-
-                      <div className="options-buttons">
-                        {props.redux.sprint[activeSprintId].teams[
-                          index
-                        ].missions.map((mission, idx) => (
-                          <Button
-                            onClick={() => {
-                              setDisplayDay(idx);
-                            }}
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={idx}
-                          >
-                            Day {idx + 1}
-                          </Button>
-                        ))}
-                      </div>
-                      <div className="flex">
-                        {props.user.admin === true ? (
-                          <div>
-                            <p>Status: {status}</p>
-                            <div className="flex-apart">
-                              <Button onClick={() => setStatus("early")}>
-                                Set to Early
-                              </Button>
-                              <Button onClick={() => setStatus("active")}>
-                                Set to Active
-                              </Button>
-                              <Button onClick={() => setStatus("inactive")}>
-                                Set to Inactive
-                              </Button>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </AccordionItemPanel>
-                </AccordionItem>
-              </Accordion>
+              <Details
+                displayDay={displayDay}
+                admin={props.user.admin}
+                missions={
+                  props.redux.sprint[activeSprintId].teams[index].missions
+                }
+                setDisplayDay={setDisplayDay}
+                setStatus={setStatus}
+                status={status}
+              />
             </>
           </TabPanel>
+
           <TabPanel value={key} index={2}>
             <div className="row">
               <div className="col-xs-12 col-sm-7">
