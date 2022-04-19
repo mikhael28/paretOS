@@ -5,6 +5,7 @@ import {
   GridColDef,
   GridValueGetterParams,
   GridCellParams,
+  GridValueFormatterParams,
   gridClasses,
 } from "@mui/x-data-grid";
 import StyledDataGrid from "./StyledDataGrid";
@@ -57,8 +58,10 @@ function Leaderboard({
     {
       field: "score",
       headerName: I18n.get("score"),
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.score || 0} pts`,
+      valueFormatter: (params: GridValueFormatterParams<number>) => {
+        if (params.value === null) return "0 pts";
+        return `${params.value} pts`;
+      },
       align: "center",
       headerAlign: "center",
       flex: 1,
@@ -122,6 +125,18 @@ function Leaderboard({
             />
           </form>
           <StyledDataGrid
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "score", sort: "desc" }],
+              },
+              pagination: {
+                page: Math.floor(
+                  rankedUsers.findIndex((u) => u.id === currentUser.id) /
+                    itemsPerPage
+                ),
+              },
+            }}
+            sortingOrder={["desc", "asc"]}
             rows={rankedUsers.filter(filterUsers)}
             columns={columns}
             pageSize={itemsPerPage}
