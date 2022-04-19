@@ -68,7 +68,14 @@ export class WS {
   }
 
   send(payload) {
-    this.socketRef?.send(payload);
+    if (this.isOpen() && this.socketRef) {
+      this.socketRef.send(payload);
+    } else {
+      this.socketRef?.close(3000);
+      this.connect({ path: this.path, processMsg: this.processMsg });
+      this.waitForConnection(125);
+      this.socketRef?.send(payload);
+    }
   }
 
   waitForConnection(startingTimeout = 125) {
