@@ -75,7 +75,6 @@ class App extends Component {
       relationships: [],
       isTourOpen: false,
       loading: false,
-      initialLoadComplete: false,
       sanitySchemas: {
         technicalSchemas: [],
         economicSchemas: [],
@@ -140,83 +139,93 @@ class App extends Component {
     let newState = {};
     const path = this.props.location.pathname;
 
-    // Fetch only the data needed for that page
+    // Set up variables to enable fetching only the data needed for your current app view
     const [context, training, arena] = [
       path.includes("context-builder"),
       path.includes("training"),
       !path.includes("context-builder") && !path.includes("training"),
     ];
-    const socketOptions = { updateState: false };
-    if (this.state.initialLoadComplete === false) {
-      const user = await fetchUser(username);
-      if (user.length > 0) {
-        const currentUser = user[0];
-        try {
-          this.props.getUser(currentUser);
-          newState.user = currentUser;
-          if (currentUser.defaultLanguage) {
-            const language = availableLanguages.find(
-              (x) => x.code === currentUser.defaultLanguage
-            );
-            newState.chosenLanguage = language || "en";
-            I18n.setLanguage(currentUser.defaultLanguage);
-          }
-          socketOptions.user = currentUser;
-          const results = await Promise.all(
-            [
-              context && fetchStarterKitSanity(),
-              context && fetchSanitySchemas(),
-              training && fetchStarterKitExperience(currentUser.id),
-              arena && this.connectSocketToSprint(socketOptions),
-              fetchCoaches(currentUser.id),
-              currentUser.instructor === true &&
-                fetchCoachingRoster(currentUser.id),
-            ].filter((x) => x !== false)
-          );
+    const firstFetch = [];
+    const secondFetch = [];
 
-          results
-            .filter((r) => r !== false)
-            .forEach((item) => {
-              const { success, ...rest } = item;
-              if (success === true) {
-                newState = { ...newState, ...rest };
-              }
-            });
-          newState.isAuthenticated = true;
-          this.setState({ ...newState }, () => this.setCloseLoading());
-        } catch (e) {
-          console.log(e.toString());
-          if (e.toString() === "Error: Network Error") {
-            console.log("Successfully identified network error");
-          }
-        }
-      }
+    const socketOptions = { updateState: false };
+
+    const user = await fetchUser(username);
+    if (user.length > 0) {
+      const currentUser = user[0];
       try {
-        // Load content that will be needed in other areas.
-        let afterState = {};
-        afterState.loading = false;
-        const afterResults = await Promise.all([
-          !context && fetchStarterKitSanity(),
-          !context && fetchSanitySchemas(),
-          !training && fetchStarterKitExperience(this.state.user.id),
-          !arena && this.connectSocketToSprint(socketOptions),
-        ]);
-        afterResults
+        this.props.getUser(currentUser);
+        newState.user = currentUser;
+        if (currentUser.defaultLanguage) {
+          const language = availableLanguages.find(
+            (x) => x.code === currentUser.defaultLanguage
+          );
+          newState.chosenLanguage = language || "en";
+          I18n.setLanguage(currentUser.defaultLanguage);
+        }
+        socketOptions.user = currentUser;
+
+        // Sort fetching functions according to whether they should happen before or after the loading overlay goes away
+        if (context) {
+          firstFetch.push(fetchSanitySchemas);
+          firstFetch.push(fetchStarterKitSanity);
+        } else {
+          secondFetch.push(fetchSanitySchemas);
+          secondFetch.push(fetchStarterKitSanity);
+        }
+        if (training) {
+          firstFetch.push(() => fetchStarterKitExperience(currentUser.id));
+        } else {
+          secondFetch.push(() => fetchStarterKitExperience(currentUser.id));
+        }
+        if (arena) {
+          firstFetch.push(() => this.connectSocketToSprint(socketOptions));
+        } else {
+          secondFetch.push(() => this.connectSocketToSprint(socketOptions));
+        }
+        if (currentUser.instructor) {
+          firstFetch.push(() => fetchCoachingRoster(currentUser.id));
+        }
+        firstFetch.push(() => fetchCoaches(currentUser.id));
+
+        // Fetch first set of data
+        const results = await Promise.all([...firstFetch.map((x) => x())]);
+
+        results
           .filter((r) => r !== false)
           .forEach((item) => {
             const { success, ...rest } = item;
             if (success === true) {
-              afterState = { ...afterState, ...rest };
+              newState = { ...newState, ...rest };
             }
           });
-        this.setState({ ...afterState }, () =>
-          this.setState({ initialLoadComplete: true })
-        );
+        newState.isAuthenticated = true;
+        this.setState({ ...newState }, () => this.setCloseLoading());
       } catch (e) {
         console.log(e.toString());
         if (e.toString() === "Error: Network Error") {
           console.log("Successfully identified network error");
         }
+      }
+    }
+    try {
+      // Fetch remaining content that will be needed in other areas of the app.
+      let afterState = {};
+      afterState.loading = false;
+      const afterResults = await Promise.all([...secondFetch.map((x) => x())]);
+      afterResults
+        .filter((r) => r !== false)
+        .forEach((item) => {
+          const { success, ...rest } = item;
+          if (success === true) {
+            afterState = { ...afterState, ...rest };
+          }
+        });
+      this.setState({ ...afterState });
+    } catch (e) {
+      console.log(e.toString());
+      if (e.toString() === "Error: Network Error") {
+        console.log("Successfully identified network error");
       }
     }
   };
