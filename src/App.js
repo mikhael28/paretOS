@@ -148,22 +148,20 @@ class App extends Component {
     const firstFetch = [];
     const secondFetch = [];
 
-    const socketOptions = { updateState: false };
-
     const user = await fetchUser(username);
     if (user.length > 0) {
       const currentUser = user[0];
       try {
         this.props.getUser(currentUser);
-        newState.user = currentUser;
+        const stateUpdate = { user: currentUser, language: "en" };
         if (currentUser.defaultLanguage) {
           const language = availableLanguages.find(
             (x) => x.code === currentUser.defaultLanguage
           );
-          newState.chosenLanguage = language || "en";
           I18n.setLanguage(currentUser.defaultLanguage);
+          stateUpdate.language = language;
         }
-        socketOptions.user = currentUser;
+        this.setState(stateUpdate);
 
         // Sort fetching functions according to whether they should happen before or after the loading overlay goes away
         if (context) {
@@ -179,9 +177,9 @@ class App extends Component {
           secondFetch.push(() => fetchStarterKitExperience(currentUser.id));
         }
         if (arena) {
-          firstFetch.push(() => this.connectSocketToSprint(socketOptions));
+          firstFetch.push(() => this.connectSocketToSprint());
         } else {
-          secondFetch.push(() => this.connectSocketToSprint(socketOptions));
+          secondFetch.push(() => this.connectSocketToSprint());
         }
         if (currentUser.instructor) {
           firstFetch.push(() => fetchCoachingRoster(currentUser.id));
@@ -230,17 +228,19 @@ class App extends Component {
     }
   };
 
-  connectSocketToSprint = async ({ user, updateState }) => {
+  connectSocketToSprint = async () => {
     let result = { success: false, sprints: null };
     try {
-      const sprints = await API.get("pareto", `/sprints/mentee/${user.id}`);
+      const sprints = await API.get(
+        "pareto",
+        `/sprints/mentee/${this.state.user.id}`
+      );
       result.success = true;
       result.sprints = sprints;
 
-      if (updateState === true) {
-        this.props.getInitialSprintData(sprints);
-        this.setState({ sprints: sprints });
-      }
+      this.props.getInitialSprintData(sprints);
+      this.setState({ sprints: sprints });
+
       if (sprints.length === 0) {
         return result;
       }
