@@ -9,6 +9,7 @@ import { useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
 import { errorToast } from "../libs/toasts";
+import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
 import ArenaProofModal from "../components/ArenaProofModal";
@@ -88,7 +89,7 @@ function Sprint(props) {
     });
 
     try {
-      await updateSprintData(props.redux.sprint[activeSprintId], props.ws);
+      await updateSprintData(props.redux.sprint[activeSprintId], ws);
     } catch (error) {
       errorToast(error);
     } finally {
@@ -112,7 +113,7 @@ function Sprint(props) {
     });
 
     try {
-      await updateSprintData(props.redux.sprint[activeSprintId], props.ws);
+      await updateSprintData(props.redux.sprint[activeSprintId], ws);
       setLoading(false);
     } catch (error) {
       alert(error);
@@ -198,10 +199,10 @@ function Sprint(props) {
       props.redux.sprint[activeSprintId].teams[index].missions[displayDay]
         .missions || []; // default to empty array
 
-    [...allMissions].forEach((mission) =>
+    [...allMissions].forEach((mission, i) =>
       mission.completed
-        ? finishedMissions.push(mission)
-        : upcomingMissions.push(mission)
+        ? finishedMissions.push([mission, i])
+        : upcomingMissions.push([mission, i])
     );
   }
 
