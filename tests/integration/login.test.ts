@@ -11,32 +11,28 @@ const url = "http://localhost:3000";
 let browser;
 let page;
 
-describe("Login page", () => {
+describe("Login Page:", () => {
   before(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.goto(`${url}/login`);
-    page.waitForTimeout(10000);
   });
 
   after(async () => {
     await browser.close();
   });
 
-  it("should allow a user to log in", async () => {
-    await page.goto(`${url}/login`);
+  it("should allow a user to log in and log out", async () => {
+    await page.waitForSelector("#email");
+    console.log(`username:${username}, password:${password}`);
     await page.type("#email", username);
     await page.type("#password", password);
     await page.click("[type='submit']");
-    await page.waitForNavigation();
-
+    await page.waitForSelector(".sticky-logout");
     const logout = await page.$(".sticky-logout");
-    expect(typeof logout === "undefined").to.equal(false);
-
     if (typeof logout === "undefined") {
       await page.screenshot({ path: "login-failure.png" });
     }
-
-    await page.click(".sticky-logout");
+    expect(typeof logout === "undefined").to.equal(false);
   });
 });

@@ -28,23 +28,24 @@ function ContextBuilder({ sanitySchemas }) {
 
     return (
       <div className="context-cards">
-        {topics.map((topic) => {
-          const link = topic.type === "hub" ? "hubs" : "context";
-          const img = builder.image(topic.mainImage.asset._ref);
+        {topics?.length > 0 &&
+          topics.map((topic) => {
+            const link = topic.type === "hub" ? "hubs" : "context";
+            const img = builder.image(topic.mainImage.asset._ref);
 
-          return (
-            <div
-              className={newCardClass}
-              onClick={() => history.push(`/${link}/${topic.slug.current}`)}
-            >
-              <ContextObject
-                img={img}
-                title={topic.title}
-                summary={topic.summary}
-              />
-            </div>
-          );
-        })}
+            return (
+              <div
+                className={newCardClass}
+                onClick={() => history.push(`/${link}/${topic.slug.current}`)}
+              >
+                <ContextObject
+                  img={img}
+                  title={topic.title}
+                  summary={topic.summary}
+                />
+              </div>
+            );
+          })}
       </div>
     );
   };
