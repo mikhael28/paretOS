@@ -312,9 +312,7 @@ function sprint(state = [], action) {
       let newSprints = state.slice();
       newSprints[action.payload.activeSprintIndex].teams = newTeams;
 
-      return {
-        ...newSprints,
-      };
+      return [...newSprints];
     case PLANNING_FORMS:
       let newFormsState = state[action.payload.activeSprintIndex].teams.slice();
       newFormsState[action.payload.teamIndex].planning[
@@ -322,9 +320,7 @@ function sprint(state = [], action) {
       ].content = action.payload.content;
       let newForms = state.slice();
       newForms[action.payload.activeSprintIndex].teams = newFormsState;
-      return {
-        ...newForms,
-      };
+      return [...newForms];
     case NEXT_DAY:
       return { ...state, day: state.day + 1 };
     case PUT_UPDATED_SPRINT_DATA:
