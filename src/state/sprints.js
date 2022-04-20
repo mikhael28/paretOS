@@ -292,7 +292,7 @@ function sprint(state = [], action) {
       newTeams[action.payload.index].missions[
         action.payload.day
       ].dailyCompletion =
-        completedTasks /
+        (completedTasks * 100) /
         newTeams[action.payload.index].missions[action.payload.day].missions
           .length;
 
@@ -302,7 +302,7 @@ function sprint(state = [], action) {
       // weekly completion
 
       let newPercentage =
-        newTeams[action.payload.index].score /
+        (newTeams[action.payload.index].score * 100) /
         (newTeams[action.payload.index].missions.length *
           (newTeams[action.payload.index].missions[0].missions.length * 10));
       if (isNaN(newPercentage) !== true) {
