@@ -23,7 +23,7 @@ import uploadToS3 from "../libs/s3";
  * @TODO #26
  */
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
       width: "100%",
@@ -31,6 +31,18 @@ const useStyles = makeStyles(() => ({
     "& .MuiInputBase-input": {
       fontSize: 16,
       color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme?.spacing(1) || 8,
+      marginRight: 6,
+      fontSize: 16,
+      padding: "6px 32px",
+      textTransform: "none",
+    },
+    "& .MuiDialogActions-root": {
+      padding: 0,
+      display: "inline-flex",
+      alignItems: "end",
     },
   },
 }));
@@ -95,9 +107,6 @@ export default function ArenaProofModal({
 
   return (
     <Dialog
-      style={{
-        margin: "auto",
-      }}
       fullWidth
       open={show}
       onClose={handleClose}
@@ -135,23 +144,12 @@ export default function ArenaProofModal({
               <h3>{I18n.get("attachment")}</h3>
               <input type="file" onChange={(evt) => onChange(evt)} />
               <br />
-              <DialogActions
-                style={{
-                  padding: "0",
-                  display: "inline-flex",
-                  alignItems: "end",
-                }}
-              >
+              <DialogActions>
                 <Button
                   size="large"
                   variant="contained"
                   color="primary"
                   onClick={handleClose}
-                  style={{
-                    fontSize: "16px",
-                    padding: "6px 32px",
-                    marginRight: "6px",
-                  }}
                 >
                   {I18n.get("close")}
                 </Button>
