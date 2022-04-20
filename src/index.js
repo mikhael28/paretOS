@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import Amplify from "@aws-amplify/core";
-import API from "@aws-amplify/api";
-import Storage from "@aws-amplify/storage";
+import { Amplify } from "@aws-amplify/core";
+import { API } from "@aws-amplify/api";
+import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -55,7 +55,8 @@ API.configure({
 
 Storage.configure({
   AWSS3: {
-    bucket: process.env.REACT_APP_PHOTO_BUCKET,
+    bucket: process.env.REACT_APP_PROOF_BUCKET,
+    region: process.env.REACT_APP_UTIL_REGION,
   },
 });
 
