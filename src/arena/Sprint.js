@@ -113,15 +113,15 @@ function Sprint(props) {
     setDynamicForms(tempObj);
   }
 
-  async function handleChange(mission, idx, day, key, activeSprintIndex) {
+  async function handleChange(mission, idx, day, key) {
     setLoading(true);
     props.completeSprintTask({
       mission,
       idx,
       day,
       key,
-      TEAM_INDEX,
-      activeSprintIndex,
+      index: TEAM_INDEX,
+      activeSprintIndex: SPRINT_INDEX,
     });
 
     try {
@@ -280,7 +280,6 @@ function Sprint(props) {
           handleClose={closeModal}
           sprint={props.redux.sprint[SPRINT_INDEX]}
           view={view}
-          activeSprintId={SPRINT_INDEX}
           user={props.user}
         />
         <Tour steps={steps} isOpen={isTourOpen} onRequestClose={closeTour} />

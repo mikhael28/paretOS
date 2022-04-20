@@ -98,7 +98,6 @@ export default function ArenaProofModal({
                       activeIndex,
                       day,
                       formData.key,
-                      activeSprintId,
                       `${user.fName} just completed ${activeMission.title}.${
                         formData.trashTalk.length > 0
                           ? `They also said: "${formData.trashTalk}"`
