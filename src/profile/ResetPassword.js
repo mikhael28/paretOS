@@ -6,7 +6,8 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import HelpBlock from "react-bootstrap/lib/HelpBlock";
-import Glyphicon from "react-bootstrap/lib/Glyphicon";
+// import Glyphicon from "react-bootstrap/lib/Glyphicon";
+import { BsCheckLg } from "react-icons/bs";
 import LoaderButton from "../components/LoaderButton";
 
 const ResetPassword = () => {
@@ -129,7 +130,7 @@ const ResetPassword = () => {
 
   const renderSuccessMessage = () => (
     <div className="success">
-      <Glyphicon glyph="ok" />
+      <BsCheckLg />
       <p>Your password has been reset.</p>
       <p>
         <Link to="/login">Click here to login with your new credentials.</Link>
