@@ -52,6 +52,20 @@ body {
   line-height: 28px;
 }
 
+section {
+  margin-bottom: 16px;
+}
+
+.stats-container.flex {
+  display: flex;
+  justify-content: flex-start!important;
+  margin: 8px -8px;
+  flex-wrap: wrap;
+}
+
+.experience-container.flex {
+  margin: 8px -8px;
+}
 /* Typography */
 
 h1 {
@@ -61,22 +75,25 @@ h1 {
 }
 
 h2 {
-  margin-top: 10px;
-  margin-bottom: 0px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0px;
   font-size: 24px;
   font-weight: 900;
   text-shadow: 0.5px 0px 0px white;
   letter-spacing: 0.5px;
 }
 h3 {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin: 0;
   font-Weight: 600;
   text-shadow: 0.5px 0px 0px;
   letter-spacing: 0.5px;
   font-size: 18px;
 }
 h5 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
   color: var(--tertiary);
   text-transform: uppercase;
   font-weight: 600;
@@ -120,9 +137,7 @@ a.MuiButton-root:focus {
     margin-bottom: 6vh;
   }
   .root-padding {
-    padding-left: 16px;
-    padding-right: 16px;
-    margin-bottom: 12vh;
+    padding: 8px 16px 12vh 16px;
   }
   .sticky-nav {
     position: fixed;
@@ -176,9 +191,7 @@ a.MuiButton-root:focus {
     padding-top: -74px;
   }
   .root-padding {
-    padding-left: 286px;
-    padding-right: 16px;
-    padding-top: 16px;
+    padding: 24px 32px 24px 302px
   }
   .sticky-nav {
     visibility: hidden;
@@ -298,6 +311,7 @@ a.MuiButton-root:focus {
 
 .flex {
   display: flex;
+  align-items: center;
 }
 
 .flex-down {
@@ -379,8 +393,8 @@ a.MuiButton-root:focus {
   display: flex;
   flex-direction: column;
   height: 100px;
-  width: 135px;
-  max-width: 200px;
+  width: 125px;
+  max-width: calc(min(200px, 33% - 14px));
   align-items: stretch;
   justify-content: space-between;
 }
@@ -457,21 +471,25 @@ a.MuiButton-root:focus {
     padding: 5px;
   }
   .context-card {
-    flex: 1 1 calc(50% - 1em);
-    margin: 5px;
+    flex: 1 1 calc(50% - 16px);
+    margin: 8px;
+    max-width: calc(50% - 16px);
   }
 }
 
 @media screen and (min-width: 60em) {
   .context-card {
-    flex: 0 1 calc(33% - 1em);
+    flex: 1 1 calc(33% - 16px);
+    max-width: calc(33% - 16px);
+    min-width: calc(33% - 16px);
     margin: 8px;
   }
 }
 
 @media screen and (max-width: 768px) {
   .context-cards {
-    margin-top: 26px;
+    padding: 0px;
+    margin: 8px -8px 24px -8px;
   }
 }
 
@@ -642,7 +660,8 @@ a.MuiButton-root:focus {
 
 /* button styles */
 
-.LoaderButton .spinning {
+.LoaderButton .spinning,
+.loading-icon.spinning {
   margin-right: 7px;
   top: 2px;
   animation: spin 1s infinite linear;
@@ -706,6 +725,28 @@ a.MuiButton-root:focus {
 .options .btn-default:hover
 .options .btn-default:active {
   background: #777!important;
+}
+
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: .5em .5em 0;
+}
+
+summary {
+  font-weight: bold;
+  margin: -.5em -.5em 0;
+  padding: .5em;
+  cursor: pointer;
+}
+
+details[open] {
+  padding: .5em;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: .5em;
 }
 
 .btn:hover {

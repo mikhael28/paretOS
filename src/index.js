@@ -1,7 +1,8 @@
+import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import Amplify from "@aws-amplify/core";
-import API from "@aws-amplify/api";
-import Storage from "@aws-amplify/storage";
+import { Amplify } from "@aws-amplify/core";
+import { API } from "@aws-amplify/api";
+import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -54,22 +55,22 @@ API.configure({
 
 Storage.configure({
   AWSS3: {
-    bucket: process.env.REACT_APP_PHOTO_BUCKET,
+    bucket: process.env.REACT_APP_PROOF_BUCKET,
+    region: process.env.REACT_APP_UTIL_REGION,
   },
 });
 
 ReactDOM.render(
-  <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Router>,
+  <StrictMode>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
+  </StrictMode>,
   document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
 // @TODO register service worker for full PWA, currently disabled while in alpha
 serviceWorkerRegistration.unregister();
 

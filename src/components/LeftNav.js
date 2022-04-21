@@ -1,16 +1,38 @@
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import Image from "react-bootstrap/lib/Image";
-import DropdownButton from "react-bootstrap/lib/DropdownButton";
-import MenuItem from "react-bootstrap/lib/MenuItem";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
 import { BiRun } from "react-icons/bi";
+import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
+import { availableLanguages, updateLanguage } from "../libs/languages";
+import LanguageContext from "../LanguageContext";
 
 function LeftNav(props) {
-  const { chosenLanguage, user, updateState, athletes } = props;
+  const { language, setLanguage } = useContext(LanguageContext);
+  const { user, athletes } = props;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedCode, setSelectedCode] = useState(language.code);
+  const open = Boolean(anchorEl);
+
+  const handleClickListItem = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event, code) => {
+    setSelectedCode(code);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSetLanguage = (language) => {
+    setLanguage(language);
+  };
 
   const headingStyle = {
     textDecoration: "none",
@@ -18,7 +40,7 @@ function LeftNav(props) {
     fontWeight: 600,
     marginLeft: 16,
     marginRight: 16,
-    marginTop: 48,
+    marginTop: 24,
     paddingTop: 8,
     textTransform: "uppercase",
     letterSpacing: "2.5px",
@@ -34,152 +56,46 @@ function LeftNav(props) {
     textDecoration: "none",
   };
 
-  const langStyle = {
-    backgroundColor: "black",
-    color: white,
-    padding: "3px",
-  };
-
-  const langTitle = (
-    <Image
-      src={chosenLanguage.image}
-      height="22"
-      width="22"
-      circle
-      style={{ position: "relative", zIndex: "999" }}
-    />
-  );
-
   // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
   const renderLanguageDropdown = () => (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <DropdownButton
-        key={1}
-        title={langTitle}
-        id="pick-service"
-        style={{
-          color: "white",
-          fontSize: 14,
-          backgroundColor: "var(--navigation-bgColor)",
-          backgroundImage: "none",
-          border: "none",
-          textAlign: "left",
-          maxWidth: "40px",
-          minWidth: "unset",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
+      <IconButton
+        onClick={handleClickListItem}
+        size="small"
+        sx={{ ml: 2 }}
+        aria-controls={open ? "language-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+      >
+        <Avatar sx={{ width: 24, height: 24 }} src={language.image} />
+      </IconButton>
+      <Menu
+        id="language-menu-button"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "language-button",
+          role: "listbox",
         }}
       >
-        <div
-          style={{
-            background: "black",
-            marginTop: "-5px",
-            marginBottom: "-5px",
-            padding: "8px 6px",
-          }}
-        >
+        {availableLanguages.map((language) => (
           <MenuItem
-            style={langStyle}
-            key={1.1}
-            onClick={() => {
-              I18n.setLanguage("lg");
-              updateState({
-                chosenLanguage: {
-                  name: "Lugandan",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/uganda/flag-square-250.png",
-                },
+            key={language.code}
+            selected={language.code === selectedCode}
+            onClick={(e) => {
+              handleMenuItemClick(e, language.code);
+              updateLanguage({
+                language,
+                id: user.id,
+                setLanguage: handleSetLanguage,
               });
             }}
           >
-            Luganda
+            {language.name}
           </MenuItem>
-          <MenuItem
-            style={langStyle}
-            key={1.2}
-            onClick={() => {
-              I18n.setLanguage("es");
-              updateState({
-                chosenLanguage: {
-                  name: "Spanish",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/spain/flag-400.png",
-                },
-              });
-            }}
-          >
-            Spanish
-          </MenuItem>
-          <MenuItem
-            style={langStyle}
-            key={1.3}
-            onClick={() => {
-              I18n.setLanguage("en");
-              updateState({
-                chosenLanguage: {
-                  name: "English",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png",
-                },
-              });
-            }}
-          >
-            English
-          </MenuItem>
-
-          <MenuItem
-            style={langStyle}
-            key={1.4}
-            onClick={() => {
-              I18n.setLanguage("ptbr");
-              updateState({
-                chosenLanguage: {
-                  name: "Portuguese",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/brazil/flag-400.png",
-                },
-              });
-            }}
-          >
-            Portugeuse (BR)
-          </MenuItem>
-
-          <MenuItem
-            key={1.5}
-            style={langStyle}
-            onClick={() => {
-              I18n.setLanguage("ngpg");
-              updateState({
-                chosenLanguage: {
-                  name: "Nigerian Pidgin",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/nigeria/flag-400.png",
-                },
-              });
-            }}
-          >
-            Nigeria (Pidgin)
-          </MenuItem>
-
-          <MenuItem
-            key={1.6}
-            style={langStyle}
-            onClick={() => {
-              I18n.setLanguage("hi");
-              updateState({
-                chosenLanguage: {
-                  name: "Hindi",
-                  image:
-                    "https://cdn.countryflags.com/thumbs/india/flag-400.png",
-                },
-              });
-            }}
-          >
-            Hindi
-          </MenuItem>
-        </div>
-      </DropdownButton>
+        ))}
+      </Menu>
     </div>
   );
 
@@ -202,15 +118,14 @@ function LeftNav(props) {
             justifyContent: "flex-start",
           }}
         >
-          <Image
+          <Avatar
+            sx={{ width: 24, height: 24 }}
             src={
               user.picture ||
               "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             }
-            height="40"
-            width="40"
-            circle
           />
+
           <p
             style={{
               fontSize: 18,
@@ -373,9 +288,14 @@ function LeftNav(props) {
       </NavLink>
       <div style={{ flex: "0 0 4px" }} />
 
-      {/* <div className="fourth-step">
-        <Pomodoro />
-      </div> */}
+      <NavLink
+        to="/sandbox"
+        style={headingStyle}
+        activeStyle={activeStyle}
+        exact
+      >
+        &ensp;Sandbox
+      </NavLink>
 
       <div style={{ flex: "0 0 16px" }} />
 
