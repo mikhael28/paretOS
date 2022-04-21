@@ -10,6 +10,7 @@ const Login = lazy(() => import("./profile/Login"));
 const Signup = lazy(() => import("./profile/Signup"));
 const ResetPassword = lazy(() => import("./profile/ResetPassword"));
 const ChangePassword = lazy(() => import("./profile/ChangePassword"));
+// eslint-ignore import/no-cycle
 const Sandbox = lazy(() => import("./containers/Sandbox"));
 const Order = lazy(() => import("./learn/Order"));
 const Profile = lazy(() => import("./mentorship/MenteeProfile"));
@@ -17,7 +18,7 @@ const ExperienceModule = lazy(() => import("./learn/ExperienceModule"));
 const SprintCreation = lazy(() => import("./arena/SprintCreation"));
 const NotFound = lazy(() => import("./containers/NotFound"));
 const EditProfile = lazy(() => import("./profile/EditProfile"));
-const Languages = lazy(() => import("./profile/Languages"));
+const LanguageSelector = lazy(() => import("./profile/LanguageSelector"));
 const ArenaDashboard = lazy(() => import("./arena/Sprints"));
 const ContextBuilder = lazy(() => import("./context/ContextBuilder"));
 const ContextPage = lazy(() => import("./context/ContextPage"));
@@ -136,7 +137,7 @@ export default ({ childProps }) => (
       <AuthenticatedRoute
         path="/profile/languages/:id"
         exact
-        component={Languages}
+        component={LanguageSelector}
         props={childProps}
       />
       <AppliedRoute

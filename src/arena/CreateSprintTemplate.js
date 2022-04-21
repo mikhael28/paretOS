@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import { useTheme } from "@mui/material";
+import { useTheme, Button } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import API from "@aws-amplify/api";
@@ -154,7 +153,9 @@ function CreateSprintTemplate(props) {
           onChange={(event) => setTitle(event.target.value)}
         />
       </FormGroup>
-      <Button onClick={createTemplate}>{I18n.get("create")} Sprint</Button>
+      <Button variant="gradient" onClick={createTemplate}>
+        {I18n.get("create")} Sprint
+      </Button>
       <div
         style={{
           display: "flex",

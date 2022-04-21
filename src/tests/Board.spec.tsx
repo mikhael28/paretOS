@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Leaderboard from "../components/Board";
 import type { User } from "../types";
@@ -82,11 +82,15 @@ describe("LEADERBOARD", () => {
     });
     // ! this test fails because fireEvent.change function
     // ! doesn't seem to change the value of the input element
-    it("filters the leaderboard based on a given filter phrase", () => {
+    it("filters the leaderboard based on a given filter phrase", async () => {
       const inputEl = screen.getByPlaceholderText(/Filter by name/);
-      fireEvent.change(inputEl, {
-        value: "Adam",
-      });
+      await waitFor(() =>
+        fireEvent.change(inputEl, {
+          target: {
+            value: "Adam",
+          },
+        })
+      );
       expect(inputEl).toHaveValue("Adam");
       const rows = screen.getAllByTestId("leaderboard-row");
       expect(rows).toHaveLength(1);

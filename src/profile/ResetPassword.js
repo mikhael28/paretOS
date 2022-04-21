@@ -231,6 +231,7 @@ const ResetPassword = ({ initialFetch, setCloseLoading, setLoading }) => {
   const renderSuccessMessage = () => (
     <div className="success">
       <Typography variant="h1">{I18n.get("Success!")}</Typography>
+
       <p>Your password has been reset.</p>
       <p>
         <Link href="/login">

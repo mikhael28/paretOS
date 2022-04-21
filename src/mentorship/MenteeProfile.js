@@ -3,15 +3,7 @@ import API from "@aws-amplify/api";
 import { I18n } from "@aws-amplify/core";
 import Image from "react-bootstrap/lib/Image";
 import { Link } from "react-router-dom";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
 import { AiOutlineGithub } from "react-icons/ai";
-import Skeleton from "react-loading-skeleton";
 import classNames from "classnames";
 import { errorToast } from "../libs/toasts";
 
@@ -72,7 +64,7 @@ function Profile() {
     <div style={{ marginTop: 28 }}>
       {loading === true ? (
         <section style={{ marginTop: -12 }}>
-          <h2 className="section-title">
+          {/* <h2 className="section-title">
             <Skeleton height={60} width="100%" />
           </h2>
           <h2 className="section-title">
@@ -80,7 +72,7 @@ function Profile() {
           </h2>
           <h2 className="section-title">
             <Skeleton height={200} width="100%" />
-          </h2>
+          </h2> */}
         </section>
       ) : (
         <>
@@ -170,42 +162,27 @@ function Profile() {
                       {new Date(sprint.endDate).getUTCDate()}/
                       {new Date(sprint.endDate).getUTCFullYear()}
                     </p>
-                    <Accordion allowMultipleExpanded allowZeroExpanded>
-                      <AccordionItem>
-                        <AccordionItemHeading>
-                          <AccordionItemButton>
-                            See Planning Entries
-                          </AccordionItemButton>
-                        </AccordionItemHeading>
-                        <AccordionItemPanel>
-                          {activeTeam.planning.map((plan, idx) => (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <div key={idx}>
-                              <h3>{plan.name}</h3>
-                              <p>{plan.content}</p>
-                            </div>
-                          ))}
-                        </AccordionItemPanel>
-                      </AccordionItem>
-                    </Accordion>
-                    <Accordion allowMultipleExpanded allowZeroExpanded>
-                      <AccordionItem>
-                        <AccordionItemHeading>
-                          <AccordionItemButton>
-                            See Review Entries
-                          </AccordionItemButton>
-                        </AccordionItemHeading>
-                        <AccordionItemPanel>
-                          {activeTeam.review.map((plan, idx) => (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <div key={idx}>
-                              <h3>{plan.name}</h3>
-                              <p>{plan.content}</p>
-                            </div>
-                          ))}
-                        </AccordionItemPanel>
-                      </AccordionItem>
-                    </Accordion>
+                    <details>
+                      <summary>See Planning Entries</summary>
+                      {activeTeam.planning.map((plan, idx) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div key={idx}>
+                          <h3>{plan.name}</h3>
+                          <p>{plan.content}</p>
+                        </div>
+                      ))}
+                    </details>
+
+                    <details>
+                      <summary>See Review Entries</summary>
+                      {activeTeam.review.map((plan, idx) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div key={idx}>
+                          <h3>{plan.name}</h3>
+                          <p>{plan.content}</p>
+                        </div>
+                      ))}
+                    </details>
                   </div>
                 );
               })}

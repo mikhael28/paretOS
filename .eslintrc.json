@@ -8,7 +8,14 @@
     "prefer-destructuring": 0,
     "object-shorthand": 0,
     "no-shadow": 0,
-    "no-restricted-syntax": 0,
+    "no-unused-vars": 0,
+    "no-restricted-syntax": [
+      "error",
+      {
+          "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+          "message": "Unexpected property on console object was called"
+      }
+  ],
     "no-use-before-define": 0,
     "consistent-return": 0,
     "no-plusplus": 0,
@@ -57,6 +64,8 @@
       {
         "extensions": [".js", ".jsx", "tsx", "ts"]
       }
-    ]
+    ],
+    "no-console": "off",
+    "no-alert": "off"
   }
 }
