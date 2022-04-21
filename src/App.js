@@ -9,11 +9,9 @@ import { connect } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
 import * as Sentry from "@sentry/react";
-import sortby from "lodash.sortby";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
-import sanity from "./libs/sanity";
 import LanguageContext from "./LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
@@ -37,6 +35,7 @@ import Routes from "./Routes";
 import question from "./assets/help.png";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
+import ws from "./libs/websocket";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -80,7 +79,6 @@ class App extends Component {
         economicSchemas: [],
         hubSchemas: [],
       },
-      ws: "",
       experiences: [],
       messages: [],
       chosenLanguage: availableLanguages[0],
@@ -256,30 +254,9 @@ class App extends Component {
 
     let sprintString = sprintStrings.join("&");
 
-    let wsClient = new WebSocket(
-      `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`
-    );
+    let path = `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`;
 
-    // console.log(wsClient);
-
-    let that = this; // caching 'this'
-    let connectInterval;
-
-    wsClient.onopen = () => {
-      // console.log("Connected");
-      this.setState({ ws: wsClient });
-      that.timeout = 250; // reset timer to 250 on open of websocket connection
-      clearTimeout(connectInterval); // clear interval on onOpen of websocket connection
-
-      // console.log(wsClient);
-
-      setInterval(() => {
-        // console.log("Firing Ping");
-        wsClient.send(`{"action":"sendmessage", "data":"ping" }`);
-      }, 400000);
-    };
-
-    wsClient.onmessage = (message) => {
+    const processMsg = (message) => {
       // console.log("Received data: ", JSON.parse(message.data));
       let tempSprintData = JSON.parse(message.data);
       // this check is to see whether the websocket connection successfully retrieved the latest state.
@@ -306,47 +283,8 @@ class App extends Component {
       }
     };
 
-    wsClient.onclose = (e) => {
-      // we are trying to reconnect again if offline, with a limited backoff period
-      console.log(
-        `Socket is closed. Reconnect will be attempted in ${Math.min(
-          10000 / 1000,
-          (that.timeout + that.timeout) / 1000
-        )} second.`,
-        e.reason
-      );
-
-      that.timeout += that.timeout; // increment retry interval
-      connectInterval = setTimeout(this.check, Math.min(10000, that.timeout)); // call check function after timeout
-    };
-
-    wsClient.onerror = (err) => {
-      alert("Socket encountered error: ", err.message);
-      console.log("Closing Socket");
-
-      wsClient.close();
-    };
+    ws.connect({ path, processMsg });
     return result;
-  };
-
-  // potential way of closing a particular connectionID
-  // componentWillUnmount() {
-  //   this.state.ws.close(88, "uuid");
-  // }
-
-  check = () => {
-    const { ws } = this.state;
-    console.log("Websocket status: ", ws);
-    if (
-      !ws ||
-      ws.readyState === WebSocket.CLOSED ||
-      ws.readyState === WebSocket.CLOSING
-    ) {
-      this.connectSocketToSprint({
-        user: this.state.user,
-        updateState: true,
-      }); // check if ws instance is closed - if so, reconnect
-    }
   };
 
   fetchMenteeSprints = async (userId) => {
@@ -443,7 +381,6 @@ class App extends Component {
       setCloseLoading: this.setCloseLoading,
       chosenLanguage: this.state.chosenLanguage,
       connectSocket: this.connectSocketToSprint,
-      ws: this.state.ws,
 
       // experience related state
       product: this.state.product,
