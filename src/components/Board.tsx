@@ -1,16 +1,10 @@
 /* eslint-disable eqeqeq */
 import React, { useCallback, useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import {
-  GridColDef,
-  GridValueGetterParams,
-  GridCellParams,
-  GridValueFormatterParams,
-  gridClasses,
-} from "@mui/x-data-grid";
-import StyledDataGrid from "./StyledDataGrid";
 import { User } from "../types";
 import ProfileImg from "./ProfileImg";
+import { Column, dataTableClasses } from "./DataTable";
+import StyledDataTable from "./StyledDataTable";
 
 /**
  * @component Leaderboard
@@ -37,34 +31,22 @@ function Leaderboard({
   // Define users to show on podium
   const podiumCount = 3;
 
-  // Define columns in the grid
-  const columns: GridColDef[] = [
+  // define columns in the table
+  const columns: Column[] = [
+    { id: "rank", label: I18n.get("rank"), align: "center" },
     {
-      field: "rank",
-      headerName: I18n.get("rank"),
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
+      id: "fName",
+      label: I18n.get("name"),
+      valueGetter: (user) =>
+        `${user.fName || ""} ${
+          user.lName.substring(0, 1).toUpperCase() || ""
+        }.`,
     },
     {
-      field: "fullName",
-      headerName: I18n.get("name"),
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.fName || ""} ${
-          params.row.lName.substring(0, 1).concat(".").toUpperCase() || ""
-        }`,
-      flex: 2,
-    },
-    {
-      field: "score",
-      headerName: I18n.get("score"),
-      valueFormatter: (params: GridValueFormatterParams<number>) => {
-        if (params.value === null) return "0 pts";
-        return `${params.value} pts`;
-      },
+      id: "score",
+      label: I18n.get("score"),
+      valueGetter: (user) => `${user.score || 0} pts`,
       align: "center",
-      headerAlign: "center",
-      flex: 1,
     },
   ];
 
@@ -101,10 +83,10 @@ function Leaderboard({
   /**
    * @function handleCellClick
    * @desc Reroute to the user's info page
-   * @param params - params of the table's cell
+   * @param id user's ID
    */
-  function handleCellClick(params: GridCellParams) {
-    history.push(`/profile/${params.row.id}`);
+  function handleCellClick(id: number | string) {
+    history.push(`/profile/${id}`);
   }
 
   return (
@@ -124,31 +106,23 @@ function Leaderboard({
               onChange={(e) => setFilterBy(e.target.value)}
             />
           </form>
-          <StyledDataGrid
-            initialState={{
-              sorting: {
-                sortModel: [{ field: "score", sort: "desc" }],
-              },
-              pagination: {
-                page: Math.floor(
-                  rankedUsers.findIndex((u) => u.id === currentUser.id) /
-                    itemsPerPage
-                ),
-              },
-            }}
-            sortingOrder={["desc", "asc"]}
+          <StyledDataTable
+            onCellClick={handleCellClick}
             rows={rankedUsers.filter(filterUsers)}
             columns={columns}
-            pageSize={itemsPerPage}
-            rowsPerPageOptions={[itemsPerPage]}
-            onCellClick={handleCellClick}
-            autoHeight
-            disableSelectionOnClick
-            disableColumnMenu
-            density="compact"
-            getRowClassName={(params) =>
-              params.row.id === currentUser.id
-                ? `${gridClasses.row}-selected`
+            sortModel={{
+              order: "desc",
+              orderBy: "score",
+            }}
+            sortingOrder={["desc", "asc"]}
+            itemsPerPage={itemsPerPage}
+            startPage={Math.floor(
+              rankedUsers.findIndex((u) => u.id === currentUser.id) /
+                itemsPerPage
+            )}
+            getRowClassName={(row) =>
+              row.id === currentUser.id
+                ? `${dataTableClasses.row}-selected`
                 : ""
             }
           />
