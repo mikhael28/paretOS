@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Auth from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
+import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
 import {
   Typography,
-  FormLabel,
   Container,
   FormHelperText,
   TextField,
@@ -17,16 +17,18 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     width: 300,
 
+    "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
+      backgroundColor: theme.palette.background.paper,
+    },
     "& .MuiTextField-root": {
       width: 300,
     },
     "& .MuiFormLabel-root": {
       fontSize: 16,
-      color: "#000",
+      color: theme.palette.primary.main,
     },
     "& .MuiInputBase-input": {
       fontSize: 16,
-      color: "#000",
     },
     "& .MuiButtonBase-root": {
       marginTop: theme.spacing(1),
@@ -43,83 +45,97 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword = () => {
+const ResetPassword = ({ initialFetch, setCloseLoading, setLoading }) => {
   const classes = useStyles();
 
-  const [state, setState] = useState({
-    code: "",
-    email: "",
-    password: "",
-    codeSent: false,
-    confirmed: false,
-    confirmPassword: "",
-    isConfirming: false,
-    isSendingCode: false,
-  });
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [disabled] = useState(false);
 
-  const validateEmailForm = () => state.email.length > 0;
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    getValues,
+  } = useForm();
 
-  const validateResetForm = () =>
-    state.code.length > 0 &&
-    state.password.length > 0 &&
-    state.password === state.confirmPassword;
+  const {
+    register: register2,
+    formState: { errors: errors2 },
+    handleSubmit: handleSubmit2,
+    watch,
+  } = useForm();
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.id]: event.target.value,
-    });
-  };
+  let password1 = watch("password");
+  let password2 = watch("confirmPassword");
+  let email1 = getValues("email");
 
-  const handleSendCodeClick = async (event) => {
-    event.preventDefault();
+  const handleSendCodeClick = async (data) => {
+    setLoading();
 
-    setState({ ...state, isSendingCode: true });
+    setIsSendingCode(true);
 
     try {
-      await Auth.forgotPassword(state.email);
-      setState({ ...state, codeSent: true });
+      await Auth.forgotPassword(data.email);
+
+      setCodeSent(true);
+      setCloseLoading();
     } catch (e) {
       alert(e.message);
-      setState({ ...state, isSendingCode: false });
+      setIsSendingCode(false);
+      setCloseLoading();
     }
   };
 
-  const handleConfirmClick = async (event) => {
-    event.preventDefault();
+  const handleConfirmClick = async (data) => {
+    setLoading();
 
-    setState({ ...state, isConfirming: true });
+    setIsConfirming(true);
 
     try {
-      await Auth.forgotPasswordSubmit(state.email, state.code, state.password);
-      setState({ ...state, confirmed: true });
+      console.log(email1);
+
+      await Auth.forgotPasswordSubmit(email1, data.code, data.password);
+      setConfirmed(true);
+      setCloseLoading();
     } catch (e) {
       alert(e.message);
-      setState({ ...state, isConfirming: false });
+      setIsConfirming(false);
+      setCloseLoading();
     }
   };
 
   const renderRequestCodeForm = () => (
     <div className="Form">
-      <form className={classes.root} onSubmit={handleSendCodeClick}>
-        <FormLabel>{I18n.get("email")}</FormLabel>
-        <div style={{ backgroundColor: "#ccc" }}>
+      <form
+        className={classes.root}
+        onSubmit={handleSubmit(handleSendCodeClick)}
+      >
+        <div>
           <TextField
             id="email"
             variant="filled"
             size="medium"
             autoFocus
             label={I18n.get("email")}
-            value={state.email}
-            onChange={handleChange}
+            {...register("email", {
+              required: "email is required",
+              pattern: {
+                value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
+                message: "invalid email address",
+              },
+            })}
           />
         </div>
+        <span className="error">{errors.email && errors.email.message}</span>
         <div>
           <LoaderButton
             loadingText={I18n.get("sending")} //
             text={I18n.get("sendConfirmation")} //
-            isLoading={state.isSendingCode} //
-            disabled={!validateEmailForm()} //
+            isLoading={isSendingCode} //
+            disabled={disabled} //
             type="submit"
             color="primary"
             variant="contained"
@@ -132,8 +148,11 @@ const ResetPassword = () => {
   const renderConfirmationForm = () => (
     <div className="Form">
       <Container>
-        <form className={classes.root} onSubmit={handleConfirmClick}>
-          <div style={{ backgroundColor: "#ccc" }}>
+        <form
+          className={classes.root}
+          onSubmit={handleSubmit2(handleConfirmClick)}
+        >
+          <div>
             <TextField
               id="code"
               variant="filled"
@@ -141,13 +160,23 @@ const ResetPassword = () => {
               autoFocus
               label={I18n.get("confirmationCode")}
               type="tel"
-              value={state.code}
-              onChange={handleChange}
+              {...register2("code", {
+                required: "code is required",
+                minLength: {
+                  value: 6,
+                  message: "codes are 6 digits long",
+                },
+                maxLength: {
+                  value: 6,
+                  message: "codes are 6 digits long",
+                },
+              })}
             />
           </div>
-          <FormHelperText>{I18n.get("checkEmail")}</FormHelperText>
+
+          <span className="error">{errors2.code && errors2.code.message}</span>
           <hr />
-          <div style={{ backgroundColor: "#ccc" }}>
+          <div>
             <TextField
               id="password"
               variant="filled"
@@ -155,12 +184,20 @@ const ResetPassword = () => {
               autoFocus
               label={I18n.get("newPassword")}
               type="password"
-              value={state.password}
-              onChange={handleChange}
+              {...register2("password", {
+                required: "password is required",
+                minLength: {
+                  value: 8,
+                  message: "minimum length is 8 characters",
+                },
+              })}
             />
           </div>
+          <span className="error">
+            {errors2.password && errors2.password.message}
+          </span>
           <br />
-          <div style={{ backgroundColor: "#ccc" }}>
+          <div>
             <TextField
               id="confirmPassword"
               variant="filled"
@@ -168,18 +205,25 @@ const ResetPassword = () => {
               autoFocus
               label={I18n.get("confirm")}
               type="password"
-              value={state.confirmPassword}
-              onChange={handleChange}
+              {...register2("confirmPassword", {
+                required: "password needs to be confirmed",
+                validate: {
+                  passEqual: (password2) =>
+                    password2 === password1 || "passwords need to match",
+                },
+              })}
             />
           </div>
+          <span className="error">
+            {errors2.confirmPassword && errors2.confirmPassword.message}
+          </span>
           <LoaderButton
-            block
             type="submit"
             size="large"
             text={I18n.get("confirm")}
             loadingText={I18n.get("confirming")}
-            isLoading={state.isConfirming}
-            disabled={!validateResetForm()}
+            isLoading={isConfirming}
+            disabled={disabled}
           />
         </form>
       </Container>
@@ -200,9 +244,9 @@ const ResetPassword = () => {
 
   return (
     <div className="Form">
-      {!state.codeSent
+      {!codeSent
         ? renderRequestCodeForm()
-        : !state.confirmed
+        : !confirmed
         ? renderConfirmationForm()
         : renderSuccessMessage()}
     </div>
