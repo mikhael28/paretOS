@@ -69,7 +69,6 @@ const ResetPassword = ({ initialFetch, setCloseLoading, setLoading }) => {
   } = useForm();
 
   let password1 = watch("password");
-  let password2 = watch("confirmPassword");
   let email1 = getValues("email");
 
   const handleSendCodeClick = async (data) => {
@@ -95,7 +94,6 @@ const ResetPassword = ({ initialFetch, setCloseLoading, setLoading }) => {
     setIsConfirming(true);
 
     try {
-      console.log(email1);
 
       await Auth.forgotPasswordSubmit(email1, data.code, data.password);
       setConfirmed(true);
