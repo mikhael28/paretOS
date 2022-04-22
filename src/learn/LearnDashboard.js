@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { init } from "pell";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import { Slide, Dialog } from "@mui/material";
@@ -43,7 +43,7 @@ function LearnDashboard(props) {
 
   async function editNote() {
     try {
-      await API.put("pareto", `/users/${props.user.id}`, {
+      await RestAPI.put("pareto", `/users/${props.user.id}`, {
         body: {
           notes: [html],
         },

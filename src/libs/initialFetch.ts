@@ -1,4 +1,4 @@
-import API from "@aws-amplify/api/";
+import { RestAPI } from "@aws-amplify/api-rest";
 import sortby from "lodash.sortby";
 import sanity from "./sanity";
 import { errorToast } from "./toasts";
@@ -6,7 +6,7 @@ import { errorToast } from "./toasts";
 export const fetchUser = async (username) => {
   let user = {};
   try {
-    user = await API.get("pareto", `/users/${username}`, {});
+    user = await RestAPI.get("pareto", `/users/${username}`, {});
   } catch (e) {
     console.error(e);
   }
@@ -65,7 +65,7 @@ export const fetchStarterKitExperience = async (id) => {
     experiences: null,
   };
   try {
-    let experiences = await API.get("pareto", `/experience/user/${id}`, {});
+    let experiences = await RestAPI.get("pareto", `/experience/user/${id}`, {});
     let product;
     let apprenticeship;
     let interviewing;
@@ -93,7 +93,11 @@ export const fetchStarterKitExperience = async (id) => {
 export const fetchCoachingRoster = async (id) => {
   const result = { success: false, athletes: null };
   try {
-    let athletes = await API.get("pareto", `/relationship/mentor/${id}`, {});
+    let athletes = await RestAPI.get(
+      "pareto",
+      `/relationship/mentor/${id}`,
+      {}
+    );
     result.success = true;
     result.athletes = athletes;
   } catch (e) {
@@ -107,7 +111,11 @@ export const fetchCoaches = async (id) => {
   try {
     let existingCoaches = localStorage.getItem("coaches");
     if (existingCoaches === null) {
-      let coaches = await API.get("pareto", `/relationship/mentee/${id}`, {});
+      let coaches = await RestAPI.get(
+        "pareto",
+        `/relationship/mentee/${id}`,
+        {}
+      );
       result.success = true;
       result.coaches = coaches;
       localStorage.setItem("coaches", JSON.stringify(coaches));

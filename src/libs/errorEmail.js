@@ -1,4 +1,4 @@
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 
 /**
  * A function to generate an email.
@@ -527,5 +527,5 @@ export function generateErrorEmail(
     htmlBody: email,
     textBody: "Hello",
   };
-  return API.post("util", "/email", { body });
+  return RestAPI.post("util", "/email", { body });
 }
