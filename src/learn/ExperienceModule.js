@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import Button from "react-bootstrap/lib/Button";
 import Image from "react-bootstrap/lib/Image";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import BlockContent from "@sanity/block-content-to-react";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
@@ -110,7 +110,7 @@ class ExperienceModule extends Component {
     let path = pathArray[2];
     let expType;
 
-    let comparisonData = await API.get("pareto", `/experience/${path}`);
+    let comparisonData = await RestAPI.get("pareto", `/experience/${path}`);
 
     if (comparisonData[0].type === "Apprenticeship") {
       expType = this.props.sanityTraining;
@@ -128,7 +128,7 @@ class ExperienceModule extends Component {
       isLoading: false,
     });
 
-    let athleteProfile = await API.get(
+    let athleteProfile = await RestAPI.get(
       "pareto",
       `/users/${comparisonData[0].memberId}`
     );
@@ -153,7 +153,7 @@ class ExperienceModule extends Component {
         `Pareto Achievement for Review!`,
         `Your athlete ${this.state.user.fName} ${this.state.user.lName} has submitted the work submitted for the milestone called '${this.state.activeExperience.title}. There is ${milestoneXP} XP at stake - you are doing a great job providing mentorship and guidance!'`
       );
-      const updatedExperienceModule = await API.put(
+      const updatedExperienceModule = await RestAPI.put(
         "pareto",
         `/experience/${this.state.experienceId}`,
         { body }
@@ -162,7 +162,7 @@ class ExperienceModule extends Component {
         showSubmitModal: false,
         mongoExperience: updatedExperienceModule,
       });
-      await API.post("util", "/email", {
+      await RestAPI.post("util", "/email", {
         body: {
           recipient: this.props.user.email,
           sender: "michael@fsa.community",
@@ -195,7 +195,7 @@ class ExperienceModule extends Component {
         `Pareto Achievement Sent Back for Review!`,
         `Your coach has requested that the work submitted for the milestone called '${this.state.activeExperience.title}' be revised according to their feedback. Please log-in to https://arena.pareto.education for their details. There is ${milestoneXP} XP at stake - you are doing a great job learning and growing every day!'`
       );
-      const updatedExperienceModule = await API.put(
+      const updatedExperienceModule = await RestAPI.put(
         "pareto",
         `/experience/${this.state.experienceId}`,
         { body }
@@ -204,7 +204,7 @@ class ExperienceModule extends Component {
         showSubmitModal: false,
         mongoExperience: updatedExperienceModule,
       });
-      await API.post("util", "/email", {
+      await RestAPI.post("util", "/email", {
         body: {
           recipient: this.state.user.email,
           sender: "michael@fsa.community",
@@ -240,7 +240,7 @@ class ExperienceModule extends Component {
         `Congratulations! Your coach has approved the work submitted for the milestone called '${this.state.activeExperience.title}'. You have earned ${milestoneXP} XP - you are doing a great job!'`
       );
 
-      const updatedExperienceModule = await API.put(
+      const updatedExperienceModule = await RestAPI.put(
         "pareto",
         `/experience/${this.state.experienceId}`,
         { body }
@@ -250,7 +250,7 @@ class ExperienceModule extends Component {
         mongoExperience: updatedExperienceModule,
         openReviewModal: false,
       });
-      await API.post("util", "/email", {
+      await RestAPI.post("util", "/email", {
         body: {
           recipient: "mikhael@hey.com",
           sender: "michael@fsa.community",

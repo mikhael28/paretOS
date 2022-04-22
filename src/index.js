@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { Amplify } from "@aws-amplify/core";
-import { API } from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "production") {
 const store = createStore(reducer);
 
 Amplify.configure(awsmobile);
-API.configure({
+RestAPI.configure({
   endpoints: [
     {
       name: "pareto",
