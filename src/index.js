@@ -1,5 +1,4 @@
-import { StrictMode } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
@@ -17,9 +16,7 @@ import "./index.css";
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
- * @TODO Suspense API Issue #18
  * @TODO Service Worker Issue #19
- * @TODO Lazy Loading Issue #20
  */
 
 if (process.env.NODE_ENV === "production") {
@@ -60,15 +57,15 @@ Storage.configure({
   },
 });
 
-ReactDOM.render(
-  <StrictMode>
-    <Router>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Router>
-  </StrictMode>,
-  document.getElementById("root")
+const container = document.getElementById("root");
+const root = createRoot(container);
+
+root.render(
+  <Router>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>
 );
 
 // @TODO register service worker for full PWA, currently disabled while in alpha
