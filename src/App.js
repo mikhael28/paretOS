@@ -437,11 +437,12 @@ class App extends Component {
             >
               <Box
                 sx={{
-                  width: "100vw",
-                  height: "100vh",
+                  // width: "100vw",
+                  // height: "100vh",
                   bgcolor: "background.default",
                   color: "text.primary",
-                  overflow: "scroll",
+                  // overflow: "scroll",
+                  minHeight: "100vh",
                 }}
               >
                 {this.state.isAuthenticated ? (

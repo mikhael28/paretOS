@@ -43,6 +43,11 @@
         padding: 0;
         width: 100%;
       }
+      body {
+        /* FIXME: This overrides an unknown inline style. Remove this and the inline style if the inline style is found */
+        overflow: auto !important;
+        padding-right: 0 !important;
+      }
     </style>
     <!--
       manifest.json provides metadata used when your web app is added to the
