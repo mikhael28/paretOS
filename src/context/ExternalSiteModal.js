@@ -47,11 +47,11 @@ export default function ExternalSiteModal(props) {
   }, [props.url]);
 
   return (
-    <div>
+    <>
       {loading === true ? (
         <div>Loading</div>
       ) : (
-        <div>
+        <>
           {render === false ? (
             <div
               style={{
@@ -73,8 +73,8 @@ export default function ExternalSiteModal(props) {
               src={props.url}
             />
           )}
-        </div>
+        </>
       )}
-    </div>
+    </>
   );
 }
