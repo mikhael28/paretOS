@@ -12,7 +12,7 @@ import * as Sentry from "@sentry/react";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
-import LanguageContext from "./LanguageContext";
+import LanguageContext from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   getActiveSprintData,
@@ -33,6 +33,7 @@ import { getUser } from "./state/profile";
 import { errorToast } from "./libs/toasts";
 import Routes from "./Routes";
 import question from "./assets/help.png";
+import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
@@ -465,6 +466,7 @@ class App extends Component {
 
                       <Routes childProps={childProps} />
                     </div>
+                    <Palette {...this.props} />
                     <div className="sticky-nav">
                       <div className="sticky-chat">
                         <Image
