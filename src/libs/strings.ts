@@ -1,6 +1,5 @@
 /**
- * Intrnationalization strings.
- * @TODO Issue #31
+ * Internationalization strings.
  */
 // eslint-disable-next-line import/prefer-default-export
 export const strings = {

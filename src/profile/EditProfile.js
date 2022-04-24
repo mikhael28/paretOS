@@ -19,7 +19,6 @@ import LanguageSelector from "./LanguageSelector";
 
 /**
  * These are the forms where you can edit your profile.
- * @TODO GH Issue #13
  * @TODO GH Issue #26
  */
 
