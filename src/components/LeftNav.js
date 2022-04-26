@@ -8,7 +8,7 @@ import { BiRun } from "react-icons/bi";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import LanguageContext from "../LanguageContext";
+import LanguageContext from "../state/LanguageContext";
 
 function LeftNav(props) {
   const { language, setLanguage } = useContext(LanguageContext);

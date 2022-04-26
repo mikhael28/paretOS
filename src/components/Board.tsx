@@ -1,10 +1,10 @@
 /* eslint-disable eqeqeq */
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import Table from "react-bootstrap/lib/Table";
 import { User } from "../types";
 import ProfileImg from "./ProfileImg";
-import PageNavigation from "./PageNavigation";
+import { Column, dataTableClasses } from "./DataTable";
+import StyledDataTable from "./StyledDataTable";
 
 /**
  * @component Leaderboard
@@ -31,6 +31,25 @@ function Leaderboard({
   // Define users to show on podium
   const podiumCount = 3;
 
+  // define columns in the table
+  const columns: Column[] = [
+    { id: "rank", label: I18n.get("rank"), align: "center" },
+    {
+      id: "fName",
+      label: I18n.get("name"),
+      valueGetter: (user) =>
+        `${user.fName || ""} ${
+          user.lName.substring(0, 1).toUpperCase() || ""
+        }.`,
+    },
+    {
+      id: "score",
+      label: I18n.get("score"),
+      valueGetter: (user) => `${user.score || 0} pts`,
+      align: "center",
+    },
+  ];
+
   // Sort a copy of the user array and add rankings
   const sortedUsers = [...users].sort((a, b) => b.score - a.score);
   const rankedUsers = sortedUsers.map((user, i) => {
@@ -45,102 +64,29 @@ function Leaderboard({
   // Determine who should appear on the podium
   const topUsers = rankedUsers.slice(0, podiumCount);
 
-  // Get curent user page. Will return -1 if user is not in filtered user array
-  const currentUserPage = getPage(
-    rankedUsers.findIndex(({ id }) => id === currentUser.id)
-  );
-
   // Manage three state variables: sort property & order, filter phrase, and page to display
-  const [sortBy, setSortBy] = useState({ property: "score", ascending: false });
   const [filterBy, setFilterBy] = useState("");
-  const [page, setPage] = useState(Math.max(currentUserPage, 1));
-
-  /**
-   * @function maxPages
-   * @desc Getter for the maximum number of pages given filtered user array length
-   */
-  const maxPages = () => getPage(rankedUsers.filter(filterUsers).length);
-
-  /**
-   * @function handleSortChange
-   * @desc Callback to sort two users by score or name, in ascending or descending order
-   */
-  function handleSortChange(e: React.MouseEvent<HTMLElement>) {
-    const property: string = (e.target as HTMLElement).id;
-    const { ascending } = sortBy;
-    // Check to see if the array is already sorted in order by the new property
-    const sorted = rankedUsers.sort(sortUsers).filter(filterUsers);
-
-    let alreadySorted = sorted
-      .slice(1)
-      .every((x, i) => x[property] <= sorted[i][property]);
-    if (ascending) {
-      alreadySorted = sorted
-        .slice(1)
-        .every((x, i) => x[property] >= sorted[i][property]);
-    }
-    // If there is a change in sort property, and doing so in the current order would result in changes, update only the propery
-    if (property !== sortBy.property && alreadySorted === false) {
-      setSortBy({ property, ascending });
-      return;
-    }
-
-    // Otherwise, change the order of the sort (property may or may not change)
-    setSortBy({ property, ascending: !ascending });
-  }
-
-  /**
-   * @function sortUsers
-   * @desc Callback to sort two users by score or name, in ascending or descending order
-   */
-  function sortUsers(a: User, b: User): number {
-    const { ascending, property } = sortBy;
-    if (ascending && a[property] < b[property]) return -1;
-    if (ascending && a[property] > b[property]) return 1;
-    if (ascending === false && b[property] < a[property]) return -1;
-    if (ascending === false && b[property] > a[property]) return 1;
-    return 0;
-  }
 
   /**
    * @function filterUsers
    * @desc Filters each element of a user array based on a search string
    * @param {User} x user to evaluate
    */
-  function filterUsers(x: User): boolean {
-    const name: string = (x.fName + x.lName.substring(0, 1)).toLowerCase();
-    return name.includes(filterBy.toLowerCase());
-  }
+  const filterUsers = useCallback(
+    (x: User): boolean => {
+      const name: string = (x.fName + x.lName.substring(0, 1)).toLowerCase();
+      return name.includes(filterBy.toLowerCase());
+    },
+    [filterBy]
+  );
 
   /**
-   * @function increasePage
-   * @desc Increments page
-   * @param {Event} Click
+   * @function handleCellClick
+   * @desc Reroute to the user's info page
+   * @param id user's ID
    */
-  function increasePage(e, num: number = 1) {
-    if (page + num <= maxPages()) {
-      setPage(page + num);
-    }
-  }
-
-  /**
-   * @function decreasePage
-   * @desc Decrements page
-   * @param {Event} Click
-   */
-  function decreasePage(e, num: number = 1) {
-    if (page - num >= 1) {
-      setPage(page - num);
-    }
-  }
-
-  /**
-   * @function getPage
-   * @desc Gets the page number of an item based on items per page
-   * @param itemNumber - number of the item to get the page of
-   */
-  function getPage(itemNumber: number): number {
-    return Math.floor(itemNumber / itemsPerPage) + 1;
+  function handleCellClick(id: number | string) {
+    history.push(`/profile/${id}`);
   }
 
   return (
@@ -160,75 +106,26 @@ function Leaderboard({
               onChange={(e) => setFilterBy(e.target.value)}
             />
           </form>
-          <Table
-            bordered
-            condensed
-            hover
-            responsive
-            data-testid="leaderboard-table"
-            style={{ borderColor: "rgb(34,34,34)" }}
-          >
-            <tbody>
-              <tr>
-                <td
-                  id="score"
-                  className="rank-header text-center"
-                  onClick={handleSortChange}
-                >
-                  {I18n.get("rank")}
-                </td>
-                <td
-                  id="fName"
-                  className="rank-header"
-                  onClick={handleSortChange}
-                >
-                  {I18n.get("name")}
-                </td>
-                <td
-                  id="score"
-                  className="rank-header text-center"
-                  onClick={handleSortChange}
-                >
-                  {I18n.get("score")}
-                </td>
-              </tr>
-              {rankedUsers
-                .sort(sortUsers)
-                .filter(filterUsers)
-                .map((user, i) =>
-                  getPage(i) === page ? (
-                    <tr
-                      className={currentUser.id === user.id ? "my-rank" : ""}
-                      key={user.id}
-                      data-testid="leaderboard-row"
-                    >
-                      <td className="data text-center">
-                        {i > 0 && user.rank == rankedUsers[i - 1].rank
-                          ? "-"
-                          : user.rank}
-                      </td>
-                      <td
-                        onClick={() => history.push(`/profile/${user.id}`)}
-                        className="data2"
-                      >
-                        {`${user.fName} ${user.lName
-                          .substring(0, 1)
-                          .toUpperCase()}.`}
-                      </td>
-                      <td className="data text-center">{user.score} pts</td>
-                    </tr>
-                  ) : null
-                )}
-            </tbody>
-          </Table>
-          {maxPages() > 0 ? (
-            <PageNavigation
-              currentPage={page}
-              maxPages={maxPages()}
-              increasePage={increasePage}
-              decreasePage={decreasePage}
-            />
-          ) : null}
+          <StyledDataTable
+            onCellClick={handleCellClick}
+            rows={rankedUsers.filter(filterUsers)}
+            columns={columns}
+            sortModel={{
+              order: "desc",
+              orderBy: "score",
+            }}
+            sortingOrder={["desc", "asc"]}
+            itemsPerPage={itemsPerPage}
+            startPage={Math.floor(
+              rankedUsers.findIndex((u) => u.id === currentUser.id) /
+                itemsPerPage
+            )}
+            getRowClassName={(row) =>
+              row.id === currentUser.id
+                ? `${dataTableClasses.row}-selected`
+                : ""
+            }
+          />
         </div>
       </div>
     </div>
