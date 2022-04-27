@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
-import { Button } from "@mui/material/Button";
+import { Button } from "@mui/material";
 import { errorToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 import LanguageSelector from "./LanguageSelector";

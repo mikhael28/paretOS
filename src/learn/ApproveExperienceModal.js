@@ -3,7 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import Modal from "react-bootstrap/lib/Modal";
-import { Button } from "@mui/material/Button";
+import { Button } from "@mui/material";
 import BlockContent from "@sanity/block-content-to-react";
 import { I18n } from "@aws-amplify/core";
 
