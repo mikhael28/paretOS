@@ -818,8 +818,7 @@ details[open] summary {
 }
 
 .btn-outline:hover {
-  background: #30944c;
-  border: 2px solid #30944c;
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
 }
 
 /* Form styles */

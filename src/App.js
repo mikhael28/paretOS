@@ -3,7 +3,6 @@ import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { withRouter } from "react-router-dom";
-import Image from "react-bootstrap/lib/Image";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Tour from "reactour";
@@ -469,12 +468,13 @@ class App extends Component {
                     <Palette {...this.props} />
                     <div className="sticky-nav">
                       <div className="sticky-chat">
-                        <Image
+                        <img
                           src={question}
                           onClick={(event) => {
                             event.preventDefault();
                             this.setState({ isTourOpen: true });
                           }}
+                          alt="Home page tour icon"
                           height="40"
                           width="40"
                           circle
@@ -485,6 +485,7 @@ class App extends Component {
                             filter: "grayscale(100%)",
                             outline: "2px solid white",
                             border: "2px solid transparent",
+                            borderRadius: "50%",
                           }}
                         />
                       </div>
