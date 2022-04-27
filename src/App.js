@@ -175,9 +175,9 @@ class App extends Component {
           secondFetch.push(() => fetchStarterKitExperience(currentUser.id));
         }
         if (arena) {
-          firstFetch.push(() => this.connectSocketToSprint());
+          firstFetch.push(() => this.connectSocketToSprint(currentUser.id));
         } else {
-          secondFetch.push(() => this.connectSocketToSprint());
+          secondFetch.push(() => this.connectSocketToSprint(currentUser.id));
         }
         if (currentUser.instructor) {
           firstFetch.push(() => fetchCoachingRoster(currentUser.id));
@@ -226,15 +226,12 @@ class App extends Component {
     }
   };
 
-  connectSocketToSprint = async () => {
+  connectSocketToSprint = async (userID = this.state.user.id) => {
     let result = { success: false, sprints: null };
     try {
-      const sprints = await RestAPI.get(
-        "pareto",
-        `/sprints/mentee/${this.state.user.id}`
-      );
+      const sprints = await RestAPI.get("pareto", `/sprints/mentee/${userID}`);
       result.success = true;
-      result.sprints = sprints;
+      result.sprints = await sprints;
 
       this.props.getInitialSprintData(sprints);
       this.setState({ sprints: sprints });
