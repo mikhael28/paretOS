@@ -2,7 +2,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { getActiveSprintData } from "../state/sprints";
 
 /**
@@ -73,7 +73,7 @@ function Sprints(props) {
                     {props.user.admin === true ? (
                       <button
                         onClick={async () => {
-                          await API.del("pareto", `/sprints/${sprint.id}`);
+                          await RestAPI.del("pareto", `/sprints/${sprint.id}`);
                           await props.fetchMenteeSprints(props.user.id);
                         }}
                       >

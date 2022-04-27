@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Auth from "@aws-amplify/auth";
+import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { withRouter } from "react-router-dom";
 import Image from "react-bootstrap/lib/Image";
 import { bindActionCreators } from "redux";
@@ -12,7 +12,7 @@ import * as Sentry from "@sentry/react";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
-import LanguageContext from "./LanguageContext";
+import LanguageContext from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   getActiveSprintData,
@@ -33,6 +33,7 @@ import { getUser } from "./state/profile";
 import { errorToast } from "./libs/toasts";
 import Routes from "./Routes";
 import question from "./assets/help.png";
+import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
@@ -229,7 +230,7 @@ class App extends Component {
   connectSocketToSprint = async () => {
     let result = { success: false, sprints: null };
     try {
-      const sprints = await API.get(
+      const sprints = await RestAPI.get(
         "pareto",
         `/sprints/mentee/${this.state.user.id}`
       );
@@ -289,7 +290,10 @@ class App extends Component {
 
   fetchMenteeSprints = async (userId) => {
     try {
-      let menteeSprints = await API.get("pareto", `/sprints/mentee/${userId}`);
+      let menteeSprints = await RestAPI.get(
+        "pareto",
+        `/sprints/mentee/${userId}`
+      );
       this.setState({ sprints: menteeSprints });
     } catch (e) {
       errorToast(e);
@@ -462,6 +466,7 @@ class App extends Component {
 
                       <Routes childProps={childProps} />
                     </div>
+                    <Palette {...this.props} />
                     <div className="sticky-nav">
                       <div className="sticky-chat">
                         <Image

@@ -21,7 +21,6 @@ const useStyles = makeStyles({
 
 /**
  * This is the visual component that unlocks the content in the Knowledge Base.
- * @TODO Issue #66
  */
 
 export default function MediaCard(props) {

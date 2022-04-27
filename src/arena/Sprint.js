@@ -29,14 +29,10 @@ import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
- * @TODO The indexing in multiplayer games seems to be off - investigate.
  * @TODO Add some sort of toast notification, indicating success/new state updates when sprint updates received.
- * @TODO Change the button UI color to something else, globally. Change wording on button text.
  * @TODO If the sprint is inactive, or pre-active, we need to set the Tab to the Planning or Leaderboard/Review tab - instead of just sending them to the Achievements tab each time.
  * @TODO Add some sort of icon set to each card.
- * @TODO Need to work on updating the language of the sprints to change immediately, when clicking on the text.
- * @TODO Can the 'My Stats' header by updated to look any better? Can the stats tabs look a bit sharper? What does NBA look like?
- * @returns
+ * @returns {JSX}
  */
 
 function Sprint(props) {

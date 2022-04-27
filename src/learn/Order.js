@@ -1,5 +1,5 @@
 import { Component } from "react";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
@@ -27,7 +27,7 @@ export default class Order extends Component {
     } else {
       route = "/billing";
     }
-    return API.post("util", route, {
+    return RestAPI.post("util", route, {
       body: details,
     });
   }
@@ -37,9 +37,13 @@ export default class Order extends Component {
       learningPurchase: true,
     };
 
-    let updatedUser = await API.put("pareto", `/users/${this.props.user.id}`, {
-      body,
-    });
+    let updatedUser = await RestAPI.put(
+      "pareto",
+      `/users/${this.props.user.id}`,
+      {
+        body,
+      }
+    );
     console.log(updatedUser);
 
     let apprenticeParams = {

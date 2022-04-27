@@ -1,4 +1,4 @@
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 
 export const availableLanguages = [
@@ -53,7 +53,7 @@ export async function updateLanguage({
   try {
     I18n.setLanguage(language.code);
     setLanguage(language);
-    await API.put("pareto", `/users/${id}`, {
+    await RestAPI.put("pareto", `/users/${id}`, {
       body,
     });
   } catch (e) {

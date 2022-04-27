@@ -7,9 +7,9 @@ import Button from "react-bootstrap/lib/Button";
 import { BsPencil, BsPlusLg } from "react-icons/bs";
 // import Image from "react-bootstrap/lib/Image";
 import { v4 as uuidv4 } from "uuid";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import Storage from "@aws-amplify/storage";
+import { Storage } from "@aws-amplify/storage";
 import { errorToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 // import question from "../assets/help.png";
@@ -19,7 +19,6 @@ import LanguageSelector from "./LanguageSelector";
 
 /**
  * These are the forms where you can edit your profile.
- * @TODO GH Issue #13
  * @TODO GH Issue #26
  */
 
@@ -54,7 +53,7 @@ const EditProfile = () => {
     let userId;
     userId = path[path.length - 1];
     // what we did above, was the get the user id from the navigation bar
-    const response = await API.get("pareto", `/users/${userId}`);
+    const response = await RestAPI.get("pareto", `/users/${userId}`);
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
     setState((prevState) => ({
       ...prevState,
@@ -84,7 +83,7 @@ const EditProfile = () => {
       summary: state.summary,
     };
     try {
-      const response = await API.put("pareto", `/users/${state.id}`, {
+      const response = await RestAPI.put("pareto", `/users/${state.id}`, {
         body,
       });
       setState((prevState) => ({
@@ -105,7 +104,7 @@ const EditProfile = () => {
       lName: state.lName,
     };
     try {
-      const newName = await API.put("pareto", `/users/${state.id}`, {
+      const newName = await RestAPI.put("pareto", `/users/${state.id}`, {
         body,
       });
       setState((prevState) => ({
@@ -136,7 +135,7 @@ const EditProfile = () => {
       projects: projects,
     };
     try {
-      const response = await API.put("pareto", `/users/${state.user.id}`, {
+      const response = await RestAPI.put("pareto", `/users/${state.user.id}`, {
         body,
       });
       setState((prevState) => ({
@@ -168,11 +167,15 @@ const EditProfile = () => {
         }
       );
       console.log("Key: ", pictureKey);
-      let updatedProfile = await API.put("pareto", `/users/${state.user.id}`, {
-        body: {
-          picture: `https://${process.env.REACT_APP_PHOTO_BUCKET}.s3.amazonaws.com/public/${pictureKey.key}`,
-        },
-      });
+      let updatedProfile = await RestAPI.put(
+        "pareto",
+        `/users/${state.user.id}`,
+        {
+          body: {
+            picture: `https://${process.env.REACT_APP_PHOTO_BUCKET}.s3.amazonaws.com/public/${pictureKey.key}`,
+          },
+        }
+      );
       console.log(updatedProfile);
       setState((prevState) => ({
         ...prevState,

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -35,8 +35,8 @@ function SprintCreation(props) {
 
   async function getConfiguration() {
     setLoading(true);
-    let options = await API.get("pareto", "/templates");
-    let userOptions = await API.get("pareto", "/users");
+    let options = await RestAPI.get("pareto", "/templates");
+    let userOptions = await RestAPI.get("pareto", "/users");
     setMissions(options);
     setPlayers(userOptions.filter((e) => e.id !== props.profile.id));
     setLoading(false);
@@ -183,7 +183,7 @@ function SprintCreation(props) {
       teams: databasedTeams,
     };
     try {
-      await API.post("pareto", "/sprints", { body });
+      await RestAPI.post("pareto", "/sprints", { body });
       await props.connectSocket();
       successToast("Sprint created successfully.");
       props.history.push("/");

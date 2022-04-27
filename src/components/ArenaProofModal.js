@@ -1,9 +1,16 @@
 import { useState } from "react";
-import Button from "react-bootstrap/lib/Button";
-import Modal from "react-bootstrap/lib/Modal";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { MdClose } from "react-icons/md";
+import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
@@ -15,6 +22,30 @@ import uploadToS3 from "../libs/s3";
  * @TODO #87
  * @TODO #26
  */
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      width: "100%",
+    },
+    "& .MuiInputBase-input": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme?.spacing(1) || 8,
+      marginRight: 6,
+      fontSize: 16,
+      padding: "6px 32px",
+      textTransform: "none",
+    },
+    "& .MuiDialogActions-root": {
+      padding: 0,
+      display: "inline-flex",
+      alignItems: "end",
+    },
+  },
+}));
 
 export default function ArenaProofModal({
   day,
@@ -28,23 +59,28 @@ export default function ArenaProofModal({
   activeSprintId,
   handleChange: propsHandleChange,
 }) {
-  const [formData, setFormData] = useState({
-    trashTalk: "",
-    athleteNotes: "",
-    key: "",
-    github: "",
-    experienceId: "",
-  });
-  //   const [isChanging, setIsChanging] = useState(false);
+  const [pictureKey, setPictureKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, reset } = useForm();
+  const classes = useStyles();
 
+  //   const [isChanging, setIsChanging] = useState(false);
   //   const validateForm = () => athleteNotes.length > 0 && github.length > 0;
 
-  const handleChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.id]: event.target.value,
-    });
+  const onSubmit = (data) => {
+    propsHandleChange(
+      activeMission,
+      activeIndex,
+      day,
+      pictureKey,
+      activeSprintId,
+      `${user.fName} just completed ${activeMission.title}.${
+        data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
+      } `
+    );
+    setPictureKey("");
+    reset();
+    handleClose();
   };
 
   const onChange = async (e) => {
@@ -60,81 +96,91 @@ export default function ArenaProofModal({
         fileType[1]
       );
 
-      setFormData({ ...formData, key: pictureKey.key });
+      setPictureKey(pictureKey.key);
       successToast("Proof successfully uploaded.");
-      setLoading(false);
     } catch (e) {
       errorToast(e);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{I18n.get("submitProof")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {view === "submit" ? (
-            <>
-              <FormGroup bsSize="large" controlId="trashTalk">
-                <ControlLabel>{I18n.get("trashTalkPSA")}</ControlLabel>
-                <FormControl
-                  type="text"
-                  onChange={handleChange}
-                  value={formData.trashTalk}
-                />
-              </FormGroup>
+    <Dialog
+      fullWidth
+      open={show}
+      onClose={handleClose}
+      keepMounted
+      hideBackdrop={false}
+    >
+      <DialogTitle>
+        {I18n.get("submitProof")}
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <MdClose />
+        </IconButton>
+      </DialogTitle>
+      {view === "submit" ? (
+        <>
+          <DialogContent>
+            <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+              <h3>{I18n.get("trashTalkPSA")}</h3>
+              <TextField
+                id="trashTalk"
+                variant="filled"
+                size="medium"
+                autoFocus
+                {...register("trashTalk")}
+              />
+              <br />
+              <br />
               <h3>{I18n.get("attachment")}</h3>
               <input type="file" onChange={(evt) => onChange(evt)} />
               <br />
-              <div className="flex">
-                <Button onClick={handleClose}>{I18n.get("close")}</Button>
-                <LoaderButton
-                  onClick={() => {
-                    propsHandleChange(
-                      activeMission,
-                      activeIndex,
-                      day,
-                      formData.key,
-                      `${user.fName} just completed ${activeMission.title}.${
-                        formData.trashTalk.length > 0
-                          ? `They also said: "${formData.trashTalk}"`
-                          : ""
-                      } `
-                    );
-                    setFormData({ trashTalk: "" });
-                    setFormData({ ...formData, key: "" });
-                    handleClose();
-                  }}
+              <DialogActions>
+                <Button
                   size="large"
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  {I18n.get("close")}
+                </Button>
+                <LoaderButton
+                  type="submit"
+                  size="medium"
                   text={I18n.get("submitProof")}
                   loadingText={I18n.get("creating")}
                   // ? Is there a reason this is commented?
                   // disabled={!this.validateForm()}
                   isLoading={loading}
                 />
-              </div>
-            </>
+              </DialogActions>
+            </form>
+          </DialogContent>
+        </>
+      ) : (
+        <DialogContent>
+          {activeMission.proofLink !== "" ? (
+            <a
+              href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {I18n.get("viewProof")}
+            </a>
           ) : (
-            <div>
-              {activeMission.proofLink !== "" ? (
-                <a
-                  href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {I18n.get("viewProof")}
-                </a>
-              ) : (
-                <p>{I18n.get("noProof")}</p>
-              )}
-            </div>
+            <p>{I18n.get("noProof")}</p>
           )}
-        </Modal.Body>
-        <Modal.Footer />
-      </Modal>
-    </div>
+        </DialogContent>
+      )}
+    </Dialog>
   );
 }

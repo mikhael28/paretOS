@@ -5,7 +5,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import HelpBlock from "react-bootstrap/lib/HelpBlock";
-import Auth from "@aws-amplify/auth";
+import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";

@@ -4,7 +4,6 @@ import logo from "../assets/Pareto-Red-01.png";
 
 /**
  * Toast notification for errors, and assorted messages.
- * @TODO Issue #30
  */
 
 export function errorToast(err) {
