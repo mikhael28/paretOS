@@ -2,18 +2,14 @@ import { useState, useEffect } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import Button from "react-bootstrap/lib/Button";
-// import Glyphicon from "react-bootstrap/lib/Glyphicon";
 import { BsPencil, BsPlusLg } from "react-icons/bs";
-// import Image from "react-bootstrap/lib/Image";
 import { v4 as uuidv4 } from "uuid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
+import { Button } from "@mui/material";
 import { errorToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
-// import question from "../assets/help.png";
-// import "react-quill/dist/quill.snow.css";
 import LanguageSelector from "./LanguageSelector";
 // import { initialize } from "workbox-google-analytics";
 
@@ -251,7 +247,9 @@ const EditProfile = () => {
                     <FormControl value={state.lName} onChange={handleChange} />
                   </FormGroup>
                 </div>
-                <Button onClick={editName}>{I18n.get("editName")}</Button>
+                <Button onClick={editName} className="btn">
+                  {I18n.get("editName")}
+                </Button>
               </div>
               <div className="flex-down" style={{ marginTop: 28 }}>
                 <h3>{I18n.get("changePicture")}</h3>
@@ -261,6 +259,7 @@ const EditProfile = () => {
                   onChange={(evt) => uploadToS3(evt)}
                 />
                 <Button
+                  className="btn-cancel"
                   onClick={() =>
                     setState((prevState) => ({ ...prevState, editName: false }))
                   }
@@ -286,6 +285,7 @@ const EditProfile = () => {
             </FormGroup>
             <div className="flex">
               <Button
+                className="btn-cancel"
                 onClick={() =>
                   setState((prevState) => ({
                     ...prevState,
@@ -374,6 +374,7 @@ const EditProfile = () => {
             </FormGroup>
             <div className="flex">
               <Button
+                className="btn-cancel"
                 onClick={() =>
                   setState((prevState) => ({ ...prevState, addProject: false }))
                 }
@@ -381,7 +382,9 @@ const EditProfile = () => {
                 {I18n.get("cancel")}
               </Button>
 
-              <Button onClick={addProject}>{I18n.get("save")}</Button>
+              <Button className="btn" onClick={addProject}>
+                {I18n.get("save")}
+              </Button>
             </div>
           </div>
         ) : null}

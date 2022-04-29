@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import { useState } from "react";
+import {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from "@mui/material";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import Button from "react-bootstrap/lib/Button";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
@@ -147,7 +151,9 @@ export default function SuggestionModal({ schema, user, handleClose }) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button className="btn-cancel" onClick={handleClose}>
+          Cancel
+        </Button>
         <LoaderButton
           text="Submit Suggestion"
           loadingText="Submitting"

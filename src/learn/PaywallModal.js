@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { DialogContent } from "@mui/material";
-import Button from "react-bootstrap/lib/Button";
+import { useEffect, useRef, useState } from "react";
+import { DialogContent, Button } from "@mui/material";
 import Order from "./Order";
 
 /**
@@ -59,7 +58,9 @@ function LoadingModal(props) {
             >
               Cancel
             </Button>
-            <Button onClick={() => setShowPayment(true)}>Purchase</Button>
+            <Button className="btn" onClick={() => setShowPayment(true)}>
+              Purchase
+            </Button>
           </div>
         </DialogContent>
       ) : (

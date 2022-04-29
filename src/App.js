@@ -3,7 +3,6 @@ import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { withRouter } from "react-router-dom";
-import Image from "react-bootstrap/lib/Image";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Tour from "reactour";
@@ -176,9 +175,9 @@ class App extends Component {
           secondFetch.push(() => fetchStarterKitExperience(currentUser.id));
         }
         if (arena) {
-          firstFetch.push(() => this.connectSocketToSprint());
+          firstFetch.push(() => this.connectSocketToSprint(currentUser.id));
         } else {
-          secondFetch.push(() => this.connectSocketToSprint());
+          secondFetch.push(() => this.connectSocketToSprint(currentUser.id));
         }
         if (currentUser.instructor) {
           firstFetch.push(() => fetchCoachingRoster(currentUser.id));
@@ -227,15 +226,12 @@ class App extends Component {
     }
   };
 
-  connectSocketToSprint = async () => {
+  connectSocketToSprint = async (userID = this.state.user.id) => {
     let result = { success: false, sprints: null };
     try {
-      const sprints = await RestAPI.get(
-        "pareto",
-        `/sprints/mentee/${this.state.user.id}`
-      );
+      const sprints = await RestAPI.get("pareto", `/sprints/mentee/${userID}`);
       result.success = true;
-      result.sprints = sprints;
+      result.sprints = await sprints;
 
       this.props.getInitialSprintData(sprints);
       this.setState({ sprints: sprints });
@@ -469,12 +465,13 @@ class App extends Component {
                     <Palette {...this.props} />
                     <div className="sticky-nav">
                       <div className="sticky-chat">
-                        <Image
+                        <img
                           src={question}
                           onClick={(event) => {
                             event.preventDefault();
                             this.setState({ isTourOpen: true });
                           }}
+                          alt="Home page tour icon"
                           height="40"
                           width="40"
                           circle
@@ -485,6 +482,7 @@ class App extends Component {
                             filter: "grayscale(100%)",
                             outline: "2px solid white",
                             border: "2px solid transparent",
+                            borderRadius: "50%",
                           }}
                         />
                       </div>

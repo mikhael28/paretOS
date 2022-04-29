@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Image from "react-bootstrap/lib/Image";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
@@ -65,12 +64,13 @@ function ContextBuilder({ sanitySchemas }) {
     <div style={{ width: "100%" }}>
       <h1>
         {I18n.get("library")}
-        <Image
+        <img
           src={help}
           onClick={(event) => {
             event.preventDefault();
             setIsTourOpen(true);
           }}
+          alt="Library of Context Tour"
           height="40"
           width="40"
           circle
