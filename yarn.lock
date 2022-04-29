@@ -3300,6 +3300,13 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/reactour@^1.18.2":
+  version "1.18.2"
+  resolved "https://registry.yarnpkg.com/@types/reactour/-/reactour-1.18.2.tgz#7b17529be743c3abae61b51e7d435a25b7df3f97"
+  integrity sha512-WFZ+RjmzZG8QzhW0NI0FQ3GsFxcn2kLIEak5R1NAW6PWkIJRCano1nLv81iFxA4qCneXSD1dwSbE6iuWVwCafw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/resolve@1.17.1":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"

@@ -1,4 +1,9 @@
-import React, { Component, ReactElement } from "react";
+import React, {
+  Component,
+  MouseEventHandler,
+  MouseEvent,
+  ReactElement,
+} from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -193,7 +198,7 @@ class App extends Component<{}, AppState> {
     this.setState({ isAuthenticating: false });
   }
 
-  initialFetch = async (username) => {
+  initialFetch = async (username: string) => {
     let newState = { isAuthenticated: false };
     const path = (this.props as AppProps).location?.pathname || "";
 
@@ -243,9 +248,9 @@ class App extends Component<{}, AppState> {
           secondFetch.push(() => this.connectSocketToSprint(currentUser.id));
         }
         if (currentUser.instructor) {
-          firstFetch.push(() => fetchCoachingRoster(currentUser.id));
+          firstFetch.push(() => fetchCoachingRoster(currentUser.id.toString()));
         }
-        firstFetch.push(() => fetchCoaches(currentUser.id));
+        firstFetch.push(() => fetchCoaches(currentUser.id.toString()));
 
         // Fetch first set of data
         const results = await Promise.all([...firstFetch.map((x) => x())]);
@@ -319,7 +324,7 @@ class App extends Component<{}, AppState> {
 
     let path = `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`;
 
-    const processMsg = (message) => {
+    const processMsg = (message: MessageEvent) => {
       // console.log("Received data: ", JSON.parse(message.data));
       let tempSprintData = JSON.parse(message.data);
       // this check is to see whether the websocket connection successfully retrieved the latest state.
@@ -350,7 +355,7 @@ class App extends Component<{}, AppState> {
     return result;
   };
 
-  fetchMenteeSprints = async (userId) => {
+  fetchMenteeSprints = async (userId: string) => {
     try {
       let menteeSprints = await RestAPI.get(
         "pareto",
@@ -363,11 +368,11 @@ class App extends Component<{}, AppState> {
     }
   };
 
-  userHasAuthenticated = (authenticated) => {
+  userHasAuthenticated = (authenticated: boolean) => {
     this.setState({ isAuthenticated: authenticated });
   };
 
-  refreshExperience = (type, updatedObject) => {
+  refreshExperience = (type: string, updatedObject: object) => {
     if (type === "training") {
       this.setState({ training: updatedObject });
     } else if (type === "product") {
@@ -377,7 +382,7 @@ class App extends Component<{}, AppState> {
     }
   };
 
-  handleLogout = async (event) => {
+  handleLogout: MouseEventHandler = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     localStorage.removeItem("sanity");
     await Auth.signOut();
@@ -393,13 +398,20 @@ class App extends Component<{}, AppState> {
     this.setState({ loading: false });
   };
 
-  updateLanguage = ({ name, code, image }) => {
+  updateLanguage = ({
+    name,
+    code,
+    image,
+  }: {
+    name: string;
+    code: string;
+    image: string;
+  }) => {
     this.setState({ chosenLanguage: { name, code, image } });
   };
 
   render() {
-    // eslint-disable-next-line no-unused-vars
-    const OnboardingWithoutRouter = (props) => {
+    const OnboardingWithoutRouter = (props: any) => {
       const {
         showCloseButton,
         location: { pathname },
@@ -437,7 +449,6 @@ class App extends Component<{}, AppState> {
           onRequestClose={this.closeTour}
           showCloseButton={showCloseButton}
           update={pathname}
-          rewindOnClose={false}
         />
       );
     };
@@ -592,11 +603,11 @@ class App extends Component<{}, AppState> {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   redux: state.redux,
 });
 
-const mapDispatchToProps = (dispatch) =>
+const mapDispatchToProps = (dispatch: any) =>
   bindActionCreators(
     {
       getActiveSprintData: (data) => getActiveSprintData(data),
