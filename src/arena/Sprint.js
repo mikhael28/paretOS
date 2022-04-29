@@ -201,7 +201,7 @@ function Sprint(props) {
         <TabPanel value={key} index={1}>
           <>
             <section>
-              <h5>{getFormattedDay(START_DATE)}</h5>
+              <h5>{getFormattedDay(START_DATE, displayDay)}</h5>
             </section>
 
             <ArenaStats
