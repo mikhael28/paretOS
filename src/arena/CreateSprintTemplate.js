@@ -161,6 +161,8 @@ function CreateSprintTemplate(props) {
           display: "flex",
           justifyContent: "flex-start",
           height: "100%",
+          overflow: "auto",
+          marginTop: "4rem",
         }}
       >
         <DragDropContext
@@ -177,7 +179,10 @@ function CreateSprintTemplate(props) {
               key={Math.random()}
             >
               <h2>{column.name}</h2>
-              <div style={{ margin: 8 }} className="overflow">
+              <div
+                style={{ margin: 8, overflow: "hidden auto" }}
+                className="overflow"
+              >
                 <Droppable droppableId={id} key={id}>
                   {(provided, snapshot) => (
                     <div
