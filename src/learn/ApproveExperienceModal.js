@@ -60,8 +60,6 @@ const ConfirmModal = ({
     } else {
       markComplete(activeExperience, mongoExperience, data.coachNotes);
     }
-    reset();
-    closeModal();
   };
 
   return (
