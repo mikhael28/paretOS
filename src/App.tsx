@@ -164,15 +164,15 @@ class App extends Component<{}, AppState> {
     I18n.putVocabularies(strings);
 
     try {
-      // TODO: Figure out CognitoUserSession typing issues
-      const session: any = await Auth.currentSession();
+      const session = await Auth.currentSession();
+      const idToken = session.getIdToken();
       this.setState({
-        username: session.idToken.payload.sub,
+        username: idToken.payload.sub,
         session: session,
       });
       this.setState({ isAuthenticating: false });
 
-      await this.initialFetch(session.idToken.payload.sub);
+      await this.initialFetch(idToken.payload.sub);
     } catch (e) {
       if (e === "No current user") {
         const result = await fetchSanitySchemas();
