@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, ReactElement } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteProps } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Tour from "reactour";
@@ -11,7 +11,7 @@ import * as Sentry from "@sentry/react";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
-import LanguageContext from "./state/LanguageContext";
+import { LanguageContext, LanguageProps } from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   getActiveSprintData,
@@ -36,9 +36,19 @@ import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
+import { User } from "./types";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+const Transition = React.forwardRef(function Transition(
+  {
+    children,
+    ...props
+  }: {
+    children: ReactElement<any, any>;
+    props: any;
+  },
+  ref
+) {
+  return <Slide children={children} direction="up" ref={ref} {...props} />;
 });
 
 /**
@@ -48,20 +58,69 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Internalization Rerender - Issue #6
  */
 
-const languageProps = {
+const languageProps: LanguageProps = {
   language: null,
   setLanguage: () => {},
 };
 
-class App extends Component {
-  constructor(props) {
+interface AppProps {
+  location: RouteProps["location"];
+  children: RouteProps["children"];
+  getActiveSprintData: Function;
+  getInitialSprintData: Function;
+  putUpdatedSprintData: Function;
+  getUser: Function;
+  isAuthenticatd: boolean;
+  history: Array<any>;
+}
+
+interface AppState {
+  isAuthenticated: boolean;
+  isAuthenticating: boolean;
+  username: string;
+  user: User;
+  training: object;
+  product: object;
+  interviewing: object;
+  sprints: Array<any>;
+  session: object;
+  athletes: Array<any>;
+  coaches: Array<any>;
+  users: Array<User>;
+  relationships: Array<any>;
+  isTourOpen: boolean;
+  loading: boolean;
+  sanitySchemas: object;
+  experiences: Array<any>;
+  messages: Array<any>;
+  chosenLanguage: object;
+  sanityTraining: Array<any>;
+  sanityProduct: Array<any>;
+  sanityInterview: Array<any>;
+}
+
+class App extends Component<{}, AppState> {
+  constructor(props: AppProps) {
     super(props);
 
     this.state = {
       isAuthenticated: false,
       isAuthenticating: true,
       username: "",
-      user: { id: "8020", fName: "Vilfredo", lName: "Pareto" },
+      user: {
+        id: 8020,
+        fName: "Vilfredo",
+        lName: "Pareto",
+        score: 0,
+        email: "",
+        github: "",
+        missions: [],
+        phone: "",
+        percentage: 0,
+        planning: [],
+        instructor: false,
+        review: "",
+      },
       training: {},
       product: {},
       interviewing: {},
@@ -105,7 +164,8 @@ class App extends Component {
     I18n.putVocabularies(strings);
 
     try {
-      const session = await Auth.currentSession();
+      // TODO: Figure out CognitoUserSession typing issues
+      const session: any = await Auth.currentSession();
       this.setState({
         username: session.idToken.payload.sub,
         session: session,
@@ -126,7 +186,7 @@ class App extends Component {
         }
       }
       if (e !== "No current user") {
-        errorToast(e, this.state.user);
+        errorToast(e);
         this.setCloseLoading();
       }
     }
@@ -134,8 +194,8 @@ class App extends Component {
   }
 
   initialFetch = async (username) => {
-    let newState = {};
-    const path = this.props.location.pathname;
+    let newState = { isAuthenticated: false };
+    const path = (this.props as AppProps).location?.pathname || "";
 
     // Set up variables to enable fetching only the data needed for your current app view
     const [context, training, arena] = [
@@ -143,21 +203,24 @@ class App extends Component {
       path.includes("training"),
       !path.includes("context-builder") && !path.includes("training"),
     ];
-    const firstFetch = [];
-    const secondFetch = [];
+    const firstFetch: Array<Function> = [];
+    const secondFetch: Array<Function> = [];
 
-    const user = await fetchUser(username);
-    if (user.length > 0) {
-      const currentUser = user[0];
+    const userArray: Array<User> = (await fetchUser(username)) as Array<User>;
+    if (userArray.length > 0) {
+      const currentUser = userArray[0];
       try {
-        this.props.getUser(currentUser);
-        const stateUpdate = { user: currentUser, language: "en" };
+        (this.props as AppProps).getUser(currentUser);
+        const stateUpdate = {
+          user: currentUser,
+          chosenLanguage: this.state.chosenLanguage,
+        };
         if (currentUser.defaultLanguage) {
           const language = availableLanguages.find(
             (x) => x.code === currentUser.defaultLanguage
           );
           I18n.setLanguage(currentUser.defaultLanguage);
-          stateUpdate.language = language;
+          if (language) stateUpdate.chosenLanguage = language;
         }
         this.setState(stateUpdate);
 
@@ -197,7 +260,7 @@ class App extends Component {
           });
         newState.isAuthenticated = true;
         this.setState({ ...newState }, () => this.setCloseLoading());
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.toString());
         if (e.toString() === "Error: Network Error") {
           console.log("Successfully identified network error");
@@ -206,8 +269,7 @@ class App extends Component {
     }
     try {
       // Fetch remaining content that will be needed in other areas of the app.
-      let afterState = {};
-      afterState.loading = false;
+      let afterState = { loading: false };
       const afterResults = await Promise.all([...secondFetch.map((x) => x())]);
       afterResults
         .filter((r) => r !== false)
@@ -218,7 +280,7 @@ class App extends Component {
           }
         });
       this.setState({ ...afterState });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.toString());
       if (e.toString() === "Error: Network Error") {
         console.log("Successfully identified network error");
@@ -227,13 +289,17 @@ class App extends Component {
   };
 
   connectSocketToSprint = async (userID = this.state.user.id) => {
-    let result = { success: false, sprints: null };
+    let result = { success: false, sprints: [] };
     try {
-      const sprints = await RestAPI.get("pareto", `/sprints/mentee/${userID}`);
+      const sprints = await RestAPI.get(
+        "pareto",
+        `/sprints/mentee/${userID}`,
+        {}
+      );
       result.success = true;
       result.sprints = await sprints;
 
-      this.props.getInitialSprintData(sprints);
+      (this.props as AppProps).getInitialSprintData(sprints);
       this.setState({ sprints: sprints });
 
       if (sprints.length === 0) {
@@ -243,9 +309,9 @@ class App extends Component {
       console.error(e);
     }
 
-    let sprintStrings = [];
+    let sprintStrings: Array<string> = [];
 
-    result.sprints.map((spr, idx) => {
+    result.sprints.map((spr: any, idx: number) => {
       sprintStrings.push(`key${idx}=${spr.id}`);
     });
 
@@ -271,7 +337,7 @@ class App extends Component {
         try {
           // console.log("Formatted Sprint Array: ", newerSprintArray);
           this.setState({ sprints: newerSprintArray });
-          this.props.putUpdatedSprintData(newerSprintArray);
+          (this.props as AppProps).putUpdatedSprintData(newerSprintArray);
         } catch (e) {
           // console.log("onmessage error", e);
         }
@@ -288,7 +354,8 @@ class App extends Component {
     try {
       let menteeSprints = await RestAPI.get(
         "pareto",
-        `/sprints/mentee/${userId}`
+        `/sprints/mentee/${userId}`,
+        {}
       );
       this.setState({ sprints: menteeSprints });
     } catch (e) {
@@ -315,7 +382,7 @@ class App extends Component {
     localStorage.removeItem("sanity");
     await Auth.signOut();
     this.userHasAuthenticated(false);
-    this.props.history.push("/login");
+    (this.props as AppProps).history.push("/login");
   };
 
   setLoading = () => {
@@ -332,44 +399,46 @@ class App extends Component {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const Onboarding = withRouter(({ location: { pathname }, history }) => {
-      const steps = [
-        {
-          selector: ".first-step",
-          content: `${I18n.get("appFirst")}`,
-        },
-        {
-          selector: ".second-step",
-          content: `${I18n.get("appSecond")}`,
-        },
-        {
-          selector: ".third-step",
-          content: `${I18n.get("appThird")}`,
-        },
-        // {
-        //   selector: ".fourth-step",
-        //   content: `${I18n.get("appFourth")}`,
-        // },
-        {
-          selector: ".fifth-step",
-          content: `${I18n.get("appFifth")}`,
-        },
-        {
-          selector: ".sixth-step",
-          content: `${I18n.get("appSixth")}`,
-        },
-      ];
-      return (
-        <Tour
-          steps={steps}
-          isOpen={this.state.isTourOpen}
-          onRequestClose={this.closeTour}
-          showCloseButton
-          update={pathname}
-          rewindOnClose={false}
-        />
-      );
-    });
+    const OnboardingWithoutRouter = (props) => {
+        const { showCloseButton, location: { pathname } } = props;
+        const steps = [
+          {
+            selector: ".first-step",
+            content: `${I18n.get("appFirst")}`,
+          },
+          {
+            selector: ".second-step",
+            content: `${I18n.get("appSecond")}`,
+          },
+          {
+            selector: ".third-step",
+            content: `${I18n.get("appThird")}`,
+          },
+          // {
+          //   selector: ".fourth-step",
+          //   content: `${I18n.get("appFourth")}`,
+          // },
+          {
+            selector: ".fifth-step",
+            content: `${I18n.get("appFifth")}`,
+          },
+          {
+            selector: ".sixth-step",
+            content: `${I18n.get("appSixth")}`,
+          },
+        ];
+        return (
+          <Tour
+            steps={steps}
+            isOpen={this.state.isTourOpen}
+            onRequestClose={this.closeTour}
+            showCloseButton={showCloseButton}
+            update={pathname}
+            rewindOnClose={false}
+          />
+        );
+    };
+    const Onboarding = withRouter(OnboardingWithoutRouter);
     const childProps = {
       // authentication related state
       isAuthenticated: this.state.isAuthenticated,
@@ -474,7 +543,6 @@ class App extends Component {
                           alt="Home page tour icon"
                           height="40"
                           width="40"
-                          circle
                           className="sticky-btn"
                           style={{
                             marginRight: 12,
@@ -495,8 +563,6 @@ class App extends Component {
                   <Routes childProps={childProps} />
                 )}
                 <Onboarding
-                  isOpen={this.state.isTourOpen}
-                  onRequestClose={this.closeTour}
                   showCloseButton
                 />
                 <Dialog
@@ -504,7 +570,7 @@ class App extends Component {
                     margin: "auto",
                   }}
                   open={this.state.loading}
-                  TransitionComponent={Transition}
+                  TransitionComponent={Transition as any}
                   keepMounted
                   disableEscapeKeyDown
                   fullScreen
@@ -539,4 +605,4 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App as any));
