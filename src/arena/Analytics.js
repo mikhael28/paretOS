@@ -13,8 +13,6 @@ import {
   // ButtonNext,
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 
@@ -74,8 +72,4 @@ function Analytics(props) {
   );
 }
 
-const mapStateToProps = () => ({});
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Analytics);
+export default Analytics;

@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import { bindActionCreators } from "redux";
 import { useLocation } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
-import { useTheme } from "@mui/material";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
 import { errorToast } from "../libs/toasts";
@@ -12,12 +10,6 @@ import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
 import ArenaProofModal from "../components/ArenaProofModal";
-import {
-  completeSprintTask,
-  getActiveSprintData,
-  nextDay,
-  updatePlanningForms,
-} from "../state/sprints";
 import { steps, updateSprintData } from "./utils";
 import Missions from "./Missions/Index";
 import getFormattedDay from "../utils/getFormattedDay";
@@ -35,13 +27,13 @@ import ArenaDynamicForms from "./ArenaDynamicForms";
  */
 
 function Sprint(props) {
+  const sprints = useSelector((state) => state.sprint);
+  const dispatch = useDispatch();
   // Identify the sprint index
   const location = useLocation();
   let path = location.pathname.split("/");
   let sprintId = path[3];
-  const SPRINT_INDEX = props.redux.sprint.findIndex(
-    (spr) => spr.id === sprintId
-  );
+  const SPRINT_INDEX = sprints.findIndex((spr) => spr.id === sprintId);
 
   // Identify the language
   let str = I18n.get("close");
@@ -49,7 +41,7 @@ function Sprint(props) {
   I18n.setLanguage(LENGUA);
 
   // Identify the user's index in the team
-  let sprint = props.redux.sprint[SPRINT_INDEX];
+  let sprint = sprints[SPRINT_INDEX];
   const TEAM_INDEX = sprint.teams.findIndex(
     (team) => team.id === props.user.id
   );
@@ -94,7 +86,7 @@ function Sprint(props) {
   const [view, setView] = useState("submit");
   const [key, setKey] = useState(1);
   const [dynamicForms, setDynamicForms] = useState(
-    props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX].planning
+    sprints[SPRINT_INDEX].teams[TEAM_INDEX].planning
   );
 
   function handleDynamicForms(event) {
@@ -110,17 +102,20 @@ function Sprint(props) {
 
   async function handleChange(mission, idx, day, key) {
     setLoading(true);
-    props.completeSprintTask({
-      mission,
-      idx,
-      day,
-      key,
-      index: TEAM_INDEX,
-      activeSprintIndex: SPRINT_INDEX,
+    dispatch({
+      type: "COMPLETE_SPRINT_TASK",
+      payload: {
+        mission,
+        idx,
+        day,
+        key,
+        index: TEAM_INDEX,
+        activeSprintIndex: SPRINT_INDEX,
+      },
     });
 
     try {
-      await updateSprintData(props.redux.sprint[SPRINT_INDEX], ws);
+      await updateSprintData(sprints[SPRINT_INDEX], ws);
     } catch (error) {
       errorToast(error);
     } finally {
@@ -136,15 +131,18 @@ function Sprint(props) {
   ) {
     setLoading(true);
 
-    props.updatePlanningForms({
-      activeSprintIndex,
-      teamIndex,
-      planningIndex,
-      content,
+    dispatch({
+      type: "PLANNING_FORMS",
+      payload: {
+        activeSprintIndex,
+        teamIndex,
+        planningIndex,
+        content,
+      },
     });
 
     try {
-      await updateSprintData(props.redux.sprint[SPRINT_INDEX], ws);
+      await updateSprintData(sprints[SPRINT_INDEX], ws);
       setLoading(false);
     } catch (error) {
       alert(error);
@@ -165,8 +163,7 @@ function Sprint(props) {
   let upcomingMissions = []; // uncompleted daily missions
 
   allMissions =
-    props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX].missions[displayDay]
-      .missions || []; // default to empty array
+    sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions[displayDay].missions || []; // default to empty array
 
   [...allMissions].forEach((mission, i) =>
     mission.completed
@@ -189,9 +186,7 @@ function Sprint(props) {
           <ArenaDynamicForms
             index={TEAM_INDEX}
             activeSprintId={SPRINT_INDEX}
-            plannings={
-              props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX].planning
-            }
+            plannings={sprints[SPRINT_INDEX].teams[TEAM_INDEX].planning}
             dynamicForms={dynamicForms}
             handleDynamicForms={handleDynamicForms}
             savePlanning={savePlanning}
@@ -205,7 +200,7 @@ function Sprint(props) {
             </section>
 
             <ArenaStats
-              activePerson={props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX]}
+              activePerson={sprints[SPRINT_INDEX].teams[TEAM_INDEX]}
               displayDay={displayDay}
             />
 
@@ -236,9 +231,7 @@ function Sprint(props) {
             <Details
               displayDay={displayDay}
               admin={props.user.admin}
-              missions={
-                props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX].missions
-              }
+              missions={sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions}
               setDisplayDay={setDisplayDay}
               setStatus={setStatus}
               status={status}
@@ -250,7 +243,7 @@ function Sprint(props) {
           <div className="row">
             <div className="col-xs-12 col-sm-7">
               <Board
-                users={props.redux.sprint[SPRINT_INDEX].teams}
+                users={sprints[SPRINT_INDEX].teams}
                 itemsPerPage={10}
                 currentUser={props.user}
                 history={props.history}
@@ -258,9 +251,7 @@ function Sprint(props) {
             </div>
             <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>
               <Analytics
-                missions={
-                  props.redux.sprint[SPRINT_INDEX].teams[TEAM_INDEX].missions
-                }
+                missions={sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions}
               />
             </div>
           </div>
@@ -273,7 +264,7 @@ function Sprint(props) {
           activeIndex={activeIndex}
           handleChange={handleChange}
           handleClose={closeModal}
-          sprint={props.redux.sprint[SPRINT_INDEX]}
+          sprint={sprints[SPRINT_INDEX]}
           view={view}
           user={props.user}
         />
@@ -283,19 +274,4 @@ function Sprint(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  redux: state,
-});
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      completeSprintTask: (task) => completeSprintTask(task),
-      nextDay: () => nextDay(),
-      getActiveSprintData: (data) => getActiveSprintData(data),
-      updatePlanningForms: (data) => updatePlanningForms(data),
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sprint);
+export default Sprint;
