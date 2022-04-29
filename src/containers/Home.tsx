@@ -5,7 +5,7 @@ import Landing from "./Landing";
  * Very simple component that loads either the landing page, or the main Dashboard depending on whether the user is logged in or not.
  */
 
-export default function Home(props) {
+export default function Home(props: any) {
   return (
     <>
       {props.isAuthenticated ? (

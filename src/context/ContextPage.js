@@ -216,7 +216,7 @@ function ContextPage(props) {
                       <></>
                     ) : (
                       <ContextObject
-                        {...item}
+                        item={item}
                         img={url.toString()}
                         openExternalModal={openExternalModal}
                         closeExternalModal={closeExternalModal}
@@ -263,7 +263,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -311,7 +311,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -359,7 +359,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -407,7 +407,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -452,7 +452,7 @@ function ContextPage(props) {
                     <></>
                   ) : (
                     <ContextObject
-                      {...item}
+                      item={item}
                       img={url.toString()}
                       openExternalModal={openExternalModal}
                       closeExternalModal={closeExternalModal}

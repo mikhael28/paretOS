@@ -15,7 +15,7 @@ function Missions(props: MissionsProps) {
       </h2>
       {missions.length > 0 ? (
         <ul className="context-cards">
-          {missions.map((mission) => (
+          {missions.map((mission: any) => (
             <Mission mission={mission[0]} id={mission[1]} {...props} />
           ))}
         </ul>
