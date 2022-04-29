@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
-import Button from "react-bootstrap/lib/Button";
-import Image from "react-bootstrap/lib/Image";
 import { RestAPI } from "@aws-amplify/api-rest";
 import BlockContent from "@sanity/block-content-to-react";
-import { Slide, Dialog } from "@mui/material";
+import { Slide, Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import classNames from "classnames";
@@ -25,7 +23,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 /**
  * This module is where the bulk of the experience module system lies.
  * @TODO Issue #48
- * @TODO Issue #6
  * @TODO Issue #27
  * @TODO Issue #53
  */
@@ -333,6 +330,7 @@ class ExperienceModule extends Component {
             ) : (
               <Button
                 onClick={() => this.setState({ showSubmitModal: true })}
+                className="btn"
                 style={{ marginTop: 16, marginRight: 10, fontSize: 16 }}
               >
                 <HiOutlineClipboardCheck /> {I18n.get("markAsComplete")}
@@ -340,7 +338,10 @@ class ExperienceModule extends Component {
             )}
             {this.props.user.instructor === true &&
             mongoExperience[activeExperience.priority].completed === true ? (
-              <Button onClick={() => this.setState({ openReviewModal: true })}>
+              <Button
+                onClick={() => this.setState({ openReviewModal: true })}
+                className="btn"
+              >
                 <HiOutlineClipboardCheck /> {I18n.get("reviewWork")}
               </Button>
             ) : null}
@@ -388,12 +389,13 @@ class ExperienceModule extends Component {
       <div style={{ width: "100%" }}>
         <h1>
           {I18n.get("experienceModule")}{" "}
-          <Image
+          <img
             src={question}
             onClick={(event) => {
               event.preventDefault();
               this.setState({ isTourOpen: true });
             }}
+            alt="Tour for Experience Module"
             height="40"
             width="40"
             circle

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import Image from "react-bootstrap/lib/Image";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
@@ -77,11 +76,12 @@ function Profile() {
       ) : (
         <>
           <div className="flex">
-            <Image
+            <img
               src={
                 profile.picture ||
                 "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
               }
+              alt="Generic profile for an athlete"
               height="50"
               width="50"
               circle

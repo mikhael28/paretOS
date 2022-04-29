@@ -12,8 +12,6 @@ import TermsOfService from "./TermsOfService";
 /**
  * Functionality for new user signup, creating their profile.
  * @TODO Onboarding emails Issue #24
- * @TODO Country picker Issue #23
- * @TODO Terms of Service Acceptance Issue #22
  * @TODO <form> Issue #21
  */
 

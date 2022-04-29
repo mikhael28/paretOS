@@ -1,5 +1,5 @@
 :root {
-  --backgroundColor: rgb(0,0,0);
+  --backgroundColor: rgb(0, 0, 0);
   --backgroundColor-light: rgb(255, 255, 255);
   --color: rgb(242, 243, 243);
   --color-light: rgb(34, 34, 34);
@@ -7,12 +7,11 @@
   --navigation-color: rgb(242, 243, 243);
   --primary: #d95b35;
   --secondary: #de4665;
-  --tertiary: #C84994;
+  --tertiary: #c84994;
 }
 
 #root {
-  height: 100vh;
-  overflow: scroll;
+  min-height: 100vh;
 }
 
 body {
@@ -46,7 +45,7 @@ body {
   font-size: 32px;
   z-index: 999;
   background-color: transparent;
-  color: white!important;
+  color: white !important;
   border-radius: 100px;
   padding: 10px 8px 8px 14px;
   line-height: 28px;
@@ -58,7 +57,7 @@ section {
 
 .stats-container.flex {
   display: flex;
-  justify-content: flex-start!important;
+  justify-content: flex-start !important;
   margin: 8px -8px;
   flex-wrap: wrap;
 }
@@ -85,7 +84,7 @@ h2 {
 }
 h3 {
   margin: 0;
-  font-Weight: 600;
+  font-weight: 600;
   text-shadow: 0.5px 0px 0px;
   letter-spacing: 0.5px;
   font-size: 18px;
@@ -115,9 +114,8 @@ input[type="file"] {
 /* TODO: remove once bootstrap is completely gone */
 a.MuiButton-root:hover,
 a.MuiButton-root:focus {
-  color: rgb(222, 70, 101)!important
+  color: rgb(222, 70, 101) !important;
 }
-
 
 /* mobile/tablet styling */
 
@@ -180,7 +178,7 @@ a.MuiButton-root:focus {
   }
 
   .btn {
-    min-width: 80px!important;
+    min-width: 80px !important;
   }
 }
 
@@ -191,7 +189,7 @@ a.MuiButton-root:focus {
     padding-top: -74px;
   }
   .root-padding {
-    padding: 24px 32px 24px 302px
+    padding: 24px 32px 24px 302px;
   }
   .sticky-nav {
     visibility: hidden;
@@ -376,9 +374,9 @@ a.MuiButton-root:focus {
 }
 
 .accordion__button {
-  background-color: transparent!important;
-  color: var(--tertiary)!important;
-  text-transform: uppercase!important;
+  background-color: transparent !important;
+  color: var(--tertiary) !important;
+  text-transform: uppercase !important;
   font-weight: 600;
   text-shadow: 0.5px 0px 0px;
   letter-spacing: 3px;
@@ -449,7 +447,7 @@ a.MuiButton-root:focus {
 }
 
 .pell-actionbar {
-  background-color: var(--primary)!important;
+  background-color: var(--primary) !important;
 }
 
 .pell-content {
@@ -645,11 +643,11 @@ a.MuiButton-root:focus {
 }
 
 .table-responsive td {
-  border: 1px solid var(--navigation-bgColor)!important;
+  border: 1px solid var(--navigation-bgColor) !important;
 }
 
 .table-responsive tr:hover {
-  background-color: var(--primary)!important;
+  background-color: var(--primary) !important;
 }
 
 .fake-bullet {
@@ -714,39 +712,38 @@ a.MuiButton-root:focus {
   padding: 12px 24px;
   border-radius: 40px;
   margin-bottom: 8px;
-  margin-right: 8px
+  margin-right: 8px;
 }
 
 .options .btn:hover,
 .options .btn:active {
-  background: #777!important;
+  background: #777 !important;
 }
 
-.options .btn-default:hover
-.options .btn-default:active {
-  background: #777!important;
+.options .btn-default:hover .options .btn-default:active {
+  background: #777 !important;
 }
 
 details {
   border: 1px solid #aaa;
   border-radius: 4px;
-  padding: .5em .5em 0;
+  padding: 0.5em 0.5em 0;
 }
 
 summary {
   font-weight: bold;
-  margin: -.5em -.5em 0;
-  padding: .5em;
+  margin: -0.5em -0.5em 0;
+  padding: 0.5em;
   cursor: pointer;
 }
 
 details[open] {
-  padding: .5em;
+  padding: 0.5em;
 }
 
 details[open] summary {
   border-bottom: 1px solid #aaa;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .btn:hover {
@@ -818,8 +815,7 @@ details[open] summary {
 }
 
 .btn-outline:hover {
-  background: #30944c;
-  border: 2px solid #30944c;
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
 }
 
 /* Form styles */

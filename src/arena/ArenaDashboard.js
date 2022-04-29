@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Image from "react-bootstrap/lib/Image";
+import { useState } from "react";
 import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -56,17 +55,19 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
         >
           &nbsp;Arena
         </h1>
-        <Image
+        <img
           src={question}
           onClick={(event) => {
             event.preventDefault();
             setIsTourOpen(true);
           }}
+          alt="Arena tour icon"
           height="16"
           width="16"
           circle
           style={{
             cursor: "pointer",
+            borderRadius: "50%",
             marginTop: 30,
             marginLeft: 6,
             opacity: 0.8,

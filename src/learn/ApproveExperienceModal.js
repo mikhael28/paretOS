@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import Button from "react-bootstrap/lib/Button";
 import Modal from "react-bootstrap/lib/Modal";
+import { Button } from "@mui/material";
 import BlockContent from "@sanity/block-content-to-react";
 import { I18n } from "@aws-amplify/core";
 
@@ -78,7 +78,9 @@ const ConfirmModal = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <div className="flex">
-            <Button onClick={props.closeModal}>{I18n.get("close")}</Button>
+            <Button className="btn-cancel" onClick={props.closeModal}>
+              {I18n.get("close")}
+            </Button>
 
             {props.mongoExperience[props.activeExperience.priority].approved ===
             true ? null : (
@@ -86,6 +88,7 @@ const ConfirmModal = (props) => {
                 {props.mongoExperience[props.activeExperience.priority]
                   .revisionsNeeded === false ? (
                   <Button
+                    className="btn"
                     onClick={() => {
                       props.markRequestRevisions(
                         props.activeExperience,
@@ -98,6 +101,7 @@ const ConfirmModal = (props) => {
                   </Button>
                 ) : null}
                 <Button
+                  className="btn"
                   onClick={() => {
                     props.markComplete(
                       props.activeExperience,

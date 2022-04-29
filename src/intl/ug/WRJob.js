@@ -1,5 +1,4 @@
-import React from "react";
-import Button from "react-bootstrap/lib/Button";
+import Button from "@mui/material/Button";
 import { FaCheck, FaMoneyCheck, FaMapMarkerAlt } from "react-icons/fa";
 import classNames from "classnames";
 
@@ -74,6 +73,7 @@ export default function Job(props) {
         </div>
         <Button
           block
+          className="btn"
           onClick={() => {
             window.open(`https://workandrise.com/jobs/${props.job.id}/details`);
           }}

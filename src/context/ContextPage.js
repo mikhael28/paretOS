@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
-import Image from "react-bootstrap/lib/Image";
 import BlockContent from "@sanity/block-content-to-react";
 import { Slide, Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
@@ -164,11 +163,12 @@ function ContextPage(props) {
           }}
           className="third-step-library"
         />
-        <Image
+        <img
           src={help}
           onClick={() => {
             setIsTourOpen(true);
           }}
+          alt="Context page tour"
           height="40"
           width="40"
           circle

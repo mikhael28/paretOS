@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import Button from "react-bootstrap/lib/Button";
+import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-White.png";
 import marketing from "../assets/marketing.png";
 
@@ -20,6 +21,8 @@ function Landing(props: any) {
       words: "Great OS project lot to learn here",
     },
   ]);
+
+  const theme = useTheme();
 
   return (
     <div>
@@ -44,12 +47,17 @@ function Landing(props: any) {
         <p className="text-center">{I18n.get("thirdLanding")}</p>
         <br />
         <div style={{ textAlign: "center" }}>
-          <Button onClick={() => props.history.push("/signup")}>
+          <Button
+            className="btn"
+            style={{ color: "white" }}
+            onClick={() => props.history.push("/signup")}
+          >
             {I18n.get("signup")}
           </Button>
           <Button
             className="btn-outline"
             onClick={() => props.history.push("/login")}
+            style={{ color: "white" }}
           >
             {I18n.get("login")}
           </Button>

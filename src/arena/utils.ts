@@ -1,4 +1,5 @@
 import { I18n } from "@aws-amplify/core";
+import { WS } from "../libs/websocket";
 
 /**
  * @constant
@@ -25,7 +26,7 @@ export const steps = [
  */
 export const updateSprintData = async (
   sprintData: { [key: string]: any },
-  wsSend: WebSocket
+  wsSend: WS
 ) => {
   let updatedSprintData = `{"action":"sendmessage", "data":${JSON.stringify(
     sprintData

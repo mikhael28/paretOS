@@ -5,7 +5,6 @@ import { useTheme } from "@mui/material";
 
 /**
  * The Experience summary component is shown as a shortcut to enter a particular training module by ID. The coach can see this when viewing his/her students, and the students see this in the learning dashboard.
- * @TODO Issue #54
  * @TODO Issue #48
  */
 
