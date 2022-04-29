@@ -17,7 +17,8 @@ const builder = imageUrlBuilder(sanity);
  *
  */
 
-function ContextBuilder({ sanitySchemas }) {
+function ContextBuilder(props) {
+  console.log(props);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState(0);
   const history = useHistory();
@@ -38,6 +39,7 @@ function ContextBuilder({ sanitySchemas }) {
                 onClick={() => history.push(`/${link}/${topic.slug.current}`)}
               >
                 <ContextObject
+                  item={topic}
                   img={img}
                   title={topic.title}
                   summary={topic.summary}
@@ -96,13 +98,13 @@ function ContextBuilder({ sanitySchemas }) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} className="tabPanelCont">
-        {renderTopicsList(sanitySchemas.technicalSchemas)}
+        {renderTopicsList(props.sanitySchemas.technicalSchemas)}
       </TabPanel>
       <TabPanel value={value} index={1} className="tabPanelCont">
-        {renderTopicsList(sanitySchemas.economicSchemas)}
+        {renderTopicsList(props.sanitySchemas.economicSchemas)}
       </TabPanel>
       <TabPanel value={value} index={2} className="tabPanelCont">
-        {renderTopicsList(sanitySchemas.hubSchemas)}
+        {renderTopicsList(props.sanitySchemas.hubSchemas)}
       </TabPanel>
 
       <Tour

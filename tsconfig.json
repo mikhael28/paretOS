@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "typeRoots": ["src/types/custom_types", "node_modules/@types"]
     // "typeRoots": ["./src/types/custom_types", "./node_modules/@types"]
   },

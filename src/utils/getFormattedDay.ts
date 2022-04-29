@@ -5,7 +5,7 @@
  * @returns date in the format of "day, month/date"
  * @example getFormattedDay("2020-01-01") returns "Tuesday, 12/17"
  */
-function getFormattedDay(startDate: Date, displayDay): string {
+function getFormattedDay(startDate: Date, displayDay: any): string {
   const days = [
     "Sunday",
     "Monday",
