@@ -103,7 +103,7 @@ function Sprint(props) {
   async function handleChange(mission, idx, day, key) {
     setLoading(true);
     dispatch({
-      task: "COMPLETE_SPRINT_TASK",
+      type: "COMPLETE_SPRINT_TASK",
       payload: {
         mission,
         idx,
@@ -132,7 +132,7 @@ function Sprint(props) {
     setLoading(true);
 
     dispatch({
-      task: "PLANNING_FORMS",
+      type: "PLANNING_FORMS",
       payload: {
         activeSprintIndex,
         teamIndex,
