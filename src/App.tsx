@@ -400,43 +400,46 @@ class App extends Component<{}, AppState> {
   render() {
     // eslint-disable-next-line no-unused-vars
     const OnboardingWithoutRouter = (props) => {
-        const { showCloseButton, location: { pathname } } = props;
-        const steps = [
-          {
-            selector: ".first-step",
-            content: `${I18n.get("appFirst")}`,
-          },
-          {
-            selector: ".second-step",
-            content: `${I18n.get("appSecond")}`,
-          },
-          {
-            selector: ".third-step",
-            content: `${I18n.get("appThird")}`,
-          },
-          // {
-          //   selector: ".fourth-step",
-          //   content: `${I18n.get("appFourth")}`,
-          // },
-          {
-            selector: ".fifth-step",
-            content: `${I18n.get("appFifth")}`,
-          },
-          {
-            selector: ".sixth-step",
-            content: `${I18n.get("appSixth")}`,
-          },
-        ];
-        return (
-          <Tour
-            steps={steps}
-            isOpen={this.state.isTourOpen}
-            onRequestClose={this.closeTour}
-            showCloseButton={showCloseButton}
-            update={pathname}
-            rewindOnClose={false}
-          />
-        );
+      const {
+        showCloseButton,
+        location: { pathname },
+      } = props;
+      const steps = [
+        {
+          selector: ".first-step",
+          content: `${I18n.get("appFirst")}`,
+        },
+        {
+          selector: ".second-step",
+          content: `${I18n.get("appSecond")}`,
+        },
+        {
+          selector: ".third-step",
+          content: `${I18n.get("appThird")}`,
+        },
+        // {
+        //   selector: ".fourth-step",
+        //   content: `${I18n.get("appFourth")}`,
+        // },
+        {
+          selector: ".fifth-step",
+          content: `${I18n.get("appFifth")}`,
+        },
+        {
+          selector: ".sixth-step",
+          content: `${I18n.get("appSixth")}`,
+        },
+      ];
+      return (
+        <Tour
+          steps={steps}
+          isOpen={this.state.isTourOpen}
+          onRequestClose={this.closeTour}
+          showCloseButton={showCloseButton}
+          update={pathname}
+          rewindOnClose={false}
+        />
+      );
     };
     const Onboarding = withRouter(OnboardingWithoutRouter);
     const childProps = {
@@ -562,9 +565,7 @@ class App extends Component<{}, AppState> {
                 ) : (
                   <Routes childProps={childProps} />
                 )}
-                <Onboarding
-                  showCloseButton
-                />
+                <Onboarding showCloseButton />
                 <Dialog
                   style={{
                     margin: "auto",
@@ -605,4 +606,7 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App as any));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(App as any));
