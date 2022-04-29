@@ -3,7 +3,18 @@ import sortby from "lodash.sortby";
 import sanity from "./sanity";
 import { errorToast } from "./toasts";
 
-export const fetchUser = async (username) => {
+interface ExperienceResult {
+  success: boolean;
+  sanityTraining?: any;
+  sanityProduct?: any;
+  sanityInterview?: any;
+  training?: any;
+  product?: any;
+  interviewing?: any;
+  experiences?: any;
+}
+
+export const fetchUser = async (username: string) => {
   let user = {};
   try {
     user = await RestAPI.get("pareto", `/users/${username}`, {});
@@ -14,7 +25,7 @@ export const fetchUser = async (username) => {
 };
 
 export const fetchStarterKitSanity = async () => {
-  let result = {
+  let result: ExperienceResult = {
     success: false,
     sanityTraining: null,
     sanityProduct: null,
@@ -56,8 +67,8 @@ export const fetchStarterKitSanity = async () => {
   return result;
 };
 
-export const fetchStarterKitExperience = async (id) => {
-  const result = {
+export const fetchStarterKitExperience = async (id: any) => {
+  const result: ExperienceResult = {
     success: false,
     training: null,
     product: null,
@@ -70,7 +81,7 @@ export const fetchStarterKitExperience = async (id) => {
     let apprenticeship;
     let interviewing;
 
-    await experiences.forEach((exp) => {
+    await experiences.forEach((exp: any) => {
       if (exp.type === "Product") {
         product = exp;
       } else if (exp.type === "Apprenticeship") {
@@ -90,7 +101,7 @@ export const fetchStarterKitExperience = async (id) => {
   return result;
 };
 
-export const fetchCoachingRoster = async (id) => {
+export const fetchCoachingRoster = async (id: string) => {
   const result = { success: false, athletes: null };
   try {
     let athletes = await RestAPI.get(
@@ -106,7 +117,7 @@ export const fetchCoachingRoster = async (id) => {
   return result;
 };
 
-export const fetchCoaches = async (id) => {
+export const fetchCoaches = async (id: string) => {
   let result = { success: false, coaches: null };
   try {
     let existingCoaches = localStorage.getItem("coaches");

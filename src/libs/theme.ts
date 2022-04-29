@@ -132,7 +132,7 @@ const theme = createTheme({
           }),
         },
         {
-          props: { variant: "options", status: "selected" },
+          props: { variant: "options-selected" },
           style: {
             background: "rgba(255, 255, 255, 0.44)",
             "&:hover": { background: "rgba(255, 255, 255, 0.44)" },
@@ -142,5 +142,24 @@ const theme = createTheme({
     },
   },
 });
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsVariantOverrides {
+    gradient: true;
+  }
+}
+
+declare module "@mui/material/Paper" {
+  interface PaperPropsVariantOverrides {
+    filled: true;
+  }
+}
+
+declare module "@mui/material/Chip" {
+  interface ChipPropsVariantOverrides {
+    options: true;
+    "options-selected": true;
+  }
+}
 
 export default theme;

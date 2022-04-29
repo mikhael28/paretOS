@@ -40,7 +40,7 @@ const routes = [
   },
 ];
 
-function Sandbox(props) {
+function CommandPalette(props: any) {
   const ninjaKeys = useRef<any>(null);
 
   const [externalModal, setExternalModal] = useState({
@@ -157,4 +157,4 @@ function Sandbox(props) {
     </div>
   );
 }
-export default Sandbox;
+export default CommandPalette;

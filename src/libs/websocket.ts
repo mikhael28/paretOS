@@ -25,7 +25,7 @@ export class WS {
     this.timeout = 5000;
   }
 
-  connect({ path, processMsg }) {
+  connect({ path, processMsg }: any) {
     // Close old connection if new connect call would create a duplicate
     if (this.socketRef) {
       this.socketRef.close(3000);
@@ -67,7 +67,7 @@ export class WS {
     return this.socketRef?.readyState === 1;
   }
 
-  send(payload) {
+  send(payload: any) {
     if (this.isOpen() && this.socketRef) {
       this.socketRef.send(payload);
     } else {

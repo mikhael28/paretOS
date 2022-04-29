@@ -12,7 +12,7 @@ const getDateRange = (startDate: Date) => {
   const endMonth = end.getMonth();
   const endDate = end.getDate();
 
-  return `${beginMonth + 1}/${beginDate + 1} - ${endMonth + 1}/${endDate + 1}`;
+  return `${beginMonth + 1}/${beginDate} - ${endMonth + 1}/${endDate}`;
 };
 
 export default getDateRange;
