@@ -20,18 +20,7 @@ function ArenaDateHeader({
   const theme = useTheme();
 
   return (
-    <Paper
-      sx={{
-        mt: -1,
-        pl: 2,
-        borderRadius: 0,
-      }}
-      elevation={8}
-      className="flex"
-      style={{
-        backgroundImage: "linear-gradient(70deg, #DE4665, #D95B35)",
-      }}
-    >
+    <Paper variant="filled" sx={{ mt: -1 }} className="flex">
       <h1>
         <b>Sprint</b>&nbsp;&nbsp;{getDateRange(startDate)}
       </h1>
