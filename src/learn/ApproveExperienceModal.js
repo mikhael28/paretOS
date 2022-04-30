@@ -4,7 +4,7 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import Modal from "react-bootstrap/lib/Modal";
 import { Button } from "@mui/material";
-import BlockContent from "@sanity/block-content-to-react";
+import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
 
 /**
@@ -29,7 +29,7 @@ const ConfirmModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h3 style={{ marginTop: -4 }}>{I18n.get("description")}</h3>
-          <BlockContent blocks={props.activeExperience.overview} />
+          <PortableText value={props.activeExperience.overview} />
           <h3>{I18n.get("notesForCoach")}</h3>
           <p>
             {

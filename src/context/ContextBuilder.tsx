@@ -5,6 +5,7 @@ import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import classNames from "classnames";
+import { LibraryEntry } from "./ContextTypes";
 import ContextObject from "./ContextObject";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
@@ -17,13 +18,13 @@ const builder = imageUrlBuilder(sanity);
  *
  */
 
-function ContextBuilder(props) {
+function ContextBuilder(props: any) {
   console.log(props);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState(0);
   const history = useHistory();
 
-  const renderTopicsList = (topics) => {
+  const renderTopicsList = (topics: LibraryEntry[]) => {
     const newCardClass = classNames("context-card", "second-step-library");
 
     return (
@@ -38,12 +39,7 @@ function ContextBuilder(props) {
                 className={newCardClass}
                 onClick={() => history.push(`/${link}/${topic.slug.current}`)}
               >
-                <ContextObject
-                  item={topic}
-                  img={img}
-                  title={topic.title}
-                  summary={topic.summary}
-                />
+                <ContextObject item={topic} img={img} />
               </div>
             );
           })}
@@ -75,7 +71,6 @@ function ContextBuilder(props) {
           alt="Library of Context Tour"
           height="40"
           width="40"
-          circle
           style={{ cursor: "pointer" }}
         />
       </h1>
@@ -112,7 +107,7 @@ function ContextBuilder(props) {
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-        rewindOnClose={false}
+        // rewindOnClose={false}
       />
     </div>
   );

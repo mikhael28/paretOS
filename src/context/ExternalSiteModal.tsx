@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function ExternalSiteModal(props) {
+export default function ExternalSiteModal(props: any) {
   const [loading, setLoading] = useState(true);
   const [render, setRender] = useState(false);
 
@@ -9,7 +9,7 @@ export default function ExternalSiteModal(props) {
   // They asked not to use their solution in production, but I have included it here as a temporary fix.
   // The gist to deploy it ourselves is here: The code is available at: https://gist.github.com/repalash/b1e778dbe3ac2e7149831c530a6535f9 and can be deployed directly as a cloudflare worker
 
-  function checkUrlFrameOptions(siteUrl) {
+  function checkUrlFrameOptions(siteUrl: string) {
     return fetch(
       `https://header-inspector.repalash.workers.dev/?${new URLSearchParams({
         apiurl: siteUrl,

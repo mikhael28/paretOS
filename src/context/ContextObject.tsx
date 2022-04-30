@@ -34,7 +34,8 @@ export default function ContextObject(props: ContextObjectProps) {
           <figure
             className={classNames("block")}
             onClick={() =>
-              window.location.pathname !== "/context-builder"
+              window.location.pathname !== "/context-builder" &&
+              openExternalModal !== undefined
                 ? openExternalModal(url)
                 : null
             }
