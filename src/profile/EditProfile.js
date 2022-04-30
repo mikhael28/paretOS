@@ -390,7 +390,7 @@ const EditProfile = () => {
         ) : null}
       </div>
       <br />
-      <LanguageSelector id={state.id} user={state.user} />
+      <LanguageSelector user={state.user} />
     </div>
   );
 };

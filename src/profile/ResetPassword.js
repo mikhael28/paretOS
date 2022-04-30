@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword = ({ setCloseLoading, setLoading }) => {
+const ResetPassword = ({ setLoading }) => {
   const classes = useStyles();
 
   const [isConfirming, setIsConfirming] = useState(false);
@@ -66,7 +66,7 @@ const ResetPassword = ({ setCloseLoading, setLoading }) => {
   let email1 = getValues("email");
 
   const handleSendCodeClick = async (data) => {
-    setLoading();
+    setLoading(true);
 
     setIsSendingCode(true);
 
@@ -74,27 +74,27 @@ const ResetPassword = ({ setCloseLoading, setLoading }) => {
       await Auth.forgotPassword(data.email);
 
       setCodeSent(true);
-      setCloseLoading();
+      setLoading(false);
     } catch (e) {
       alert(e.message);
       setIsSendingCode(false);
-      setCloseLoading();
+      setLoading(false);
     }
   };
 
   const handleConfirmClick = async (data) => {
-    setLoading();
+    setLoading(true);
 
     setIsConfirming(true);
 
     try {
       await Auth.forgotPasswordSubmit(email1, data.code, data.password);
       setConfirmed(true);
-      setCloseLoading();
+      setLoading(false);
     } catch (e) {
       alert(e.message);
       setIsConfirming(false);
-      setCloseLoading();
+      setLoading(false);
     }
   };
 
