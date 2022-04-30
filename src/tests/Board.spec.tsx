@@ -138,6 +138,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 2,
@@ -152,6 +153,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 3,
@@ -166,6 +168,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 4,
@@ -180,6 +183,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 5,
@@ -194,6 +198,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 6,
@@ -208,6 +213,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
   ];
   return users;

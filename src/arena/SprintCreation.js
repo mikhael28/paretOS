@@ -5,13 +5,11 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
 import { IconButton } from "@mui/material";
 import Calendar from "react-calendar";
 import cloneDeep from "lodash.clonedeep";
-import { getActiveSprintData } from "../state/sprints";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 import "react-calendar/dist/Calendar.css";
@@ -21,8 +19,10 @@ import "react-calendar/dist/Calendar.css";
  * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
+  const profile = useSelector((state) => state.profile);
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [ready, setReady] = useState(false);
   const [missions, setMissions] = useState([]);
   const [players, setPlayers] = useState([]);
@@ -38,8 +38,9 @@ function SprintCreation(props) {
     let options = await RestAPI.get("pareto", "/templates");
     let userOptions = await RestAPI.get("pareto", "/users");
     setMissions(options);
-    setPlayers(userOptions.filter((e) => e.id !== props.profile.id));
+    setPlayers(userOptions.filter((e) => e.id !== profile.id));
     setLoading(false);
+    setLoaded(true);
   }
 
   async function createSprint() {
@@ -72,7 +73,7 @@ function SprintCreation(props) {
     let databasedTeams = [];
     let dbTeam;
     let chosenCompetitors = chosenPlayers.slice();
-    chosenCompetitors.push(props.profile);
+    chosenCompetitors.push(profile);
     chosenCompetitors.forEach((el) => {
       dbTeam = {
         fName: el.fName,
@@ -344,7 +345,7 @@ function SprintCreation(props) {
       <LoaderButton
         style={{ width: 350 }}
         isLoading={loading}
-        loadingText={I18n.get("saving")}
+        loadingText={loaded ? I18n.get("saving") : I18n.get("loading")}
         text={I18n.get("create")}
         disabled={!ready}
         onClick={() => createSprint()}
@@ -352,15 +353,5 @@ function SprintCreation(props) {
     </div>
   );
 }
-const mapStateToProps = (state) => ({
-  profile: state.profile,
-  redux: state,
-});
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      getActiveSprintData: () => getActiveSprintData(),
-    },
-    dispatch
-  );
-export default connect(mapStateToProps, mapDispatchToProps)(SprintCreation);
+
+export default SprintCreation;

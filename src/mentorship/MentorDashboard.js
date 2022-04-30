@@ -1,8 +1,6 @@
 import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { I18n } from "@aws-amplify/core";
-import { getUser } from "../state/profile";
 import Athlete from "./Athlete";
 
 /**
@@ -10,6 +8,10 @@ import Athlete from "./Athlete";
  */
 
 function MentorDashboard(props) {
+  // redux and dispatch replace the old connect/bind functions
+  const redux = useSelector((state) => state);
+  const dispatch = useDispatch();
+
   return (
     <div>
       <h1>Mentorship Dashboard</h1>
@@ -41,16 +43,4 @@ function MentorDashboard(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  redux: state.redux,
-});
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      getUser: () => getUser(),
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(MentorDashboard);
+export default MentorDashboard;
