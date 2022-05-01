@@ -1,116 +1,133 @@
 import { useState } from "react";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
-import Modal from "react-bootstrap/lib/Modal";
-import Button from "react-bootstrap/lib/Button";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { MdClose } from "react-icons/md";
+import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "../components/LoaderButton";
-// import { errorToast, successToast } from "../libs/toasts";
-// import uploadToS3 from "../libs/s3";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
  * @TODO Issue #26
  */
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      width: "100%",
+    },
+    "& .MuiInputBase-input": {
+      fontSize: 16,
+      color: "#000",
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme?.spacing(1) || 8,
+      marginRight: 6,
+      fontSize: 16,
+      padding: "6px 32px",
+      textTransform: "none",
+    },
+    "& .MuiDialogActions-root": {
+      padding: 0,
+      display: "inline-flex",
+      alignItems: "end",
+    },
+  },
+}));
+
 export default function SubmitProof({
   show,
   handleClose,
   markSubmitted,
   activeExperience,
-  // mongoExperience,
 }) {
+  const classes = useStyles();
   const [isChanging, setChanging] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [experienceId, setExperienceId] = useState("");
-  const [formData, setFormData] = useState({ github: "", athleteNotes: "" });
+  const { register, handleSubmit, formState, reset } = useForm({
+    mode: "onChange",
+  });
 
-  const validateForm = () =>
-    formData.athleteNotes.length > 0 && formData.github.length > 0;
-
-  const handleChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.id]: event.target.value,
-    });
+  const onSubmit = (data) => {
+    setChanging(true);
+    markSubmitted(activeExperience, data.github, data.athleteNotes);
+    setChanging(false);
+    reset();
+    handleClose();
   };
-
-  // const onChange = async (e) => {
-  //   const file = e.target.files[0];
-  //   let fileType = e.target.files[0].name.split(".");
-
-  //   // the name to save is the id of the experience_01 or whatever the number is.
-  //   try {
-  //     await uploadToS3(
-  //       `${mongoExperience.id}${activeExperience.priority}`,
-  //       file,
-  //       fileType[1]
-  //     );
-
-  //     successToast("Proof successfully uploaded.");
-  //   } catch (err) {
-  //     errorToast(err);
-  //   }
-  // };
 
   return (
     <div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{I18n.get("submitProof")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup bsSize="large" controlId="athleteNotes">
-            <ControlLabel>{I18n.get("notesForCoach")}</ControlLabel>
-            <FormControl
-              type="text"
-              onChange={handleChange}
-              value={formData.athleteNotes}
+      <Dialog
+        fullWidth
+        open={show}
+        onClose={handleClose}
+        keepMounted
+        hideBackdrop={false}
+      >
+        <DialogTitle>
+          {I18n.get("submitProof")}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+            }}
+          >
+            <MdClose />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+            <h3>{I18n.get("notesForCoach")}</h3>
+            <TextField
+              id="athleteNotes"
+              variant="filled"
+              size="medium"
+              autoFocus
+              {...register("athleteNotes", { required: true })}
             />
-          </FormGroup>
-          <FormGroup bsSize="large" controlId="github">
-            <ControlLabel>{I18n.get("submitLink")}</ControlLabel>
-            <FormControl
-              type="text"
-              onChange={handleChange}
-              value={formData.github}
+            <br />
+            <br />
+            <h3>{I18n.get("submitLink")}</h3>
+            <TextField
+              id="github"
+              variant="filled"
+              size="medium"
+              autoFocus
+              {...register("github", { required: true })}
             />
-          </FormGroup>
-          {/* <h3>{I18n.get("attachment")}</h3>
-          <input
-            type="file"
-            accept="image/png"
-            onChange={(evt) => onChange(evt)}
-          /> */}
-          <br />
-          <div className="flex">
-            <Button onClick={handleClose}>{I18n.get("close")}</Button>
-            <LoaderButton
-              block
-              onClick={() => {
-                setChanging(true);
-                markSubmitted(
-                  activeExperience,
-                  formData.github,
-                  formData.athleteNotes
-                );
-                setFormData({
-                  athleteNotes: "",
-                  github: "",
-                });
-                setChanging(false);
-              }}
-              size="large"
-              text={I18n.get("submitProof")}
-              loadingText={I18n.get("saving")}
-              disabled={!validateForm()}
-              isLoading={isChanging}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer />
-      </Modal>
+            <br />
+            <DialogActions>
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={handleClose}
+              >
+                {I18n.get("close")}
+              </Button>
+              <LoaderButton
+                type="submit"
+                size="medium"
+                text={I18n.get("submitProof")}
+                loadingText={I18n.get("saving")}
+                disabled={!formState.isValid}
+                isLoading={isChanging}
+              />
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { CardActionArea, CardContent, CardMedia, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import classNames from "classnames";
+import { ContextObjectProps } from "./ContextTypes";
 
 const useStyles = makeStyles({
   root: {
@@ -21,33 +22,33 @@ const useStyles = makeStyles({
 
 /**
  * This is the visual component that unlocks the content in the Knowledge Base.
- * @TODO Issue #66
  */
 
-export default function MediaCard(props) {
+export default function ContextObject(props: ContextObjectProps) {
   const classes = useStyles();
+  const { item, img, url, openExternalModal, closeExternalModal } = props;
   return (
     <>
-      {props.logo || props.slug || props.img.options ? (
-        <Tooltip title={props.summary} className={classes.tooltip}>
+      {item?.logo || item?.slug || img ? (
+        <Tooltip title={item.summary} className={classes.tooltip}>
           <figure
             className={classNames("block")}
             onClick={() =>
               window.location.pathname !== "/context-builder"
-                ? props.openExternalModal(props.url)
+                ? openExternalModal(url)
                 : null
             }
           >
             <CardActionArea style={{ height: "100%" }}>
-              {props.url !== "na" ? (
+              {url !== "na" ? (
                 <CardMedia
                   className={classes.media}
-                  image={props.img}
-                  title={props.title}
+                  image={img}
+                  title={item.title}
                 />
               ) : null}
               <CardContent>
-                <figcaption style={{ fontSize: 20 }}>{props.title}</figcaption>
+                <figcaption style={{ fontSize: 20 }}>{item.title}</figcaption>
               </CardContent>
             </CardActionArea>
           </figure>

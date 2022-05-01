@@ -1,5 +1,3 @@
-import Image from "react-bootstrap/lib/Image";
-
 /**
  *
  * This is a visual component, that displays an Athletes name and picture in Mentorship Dashboard. Basic.
@@ -18,11 +16,12 @@ function Athlete(props) {
       }}
       onClick={() => props.history.push(`/mentorship/${props.athlete.id}`)}
     >
-      <Image
+      <img
         src={
           props.athlete.picture ||
           "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
         }
+        alt="Athletes profile pic"
         height="50"
         width="50"
         circle

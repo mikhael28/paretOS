@@ -1,4 +1,4 @@
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 
 /**
  * Reusable function to create experience items.
@@ -46,7 +46,7 @@ export async function createExperience(params) {
     _15: achievement,
   };
   try {
-    const response = await API.post("pareto", "/experience", { body });
+    const response = await RestAPI.post("pareto", "/experience", { body });
     return response;
   } catch (e) {
     console.log("Error creating EXP: ", e);

@@ -5,7 +5,7 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
 import { errorToast } from "../libs/toasts";
@@ -105,7 +105,7 @@ function CreateSprintTemplate(props) {
       createdAt: Date.now(),
     };
     try {
-      await API.post("pareto", `/templates`, { body });
+      await RestAPI.post("pareto", `/templates`, { body });
       props.history.push("/");
     } catch (e) {
       errorToast(e, props.user);
@@ -161,6 +161,8 @@ function CreateSprintTemplate(props) {
           display: "flex",
           justifyContent: "flex-start",
           height: "100%",
+          overflow: "auto",
+          marginTop: "4rem",
         }}
       >
         <DragDropContext
@@ -177,7 +179,10 @@ function CreateSprintTemplate(props) {
               key={Math.random()}
             >
               <h2>{column.name}</h2>
-              <div style={{ margin: 8 }} className="overflow">
+              <div
+                style={{ margin: 8, overflow: "hidden auto" }}
+                className="overflow"
+              >
                 <Droppable droppableId={id} key={id}>
                   {(provided, snapshot) => (
                     <div

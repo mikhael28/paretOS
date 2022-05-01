@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import API from "@aws-amplify/api";
+import { useEffect, useState } from "react";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import Image from "react-bootstrap/lib/Image";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
@@ -31,7 +30,7 @@ function Profile() {
   }, [window.location.pathname]);
 
   const getUser = async (id) => {
-    let user = await API.get("pareto", `/users/${id}`);
+    let user = await RestAPI.get("pareto", `/users/${id}`);
     if (user.length > 0) {
       setProfile(user[0]);
     }
@@ -41,7 +40,7 @@ function Profile() {
 
   const getExperienceByUser = async (id) => {
     try {
-      let experiences = await API.get("pareto", `/experience/user/${id}`);
+      let experiences = await RestAPI.get("pareto", `/experience/user/${id}`);
       setExperiences(experiences);
     } catch (e) {
       errorToast(e);
@@ -50,7 +49,7 @@ function Profile() {
 
   const getSprintsByUser = async (id) => {
     try {
-      let sprints = await API.get("pareto", `/sprints/mentee/${id}`);
+      let sprints = await RestAPI.get("pareto", `/sprints/mentee/${id}`);
       setSprints(sprints);
       setLoading(false);
     } catch (e) {
@@ -77,11 +76,12 @@ function Profile() {
       ) : (
         <>
           <div className="flex">
-            <Image
+            <img
               src={
                 profile.picture ||
                 "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
               }
+              alt="Generic profile for an athlete"
               height="50"
               width="50"
               circle

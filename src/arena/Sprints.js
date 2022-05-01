@@ -1,9 +1,7 @@
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
-import API from "@aws-amplify/api";
-import { getActiveSprintData } from "../state/sprints";
+import { RestAPI } from "@aws-amplify/api-rest";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -14,12 +12,13 @@ import { getActiveSprintData } from "../state/sprints";
 
 function Sprints(props) {
   let newClassName = classNames("exp-card");
+  const sprints = useSelector((state) => state.sprint);
   return (
     <div style={{ marginTop: 20 }}>
       {props.reviewMode === true ? null : (
         <div className="flex-down">
           <div>
-            {props.sprints.length === 0 ? (
+            {sprints.length === 0 ? (
               <div>
                 <p>
                   Welcome - this is a competitive, single or multi-player
@@ -37,9 +36,9 @@ function Sprints(props) {
       )}
       <div className={classNames("sprints-top")}>
         <div className={classNames("sprints-container", "sprints-scroller")}>
-          {props.sprints.length > 0 ? (
+          {sprints.length > 0 ? (
             <div className="exp-cards">
-              {props.sprints
+              {sprints
                 .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
                 .map((sprint, index) => (
                   <div
@@ -54,7 +53,7 @@ function Sprints(props) {
                       <h3 style={{ fontWeight: "bold" }}>
                         {index === 0
                           ? "Most Recent Sprint"
-                          : `Sprint ${props.sprints.length - index}`}
+                          : `Sprint ${sprints.length - index}`}
                       </h3>
 
                       <p>
@@ -73,7 +72,7 @@ function Sprints(props) {
                     {props.user.admin === true ? (
                       <button
                         onClick={async () => {
-                          await API.del("pareto", `/sprints/${sprint.id}`);
+                          await RestAPI.del("pareto", `/sprints/${sprint.id}`);
                           await props.fetchMenteeSprints(props.user.id);
                         }}
                       >
@@ -90,16 +89,4 @@ function Sprints(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  redux: state,
-});
-
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      getActiveSprintData: (data) => getActiveSprintData(data),
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sprints);
+export default Sprints;

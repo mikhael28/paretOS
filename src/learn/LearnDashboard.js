@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { init } from "pell";
-import API from "@aws-amplify/api";
+import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
-import FormGroup from "react-bootstrap/lib/FormGroup";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import { errorToast, successToast } from "../libs/toasts";
@@ -43,7 +42,7 @@ function LearnDashboard(props) {
 
   async function editNote() {
     try {
-      await API.put("pareto", `/users/${props.user.id}`, {
+      await RestAPI.put("pareto", `/users/${props.user.id}`, {
         body: {
           notes: [html],
         },
@@ -99,12 +98,8 @@ function LearnDashboard(props) {
           </div>
         </div>
         <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
-          <FormGroup controlId="note" bsSize="large" className="overflow">
-            <h3>Journal</h3>
-            <div id="editor" className="pell" onBlur={editNote} />
-            {/* <h3>HTML Output</h3>
-            <div id="html-output">{html}</div> */}
-          </FormGroup>
+          <h3>Journal</h3>
+          <div id="editor" className="pell" onBlur={editNote} />
         </div>
       </div>
       <Dialog

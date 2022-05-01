@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
-import Image from "react-bootstrap/lib/Image";
 import BlockContent from "@sanity/block-content-to-react";
 import { Slide, Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
@@ -12,7 +11,7 @@ import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+export const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 const builder = imageUrlBuilder(sanity);
@@ -164,11 +163,12 @@ function ContextPage(props) {
           }}
           className="third-step-library"
         />
-        <Image
+        <img
           src={help}
           onClick={() => {
             setIsTourOpen(true);
           }}
+          alt="Context page tour"
           height="40"
           width="40"
           circle
@@ -216,7 +216,7 @@ function ContextPage(props) {
                       <></>
                     ) : (
                       <ContextObject
-                        {...item}
+                        item={item}
                         img={url.toString()}
                         openExternalModal={openExternalModal}
                         closeExternalModal={closeExternalModal}
@@ -263,7 +263,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -311,7 +311,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -359,7 +359,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -407,7 +407,7 @@ function ContextPage(props) {
                         <></>
                       ) : (
                         <ContextObject
-                          {...item}
+                          item={item}
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
@@ -452,7 +452,7 @@ function ContextPage(props) {
                     <></>
                   ) : (
                     <ContextObject
-                      {...item}
+                      item={item}
                       img={url.toString()}
                       openExternalModal={openExternalModal}
                       closeExternalModal={closeExternalModal}

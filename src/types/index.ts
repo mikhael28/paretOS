@@ -32,4 +32,6 @@ export interface User {
   planning: Array<PlanningField>;
   review: string;
   profileImg?: File;
+  defaultLanguage?: string;
+  instructor: boolean;
 }

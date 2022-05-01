@@ -1,5 +1,5 @@
-import Auth from "@aws-amplify/auth";
-import API from "@aws-amplify/api";
+import { Auth } from "@aws-amplify/auth";
+import { RestAPI } from "@aws-amplify/api-rest";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
@@ -12,8 +12,6 @@ import TermsOfService from "./TermsOfService";
 /**
  * Functionality for new user signup, creating their profile.
  * @TODO Onboarding emails Issue #24
- * @TODO Country picker Issue #23
- * @TODO Terms of Service Acceptance Issue #22
  * @TODO <form> Issue #21
  */
 
@@ -47,7 +45,7 @@ const CreateUser = (props) => {
       textBody: `Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.`,
     };
     try {
-      await API.post("util", "/email", { body });
+      await RestAPI.post("util", "/email", { body });
     } catch (e) {
       console.log("Email send error: ", e);
     }
@@ -81,7 +79,7 @@ const CreateUser = (props) => {
       const session = await Auth.currentSession();
       uuid = session.idToken.payload.sub;
       tempEmail = session.idToken.payload.email;
-      await API.post("pareto", "/users", {
+      await RestAPI.post("pareto", "/users", {
         body: {
           id: uuid,
           type: state.type,

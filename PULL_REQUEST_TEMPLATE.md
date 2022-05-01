@@ -18,5 +18,5 @@ Pull-Request for `paretOS`
 - Make request to `/endpoint` with `{ "body": "test" }`
 - Expect some response
 
-### Screenshots / other info
+## Screenshots / other info
 ...

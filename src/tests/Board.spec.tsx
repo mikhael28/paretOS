@@ -23,22 +23,24 @@ describe("LEADERBOARD", () => {
     it("displays the page of the table containing the current user", () => {
       expect(screen.getByText("Current U.")).toBeDefined();
     });
-    it("displays a table with three users if itemsperpage is set to 3 users", () => {
-      expect(screen.getAllByTestId("leaderboard-row").length).toEqual(3);
+
+    // header also considered a row, so the counting starts from 1
+    it("displays a table with three users if itemsperpage is set to 3 users + 1 row (header)", () => {
+      expect(screen.getAllByRole("row").length).toEqual(4);
     });
     it("decrements and increments page", () => {
       // go to previous page
-      fireEvent.click(screen.getByText(/back/));
-      let rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/1000/);
-      expect(rows[1]).toHaveTextContent(/900/);
-      expect(rows[2]).toHaveTextContent(/800/);
+      fireEvent.click(screen.getByTitle("Go to previous page"));
+      let rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/1000/);
+      expect(rows[2]).toHaveTextContent(/900/);
+      expect(rows[3]).toHaveTextContent(/800/);
       // go to next page
-      fireEvent.click(screen.getByText(/next/));
-      rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/700/);
-      expect(rows[1]).toHaveTextContent(/600/);
-      expect(rows[2]).toHaveTextContent(/500/);
+      fireEvent.click(screen.getByTitle("Go to next page"));
+      rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/700/);
+      expect(rows[2]).toHaveTextContent(/600/);
+      expect(rows[3]).toHaveTextContent(/500/);
     });
   });
 
@@ -54,31 +56,31 @@ describe("LEADERBOARD", () => {
       );
     });
     it("initially displays the table in descending score order", () => {
-      const rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/1000/);
-      expect(rows[1]).toHaveTextContent(/900/);
-      expect(rows[2]).toHaveTextContent(/800/);
+      const rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/1000/);
+      expect(rows[2]).toHaveTextContent(/900/);
+      expect(rows[3]).toHaveTextContent(/800/);
     });
     it("clicking on 'name' column header sorts by ascending name order", () => {
       fireEvent.click(screen.getByText(/name/i));
-      const rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/Third/);
-      expect(rows[1]).toHaveTextContent(/Second/);
-      expect(rows[2]).toHaveTextContent(/First/);
+      const rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/Third/);
+      expect(rows[2]).toHaveTextContent(/Second/);
+      expect(rows[3]).toHaveTextContent(/First/);
     });
     it("clicking on 'score' column header sorts by ascending score order", () => {
       fireEvent.click(screen.getByText(/score/i));
-      const rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/500/i);
-      expect(rows[1]).toHaveTextContent(/600/i);
-      expect(rows[2]).toHaveTextContent(/700/i);
+      const rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/500/i);
+      expect(rows[2]).toHaveTextContent(/600/i);
+      expect(rows[3]).toHaveTextContent(/700/i);
     });
     it("clicking on 'rank' column header sorts by ascending score order", () => {
       fireEvent.click(screen.getByText(/rank/i));
-      const rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows[0]).toHaveTextContent(/500 pts/i);
-      expect(rows[1]).toHaveTextContent(/600 pts/i);
-      expect(rows[2]).toHaveTextContent(/700 pts/i);
+      const rows = screen.getAllByRole("row");
+      expect(rows[1]).toHaveTextContent(/500 pts/i);
+      expect(rows[2]).toHaveTextContent(/600 pts/i);
+      expect(rows[3]).toHaveTextContent(/700 pts/i);
     });
     // ! this test fails because fireEvent.change function
     // ! doesn't seem to change the value of the input element
@@ -92,9 +94,9 @@ describe("LEADERBOARD", () => {
         })
       );
       expect(inputEl).toHaveValue("Adam");
-      const rows = screen.getAllByTestId("leaderboard-row");
-      expect(rows).toHaveLength(1);
-      expect(rows[0]).toHaveTextContent(/Adam/i);
+      const rows = screen.getAllByRole("row");
+      expect(rows).toHaveLength(2); // + 1 row (header)
+      expect(rows[1]).toHaveTextContent(/Adam/i);
     });
   });
 
@@ -136,6 +138,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 2,
@@ -150,6 +153,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 3,
@@ -164,6 +168,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 4,
@@ -178,6 +183,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 5,
@@ -192,6 +198,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
     {
       rank: 6,
@@ -206,6 +213,7 @@ function testUsers(): Array<User> {
       phone: "123",
       planning: [{ name: "a", code: "b", content: "" }],
       review: "123",
+      instructor: false,
     },
   ];
   return users;
