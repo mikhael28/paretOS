@@ -361,7 +361,7 @@ a.MuiButton-root:focus {
 }
 
 .block {
-  padding: 16px;
+  padding: 14px;
   border-radius: 6px;
   background: var(--navigation-bgColor);
   margin: 8px;
@@ -384,8 +384,8 @@ a.MuiButton-root:focus {
 }
 
 .block p {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 .stats-block {
   display: flex;
