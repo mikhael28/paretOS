@@ -13,6 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "../components/LoaderButton";
+import { ActiveExperience } from "../types";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
@@ -43,25 +44,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface SubmitProofProps {
+  show: boolean;
+  handleClose: () => void;
+  markSubmitted: (
+    activeExperience: ActiveExperience,
+    github: string,
+    athleteNotes: string
+  ) => void;
+  activeExperience: ActiveExperience;
+}
+
 export default function SubmitProof({
   show,
   handleClose,
   markSubmitted,
   activeExperience,
-}) {
+}: SubmitProofProps) {
   const classes = useStyles();
   const [isChanging, setChanging] = useState(false);
-  const { register, handleSubmit, formState, reset } = useForm({
-    mode: "onChange",
-  });
+  const { register, handleSubmit, formState, reset } = useForm<{
+    github: string;
+    athleteNotes: string;
+  }>({ mode: "onChange" });
 
-  const onSubmit = (data) => {
+  const onSubmit = handleSubmit((data) => {
     setChanging(true);
     markSubmitted(activeExperience, data.github, data.athleteNotes);
     setChanging(false);
     reset();
     handleClose();
-  };
+  });
 
   return (
     <div>
@@ -87,7 +100,7 @@ export default function SubmitProof({
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+          <form className={classes.root} onSubmit={onSubmit}>
             <h3>{I18n.get("notesForCoach")}</h3>
             <TextField
               id="athleteNotes"
