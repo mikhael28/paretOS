@@ -26,6 +26,23 @@ export interface Project {
   tools: Array<any>;
 }
 
+export type ActiveExperience = {
+  title: string;
+  amount: number;
+  overview: [];
+  completed: boolean;
+  priority: string;
+  _type: string;
+  github: string;
+  athleteNotes: string;
+};
+
+export type ActiveMission = {
+  title: string;
+  description: string;
+  proofLink: string;
+};
+
 export interface User {
   rank?: number;
   score: number;
