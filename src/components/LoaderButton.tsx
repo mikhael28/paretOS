@@ -24,7 +24,7 @@ const UseStyles = () => {
 
 // Extend existing ButtonProps type to allow for our custom props
 interface CustomButtonProps extends ButtonProps {
-  props: ButtonProps;
+  props?: ButtonProps;
   text: string;
   loadingText: string;
   isLoading: boolean;

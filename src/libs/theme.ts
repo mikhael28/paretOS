@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
@@ -160,6 +161,10 @@ declare module "@mui/material/Chip" {
     options: true;
     "options-selected": true;
   }
+}
+
+declare module "@mui/styles/defaultTheme" {
+  interface DefaultTheme extends Theme {}
 }
 
 export default theme;
