@@ -18,20 +18,15 @@ function LearnDashboard(props) {
   const [activeNote, setActiveNote] = useState(0);
 
   useEffect(() => {
-    setNotes(props.user.notes);
-    let activeNote;
-    if (props.user.notes.length < 1) {
-      activeNote = "<p></p>";
-    } else {
-      activeNote = props.user.notes[0];
+    setHtml(notes[activeNote]);
+    if (editor.current.content) {
+      editor.current.content.innerHTML = notes[activeNote];
     }
-    setTimeout(() => {
-      editor.current.content.innerHTML = activeNote;
-      // testRef.current.innerHTML = "<p>Testing</p>";
-    }, 0);
-  }, []);
+  }, [activeNote]);
 
   useEffect(() => {
+    setNotes(props.user.notes);
+
     editor.current = init({
       element: document.getElementById("editor"),
       onChange: (html) => setHtml(html),
@@ -112,6 +107,16 @@ function LearnDashboard(props) {
         },
       ],
     });
+    let newActiveNote;
+    if (props.user.notes.length < 1) {
+      newActiveNote = "<p></p>";
+    } else {
+      newActiveNote = props.user.notes[0];
+    }
+    setTimeout(() => {
+      editor.current.content.innerHTML = newActiveNote;
+      // testRef.current.innerHTML = "<p>Testing</p>";
+    }, 0);
   }, []);
 
   async function editNote() {
@@ -143,6 +148,12 @@ function LearnDashboard(props) {
       <button
         className="btn"
         onClick={() => {
+          if (activeNote === notes.length - 1) {
+            let oldNotes = notes.slice();
+            oldNotes.push("");
+            setNotes(oldNotes);
+            setActiveNote(activeNote + 1);
+          }
           if (activeNote < notes.length) {
             setActiveNote(activeNote + 1);
           }

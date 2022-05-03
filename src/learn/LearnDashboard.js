@@ -25,20 +25,21 @@ function LearnDashboard(props) {
     props.user.learningPurchase === false
   );
 
-  useEffect(() => {
-    if (html === null) {
-      const editor = init({
-        element: document.getElementById("editor"),
-        onChange: (html) => {
-          console.log(html);
-          setHtml(html);
-        },
-        actions: ["bold", "underline", "italic"],
-      });
-      setHtml(props.user.notes[0] ?? []);
-      editor.content.innerHTML = props.user.notes[0];
-    }
-  }, []);
+  // @TODO disabling temporarily
+  // useEffect(() => {
+  //   if (html === null) {
+  //     const editor = init({
+  //       element: document.getElementById("editor"),
+  //       onChange: (html) => {
+  //         console.log(html);
+  //         setHtml(html);
+  //       },
+  //       actions: ["bold", "underline", "italic"],
+  //     });
+  //     setHtml(props.user.notes[0] ?? []);
+  //     editor.content.innerHTML = props.user.notes[0];
+  //   }
+  // }, []);
 
   async function editNote() {
     try {
@@ -97,10 +98,11 @@ function LearnDashboard(props) {
             </div>
           </div>
         </div>
-        <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
+        {/* @TODO Disabling this temporarily */}
+        {/* <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
           <h3>Journal</h3>
           <div id="editor" className="pell" onBlur={editNote} />
-        </div>
+        </div> */}
       </div>
       <Dialog
         style={{

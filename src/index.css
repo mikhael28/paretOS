@@ -447,11 +447,21 @@ a.MuiButton-root:focus {
 }
 
 .pell-actionbar {
-  background-color: var(--primary) !important;
+  background-color: orange !important;
+  color: white;
 }
 
 .pell-content {
   background-color: var(--navigation-bgColor);
+  box-sizing: border-box;
+  height: 75vh;
+  outline: 0;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.pell-button {
+  color: black;
 }
 @media screen and (min-width: 30em) {
   .context-cards {

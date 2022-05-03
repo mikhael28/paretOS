@@ -30,6 +30,7 @@ const Room = lazy(() => import("./containers/Room"));
 const PomodoroDashboard = lazy(() =>
   import("./containers/PomodoroDashboard/PomodoroDashboard")
 );
+const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
@@ -72,6 +73,12 @@ export default ({ childProps }) => (
         path="/hubs/:id"
         exact
         component={ContextPage}
+        props={childProps}
+      />
+      <AuthenticatedRoute
+        path="/journal"
+        exact
+        component={Journal}
         props={childProps}
       />
       <AuthenticatedRoute

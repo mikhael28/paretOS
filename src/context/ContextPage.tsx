@@ -78,7 +78,6 @@ function ContextPage(props: any) {
     let tempNews: LibraryEntry[] = [];
     let tempAssorted: LibraryEntry[] = [];
     if (tempPath[1] === "hubs") {
-      console.log(links);
       links.map((link: LibraryEntry) => {
         if (
           link.type === "community" ||
@@ -426,10 +425,6 @@ function ContextPage(props: any) {
             <summary>Read Overview</summary>
             <PortableText value={schemaObject.body} />
           </details>
-
-          <h3>
-            Pareto curated resources below - tap or click to open in a new tab.
-          </h3>
           <div className="context-cards">
             {items.map((item: any) => {
               function urlFor(source: string) {
@@ -461,14 +456,12 @@ function ContextPage(props: any) {
           </div>
         </>
       ) : null}
-      {/* Modal Component */}
       <Dialog
         style={{
           margin: "auto",
         }}
         open={openModal}
         onClose={handleCloseModal}
-        // TransitionComponent={Transition}
         keepMounted
         hideBackdrop={false}
         aria-labelledby="Suggestion Form"
@@ -487,7 +480,6 @@ function ContextPage(props: any) {
         }}
         open={externalModal.display}
         onClose={closeExternalModal}
-        // TransitionComponent={Transition}
         keepMounted
         hideBackdrop={false}
       >
@@ -522,14 +514,11 @@ function ContextPage(props: any) {
         </Button>
       </Dialog>
 
-      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
-
       <Tour
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-        // rewindOnClose={false}
       />
     </div>
   );
