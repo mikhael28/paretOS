@@ -70,6 +70,12 @@ export const strings = {
     startSprint: "Start a Sprint",
     sprintDescription:
       "Sprints are 5-Day events where you measure your ability to perform at the highest level. Currently, sprints must start on a Monday and Finish on a Friday.",
+    selectSprintDate: "Choose Your Sprint Start",
+    selectSprintDateHelper: "Valid dates include from today to 90 days out.",
+    sprintDateError:
+      "Cannot create sprint that starts before today or more than 90 days from now.",
+    sprintChooseTemplateError:
+      "You must seelct a sprint template before starting a sprint.",
     create: "Create",
 
     pageNoExist: "Sorry, this page doesn't exist!",

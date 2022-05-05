@@ -991,6 +991,11 @@ details[open] summary {
   overflow-y: scroll;
 }
 
+.react-calendar__create-sprints {
+	color: black;
+}
+
+
 /* Messaging styles */
 
 * {

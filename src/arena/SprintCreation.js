@@ -7,12 +7,26 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Alert from "@mui/material/Alert";
 import Calendar from "react-calendar";
 import cloneDeep from "lodash.clonedeep";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 import "react-calendar/dist/Calendar.css";
+
+/**
+ * Returns max date that the user will be allowed to
+ * create a sprint for. Returns date 90 days
+ * in the future.
+ * @returns {Date} futureDate
+ */
+function getCalendarMaxDate() {
+  const numberOfDaysInFutureAllowed = 90;
+  return new Date(
+    Date.now() + numberOfDaysInFutureAllowed * 24 * 60 * 60 * 1000
+  );
+}
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
@@ -45,6 +59,10 @@ function SprintCreation(props) {
 
   async function createSprint() {
     setLoading(true);
+    const validateFormResult = validateForm();
+    if (!validateFormResult.isValid) {
+      return setLoading(false);
+    }
     let dbMission;
     let databasedMissions = [];
     chosenMissions.missions.forEach((element) => {
@@ -195,16 +213,38 @@ function SprintCreation(props) {
     setLoading(false);
   }
   // eslint-disable-next-line no-unused-vars
+  /**
+   *
+   * @returns {Object} result. The validation result.
+   * @returns {boolean} result.isValid. whether the form is valid or not
+   * @returns {string} result.message. Error message if isValid is false. Empty if true.
+   */
   function validateForm() {
-    let result;
-    // console.log(Date.now(startDate) - 5000 < Date.now(new Date()) + 4000000);
-    if (Date.now(startDate) - 5000 < Date.now(new Date())) {
-      result = true;
-    } else {
-      result = false;
+    const result = {
+      isValid: true,
+      message: "",
+    };
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (startDate > getCalendarMaxDate() || startDate < today) {
+      result.isValid = false;
+      result.message = I18n.get("sprintDateError");
+    }
+    if (!hasSelectedSprintTemplate()) {
+      result.isValid = false;
+      result.message += I18n.get("sprintChooseTemplateError");
     }
     // console.log(result);
     return result;
+  }
+
+  function getCreateAlertMessage() {
+    const validateFormResult = validateForm();
+    return validateFormResult.message;
+  }
+
+  function hasSelectedSprintTemplate() {
+    return chosenMissions !== null;
   }
   function renderMissionOptions(missions) {
     return missions.map((mission, i) => (
@@ -248,10 +288,10 @@ function SprintCreation(props) {
         if (opts[i].value === input.value) {
           // An item was selected from the list!
           // yourCallbackHere()
-          handleChange(opts[i].dataset.value, input);
-          break;
+          return handleChange(opts[i].dataset.value, input);
         }
       }
+      return setChosenMissions(null);
     }
   }
   function handlePlayrChange(value, input) {
@@ -328,28 +368,42 @@ function SprintCreation(props) {
           </div>
         </div>
       ))}
-      <Calendar
-        onChange={(value) => {
-          setStartDate(value);
-          setReady(true);
-        }}
-        value={startDate}
-        maxDetail="month"
-        minDetail="month"
-        // minDate={new Date()}
-        maxDate={new Date(Date.now() + 2592000000)}
-        // tileDisabled={({ date }) => date.getDay() !== 1}
-        showNeighboringMonth
-      />
+      <FormGroup>
+        <ControlLabel>{I18n.get("selectSprintDate")}</ControlLabel>
+        <p>* {I18n.get("selectSprintDateHelper")}</p>
+        <Calendar
+          className="react-calendar__create-sprints"
+          onChange={(value) => {
+            setStartDate(value);
+            setReady(true);
+          }}
+          value={startDate}
+          maxDetail="month"
+          minDetail="month"
+          minDate={new Date()}
+          maxDate={getCalendarMaxDate()}
+          // tileDisabled={({ date }) => date.getDay() !== 1}
+          showNeighboringMonth
+          defaultValue={new Date()}
+          tileDisabled={() => loading}
+        />
+      </FormGroup>
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
       <LoaderButton
         style={{ width: 350 }}
         isLoading={loading}
         loadingText={loaded ? I18n.get("saving") : I18n.get("loading")}
         text={I18n.get("create")}
-        disabled={!ready}
+        disabled={!ready || !hasSelectedSprintTemplate() || !startDate}
         onClick={() => createSprint()}
       />
+      {!hasSelectedSprintTemplate() && (
+        <div style={{ width: 350, marginTop: 10 }}>
+          <Alert severity="error">
+            <p style={{ fontSize: "1.3rem" }}>{getCreateAlertMessage()}</p>
+          </Alert>
+        </div>
+      )}
     </div>
   );
 }
