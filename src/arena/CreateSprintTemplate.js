@@ -76,7 +76,7 @@ function CreateSprintTemplate(props) {
       items: [],
     },
   });
-  console.log(columns);
+  console.log(columns.Options.items.length);
   const [title, setTitle] = useState("");
 
   async function createTemplate() {
@@ -163,14 +163,19 @@ function CreateSprintTemplate(props) {
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
-          disabled={title.length <= 4}
+          disabled={title.length <= 4 || columns.Options.items.length > 28}
           variant="gradient"
           onClick={createTemplate}
-          style={{ marginLeft: 20 }}
+          style={{ marginLeft: 30 }}
         >
-          {I18n.get("Create Sprint Template")}
+          {I18n.get("create sprint template")}
         </Button>
       </FormGroup>
+      <h4 style={{ width: 600 }}>
+        Drag and drop the options below to the appropriate column to add them to
+        the Sprint Template. Click 'Create Sprint Template' when you're
+        finished.
+      </h4>
       <div
         style={{
           display: "flex",
