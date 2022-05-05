@@ -76,6 +76,7 @@ function CreateSprintTemplate(props) {
       items: [],
     },
   });
+  console.log(columns);
   const [title, setTitle] = useState("");
 
   async function createTemplate() {
@@ -146,16 +147,30 @@ function CreateSprintTemplate(props) {
   return (
     <>
       <h1>{I18n.get("createTemplate")}</h1>
-      <FormGroup controlId="fName" bsSize="large" style={{ width: 300 }}>
-        <ControlLabel>{I18n.get("editTemplateName")}</ControlLabel>
+      <ControlLabel>{I18n.get("editTemplateName")}</ControlLabel>
+      <FormGroup
+        controlId="fName"
+        bsSize="large"
+        style={{
+          width: 600,
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
         <FormControl
+          style={{ width: 300 }}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
+        <Button
+          disabled={title.length <= 4}
+          variant="gradient"
+          onClick={createTemplate}
+          style={{ marginLeft: 20 }}
+        >
+          {I18n.get("Create Sprint Template")}
+        </Button>
       </FormGroup>
-      <Button variant="gradient" onClick={createTemplate}>
-        {I18n.get("create")} Sprint
-      </Button>
       <div
         style={{
           display: "flex",
