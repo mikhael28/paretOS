@@ -173,7 +173,7 @@ function SprintCreation(props) {
       coachId: props.user.mentor,
       // hopefully the Date type doesn't give us problems, could be a place to debug
       startDate: startDate,
-      endDate: new Date(Date.now(startDate) + 432000000),
+      endDate: new Date(startDate.getTime() + 432000000),
       events: [],
       studySessions: [],
       createdAt: Date.now(),
