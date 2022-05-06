@@ -76,7 +76,6 @@ function CreateSprintTemplate(props) {
       items: [],
     },
   });
-  console.log(columns.Options.items.length);
   const [title, setTitle] = useState("");
 
   async function createTemplate() {
@@ -143,39 +142,77 @@ function CreateSprintTemplate(props) {
   useEffect(() => {
     getSanityItems();
   }, []);
+  console.log(props);
+  // checks to see if minimum template requirements are met
+  function checkReqs() {
+    let result;
+    if (title.length <= 4 || columns.Options.items.length > 28) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
 
   return (
     <>
-      <h1>{I18n.get("createTemplate")}</h1>
-      <ControlLabel>{I18n.get("editTemplateName")}</ControlLabel>
+      <h1
+        style={{
+          textAlign: "center",
+          width: "auto",
+          marginBottom: "2rem",
+          fontWeight: 900,
+        }}
+      >
+        {I18n.get("createTemplate")}
+      </h1>
       <FormGroup
         controlId="fName"
         bsSize="large"
         style={{
-          width: 600,
+          width: "auto",
           display: "flex",
           flexDirection: "row",
+          justifyContent: "center",
         }}
       >
+        <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
+          {I18n.get("enterTemplateName")}
+        </ControlLabel>
         <FormControl
           style={{ width: 300 }}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
-          disabled={title.length <= 4 || columns.Options.items.length > 28}
+          // disabled={title.length <= 4 || columns.Options.items.length > 28}
+          disabled={checkReqs()}
           variant="gradient"
           onClick={createTemplate}
           style={{ marginLeft: 30 }}
         >
-          {I18n.get("create sprint template")}
+          {I18n.get("create")}
         </Button>
       </FormGroup>
-      <h4 style={{ width: 600 }}>
-        Drag and drop the options below to the appropriate column to add them to
-        the Sprint Template. Click 'Create Sprint Template' when you're
-        finished.
-      </h4>
+      <h2
+        style={{
+          textAlign: "center",
+          marginTop: 50,
+          textDecoration: "underline",
+          fontWeight: 400,
+        }}
+      >
+        {I18n.get("dailyAchievements")}
+      </h2>
+      <p
+        style={{
+          textAlign: "left",
+          width: 600,
+          margin: "0 auto",
+        }}
+      >
+        {I18n.get("dragDropDescription")}
+      </p>
       <div
         style={{
           display: "flex",

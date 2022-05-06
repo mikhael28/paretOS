@@ -19,7 +19,7 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
- * @TODO Re-integrate 'validateForm' functtion, to prevent people from selecting days in the past. Rethink what other purposes this could have.
+ * @TODO Re-integrate 'validateForm' function, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
 function SprintCreation(props) {
   const profile = useSelector((state) => state.profile);
@@ -45,7 +45,6 @@ function SprintCreation(props) {
     setLoading(false);
     setLoaded(true);
   }
-
   async function createSprint() {
     setLoading(true);
     let dbMission;
@@ -206,7 +205,7 @@ function SprintCreation(props) {
     } else {
       result = false;
     }
-    // console.log(result);
+    console.log(result);
     return result;
   }
   function renderMissionOptions(missions) {
