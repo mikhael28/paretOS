@@ -132,6 +132,7 @@ function LearnDashboard(props) {
       errorToast(e, props.user);
     }
   }
+
   return (
     <div>
       <h2>Daily Journal {date}</h2>
@@ -139,6 +140,9 @@ function LearnDashboard(props) {
         className="btn"
         onClick={() => {
           if (activeNote > 0) {
+            let oldNotes = notes.slice();
+            oldNotes[activeNote] = html;
+            setNotes(oldNotes);
             setActiveNote(activeNote - 1);
           }
         }}
@@ -148,15 +152,13 @@ function LearnDashboard(props) {
       <button
         className="btn"
         onClick={() => {
-          if (activeNote === notes.length - 1) {
-            let oldNotes = notes.slice();
-            oldNotes.push("");
-            setNotes(oldNotes);
-            setActiveNote(activeNote + 1);
+          let oldNotes = notes.slice();
+          oldNotes[activeNote] = html;
+          if (activeNote === oldNotes.length - 1) {
+            oldNotes.push("<p></p>");
           }
-          if (activeNote < notes.length) {
-            setActiveNote(activeNote + 1);
-          }
+          setNotes(oldNotes);
+          setActiveNote(activeNote + 1);
         }}
       >
         Next Day
@@ -164,7 +166,7 @@ function LearnDashboard(props) {
       <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
         <div className="col-xs-12" style={{ marginTop: 20 }}>
           <h3>Journal</h3>
-          <div ref={editor} id="editor" className="pell" onBlur={editNote} />
+          <div ref={editor} id="editor" className="pell" />
         </div>
       </div>
     </div>
