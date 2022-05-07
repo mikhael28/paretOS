@@ -27,9 +27,9 @@ export const fetchUser = async (username: string) => {
 export const fetchStarterKitSanity = async () => {
   let result: ExperienceResult = {
     success: false,
-    sanityTraining: null,
-    sanityProduct: null,
-    sanityInterview: null,
+    sanityTraining: [],
+    sanityProduct: [],
+    sanityInterview: [],
   };
   try {
     let storedTrainingSanity = localStorage.getItem("trainingSanity");
@@ -145,9 +145,9 @@ export const fetchSanitySchemas = async () => {
   let result = {
     success: false,
     sanitySchemas: {
-      technicalSchemas: null,
-      economicSchemas: null,
-      hubSchemas: null,
+      technicalSchemas: [],
+      economicSchemas: [],
+      hubSchemas: [],
     },
   };
   try {

@@ -60,7 +60,7 @@ const CreateUser = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    props.setLoading();
+    props.setLoading(true);
     // need to auto-generate cognito credentials for the email
     const productId = uuidv4();
     const apprenticeshipId = uuidv4();
@@ -130,7 +130,7 @@ const CreateUser = (props) => {
       props.history.push("/");
     } catch (e) {
       errorToast(e);
-      props.setCloseLoading();
+      props.setLoading(false);
     }
   };
 

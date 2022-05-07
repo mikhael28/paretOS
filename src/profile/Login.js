@@ -37,12 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({
-  initialFetch,
-  setCloseLoading,
-  setLoading,
-  userHasAuthenticated,
-}) => {
+const Login = ({ initialFetch, setLoading, userHasAuthenticated }) => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
@@ -54,7 +49,7 @@ const Login = ({
   } = useForm();
 
   const onSubmit = async (data) => {
-    setLoading();
+    setLoading(true);
 
     setIsLoading(true);
 
@@ -62,11 +57,11 @@ const Login = ({
       const user = await Auth.signIn(data.email, data.password);
       await initialFetch(user.username);
       userHasAuthenticated(true);
-      setCloseLoading();
+      setLoading(false);
     } catch (e) {
       alert(e.message);
       setIsLoading(false);
-      setCloseLoading();
+      setLoading(false);
     }
   };
 

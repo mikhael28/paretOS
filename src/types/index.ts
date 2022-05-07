@@ -35,3 +35,24 @@ export interface User {
   defaultLanguage?: string;
   instructor: boolean;
 }
+
+export interface Sprint {
+  id: string;
+  athleteId: string;
+  coachId: string;
+  startDate: Date;
+  endDate: Date;
+  started: boolean;
+  events: Array<object>;
+  studySessions: Array<object>;
+  type: string;
+  verified: boolean;
+  teams: Array<User>;
+  stake: {
+    title: string;
+    value: string;
+    conditions: Array<any>;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
