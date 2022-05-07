@@ -78,6 +78,7 @@ function CreateSprintTemplate(props) {
     },
   });
   const [title, setTitle] = useState("");
+  const [missions, setMissions] = useState([]);
 
   async function createTemplate() {
     let missionsArray = [];
@@ -143,26 +144,43 @@ function CreateSprintTemplate(props) {
   useEffect(() => {
     getSanityItems();
   }, []);
-  console.log(props.history.length);
+
+  useEffect(() => {
+    getConfiguration();
+  }, []);
+
+  // pulls the /templates api and sets the missions to the templates
+  async function getConfiguration() {
+    let options = await RestAPI.get("pareto", "/templates");
+    setMissions(options.map((option) => option.title));
+  }
+
   // checks to see if minimum template requirements are met
   function checkReqs() {
     let result;
-    if (title.length <= 4 || columns.Options.items.length > 28) {
+    const templates = missions.filter((mission) => mission === title);
+    if (templates.length !== 0) {
+      result = true;
+    } else if (title.length <= 4 || columns.Options.items.length > 28) {
       result = true;
     } else {
       result = false;
     }
     return result;
   }
-  // throws error messages if requirements arent met
+  // throws error messages if requirements aren't met
   function reqsErrorMsg() {
+    const templates = missions.filter((mission) => mission === title);
     return title.length <= 4
-      ? "Name is too short"
+      ? "Name should be four characters or more."
       : columns.Options.items.length > 28
-      ? "Add at least 3 Options"
+      ? "Add at least 3 Options."
+      : templates.length !== 0
+      ? "This name is already taken"
       : "";
   }
 
+  console.log(title, missions);
   return (
     <>
       <h1
@@ -191,15 +209,7 @@ function CreateSprintTemplate(props) {
         <TextField
           color="success"
           error={reqsErrorMsg()}
-          // error={title.length <= 4 || columns.Options.items.length > 28}
           required
-          // helperText={
-          //   title.length <= 4
-          //     ? "Name is too short"
-          //     : columns.Options.items.length > 28
-          //     ? "Add at least 3 Options"
-          //     : ""
-          // }
           helperText={reqsErrorMsg()}
           style={{ width: 300 }}
           label={I18n.get("templateName")}
@@ -211,7 +221,7 @@ function CreateSprintTemplate(props) {
           disabled={checkReqs()}
           variant="gradient"
           onClick={createTemplate}
-          style={{ marginLeft: 30 }}
+          style={{ marginLeft: 30, height: "4.8rem" }}
         >
           {I18n.get("create")}
         </Button>
