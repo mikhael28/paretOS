@@ -30,4 +30,3 @@ amplifytools.xcconfig
 **.sample
 yarn-error.log
 #amplify-do-not-edit-end
-.prettierrc

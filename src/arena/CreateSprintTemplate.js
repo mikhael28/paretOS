@@ -180,7 +180,6 @@ function CreateSprintTemplate(props) {
       : "";
   }
 
-  console.log(title, missions);
   return (
     <>
       <h1
