@@ -3,6 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -142,7 +143,7 @@ function CreateSprintTemplate(props) {
   useEffect(() => {
     getSanityItems();
   }, []);
-  console.log(props);
+  console.log(props.history.length);
   // checks to see if minimum template requirements are met
   function checkReqs() {
     let result;
@@ -153,6 +154,14 @@ function CreateSprintTemplate(props) {
     }
     return result;
   }
+  // throws error messages if requirements arent met
+  function reqsErrorMsg() {
+    return title.length <= 4
+      ? "Name is too short"
+      : columns.Options.items.length > 28
+      ? "Add at least 3 Options"
+      : "";
+  }
 
   return (
     <>
@@ -160,7 +169,7 @@ function CreateSprintTemplate(props) {
         style={{
           textAlign: "center",
           width: "auto",
-          marginBottom: "2rem",
+          marginBottom: "3rem",
           fontWeight: 900,
         }}
       >
@@ -179,13 +188,26 @@ function CreateSprintTemplate(props) {
         <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
           {I18n.get("enterTemplateName")}
         </ControlLabel>
-        <FormControl
+        <TextField
+          color="success"
+          error={reqsErrorMsg()}
+          // error={title.length <= 4 || columns.Options.items.length > 28}
+          required
+          // helperText={
+          //   title.length <= 4
+          //     ? "Name is too short"
+          //     : columns.Options.items.length > 28
+          //     ? "Add at least 3 Options"
+          //     : ""
+          // }
+          helperText={reqsErrorMsg()}
           style={{ width: 300 }}
+          label={I18n.get("templateName")}
+          variant="outlined"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
-          // disabled={title.length <= 4 || columns.Options.items.length > 28}
           disabled={checkReqs()}
           variant="gradient"
           onClick={createTemplate}
