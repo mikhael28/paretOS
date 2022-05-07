@@ -1,10 +1,10 @@
 :root {
-  --backgroundColor: rgb(0, 0, 0);
-  --backgroundColor-light: rgb(255, 255, 255);
-  --color: rgb(242, 243, 243);
-  --color-light: rgb(34, 34, 34);
-  --navigation-bgColor: rgb(34, 34, 34);
-  --navigation-color: rgb(242, 243, 243);
+  --backgroundColor: rgb(0 0 0);
+  --backgroundColor-light: rgb(255 255 255);
+  --color: rgb(242 243 243);
+  --color-light: rgb(34 34 34);
+  --navigation-bgColor: rgb(34 34 34);
+  --navigation-color: rgb(242 243 243);
   --primary: #d95b35;
   --secondary: #de4665;
   --tertiary: #c84994;
@@ -65,6 +65,7 @@ section {
 .experience-container.flex {
   margin: 8px -8px;
 }
+
 /* Typography */
 
 h1 {
@@ -76,45 +77,41 @@ h1 {
 h2 {
   padding-top: 8px;
   padding-bottom: 8px;
-  margin: 0px;
+  margin: 0;
   font-size: 24px;
   font-weight: 900;
-  text-shadow: 0.5px 0px 0px white;
+  text-shadow: 0.5px 0 0 white;
   letter-spacing: 0.5px;
 }
+
 h3 {
   margin: 0;
   font-weight: 600;
-  text-shadow: 0.5px 0px 0px;
+  text-shadow: 0.5px 0 0;
   letter-spacing: 0.5px;
   font-size: 18px;
 }
+
 h5 {
   padding-top: 8px;
   padding-bottom: 8px;
-  margin: 0;
   color: var(--tertiary);
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0.5px 0px 0px;
+  text-shadow: 0.5px 0 0;
   letter-spacing: 3px;
-  margin: 16px 0px;
+  margin: 16px 0;
 }
+
 select.form-control,
 textarea.form-control,
 input.form-control {
   font-size: 16px;
   background-color: var(--navigation-bgColor);
 }
+
 input[type="file"] {
   width: 100%;
-}
-
-/* temporary styles to override bootstrap conflicts with MUI */
-/* TODO: remove once bootstrap is completely gone */
-a.MuiButton-root:hover,
-a.MuiButton-root:focus {
-  color: rgb(222, 70, 101) !important;
 }
 
 /* mobile/tablet styling */
@@ -123,40 +120,45 @@ a.MuiButton-root:focus {
   html {
     padding-top: -74px;
   }
+
   h1 {
     font-weight: 400;
     font-size: 9vw;
   }
+
   header span {
     font-size: 3vw;
   }
+
   .tabPanelCont {
     margin: -8.5vw;
     margin-bottom: 6vh;
   }
+
   .root-padding {
-    padding: 8px 16px 12vh 16px;
+    padding: 8px 16px 12vh;
   }
+
   .sticky-nav {
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     visibility: visible;
     width: 100%;
     padding-left: -24px;
   }
+
   .sticky-nav button {
     min-width: 0;
   }
+
   .sidenav {
     height: 100%;
     position: fixed;
     z-index: 1;
     padding-top: 40px;
     background-color: var(--navigation-bgCol);
-    -webkit-transform: translate3d(-100%, 0px, 0px);
-    transform: translate3d(-100%, 0px, 0px);
+    transform: translate3d(-100%, 0, 0);
     transition: all 0.5s ease 0s;
-    -webkit-transition: all 0.5s ease 0s;
     visibility: hidden;
   }
 
@@ -168,17 +170,19 @@ a.MuiButton-root:focus {
     overflow: scroll;
     max-height: 180px;
   }
+
   .sticky-logout {
     bottom: 50px;
     left: calc(100vw - 52px);
   }
-  .options .btn {
-    min-width: 100%;
-    width: 100%;
-  }
 
   .btn {
     min-width: 80px !important;
+  }
+
+  .options .btn {
+    min-width: 100%;
+    width: 100%;
   }
 }
 
@@ -188,12 +192,15 @@ a.MuiButton-root:focus {
   html {
     padding-top: -74px;
   }
+
   .root-padding {
     padding: 24px 32px 24px 302px;
   }
+
   .sticky-nav {
     visibility: hidden;
   }
+
   .sidenav {
     display: flex;
     flex-direction: column;
@@ -216,6 +223,7 @@ a.MuiButton-root:focus {
     right: 15px;
     visibility: visible;
   }
+
   .notes-overflow {
     overflow: scroll;
     max-height: 610px;
@@ -225,23 +233,23 @@ a.MuiButton-root:focus {
 /* Colors */
 
 .red-white {
-  background-color: rgb(220, 66, 45);
-  color: rgb(255, 255, 254);
+  background-color: rgb(220 66 45);
+  color: rgb(255 255 254);
 }
 
 .red-black {
-  background-color: rgb(220, 66, 45);
-  color: rgb(52, 58, 64);
+  background-color: rgb(220 66 45);
+  color: rgb(52 58 64);
 }
 
 .blue-white {
-  background-color: rgb(0, 170, 212);
-  color: rgb(255, 255, 254);
+  background-color: rgb(0 170 212);
+  color: rgb(255 255 254);
 }
 
 .blue-black {
-  background-color: rgb(0, 170, 212);
-  color: rgb(52, 58, 64);
+  background-color: rgb(0 170 212);
+  color: rgb(52 58 64);
 }
 
 /* Overflow classes */
@@ -284,7 +292,7 @@ a.MuiButton-root:focus {
 }
 
 .sidenav p {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .landing-page-nav {
@@ -342,6 +350,7 @@ a.MuiButton-root:focus {
 .flex-columns {
   display: flex;
   flex-wrap: wrap;
+
   /* justify-content: space-between; */
 }
 
@@ -352,8 +361,10 @@ a.MuiButton-root:focus {
   border-radius: 3px;
   background: white;
   margin: 8px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
+
   /* flex-grow: 1;  */
+
   /* flex-shrink: 1; */
   display: flex;
   align-items: flex-start;
@@ -365,7 +376,7 @@ a.MuiButton-root:focus {
   border-radius: 6px;
   background: var(--navigation-bgColor);
   margin: 8px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
   font-size: 16px;
   font-weight: 100;
   flex-grow: 1;
@@ -378,7 +389,7 @@ a.MuiButton-root:focus {
   color: var(--tertiary) !important;
   text-transform: uppercase !important;
   font-weight: 600;
-  text-shadow: 0.5px 0px 0px;
+  text-shadow: 0.5px 0 0;
   letter-spacing: 3px;
   font-size: 16px;
 }
@@ -387,6 +398,7 @@ a.MuiButton-root:focus {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
 .stats-block {
   display: flex;
   flex-direction: column;
@@ -404,15 +416,14 @@ a.MuiButton-root:focus {
   background: linear-gradient(70deg, var(--primary), var(--secondary));
   color: white;
   margin: 8px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
 }
 
 .exp-card {
   padding: 8px;
-  border-radius: 3px;
   background: var(--navigation-bgColor);
   margin: 8px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
+  box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
   flex-wrap: wrap;
   justify-content: space-between;
   flex-grow: 1;
@@ -443,7 +454,7 @@ a.MuiButton-root:focus {
   width: calc(100% + 16px);
   justify-content: space-betwen;
   padding: 5px;
-  margin: 0px -8px;
+  margin: 0 -8px;
 }
 
 .pell-actionbar {
@@ -453,13 +464,14 @@ a.MuiButton-root:focus {
 .pell-content {
   background-color: var(--navigation-bgColor);
 }
+
 @media screen and (min-width: 30em) {
   .context-cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0px;
-    margin: 8px -8px 24px -8px;
+    padding: 0;
+    margin: 8px -8px 24px;
   }
 
   .context-cards-start {
@@ -468,6 +480,7 @@ a.MuiButton-root:focus {
     justify-content: flex-start;
     padding: 5px;
   }
+
   .context-card {
     flex: 1 1 calc(50% - 16px);
     margin: 8px;
@@ -486,9 +499,13 @@ a.MuiButton-root:focus {
 
 @media screen and (max-width: 768px) {
   .context-cards {
-    padding: 0px;
-    margin: 8px -8px 24px -8px;
+    padding: 0;
+    margin: 8px -8px 24px;
   }
+}
+
+.ipl-progress-indicator p {
+  font-size: 48px;
 }
 
 .exp-card > p:hover {
@@ -511,8 +528,8 @@ a.MuiButton-root:focus {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgb(0 0 0); /* Fallback color */
+  background-color: rgb(0 0 0 / 40%);
 }
 
 /* Modal Content/Box */
@@ -541,7 +558,7 @@ a.MuiButton-root:focus {
   flex-grow: 1;
   position: relative;
   padding-bottom: calc(min(230px, 100%));
-  margin: 0px calc(max(5px, min(7%, 20px)));
+  margin: 0 calc(max(5px, min(7%, 20px)));
 }
 
 .podium-container {
@@ -587,7 +604,7 @@ a.MuiButton-root:focus {
 .profile-image {
   width: calc(100% - 30px);
   height: calc(100% - 30px);
-  margin: 0px 15px;
+  margin: 0 15px;
   border-radius: 50%;
   border: 1px solid gray;
   background-color: lightgray;
@@ -601,12 +618,12 @@ a.MuiButton-root:focus {
 }
 
 .dais-platform {
-  background-color: rgb(90, 186, 233);
+  background-color: rgb(90 186 233);
   padding: 10%;
   text-align: center;
   font-size: 3rem;
   color: #fff;
-  margin: 0px calc(max(5px, 8%));
+  margin: 0 calc(max(5px, 8%));
 }
 
 .table-container {
@@ -623,14 +640,14 @@ a.MuiButton-root:focus {
   cursor: pointer;
 }
 
-.data:first-child {
-  font-size: 16px;
-  font-weight: bold;
-}
-
 .data,
 .data2 {
   font-size: 16px;
+}
+
+.data:first-child {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .data2:hover {
@@ -664,10 +681,12 @@ a.MuiButton-root:focus {
   top: 2px;
   animation: spin 1s infinite linear;
 }
+
 @keyframes spin {
   from {
     transform: scale(1) rotate(0deg);
   }
+
   to {
     transform: scale(1) rotate(360deg);
   }
@@ -684,7 +703,6 @@ a.MuiButton-root:focus {
   padding-bottom: 8px;
   font-weight: 600;
   font-size: 16px;
-  -webkit-transition: background 0.3s;
   transition: background 0.3s;
   margin-right: 10px;
 }
@@ -694,7 +712,7 @@ a.MuiButton-root:focus {
 }
 
 .options {
-  padding: 0px 24px;
+  padding: 0 24px;
   margin-top: -16px;
   max-width: calc(100vw - 64px);
   overflow: scroll;
@@ -713,11 +731,6 @@ a.MuiButton-root:focus {
   border-radius: 40px;
   margin-bottom: 8px;
   margin-right: 8px;
-}
-
-.options .btn:hover,
-.options .btn:active {
-  background: #777 !important;
 }
 
 .options .btn-default:hover .options .btn-default:active {
@@ -758,6 +771,11 @@ details[open] summary {
   color: white;
 }
 
+.options .btn:hover,
+.options .btn:active {
+  background: #777 !important;
+}
+
 .btn-cancel {
   background: #f44336;
   border: 0;
@@ -768,7 +786,6 @@ details[open] summary {
   padding-top: 5px;
   padding-bottom: 5px;
   font-weight: 1000;
-  -webkit-transition: background 0.3s;
   transition: background 0.3s;
   max-height: 30px;
   margin-right: 10px;
@@ -788,13 +805,13 @@ details[open] summary {
 
 .btnIcon {
   border: 0;
+
   /* background-color: transparent; */
   background-repeat: no-repeat;
   background-position: center;
   width: 50px;
   height: 50px;
   background-size: 40px;
-  -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
 }
 
@@ -831,13 +848,14 @@ details[open] summary {
   padding: 11px 16px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  line-height: 1.3333333;
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 7.5%);
+  line-height: 1.3333;
 }
 
 .BillingForm .card-field.StripeElement--focus {
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgb(0 0 0 / 7.5%),
+    0 0 8px rgb(102 175 233 / 60%);
   border-color: #66afe9;
 }
 
@@ -868,6 +886,7 @@ details[open] summary {
     margin: 0 auto;
   }
 }
+
 .Form .LoaderButton:last-child {
   margin-top: 15px;
 }
@@ -908,15 +927,10 @@ details[open] summary {
   margin-top: 10%;
   opacity: 1;
   pointer-events: none;
-  -webkit-transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
-  -moz-transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
   transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
   z-index: 9999;
 }
 
-.ipl-progress-indicator p {
-  font-size: 48px;
-}
 .lds-dual-ring {
   display: flex;
   flex-direction: column;
@@ -925,7 +939,8 @@ details[open] summary {
   justify-content: center;
   margin-top: 1%;
 }
-.lds-dual-ring:after {
+
+.lds-dual-ring::after {
   content: " ";
   display: block;
   width: 92px;
@@ -937,34 +952,41 @@ details[open] summary {
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 @keyframes fadein {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -975,6 +997,7 @@ details[open] summary {
 .sprints-top {
   height: 100vh;
 }
+
 .sprints-container {
   display: flex;
   flex-direction: column;
@@ -982,7 +1005,6 @@ details[open] summary {
   height: 80vh;
   visibility: visible;
   transition: all 0.5s ease 0s;
-  -webkit-transition: all 0.5s ease 0s;
 }
 
 .sprints-scroller {
@@ -1000,17 +1022,17 @@ details[open] summary {
 .messaging {
   height: 100vh;
 }
+
 .messaging-container {
   display: flex;
   flex-direction: column;
   height: 80vh;
   background: white;
   border-radius: 16px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px 0px;
-  border-color: rgb(17, 16, 16);
+  box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
+  border-color: rgb(17 16 16);
   visibility: visible;
   transition: all 0.5s ease 0s;
-  -webkit-transition: all 0.5s ease 0s;
 }
 
 .messages-scroller {
@@ -1028,7 +1050,7 @@ details[open] summary {
   background: #339c51;
   border-radius: 16px;
   font-size: 14px;
-  color: rgb(255, 255, 254);
+  color: rgb(255 255 254);
 }
 
 .message.league {
@@ -1039,12 +1061,12 @@ details[open] summary {
   background: black;
   border-radius: 16px;
   font-size: 14px;
-  color: rgb(255, 255, 254);
+  color: rgb(255 255 254);
 }
 
 .message.me {
   align-self: flex-end;
-  background: rgb(220, 66, 45);
+  background: rgb(220 66 45);
   color: white;
 }
 
@@ -1087,7 +1109,7 @@ details[open] summary {
 }
 
 .input-group h3 {
-  padding: 8px 0px;
+  padding: 8px 0;
 }
 
 .input-group:last-child {

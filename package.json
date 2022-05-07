@@ -104,6 +104,8 @@
     "mocha": "^9.2.2",
     "prettier": "2.5.1",
     "puppeteer": "^13.5.2",
+    "stylelint": "^14.8.2",
+    "stylelint-config-standard": "^25.0.0",
     "ts-node": "^10.7.0"
   },
   "jest": {
