@@ -8,11 +8,14 @@ import { I18n } from "@aws-amplify/core";
 import { useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
 import { IconButton } from "@mui/material";
-import Calendar from "react-calendar";
 import cloneDeep from "lodash.clonedeep";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { getActiveSprintData } from "../state/sprints";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
-import "react-calendar/dist/Calendar.css";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
@@ -175,7 +178,7 @@ function SprintCreation(props) {
       coachId: props.user.mentor,
       // hopefully the Date type doesn't give us problems, could be a place to debug
       startDate: startDate,
-      endDate: new Date(Date.now(startDate) + 432000000),
+      endDate: new Date(startDate.getTime() + 432000000),
       events: [],
       studySessions: [],
       createdAt: Date.now(),
@@ -291,7 +294,6 @@ function SprintCreation(props) {
           {renderMissionOptions(missions)}
         </datalist>
       </FormGroup>
-
       <FormGroup>
         <ControlLabel>{I18n.get("selectPlayers")}</ControlLabel>
         <FormControl
@@ -328,19 +330,21 @@ function SprintCreation(props) {
           </div>
         </div>
       ))}
-      <Calendar
-        onChange={(value) => {
-          setStartDate(value);
-          setReady(true);
-        }}
-        value={startDate}
-        maxDetail="month"
-        minDetail="month"
-        // minDate={new Date()}
-        maxDate={new Date(Date.now() + 2592000000)}
-        // tileDisabled={({ date }) => date.getDay() !== 1}
-        showNeighboringMonth
-      />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <StaticDatePicker
+          orientation="portrait"
+          openTo="day"
+          value={startDate}
+          onChange={(value) => {
+            setStartDate(value);
+            setReady(true);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+          // minDate={new Date()}
+          maxDate={new Date(Date.now() + 2592000000)}
+          views={["day"]}
+        />
+      </LocalizationProvider>
       {/* <h3>Currently Selected Start Date: {startDate.toString()}</h3> */}
       <LoaderButton
         style={{ width: 350 }}

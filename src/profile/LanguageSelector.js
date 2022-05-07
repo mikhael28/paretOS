@@ -21,7 +21,7 @@ const LanguageSelector = (props) => {
   const handleChange = (e) => {
     updateLanguage({
       language: availableLanguages.find((x) => x.code === e.target.value),
-      id: props.id,
+      id: props.user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
     });
