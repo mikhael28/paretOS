@@ -205,7 +205,7 @@ function SprintCreation(props) {
     } else {
       result = false;
     }
-    console.log(result);
+    // console.log(result);
     return result;
   }
   function renderMissionOptions(missions) {
