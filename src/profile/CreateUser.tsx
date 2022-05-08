@@ -15,6 +15,7 @@ import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
+
 /**
  * Functionality for new user signup, creating their profile.
  * @TODO Onboarding emails Issue #24
@@ -33,8 +34,8 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
     handleSubmit,
     getValues,
     control,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({ mode: "onBlur" });
 
   const [isLoading, setIsLoading] = useState(false);
   const [showTOS, setShowTOS] = useState(false);
@@ -290,7 +291,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
             style={{ textAlign: "center", ...formStyle }}
             size="large"
             type="submit"
-            disabled={!errors}
+            disabled={!isValid}
             text="Create Account"
             loadingText="Creating User Account"
             props={{}}
