@@ -52,7 +52,7 @@ export interface User {
   projects?: Array<Project>;
   // Deprecate ideas?
   ideas?: Array<any>;
-  notes?: Array<any>;
+  notes: Array<any>;
 
   // deprecate actions?
   actions: Array<any>;

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { RestAPI } from "@aws-amplify/api-rest";
 
 /**
@@ -7,7 +8,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
  * @TODO Issue #24
  */
 
-export function generateEmail(messageTitle, messageDescription) {
+export function generateEmail(messageTitle: string, messageDescription: string) {
   let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns:v="urn:schemas-microsoft-com:vml">
 		<head>
@@ -263,11 +264,11 @@ export function generateEmail(messageTitle, messageDescription) {
 }
 
 export function generateErrorEmail(
-  fName,
-  lName,
-  timestamp,
-  errorTitle,
-  errorMessage
+  fName: string,
+  lName: string,
+  timestamp: any,
+  errorTitle: string,
+  errorMessage: string
 ) {
   let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns:v="urn:schemas-microsoft-com:vml">

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { init } from "pell";
+import React, { useState } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
 import { Slide, Dialog } from "@mui/material";
@@ -7,7 +6,6 @@ import { I18n } from "@aws-amplify/core";
 import { errorToast, successToast } from "../libs/toasts";
 import PaywallModal from "./PaywallModal";
 import ExperienceSummary from "./ExperienceSummary";
-import "pell/dist/pell.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,22 +22,6 @@ function LearnDashboard(props) {
   const [showPaywallDialog, setShowPaywallDialog] = useState(
     props.user.learningPurchase === false
   );
-
-  // @TODO disabling temporarily
-  // useEffect(() => {
-  //   if (html === null) {
-  //     const editor = init({
-  //       element: document.getElementById("editor"),
-  //       onChange: (html) => {
-  //         console.log(html);
-  //         setHtml(html);
-  //       },
-  //       actions: ["bold", "underline", "italic"],
-  //     });
-  //     setHtml(props.user.notes[0] ?? []);
-  //     editor.content.innerHTML = props.user.notes[0];
-  //   }
-  // }, []);
 
   async function editNote() {
     try {
@@ -98,11 +80,6 @@ function LearnDashboard(props) {
             </div>
           </div>
         </div>
-        {/* @TODO Disabling this temporarily */}
-        {/* <div className="col-xs-12 col-sm-8" style={{ marginTop: 20 }}>
-          <h3>Journal</h3>
-          <div id="editor" className="pell" onBlur={editNote} />
-        </div> */}
       </div>
       <Dialog
         style={{

@@ -2,17 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { init, exec } from "pell";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { errorToast, successToast } from "../libs/toasts";
+import { User } from "../types/index";
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.
  * @TODO Issue #32
  * @TODO Issue #55
  */
 
-function LearnDashboard(props) {
+interface JournalProps {
+  user: User;
+}
+
+function LearnDashboard(props: JournalProps) {
   const [html, setHtml] = useState("");
-  const editor = useRef(null);
+  const editor = useRef<any>(null);
   const [date, setDate] = useState(null);
-  const [notes, setNotes] = useState([]);
+  // @TODO update this typing with what the Notes turns out to be
+  const [notes, setNotes] = useState<any>([]);
   const [activeNote, setActiveNote] = useState(0);
 
   useEffect(() => {
@@ -26,7 +32,7 @@ function LearnDashboard(props) {
     setNotes(props.user.notes);
 
     editor.current = init({
-      element: document.getElementById("editor"),
+      element: document.getElementById("editor") as any,
       onChange: (html) => setHtml(html),
       defaultParagraphSeparator: "p",
       actions: [
@@ -103,9 +109,9 @@ function LearnDashboard(props) {
         {
           name: "line",
         },
-      ],
+      ] as any,
     });
-    let newActiveNote;
+    let newActiveNote: any;
     if (props.user.notes.length < 1) {
       newActiveNote = "<p></p>";
     } else {
@@ -127,7 +133,7 @@ function LearnDashboard(props) {
       setNotes(result.notes);
       successToast("Journal saved 👍");
     } catch (e) {
-      errorToast(e, props.user);
+      errorToast(e);
     }
   }
 
