@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
-import BlockContent from "@sanity/block-content-to-react";
-import { Slide, Dialog, Button } from "@mui/material";
+import { PortableText } from "@portabletext/react";
+import { Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import SuggestionModal from "./SuggestionModal";
@@ -10,10 +10,8 @@ import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
+import { LibraryEntry } from "./ContextTypes";
 
-export const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 const builder = imageUrlBuilder(sanity);
 
 /**
@@ -21,18 +19,18 @@ const builder = imageUrlBuilder(sanity);
  * @TODO Issue #27
  */
 
-function ContextPage(props) {
+function ContextPage(props: any) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [community, setCommunity] = useState([]);
-  const [support, setSupport] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [news, setNews] = useState([]);
-  const [assorted, setAssorted] = useState([]);
+  const [community, setCommunity] = useState<LibraryEntry[]>([]);
+  const [support, setSupport] = useState<LibraryEntry[]>([]);
+  const [companies, setCompanies] = useState<LibraryEntry[]>([]);
+  const [news, setNews] = useState<LibraryEntry[]>([]);
+  const [assorted, setAssorted] = useState<LibraryEntry[]>([]);
   const [schema, setSchema] = useState("");
   const [renderType, setRenderType] = useState("generic");
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [schemaObject, setSchemaObject] = useState({
+  const [schemaObject, setSchemaObject] = useState<any>({
     body: [],
     description: "",
     mainImage: {
@@ -48,7 +46,7 @@ function ContextPage(props) {
     url: "",
   });
 
-  function openExternalModal(url) {
+  function openExternalModal(url: string) {
     setExternalModal({ display: true, url });
   }
 
@@ -74,14 +72,13 @@ function ContextPage(props) {
     const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
     const links = await sanity.fetch(query);
     setItems(links);
-    let tempCommunity = [];
-    let tempSupport = [];
-    let tempCompanies = [];
-    let tempNews = [];
-    let tempAssorted = [];
+    let tempCommunity: LibraryEntry[] = [];
+    let tempSupport: LibraryEntry[] = [];
+    let tempCompanies: LibraryEntry[] = [];
+    let tempNews: LibraryEntry[] = [];
+    let tempAssorted: LibraryEntry[] = [];
     if (tempPath[1] === "hubs") {
-      console.log(links);
-      links.map((link) => {
+      links.map((link: LibraryEntry) => {
         if (
           link.type === "community" ||
           link.type === "education" ||
@@ -113,21 +110,21 @@ function ContextPage(props) {
       let schema = tempPath[2];
       let sObj;
       // possible to refactor??
-      props.sanitySchemas.technicalSchemas.map((obj) => {
+      props.sanitySchemas.technicalSchemas.map((obj: LibraryEntry) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
           setLoading(false);
         }
       });
-      props.sanitySchemas.economicSchemas.map((obj) => {
+      props.sanitySchemas.economicSchemas.map((obj: LibraryEntry) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
           setLoading(false);
         }
       });
-      props.sanitySchemas.hubSchemas.map((obj) => {
+      props.sanitySchemas.hubSchemas.map((obj: LibraryEntry) => {
         if (obj.slug.current === schema) {
           sObj = obj;
           setSchemaObject(sObj);
@@ -171,14 +168,13 @@ function ContextPage(props) {
           alt="Context page tour"
           height="40"
           width="40"
-          circle
           style={{ cursor: "pointer", margin: 30, marginLeft: 10 }}
         />
       </div>
 
       {renderType === "hubs" ? (
         <>
-          <BlockContent blocks={schemaObject.body} />
+          <PortableText value={schemaObject.body} />
 
           <h3>Local Communities & Meetups</h3>
           {community.length === 0 ? (
@@ -197,8 +193,8 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {community.map((item) => {
-                function urlFor(source) {
+              {community.map((item: any) => {
+                function urlFor(source: any) {
                   return builder.image(source);
                 }
                 let url;
@@ -244,8 +240,8 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {support.map((item) => {
-                function urlFor(source) {
+              {support.map((item: any) => {
+                function urlFor(source: any) {
                   return builder.image(source);
                 }
                 let url;
@@ -292,8 +288,8 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {companies.map((item) => {
-                function urlFor(source) {
+              {companies.map((item: any) => {
+                function urlFor(source: any) {
                   return builder.image(source);
                 }
                 let url;
@@ -340,8 +336,8 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {news.map((item) => {
-                function urlFor(source) {
+              {news.map((item: any) => {
+                function urlFor(source: any) {
                   return builder.image(source);
                 }
                 let url;
@@ -388,8 +384,8 @@ function ContextPage(props) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {assorted.map((item) => {
-                function urlFor(source) {
+              {assorted.map((item: any) => {
+                function urlFor(source: string) {
                   return builder.image(source);
                 }
                 let url;
@@ -427,15 +423,11 @@ function ContextPage(props) {
           <h2>{schemaObject.description}</h2>
           <details>
             <summary>Read Overview</summary>
-            <BlockContent blocks={schemaObject.body} />
+            <PortableText value={schemaObject.body} />
           </details>
-
-          <h3>
-            Pareto curated resources below - tap or click to open in a new tab.
-          </h3>
           <div className="context-cards">
-            {items.map((item) => {
-              function urlFor(source) {
+            {items.map((item: any) => {
+              function urlFor(source: string) {
                 return builder.image(source);
               }
               let url;
@@ -464,14 +456,12 @@ function ContextPage(props) {
           </div>
         </>
       ) : null}
-      {/* Modal Component */}
       <Dialog
         style={{
           margin: "auto",
         }}
         open={openModal}
         onClose={handleCloseModal}
-        TransitionComponent={Transition}
         keepMounted
         hideBackdrop={false}
         aria-labelledby="Suggestion Form"
@@ -490,7 +480,6 @@ function ContextPage(props) {
         }}
         open={externalModal.display}
         onClose={closeExternalModal}
-        TransitionComponent={Transition}
         keepMounted
         hideBackdrop={false}
       >
@@ -506,7 +495,7 @@ function ContextPage(props) {
           }}
           onClick={() => {
             let win = window.open(externalModal.url, "_blank");
-            win.focus();
+            win?.focus();
           }}
         >
           Open External Link
@@ -525,14 +514,11 @@ function ContextPage(props) {
         </Button>
       </Dialog>
 
-      {/* { externalModal.display ? <ExternalSiteModal url={externalModal.url} /> : null } */}
-
       <Tour
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-        rewindOnClose={false}
       />
     </div>
   );

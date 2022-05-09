@@ -76,18 +76,47 @@ function App(props: AppProps) {
   });
   const [userData, setUserData] = useState({
     user: {
-      id: 8020,
+      id: "8020",
+      _id: "",
       fName: "Vilfredo",
       lName: "Pareto",
       score: 0,
       email: "",
       github: "",
-      missions: [{}, {}],
       phone: "",
       percentage: 0,
-      planning: [{}, {}],
+      admin: false,
       instructor: false,
+      learningPurchase: false,
       review: "",
+      mentor: "",
+      mentors: [],
+      country: "",
+      bio: "",
+      summary: "",
+      city: "",
+      communityRank: "",
+      technicalRank: "",
+      experience: "",
+      linkedIn: "",
+      stripe: "",
+      paypal: "",
+      productId: "",
+      apprenticeshipId: "",
+      masteryId: "",
+      xp: 0,
+      completionPercentage: 0,
+      completionAttempts: 0,
+      completions: 0,
+      wrMembers: false,
+      wrid: "",
+      createdAt: "",
+      __v: 0,
+      actions: [],
+      achievements: [],
+      expo: "",
+      missions: [{}, {}],
+      planning: [{}, {}],
     },
     chosenLanguage: availableLanguages[0],
   });
@@ -105,7 +134,7 @@ function App(props: AppProps) {
   });
   const initialSprints: Array<Sprint> = [];
   const [sprints, setSprints] = useState(initialSprints);
-  const [athletes, setAthletes] = useState([...emptyArray]);
+  const [athletes, setAthletes] = useState<any>([...emptyArray]);
 
   const [coaches, setCoaches] = useState([...emptyArray]);
   const [sanityTraining, setSanityTraining] = useState([...emptyArray]);
@@ -232,7 +261,7 @@ function App(props: AppProps) {
           I18n.setLanguage(currentUser.defaultLanguage);
           if (language) userStateUpdate.chosenLanguage = language;
         }
-        setUserData(userStateUpdate);
+        setUserData(userStateUpdate as any);
 
         // Sort fetching functions according to whether they should happen before or after the loading overlay goes away
         if (context) {
@@ -537,7 +566,7 @@ function App(props: AppProps) {
                   </div>
 
                   <div className="root-padding">
-                    <LeftNav user={userData.user} athletes={athletes} />
+                    <LeftNav user={userData.user as any} athletes={athletes} />
                     <Routes childProps={childProps} />
                   </div>
                   <Palette {...props} />

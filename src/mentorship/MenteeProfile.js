@@ -76,17 +76,6 @@ function Profile() {
       ) : (
         <>
           <div className="flex">
-            <img
-              src={
-                profile.picture ||
-                "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
-              }
-              alt="Generic profile for an athlete"
-              height="50"
-              width="50"
-              circle
-              style={{ marginTop: 8 }}
-            />
             <h2>
               {profile.fName} {profile.lName}
             </h2>

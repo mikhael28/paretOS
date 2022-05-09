@@ -41,7 +41,7 @@ export default function LoaderButton({
   color = "primary",
   variant = "contained",
   ...props
-}: CustomButtonProps) {
+}: CustomButtonProps | any) {
   const classes = UseStyles()();
 
   return (

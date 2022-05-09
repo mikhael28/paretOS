@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AiFillCode } from "react-icons/ai";
@@ -8,20 +8,32 @@ import { BiRun } from "react-icons/bi";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import LanguageContext from "../state/LanguageContext";
+import LanguageContext, { Language } from "../state/LanguageContext";
+import { User, Relationship } from "../types";
 
-function LeftNav(props) {
-  const { language, setLanguage } = useContext(LanguageContext);
-  const { user, athletes } = props;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCode, setSelectedCode] = useState(language.code);
+interface LeftNavProps {
+  user: User;
+  athletes: Array<Relationship>;
+  chosenLanguage?: object;
+  updateState?: any;
+}
+
+function LeftNav(props: LeftNavProps) {
+  // @TODO add proper typing for the LanguageContext
+  const { language, setLanguage } = useContext<any>(LanguageContext);
+  const { user, athletes, chosenLanguage, updateState } = props;
+  const [anchorEl, setAnchorEl] = useState<any>(null);
+  const [selectedCode, setSelectedCode] = useState<string>(language.code);
   const open = Boolean(anchorEl);
 
-  const handleClickListItem = (event) => {
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (event, code) => {
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    code: string
+  ) => {
     setSelectedCode(code);
     setAnchorEl(null);
   };
@@ -30,7 +42,7 @@ function LeftNav(props) {
     setAnchorEl(null);
   };
 
-  const handleSetLanguage = (language) => {
+  const handleSetLanguage = (language: any) => {
     setLanguage(language);
   };
 
@@ -87,7 +99,7 @@ function LeftNav(props) {
               handleMenuItemClick(e, language.code);
               updateLanguage({
                 language,
-                id: user.id,
+                id: user.id.toString(),
                 setLanguage: handleSetLanguage,
               });
             }}
@@ -143,7 +155,7 @@ function LeftNav(props) {
       <div style={{ marginTop: 10 }}>
         <NavLink
           to="/"
-          style={headingStyle}
+          style={headingStyle as any}
           className="flex"
           activeStyle={activeStyle}
           exact
@@ -183,7 +195,7 @@ function LeftNav(props) {
         <div style={{ marginTop: 14 }}>
           <NavLink
             to="/mentorship"
-            style={headingStyle}
+            style={headingStyle as any}
             activeStyle={activeStyle}
             exact
           >
@@ -223,7 +235,7 @@ function LeftNav(props) {
       <div style={{ marginLeft: 3 }}>
         <NavLink
           to="/training"
-          style={headingStyle}
+          style={headingStyle as any}
           className="flex"
           activeStyle={activeStyle}
           exact
@@ -270,7 +282,7 @@ function LeftNav(props) {
 
       <NavLink
         to="/context-builder"
-        style={headingStyle}
+        style={headingStyle as any}
         activeStyle={activeStyle}
         className="third-step"
         exact
@@ -279,8 +291,18 @@ function LeftNav(props) {
       </NavLink>
 
       <NavLink
+        to="/journal"
+        style={headingStyle as any}
+        activeStyle={activeStyle}
+        // className="third-step"
+        exact
+      >
+        &ensp;{I18n.get("journal")}
+      </NavLink>
+
+      <NavLink
         to={`/profile/edit/${user.id}`}
-        style={headingStyle}
+        style={headingStyle as any}
         activeStyle={activeStyle}
         exact
       >
@@ -290,7 +312,7 @@ function LeftNav(props) {
 
       <NavLink
         to="/sandbox"
-        style={headingStyle}
+        style={headingStyle as any}
         activeStyle={activeStyle}
         exact
       >
@@ -305,9 +327,9 @@ function LeftNav(props) {
         style={{ opacity: 0.6, position: "fixed", bottom: 30, left: 16 }}
         alt="pareto logo"
         // eslint-disable-next-line no-return-assign
-        onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+        onMouseEnter={(e) => ((e.currentTarget.style.opacity as any) = 1)}
         // eslint-disable-next-line no-return-assign
-        onMouseLeave={(e) => (e.currentTarget.style.opacity = 0.6)}
+        onMouseLeave={(e) => ((e.currentTarget.style.opacity as any) = 0.6)}
       />
     </div>
   );

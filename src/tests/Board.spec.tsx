@@ -123,8 +123,10 @@ describe("LEADERBOARD", () => {
   });
 });
 
-function testUsers(): Array<User> {
-  const users: Array<User> = [
+// @TODO retype the User type from any, actually a better todo is to create a complete initial state object that can be used for mock data for offline development, and for our test suite.
+
+function testUsers(): Array<any> {
+  const users: Array<any> = [
     {
       rank: 1,
       score: 1000,
