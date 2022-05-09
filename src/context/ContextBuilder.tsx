@@ -93,13 +93,16 @@ function ContextBuilder(props: any) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} className="tabPanelCont">
-        {renderTopicsList(props.sanitySchemas.technicalSchemas)}
+        {props.sanitySchemas &&
+          renderTopicsList(props.sanitySchemas.technicalSchemas)}
       </TabPanel>
       <TabPanel value={value} index={1} className="tabPanelCont">
-        {renderTopicsList(props.sanitySchemas.economicSchemas)}
+        {props.sanitySchemas &&
+          renderTopicsList(props.sanitySchemas?.economicSchemas)}
       </TabPanel>
       <TabPanel value={value} index={2} className="tabPanelCont">
-        {renderTopicsList(props.sanitySchemas.hubSchemas)}
+        {props.sanitySchemas &&
+          renderTopicsList(props.sanitySchemas?.hubSchemas)}
       </TabPanel>
 
       <Tour
