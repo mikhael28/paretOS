@@ -30,7 +30,7 @@ export interface User {
   rank?: number;
   score: number;
   _id: string;
-  id: string;
+  id: any;
   fName: string;
   lName: string;
   email: string;
