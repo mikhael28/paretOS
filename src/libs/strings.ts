@@ -62,6 +62,7 @@ export const strings = {
     leaderboard: "Leaderboard",
     position: "Rank",
     library: "Library of Context",
+    journal: "Journal",
     verify: "Verify",
     nowVerifying: "Now Verifying..",
     sending: "Sending...",

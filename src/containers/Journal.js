@@ -10,9 +10,7 @@ import { errorToast, successToast } from "../libs/toasts";
 
 function LearnDashboard(props) {
   const [html, setHtml] = useState("");
-  const [preview, setPreview] = useState("");
   const editor = useRef(null);
-  const testRef = useRef(null);
   const [date, setDate] = useState(null);
   const [notes, setNotes] = useState([]);
   const [activeNote, setActiveNote] = useState(0);
