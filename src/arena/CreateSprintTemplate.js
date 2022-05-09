@@ -3,6 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -77,6 +78,7 @@ function CreateSprintTemplate(props) {
     },
   });
   const [title, setTitle] = useState("");
+  const [missions, setMissions] = useState([]);
 
   async function createTemplate() {
     let missionsArray = [];
@@ -143,19 +145,105 @@ function CreateSprintTemplate(props) {
     getSanityItems();
   }, []);
 
+  useEffect(() => {
+    getConfiguration();
+  }, []);
+
+  // pulls the /templates api and sets the missions to the templates
+  async function getConfiguration() {
+    let options = await RestAPI.get("pareto", "/templates");
+    setMissions(options.map((option) => option.title));
+  }
+
+  // checks to see if minimum template requirements are met
+  function checkReqs() {
+    let result;
+    const templates = missions.filter((mission) => mission === title);
+    if (templates.length !== 0) {
+      result = true;
+    } else if (title.length <= 4 || columns.Options.items.length > 28) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
+  // throws error messages if requirements aren't met
+  function reqsErrorMsg() {
+    const templates = missions.filter((mission) => mission === title);
+    return title.length <= 4
+      ? "Name should be four characters or more."
+      : columns.Options.items.length > 28
+      ? "Add at least 3 Options."
+      : templates.length !== 0
+      ? "This name is already taken"
+      : "";
+  }
+
   return (
     <>
-      <h1>{I18n.get("createTemplate")}</h1>
-      <FormGroup controlId="fName" bsSize="large" style={{ width: 300 }}>
-        <ControlLabel>{I18n.get("editTemplateName")}</ControlLabel>
-        <FormControl
+      <h1
+        style={{
+          textAlign: "center",
+          width: "auto",
+          marginBottom: "3rem",
+          fontWeight: 900,
+        }}
+      >
+        {I18n.get("createTemplate")}
+      </h1>
+      <FormGroup
+        controlId="fName"
+        bsSize="large"
+        style={{
+          width: "auto",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
+          {I18n.get("enterTemplateName")}
+        </ControlLabel>
+        <TextField
+          color="success"
+          error={reqsErrorMsg()}
+          required
+          helperText={reqsErrorMsg()}
+          style={{ width: 300 }}
+          label={I18n.get("templateName")}
+          variant="outlined"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
+        <Button
+          disabled={checkReqs()}
+          variant="gradient"
+          onClick={createTemplate}
+          style={{ marginLeft: 30, height: "4.8rem" }}
+        >
+          {I18n.get("create")}
+        </Button>
       </FormGroup>
-      <Button variant="gradient" onClick={createTemplate}>
-        {I18n.get("create")} Sprint
-      </Button>
+      <h2
+        style={{
+          textAlign: "center",
+          marginTop: 50,
+          textDecoration: "underline",
+          fontWeight: 400,
+        }}
+      >
+        {I18n.get("dailyAchievements")}
+      </h2>
+      <p
+        style={{
+          textAlign: "left",
+          width: 600,
+          margin: "0 auto",
+        }}
+      >
+        {I18n.get("dragDropDescription")}
+      </p>
       <div
         style={{
           display: "flex",
