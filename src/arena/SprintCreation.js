@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -173,7 +173,7 @@ function SprintCreation(props) {
       databasedTeams.push(dbTeam);
     });
     let body = {
-      id: uuidv4(),
+      id: nanoid(),
       athleteId: props.user.id,
       coachId: props.user.mentor,
       // hopefully the Date type doesn't give us problems, could be a place to debug

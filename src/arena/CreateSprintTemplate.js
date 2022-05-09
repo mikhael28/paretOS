@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
@@ -91,7 +91,7 @@ function CreateSprintTemplate(props) {
     });
 
     let body = {
-      id: uuidv4(),
+      id: nanoid(),
       title: title,
       author: `${props.user.fName} ${props.user.lName}`,
       authorId: props.user.id,
