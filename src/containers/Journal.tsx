@@ -13,7 +13,7 @@ interface JournalProps {
   user: User;
 }
 
-function LearnDashboard(props: JournalProps) {
+function Journal(props: JournalProps) {
   const [html, setHtml] = useState("");
   const editor = useRef<any>(null);
   const [date, setDate] = useState(null);
@@ -119,7 +119,6 @@ function LearnDashboard(props: JournalProps) {
     }
     setTimeout(() => {
       editor.current.content.innerHTML = newActiveNote;
-      // testRef.current.innerHTML = "<p>Testing</p>";
     }, 0);
   }, []);
 
@@ -140,6 +139,10 @@ function LearnDashboard(props: JournalProps) {
   return (
     <div>
       <h2>Daily Journal {date}</h2>
+      <p>
+        Note: this functionality isn't currently working/saving, this is a
+        preview.
+      </p>
       <button
         className="btn"
         onClick={() => {
@@ -177,4 +180,4 @@ function LearnDashboard(props: JournalProps) {
   );
 }
 
-export default LearnDashboard;
+export default Journal;
