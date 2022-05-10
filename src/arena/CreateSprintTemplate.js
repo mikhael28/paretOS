@@ -79,6 +79,7 @@ function CreateSprintTemplate(props) {
   });
   const [title, setTitle] = useState("");
   const [missions, setMissions] = useState([]);
+  const [error, setError] = useState("");
 
   async function createTemplate() {
     let missionsArray = [];
@@ -149,42 +150,49 @@ function CreateSprintTemplate(props) {
     getConfiguration();
   }, []);
 
+  useEffect(() => {
+    handleChange();
+  }, [title, columns, handleChange]);
+
   // pulls the /templates api and sets the missions to the templates
   async function getConfiguration() {
     let options = await RestAPI.get("pareto", "/templates");
     setMissions(options.map((option) => option.title));
   }
+  const minimumOptions =
+    columns.Morning.items.length +
+      columns.Workday.items.length +
+      columns.Evening.items.length >=
+    3;
 
-  // checks to see if minimum template requirements are met
-  function checkReqs() {
-    let result;
-    const templates = missions.filter((mission) => mission === title);
-    if (templates.length !== 0) {
-      result = true;
-    } else if (title.length <= 4 || columns.Options.items.length > 28) {
-      result = true;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleChange = () => {
+    const templates = missions.filter((mission) => mission === title.trim());
+    let message;
+    if (
+      title === "" &&
+      (columns.Morning.items.length === 0 ||
+        columns.Workday.items.length === 0 ||
+        columns.Evening.items.length === 0)
+    ) {
+      message = "";
+    } else if (title.length < 4) {
+      message = "Name should be four characters or more.";
+    } else if (templates.length > 0) {
+      message = "This name is already taken";
+    } else if (minimumOptions === false) {
+      message = "Add at least 3 Options.";
     } else {
-      result = false;
+      message = "";
     }
-    return result;
-  }
-  // throws error messages if requirements aren't met
-  function reqsErrorMsg() {
-    const templates = missions.filter((mission) => mission === title);
-    return title.length <= 4
-      ? "Name should be four characters or more."
-      : columns.Options.items.length > 28
-      ? "Add at least 3 Options."
-      : templates.length !== 0
-      ? "This name is already taken"
-      : "";
-  }
+    setError(message);
+  };
 
   return (
     <>
       <h1
         style={{
-          textAlign: "center",
+          // textAlign: "center",
           width: "auto",
           marginBottom: "3rem",
           fontWeight: 900,
@@ -199,7 +207,6 @@ function CreateSprintTemplate(props) {
           width: "auto",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "center",
         }}
       >
         <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
@@ -207,9 +214,9 @@ function CreateSprintTemplate(props) {
         </ControlLabel>
         <TextField
           color="success"
-          error={reqsErrorMsg()}
+          error={error}
           required
-          helperText={reqsErrorMsg()}
+          helperText={error}
           style={{ width: 300 }}
           label={I18n.get("templateName")}
           variant="outlined"
@@ -217,7 +224,7 @@ function CreateSprintTemplate(props) {
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
-          disabled={checkReqs()}
+          disabled={(title === "" && minimumOptions === false) || error}
           variant="gradient"
           onClick={createTemplate}
           style={{ marginLeft: 30, height: "4.8rem" }}
@@ -227,7 +234,6 @@ function CreateSprintTemplate(props) {
       </FormGroup>
       <h2
         style={{
-          textAlign: "center",
           marginTop: 50,
           textDecoration: "underline",
           fontWeight: 400,
@@ -239,7 +245,6 @@ function CreateSprintTemplate(props) {
         style={{
           textAlign: "left",
           width: 600,
-          margin: "0 auto",
         }}
       >
         {I18n.get("dragDropDescription")}
@@ -268,7 +273,7 @@ function CreateSprintTemplate(props) {
             >
               <h2>{column.name}</h2>
               <div
-                style={{ margin: 8, overflow: "hidden auto" }}
+                style={{ margin: 0, overflow: "hidden auto" }}
                 className="overflow"
               >
                 <Droppable droppableId={id} key={id}>
