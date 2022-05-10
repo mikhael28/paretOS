@@ -192,7 +192,6 @@ function CreateSprintTemplate(props) {
     <>
       <h1
         style={{
-          // textAlign: "center",
           width: "auto",
           marginBottom: "3rem",
           fontWeight: 900,
