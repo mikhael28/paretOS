@@ -5,6 +5,12 @@ export interface LanguageProps {
   setLanguage: Function;
 }
 
+export interface Language {
+  name: string;
+  code: string;
+  image: string;
+}
+
 const emptyLanguageProps: LanguageProps = {
   language: {
     name: "",

@@ -3,8 +3,8 @@ import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { RestAPI } from "@aws-amplify/api-rest";
-import BlockContent from "@sanity/block-content-to-react";
 import { Slide, Dialog, Button } from "@mui/material";
+import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import classNames from "classnames";
@@ -466,10 +466,10 @@ class ExperienceModule extends Component {
               <h4>{this.state.activeExperience.amount} EXP</h4>
               <div className="fourth-step-exp">
                 {this.state.language === "en" ? (
-                  <BlockContent blocks={this.state.activeExperience.overview} />
+                  <PortableText value={this.state.activeExperience.overview} />
                 ) : (
-                  <BlockContent
-                    blocks={this.state.activeExperience.esOverview}
+                  <PortableText
+                    value={this.state.activeExperience.esOverview}
                   />
                 )}
               </div>
