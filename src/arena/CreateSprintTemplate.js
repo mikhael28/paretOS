@@ -78,7 +78,7 @@ function CreateSprintTemplate(props) {
     },
   });
   const [title, setTitle] = useState("");
-  const [missions, setMissions] = useState([]);
+  const [existingTemplates, setExistingTemplates] = useState([]);
   const [error, setError] = useState("");
 
   async function createTemplate() {
@@ -154,12 +154,13 @@ function CreateSprintTemplate(props) {
     handleChange();
   }, [title, columns, handleChange]);
 
-  // pulls the /templates api and sets the missions to the templates
+  // pulls the /templates api and sets the existing templates
   async function getConfiguration() {
     let options = await RestAPI.get("pareto", "/templates");
-    setMissions(options.map((option) => option.title));
+    setExistingTemplates(options.map((option) => option.title));
   }
-  const minimumOptions =
+  // This will equal true or false, not a number
+  const meetsMinimumOptionsThreshold =
     columns.Morning.items.length +
       columns.Workday.items.length +
       columns.Evening.items.length >=
@@ -167,20 +168,22 @@ function CreateSprintTemplate(props) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleChange = () => {
-    const templates = missions.filter((mission) => mission === title.trim());
+    const templates = existingTemplates.filter(
+      (template) => template === title.trim()
+    );
     let message;
     if (
       title === "" &&
-      (columns.Morning.items.length === 0 ||
-        columns.Workday.items.length === 0 ||
-        columns.Evening.items.length === 0)
+      columns.Morning.items.length === 0 &&
+      columns.Workday.items.length === 0 &&
+      columns.Evening.items.length === 0
     ) {
       message = "";
     } else if (title.length < 4) {
       message = "Name should be four characters or more.";
     } else if (templates.length > 0) {
       message = "This name is already taken";
-    } else if (minimumOptions === false) {
+    } else if (meetsMinimumOptionsThreshold === false) {
       message = "Add at least 3 Options.";
     } else {
       message = "";
@@ -223,7 +226,9 @@ function CreateSprintTemplate(props) {
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
-          disabled={(title === "" && minimumOptions === false) || error}
+          disabled={
+            (title === "" && meetsMinimumOptionsThreshold === false) || error
+          }
           variant="gradient"
           onClick={createTemplate}
           style={{ marginLeft: 30, height: "4.8rem" }}
