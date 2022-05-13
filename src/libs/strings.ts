@@ -754,7 +754,8 @@ export const strings = {
     localCommunities: "Comunidades locales y reuniones",
     suggestResources:
       "Haz click aqui para sugerir algun recurso en nuestra base de conocimiento comunitaria",
-    incubators: "Incubadoras de emprendimientos e Inversores de Venture Capital",
+    incubators:
+      "Incubadoras de emprendimientos e Inversores de Venture Capital",
     startups: "Emprendimientos interesantes y compañías que contratan",
     localNews: "Noticias Locales y tendencias de la industria",
     fullName: "Nombre Completo",
