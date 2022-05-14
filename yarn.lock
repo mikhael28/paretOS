@@ -3278,6 +3278,11 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/pell@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/pell/-/pell-1.0.1.tgz#9027ac345f0bc89f12a00eefb8d92b0496966b58"
+  integrity sha512-q5K0pzgZzLImrYEeVL8WXLfc1IawCEc6gscTlInSTBcuXwQcWDl/55t9B2aeugCVF99rxi6aUjfS3r2ZnVEbxA==
+
 "@types/prettier@^2.1.5":
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.6.0.tgz#efcbd41937f9ae7434c714ab698604822d890759"
@@ -8976,7 +8981,7 @@ pathval@^1.1.1:
   resolved "https://registry.yarnpkg.com/pathval/-/pathval-1.1.1.tgz#8534e77a77ce7ac5a2512ea21e0fdb8fcf6c3d8d"
   integrity sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==
 
-pell@1.0.6:
+pell@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/pell/-/pell-1.0.6.tgz#9edb026f1edec2b4964251cdb2cd6fcadff08a76"
   integrity sha512-wuackvgjFCHmVABy7ACSmY2u53w+TlYFrVL2hN6V3rGL/iWWwVXMw2uphpZSXNnqFQTI8nMpD3UNNX8+R4BAYw==
