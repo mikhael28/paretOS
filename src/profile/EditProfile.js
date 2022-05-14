@@ -3,7 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { BsPencil, BsPlusLg } from "react-icons/bs";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
@@ -118,7 +118,7 @@ const EditProfile = () => {
     let projects = state.user.projects.slice();
 
     let newProject = {
-      id: uuidv4(),
+      id: nanoid(),
       description: state.description,
       github: state.github,
       name: state.name,
