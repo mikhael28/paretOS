@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import { User } from "../types";
 import ProfileImg from "./ProfileImg";

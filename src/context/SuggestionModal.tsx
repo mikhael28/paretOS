@@ -16,7 +16,7 @@ import { generateEmail } from "../libs/errorEmail";
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
  */
-export default function SuggestionModal({ schema, user, handleClose }) {
+export default function SuggestionModal({ schema, user, handleClose }: any) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -26,7 +26,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
   });
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     setFormData({
       ...formData,
       [event.target.id]: event.target.value,
@@ -39,7 +39,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
     formData.url.length > 0 &&
     formData.type.length > 0;
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     setSubmissionLoading(true);
     const mutations = [
@@ -95,7 +95,7 @@ export default function SuggestionModal({ schema, user, handleClose }) {
     }
   };
 
-  const convertCamelCaseToTitleCase = (str) => {
+  const convertCamelCaseToTitleCase = (str: string) => {
     const result = str.replace(/([A-Z])/g, " $1");
     return result.charAt(0).toUpperCase() + result.slice(1);
   };

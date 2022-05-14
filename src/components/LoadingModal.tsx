@@ -1,8 +1,7 @@
 import { DialogContent, useTheme } from "@mui/material";
-import { quotes } from "../libs/quotes";
+import getRandomQuote from "../libs/quotes";
 
-const randomIndex = Math.floor(Math.random() * Math.floor(quotes.length));
-
+const { quote, author } = getRandomQuote();
 /**
  * This component is responsible for showing some sweet motivational quotes while everything loads.
  * @TODO Issue #53
@@ -34,7 +33,7 @@ const LoadingModal = () => {
             }}
             id="now-loading"
           >
-            {quotes[randomIndex].quote}
+            {quote}
           </div>
           <div
             style={{
@@ -43,7 +42,7 @@ const LoadingModal = () => {
               fontSize: 20,
             }}
           >
-            {quotes[randomIndex].author}
+            {author}
           </div>
         </div>
       </DialogContent>

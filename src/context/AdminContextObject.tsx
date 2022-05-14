@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
+
 import classNames from "classnames";
 import { ContextObjectProps } from "./ContextTypes";
 
@@ -25,30 +27,26 @@ const useStyles = makeStyles({
  * This is the visual component that unlocks the content in the Knowledge Base.
  */
 
-export default function ContextObject(props: ContextObjectProps) {
+export default function AdminContext(props: ContextObjectProps) {
   const classes = useStyles();
   const { item, img, openExternalModal, closeExternalModal } = props;
+  const [state, setState] = useState<any>({
+    title: "",
+    url: "",
+    summary: "",
+  });
+
+  useEffect(() => {
+    //   initialize state
+  }, []);
   return (
     <>
       {item.slug ? (
         <div
-          onClick={() =>
-            window.location.pathname !== "/context-builder" && openExternalModal
-              ? openExternalModal(item.url)
-              : null
-          }
           className={classNames("flex", "block")}
           style={{ cursor: "pointer" }}
         >
-          {img !== "na" ? (
-            <img
-              className={classes.media}
-              src={img}
-              alt={item.title}
-              style={{ marginRight: 10 }}
-            />
-          ) : null}
-          <div className="flex-down">
+          <div className="flex-apart">
             <p style={{ fontSize: 20 }}>{item.title}</p>
             {item.summary ? (
               <p style={{ fontSize: 14 }}>{item.summary}</p>

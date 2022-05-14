@@ -40,12 +40,19 @@ export const availableLanguages = [
   },
 ];
 
+export interface UpdateLanguageProps {
+  language: any;
+  id: string;
+  setLanguage: Function;
+  setIsLoading?: Function;
+}
+
 export async function updateLanguage({
   language,
   id,
   setLanguage,
   setIsLoading,
-}) {
+}: UpdateLanguageProps) {
   if (setIsLoading) {
     setIsLoading(true);
   }
