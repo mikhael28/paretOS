@@ -3,6 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -77,6 +78,8 @@ function CreateSprintTemplate(props) {
     },
   });
   const [title, setTitle] = useState("");
+  const [existingTemplates, setExistingTemplates] = useState([]);
+  const [error, setError] = useState("");
 
   async function createTemplate() {
     let missionsArray = [];
@@ -143,19 +146,113 @@ function CreateSprintTemplate(props) {
     getSanityItems();
   }, []);
 
+  useEffect(() => {
+    getConfiguration();
+  }, []);
+
+  useEffect(() => {
+    handleChange();
+  }, [title, columns, handleChange]);
+
+  // pulls the /templates api and sets the existing templates
+  async function getConfiguration() {
+    let options = await RestAPI.get("pareto", "/templates");
+    setExistingTemplates(options.map((option) => option.title));
+  }
+  // This will equal true or false, not a number
+  const meetsMinimumOptionsThreshold =
+    columns.Morning.items.length +
+      columns.Workday.items.length +
+      columns.Evening.items.length >=
+    3;
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleChange = () => {
+    const templates = existingTemplates.filter(
+      (template) => template === title.trim()
+    );
+    let message;
+    if (
+      title === "" &&
+      columns.Morning.items.length === 0 &&
+      columns.Workday.items.length === 0 &&
+      columns.Evening.items.length === 0
+    ) {
+      message = "";
+    } else if (title.length < 4) {
+      message = "Name should be four characters or more.";
+    } else if (templates.length > 0) {
+      message = "This name is already taken";
+    } else if (meetsMinimumOptionsThreshold === false) {
+      message = "Add at least 3 Options.";
+    } else {
+      message = "";
+    }
+    setError(message);
+  };
+
   return (
     <>
-      <h1>{I18n.get("createTemplate")}</h1>
-      <FormGroup controlId="fName" bsSize="large" style={{ width: 300 }}>
-        <ControlLabel>{I18n.get("editTemplateName")}</ControlLabel>
-        <FormControl
+      <h1
+        style={{
+          width: "auto",
+          marginBottom: "3rem",
+          fontWeight: 900,
+        }}
+      >
+        {I18n.get("createTemplate")}
+      </h1>
+      <FormGroup
+        controlId="fName"
+        bsSize="large"
+        style={{
+          width: "auto",
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
+          {I18n.get("enterTemplateName")}
+        </ControlLabel>
+        <TextField
+          color="success"
+          error={error}
+          required
+          helperText={error}
+          style={{ width: 300 }}
+          label={I18n.get("templateName")}
+          variant="outlined"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
+        <Button
+          disabled={
+            (title === "" && meetsMinimumOptionsThreshold === false) || error
+          }
+          variant="gradient"
+          onClick={createTemplate}
+          style={{ marginLeft: 30, height: "4.8rem" }}
+        >
+          {I18n.get("create")}
+        </Button>
       </FormGroup>
-      <Button variant="gradient" onClick={createTemplate}>
-        {I18n.get("create")} Sprint
-      </Button>
+      <h2
+        style={{
+          marginTop: 50,
+          textDecoration: "underline",
+          fontWeight: 400,
+        }}
+      >
+        {I18n.get("dailyAchievements")}
+      </h2>
+      <p
+        style={{
+          textAlign: "left",
+          width: 600,
+        }}
+      >
+        {I18n.get("dragDropDescription")}
+      </p>
       <div
         style={{
           display: "flex",
@@ -180,7 +277,7 @@ function CreateSprintTemplate(props) {
             >
               <h2>{column.name}</h2>
               <div
-                style={{ margin: 8, overflow: "hidden auto" }}
+                style={{ margin: 0, overflow: "hidden auto" }}
                 className="overflow"
               >
                 <Droppable droppableId={id} key={id}>

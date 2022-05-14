@@ -67,11 +67,13 @@ export const strings = {
     nowVerifying: "Now Verifying..",
     sending: "Sending...",
     sendConfirmation: "Send Confirmation",
-
+    dailyAchievements: "Daily Achievements",
+    dragDropDescription:
+      "Drag and drop at least three options below to the appropriate column, this will add them to the Sprint Template. Click 'Create Sprint Template' when you're finished.",
     startSprint: "Start a Sprint",
     sprintDescription:
       "Sprints are 5-Day events where you measure your ability to perform at the highest level. Currently, sprints must start on a Monday and Finish on a Friday.",
-    create: "Create",
+    create: "Create Sprint Template",
 
     pageNoExist: "Sorry, this page doesn't exist!",
     returnToHome: "here to go back to the home page.",
@@ -121,7 +123,8 @@ export const strings = {
     finishedMissions: "Finished Achievements",
     goodWork: "Good Work",
     createTemplate: "Create Sprint Template",
-    editTemplateName: "Edit the Template Name",
+    enterTemplateName: "Enter Your Template Name",
+    templateName: "Template Name",
     startNewSprint: "Start New Sprint",
     editName: "Edit Name",
     changePicture: "Change Profile Picture",
