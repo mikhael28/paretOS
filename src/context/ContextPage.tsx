@@ -40,6 +40,13 @@ function ContextPage(props: any) {
     },
     title: "",
   });
+  const [activeItem, setActiveItem] = useState<any>({
+    title: "",
+    description: "",
+    url: "",
+    imgUrl: "",
+    type: "",
+  });
   const [openModal, setOpenModal] = useState(false);
   const [externalModal, setExternalModal] = useState({
     display: false,
@@ -58,6 +65,11 @@ function ContextPage(props: any) {
     setOpenModal(false);
   };
 
+  const openSuggestionModal = () => {
+    setActiveItem([]);
+    setOpenModal(true);
+  };
+
   useEffect(() => {
     fetchSanityResources();
   }, []);
@@ -69,8 +81,11 @@ function ContextPage(props: any) {
     }
     let schemaObj = tempPath[2];
     setSchema(schemaObj);
-    const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
+    const query = `*[_type == '${schemaObj}Schema']`;
+
+    // const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
     const links = await sanity.fetch(query);
+    console.log(links);
     setItems(links);
     let tempCommunity: LibraryEntry[] = [];
     let tempSupport: LibraryEntry[] = [];
@@ -140,6 +155,8 @@ function ContextPage(props: any) {
       content: `${I18n.get("libraryThird")}`,
     },
   ];
+
+  console.log(props);
 
   return (
     <div style={{ marginTop: 10 }}>
@@ -471,6 +488,7 @@ function ContextPage(props: any) {
           handleClose={handleCloseModal}
           schema={schema}
           user={props.user}
+          activeItem={activeItem}
         />
       </Dialog>
 

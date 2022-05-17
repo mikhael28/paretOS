@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -16,7 +16,12 @@ import { generateEmail } from "../libs/errorEmail";
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
  */
-export default function SuggestionModal({ schema, user, handleClose }: any) {
+export default function SuggestionModal({
+  schema,
+  user,
+  handleClose,
+  item,
+}: any) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -24,6 +29,16 @@ export default function SuggestionModal({ schema, user, handleClose }: any) {
     imgUrl: "",
     type: "",
   });
+
+  useEffect(() => {
+    setFormData(item);
+  }, []);
+
+  useEffect(() => () => {
+    console.log("Cleanup");
+    setFormData({ title: "", description: "", url: "", imgUrl: "", type: "" });
+  });
+
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
   const handleChange = (event: any) => {

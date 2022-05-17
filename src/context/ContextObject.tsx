@@ -55,7 +55,30 @@ export default function ContextObject(props: ContextObjectProps) {
             ) : null}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div
+          onClick={() => {
+            // open the modal
+          }}
+          className={classNames("flex", "block")}
+          style={{ cursor: "pointer" }}
+        >
+          {img !== "na" ? (
+            <img
+              className={classes.media}
+              src={img}
+              alt={item.title}
+              style={{ marginRight: 10 }}
+            />
+          ) : null}
+          <div className="flex-down">
+            <p style={{ fontSize: 20 }}>{item.title}</p>
+            {item.summary ? (
+              <p style={{ fontSize: 14 }}>{item.summary}</p>
+            ) : null}
+          </div>
+        </div>
+      )}
     </>
   );
 }

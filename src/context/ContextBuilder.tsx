@@ -19,7 +19,7 @@ const builder = imageUrlBuilder(sanity);
  */
 
 function ContextBuilder(props: any) {
-  console.log(props);
+  // console.log(props);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState(0);
   const history = useHistory();
