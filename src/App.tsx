@@ -524,25 +524,7 @@ function App(props: AppProps) {
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-          <Sentry.ErrorBoundary
-            // eslint-disable-next-line no-unused-vars
-            fallback={({ error, componentStack, resetError }) => (
-              <>
-                <div>
-                  Dear user, you have (sadly) encountered an error. The error is
-                  written out for you below, but it's probably useless to you.
-                  If you are just interested in moving past this unfortunate
-                  incident, click the button below to reload the page and start
-                  fresh.
-                </div>
-                <div>{error.toString()}</div>
-                <div>{componentStack}</div>
-                <button onClick={() => window.location.replace("/")}>
-                  Click here to reset!
-                </button>
-              </>
-            )}
-          >
+         
             <Box
               sx={{
                 // width: "100vw",
@@ -567,7 +549,28 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
+                    <Sentry.ErrorBoundary 
+                      // eslint-disable-next-line no-unused-vars
+                      fallback={({ error, componentStack, resetError }) => (
+                        <>
+                          <div>
+                            Dear user, you have (sadly) encountered an error. The error is
+                            written out for you below, but it's probably useless to you.
+                            If you are just interested in moving past this unfortunate
+                            incident, click the button below to reload the page and start
+                            fresh.  
+                          </div>
+                          <div>{error.toString()}</div>
+                          <div>{componentStack}</div> 
+                          <button onClick={() => resetError()}>
+                            Click here to reset!
+                          </button>
+                        </>
+                      )}
+                    >
                     <Routes childProps={childProps} />
+                      </Sentry.ErrorBoundary>
+
                   </div>
                   <Palette {...props} />
                   <div className="sticky-nav">
@@ -620,7 +623,6 @@ function App(props: AppProps) {
                 <LoadingModal />
               </Dialog>
             </Box>
-          </Sentry.ErrorBoundary>
         </LanguageContext.Provider>
       </ThemeProvider>
     )

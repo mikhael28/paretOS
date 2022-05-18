@@ -16,9 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noImplicitAny": true,
-    "types": ["vite/client"],
+    // "types": ["vite/client"],
     "typeRoots": ["src/types/custom_types", "node_modules/@types"]
     // "typeRoots": ["./src/types/custom_types", "./node_modules/@types"]
   },
-  "include": ["src", "tests"],
+  "include": ["src", "tests"]
 }

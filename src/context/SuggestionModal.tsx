@@ -20,7 +20,7 @@ export default function SuggestionModal({
   schema,
   user,
   handleClose,
-  item,
+  activeItem,
 }: any) {
   const [formData, setFormData] = useState({
     title: "",
@@ -31,7 +31,7 @@ export default function SuggestionModal({
   });
 
   useEffect(() => {
-    setFormData(item);
+    setFormData(activeItem);
   }, []);
 
   useEffect(() => () => {
