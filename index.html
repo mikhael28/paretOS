@@ -9,27 +9,27 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="%PUBLIC_URL%/apple-touch-icon.png"
+      href="/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
-      href="%PUBLIC_URL%/favicon-32x32.png"
+      href="/favicon-32x32.png"
       sizes="32x32"
     />
     <link
       rel="icon"
       type="image/png"
-      href="%PUBLIC_URL%/favicon-16x16.png"
+      href="/favicon-16x16.png"
       sizes="16x16"
     />
     <link
       rel="mask-icon"
-      href="%PUBLIC_URL%/safari-pinned-tab.svg"
+      href="/safari-pinned-tab.svg"
       color="#5bbad5"
     />
     <!-- <link rel="preload" href="index.css" as="style"> -->
-    <!-- <link rel="preload" href="%PUBLIC_URL%/FuturaStdBook.woff" as="font"> -->
+    <!-- <link rel="preload" href="/FuturaStdBook.woff" as="font"> -->
     <meta name="theme-color" content="#ffffff" />
     <meta
       name="description"
@@ -53,7 +53,7 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <!-- The 'defer' keyword is for not having to worry about waiting for DOM events to being AFTER dowloading the script - you are allowed to allow DOM events to fire in parallel to the  script finishes downloading.-->
     <link
       rel="stylesheet"
@@ -66,6 +66,12 @@
   </head>
   <body>
     <noscript> You need to enable JavaScript to run this app. </noscript>
+    <script type="module" src="/src/index.jsx"></script>
     <div id="root"></div>
+    <script>
+      if (global === undefined) {
+        var global = window;
+      }
+    </script>
   </body>
 </html>

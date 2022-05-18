@@ -170,7 +170,7 @@ export default function ArenaProofModal({
         <DialogContent>
           {activeMission.proofLink !== "" ? (
             <a
-              href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
+              href={`https://${import.meta.env.VITE_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -24,7 +24,7 @@ import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { errorToast } from "./libs/toasts";
 import Routes from "./Routes";
-import question from "./assets/help.png";
+// import question from "./assets/help.png";
 import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
@@ -365,7 +365,7 @@ function App(props: AppProps) {
 
     let sprintString = sprintStrings.join("&");
 
-    let path = `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`;
+    let path = `${import.meta.env.VITE_WSS_ENDPOINT}?${sprintString}`;
 
     const processMsg = (message: MessageEvent) => {
       // console.log("Received data: ", JSON.parse(message.data));
@@ -573,7 +573,7 @@ function App(props: AppProps) {
                   <div className="sticky-nav">
                     <div className="sticky-chat">
                       <img
-                        src={question}
+                        src={'question'}
                         onClick={(event) => {
                           event.preventDefault();
                           setIsTourOpen(true);

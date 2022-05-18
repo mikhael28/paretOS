@@ -9,7 +9,7 @@ import { LibraryEntry } from "./ContextTypes";
 import ContextObject from "./ContextObject";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
-import TabPanel from "../components/TabPanel.js";
+import TabPanel from "../components/TabPanel";
 
 const builder = imageUrlBuilder(sanity);
 

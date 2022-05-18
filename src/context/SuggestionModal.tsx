@@ -76,12 +76,12 @@ export default function SuggestionModal({
 
     try {
       fetch(
-        `https://${process.env.REACT_APP_SANITY_ID}.api.sanity.io/v1/data/mutate/production`,
+        `https://${import.meta.env.VITE_SANITY_ID}.api.sanity.io/v1/data/mutate/production`,
         {
           method: "post",
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_SANITY_TOKEN}`,
+            Authorization: `Bearer ${import.meta.env.VITE_SANITY_TOKEN}`,
           },
           body: JSON.stringify({
             mutations,

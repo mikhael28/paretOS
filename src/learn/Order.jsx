@@ -22,7 +22,7 @@ export default class Order extends Component {
 
   billUser(details) {
     let route;
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
     } else {
       route = "/billing";

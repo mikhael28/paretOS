@@ -39,7 +39,6 @@ It's also a great way of supporting this project, and you get real value that yo
 Want to contribute? Great! We have quite some issues in the repository, and I have tried to mark the easier ones as 'good first issue'. There are also issues marked as 'ownership' - these issues cover an item on our product backlog, a discrete, end to end piece of functionality that requires polish and a significant amount of work to implement. Completing one of these ownership tasks qualifies you to become a maintainer of the project, pending your availability and desire to do so. You will be a member of our Open-Source Hall of Fame as well!
 
 To fix a bug or contribute a new feature, follow these steps:
-
 - Fork the repo
 - Install the pnpm package manager `brew install pnpm` or `npm i -g pnpm`
     a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
@@ -49,6 +48,7 @@ To fix a bug or contribute a new feature, follow these steps:
 - Run `pnpm install` to install the dependencies, once you have `cd`'d into the directory
 - Run `pnpm start` to start the dev server
     a. `pnpm add <package_name>` to add a new npm dependency to the project.
+- You will get an es-lint error about some config - go to `package.json`, and press Command+S - the error should go away.
 - Create a new branch (`git checkout -b improve-feature`)
 - Make the appropriate changes in the files
 - Add Git changes to reflect the changes made

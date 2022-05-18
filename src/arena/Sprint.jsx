@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
-import TabPanel from "../components/TabPanel.js";
+import TabPanel from "../components/TabPanel.jsx";
 import { errorToast } from "../libs/toasts";
 import ws from "../libs/websocket";
 import question from "../assets/question.svg";
