@@ -5,12 +5,12 @@ import { Dialog, Button } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import SuggestionModal from "./SuggestionModal";
-import add from "../assets/add.png";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
 import { LibraryEntry } from "./ContextTypes";
+import classNames from "classnames";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -28,6 +28,7 @@ function ContextPage(props: any) {
   const [news, setNews] = useState<LibraryEntry[]>([]);
   const [assorted, setAssorted] = useState<LibraryEntry[]>([]);
   const [schema, setSchema] = useState("");
+  const [method, setMethod] = useState("post");
   const [renderType, setRenderType] = useState("generic");
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [schemaObject, setSchemaObject] = useState<any>({
@@ -42,7 +43,7 @@ function ContextPage(props: any) {
   });
   const [activeItem, setActiveItem] = useState<any>({
     title: "",
-    description: "",
+    summary: "",
     url: "",
     imgUrl: "",
     type: "",
@@ -66,7 +67,20 @@ function ContextPage(props: any) {
   };
 
   const openSuggestionModal = () => {
-    setActiveItem([]);
+    setMethod("post");
+    setActiveItem({
+      title: "",
+      summary: "",
+      url: "",
+      imgUrl: "",
+      type: "",
+    });
+    setOpenModal(true);
+  };
+
+  const openEditSuggestionModal = (item: any) => {
+    setMethod("put");
+    setActiveItem(item);
     setOpenModal(true);
   };
 
@@ -85,7 +99,7 @@ function ContextPage(props: any) {
 
     // const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
     const links = await sanity.fetch(query);
-    console.log(links);
+    console.warn(links);
     setItems(links);
     let tempCommunity: LibraryEntry[] = [];
     let tempSupport: LibraryEntry[] = [];
@@ -156,8 +170,6 @@ function ContextPage(props: any) {
     },
   ];
 
-  console.log(props);
-
   return (
     <div style={{ marginTop: 10 }}>
       <div className="flex">
@@ -166,17 +178,7 @@ function ContextPage(props: any) {
         ) : (
           <h1>Welcome to {schemaObject.title}</h1>
         )}
-        <img
-          src={add}
-          alt="Suggest Resource"
-          height="60"
-          width="60"
-          style={{ cursor: "pointer", marginTop: 20, marginLeft: 10 }}
-          onClick={() => {
-            setOpenModal(true);
-          }}
-          className="third-step-library"
-        />
+
         <img
           src={help}
           onClick={() => {
@@ -188,6 +190,15 @@ function ContextPage(props: any) {
           style={{ cursor: "pointer", margin: 30, marginLeft: 10 }}
         />
       </div>
+
+      <Button
+          onClick={() => {
+            openSuggestionModal();
+          }}
+          style={{color: 'white'}}
+          className={classNames("third-step-library", "btn")}
+
+        >Suggest New Resource</Button>
 
       {renderType === "hubs" ? (
         <>
@@ -233,6 +244,7 @@ function ContextPage(props: any) {
                         img={url.toString()}
                         openExternalModal={openExternalModal}
                         closeExternalModal={closeExternalModal}
+                        openForEdit={openEditSuggestionModal}
                       />
                     )}
                   </React.Fragment>
@@ -241,21 +253,7 @@ function ContextPage(props: any) {
             </div>
           )}
           <h3>Start-up Incubators & Venture Capital</h3>
-          {support.length === 0 ? (
-            <p
-              className="flex"
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Click&nbsp;
-              <p style={{ cursor: "pointer", textDecoration: "underline" }}>
-                {" "}
-                here{" "}
-              </p>
-              &nbsp;to suggest a resource into our community knowledge base.
-            </p>
-          ) : (
+          {support.length === 0 ? null : (
             <div className="context-cards-start">
               {support.map((item: any) => {
                 function urlFor(source: any) {
@@ -280,6 +278,7 @@ function ContextPage(props: any) {
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
+                          openForEdit={openEditSuggestionModal}
                         />
                       )}
                     </React.Fragment>
@@ -328,6 +327,7 @@ function ContextPage(props: any) {
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
+                          openForEdit={openEditSuggestionModal}
                         />
                       )}
                     </React.Fragment>
@@ -337,21 +337,7 @@ function ContextPage(props: any) {
             </div>
           )}
           <h3>Local News & Industry Trends</h3>
-          {news.length === 0 ? (
-            <p
-              className="flex"
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Click&nbsp;
-              <p style={{ cursor: "pointer", textDecoration: "underline" }}>
-                {" "}
-                here{" "}
-              </p>
-              &nbsp;to suggest a resource into our community knowledge base.
-            </p>
-          ) : (
+          {news.length === 0 ? null : (
             <div className="context-cards-start">
               {news.map((item: any) => {
                 function urlFor(source: any) {
@@ -376,6 +362,7 @@ function ContextPage(props: any) {
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
+                          openForEdit={openEditSuggestionModal}
                         />
                       )}
                     </React.Fragment>
@@ -385,21 +372,7 @@ function ContextPage(props: any) {
             </div>
           )}
           <h3>The Best of the Rest</h3>
-          {assorted.length === 0 ? (
-            <p
-              className="flex"
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Click&nbsp;
-              <p style={{ cursor: "pointer", textDecoration: "underline" }}>
-                {" "}
-                here{" "}
-              </p>
-              &nbsp;to suggest a resource into our community knowledge base.
-            </p>
-          ) : (
+          {assorted.length === 0 ? null : (
             <div className="context-cards-start">
               {assorted.map((item: any) => {
                 function urlFor(source: string) {
@@ -424,6 +397,7 @@ function ContextPage(props: any) {
                           img={url.toString()}
                           openExternalModal={openExternalModal}
                           closeExternalModal={closeExternalModal}
+                          openForEdit={openEditSuggestionModal}
                         />
                       )}
                     </React.Fragment>
@@ -465,6 +439,7 @@ function ContextPage(props: any) {
                       img={url.toString()}
                       openExternalModal={openExternalModal}
                       closeExternalModal={closeExternalModal}
+                      openForEdit={openEditSuggestionModal}
                     />
                   )}
                 </React.Fragment>
@@ -489,6 +464,7 @@ function ContextPage(props: any) {
           schema={schema}
           user={props.user}
           activeItem={activeItem}
+          method={method}
         />
       </Dialog>
 

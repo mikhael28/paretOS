@@ -21,27 +21,30 @@ export default function SuggestionModal({
   user,
   handleClose,
   activeItem,
+  method
 }: any) {
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
+    summary: "",
     url: "",
     imgUrl: "",
     type: "",
   });
 
   useEffect(() => {
-    setFormData(activeItem);
-  }, []);
+    console.log('Checking');
+    if (activeItem !== undefined) {
 
-  useEffect(() => () => {
-    console.log("Cleanup");
-    setFormData({ title: "", description: "", url: "", imgUrl: "", type: "" });
-  });
+      setFormData(activeItem);
+    }
+  }, [activeItem]);
 
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
   const handleChange = (event: any) => {
+    console.log(event.target.id);
+    console.log(event.target.value);
+    
     setFormData({
       ...formData,
       [event.target.id]: event.target.value,
@@ -50,29 +53,48 @@ export default function SuggestionModal({
 
   const validateForm = () =>
     formData.title.length > 0 &&
-    formData.description.length > 0 &&
+    formData.summary.length > 0 &&
     formData.url.length > 0 &&
     formData.type.length > 0;
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setSubmissionLoading(true);
-    const mutations = [
-      {
-        create: {
-          _type: `${schema}Schema`,
-          title: formData.title,
-          summary: formData.description,
-          url: formData.url,
-          type: formData.type,
+
+    let mutations;
+
+    if (method === "post") {
+
+      mutations = [
+        {
+          create: {
+            _type: `${schema}Schema`,
+            title: formData.title,
+            summary: formData.summary,
+            url: formData.url,
+            type: formData.type,
+          },
         },
-      },
-    ];
+      ];
+    } else {
+      mutations = [
+        {
+          createOrReplace: {
+            _id: activeItem._id,
+            _type: `${schema}Schema`,
+            title: formData.title,
+            summary: formData.summary,
+            url: formData.url,
+            type: formData.type,
+          },
+        },
+      ];
+    }
 
     let messageTitle = `${schema} suggestion received`;
-    let messageDescription = `${user.fName} ${user.lName} has submitted a resource with the title ${formData.title}. Please review it on the Sanity Creation Studio.`;
+    let messagesummary = `${user.fName} ${user.lName} has submitted a resource with the title ${formData.title}. Please review it on the Sanity Creation Studio.`;
 
-    let email = generateEmail(messageTitle, messageDescription);
+    let email = generateEmail(messageTitle, messagesummary);
 
     try {
       fetch(
@@ -97,11 +119,12 @@ export default function SuggestionModal({
           sender: "michael@pareto.education",
           subject: messageTitle,
           htmlBody: email,
-          textBody: messageDescription,
+          textBody: messagesummary,
         },
       });
 
       setSubmissionLoading(false);
+      setFormData({ title: "", summary: "", url: "", imgUrl: "", type: "" });
       handleClose();
       successToast("Thank you for your suggestion!");
     } catch (e) {
@@ -114,6 +137,8 @@ export default function SuggestionModal({
     const result = str.replace(/([A-Z])/g, " $1");
     return result.charAt(0).toUpperCase() + result.slice(1);
   };
+
+  // console.log('No way: ', activeItem);
 
   return (
     <div>
@@ -128,9 +153,9 @@ export default function SuggestionModal({
           <ControlLabel style={{ fontSize: "14px" }}>Title</ControlLabel>
           <FormControl value={formData.title} onChange={handleChange} />
         </FormGroup>
-        <FormGroup controlId="description" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>Description</ControlLabel>
-          <FormControl value={formData.description} onChange={handleChange} />
+        <FormGroup controlId="summary" bsSize="large">
+          <ControlLabel style={{ fontSize: "14px" }}>summary</ControlLabel>
+          <FormControl value={formData.summary} onChange={handleChange} />
         </FormGroup>
         <FormGroup controlId="url" bsSize="large">
           <ControlLabel style={{ fontSize: "14px" }}>Website Link</ControlLabel>

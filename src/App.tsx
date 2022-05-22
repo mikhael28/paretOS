@@ -2,7 +2,7 @@ import React, { useState, useEffect, MouseEvent, ReactElement } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { withRouter, RouteProps, useLocation } from "react-router-dom";
+import { withRouter, RouteProps, useLocation, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
@@ -24,12 +24,13 @@ import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { errorToast } from "./libs/toasts";
 import Routes from "./Routes";
-// import question from "./assets/help.png";
+import question from "./assets/help.png";
 import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
 import { User, Sprint } from "./types";
+import ErrorBoundary from "./utils/errorBoundary";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -520,6 +521,8 @@ function App(props: AppProps) {
   languageProps.language = userData.chosenLanguage;
   languageProps.setLanguage = updateLanguage;
 
+  const history = useHistory();
+
   return (
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
@@ -549,34 +552,16 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
-                    <Sentry.ErrorBoundary 
-                      // eslint-disable-next-line no-unused-vars
-                      fallback={({ error, componentStack, resetError }) => (
-                        <>
-                          <div>
-                            Dear user, you have (sadly) encountered an error. The error is
-                            written out for you below, but it's probably useless to you.
-                            If you are just interested in moving past this unfortunate
-                            incident, click the button below to reload the page and start
-                            fresh.  
-                          </div>
-                          <div>{error.toString()}</div>
-                          <div>{componentStack}</div> 
-                          <button onClick={() => resetError()}>
-                            Click here to reset!
-                          </button>
-                        </>
-                      )}
-                    >
+                  <ErrorBoundary history={history}>
                     <Routes childProps={childProps} />
-                      </Sentry.ErrorBoundary>
+                  </ErrorBoundary>
 
                   </div>
                   <Palette {...props} />
                   <div className="sticky-nav">
                     <div className="sticky-chat">
                       <img
-                        src={'question'}
+                        src={question}
                         onClick={(event) => {
                           event.preventDefault();
                           setIsTourOpen(true);
