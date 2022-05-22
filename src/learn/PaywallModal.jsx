@@ -10,10 +10,10 @@ function LoadingModal(props) {
   const [stripeKey, setStripeKey] = useState(null);
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setStripeKey(process.env.REACT_APP_STRIPE_DEV);
+    if (import.meta.env.NODE_ENV === "development") {
+      setStripeKey(import.meta.env.VITE_STRIPE_DEV);
     } else {
-      setStripeKey(process.env.REACT_APP_STRIPE_PROD);
+      setStripeKey(import.meta.env.VITE_STRIPE_PROD);
     }
   }, []);
 

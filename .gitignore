@@ -7,6 +7,7 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 package-lock.json
+stats.html
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

@@ -47,7 +47,7 @@ const ConfirmModal = (props) => {
           </a>
           {/* <h3>{I18n.get("attachment")} (PDF, JPG, MP3, etc)</h3>
           <a
-            href={`https://${process.env.REACT_APP_PROOF_BUCKET}.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}.png`}
+            href={`https://${import.meta.env.VITE_PROOF_BUCKET}.s3.amazonaws.com/public/${props.mongoExperience.id}${props.activeExperience.priority}.png`}
             target="_blank"
             rel="noopener noreferrer"
           >

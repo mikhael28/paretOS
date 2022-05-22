@@ -4,7 +4,17 @@
  *
  */
 
-function Athlete(props) {
+interface AthleteProps {
+  history: any;
+  athlete: {
+    picture: string;
+    fName: string;
+    lName: string;
+    id: string;
+  }
+}
+
+function Athlete(props: AthleteProps) {
   return (
     <div
       className="exp-card"
@@ -24,7 +34,6 @@ function Athlete(props) {
         alt="Athletes profile pic"
         height="50"
         width="50"
-        circle
       />
       <p style={{ marginLeft: 10, fontSize: 24, marginTop: 8 }}>
         {props.athlete.fName} {props.athlete.lName}

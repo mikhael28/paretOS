@@ -2,7 +2,7 @@ import React, { useState, useEffect, MouseEvent, ReactElement } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { withRouter, RouteProps, useLocation } from "react-router-dom";
+import { withRouter, RouteProps, useLocation, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
@@ -30,6 +30,7 @@ import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
 import { User, Sprint } from "./types";
+import ErrorBoundary from "./utils/errorBoundary";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -365,7 +366,7 @@ function App(props: AppProps) {
 
     let sprintString = sprintStrings.join("&");
 
-    let path = `${process.env.REACT_APP_WSS_ENDPOINT}?${sprintString}`;
+    let path = `${import.meta.env.VITE_WSS_ENDPOINT}?${sprintString}`;
 
     const processMsg = (message: MessageEvent) => {
       // console.log("Received data: ", JSON.parse(message.data));
@@ -520,29 +521,13 @@ function App(props: AppProps) {
   languageProps.language = userData.chosenLanguage;
   languageProps.setLanguage = updateLanguage;
 
+  const history = useHistory();
+
   return (
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-          <Sentry.ErrorBoundary
-            // eslint-disable-next-line no-unused-vars
-            fallback={({ error, componentStack, resetError }) => (
-              <>
-                <div>
-                  Dear user, you have (sadly) encountered an error. The error is
-                  written out for you below, but it's probably useless to you.
-                  If you are just interested in moving past this unfortunate
-                  incident, click the button below to reload the page and start
-                  fresh.
-                </div>
-                <div>{error.toString()}</div>
-                <div>{componentStack}</div>
-                <button onClick={() => window.location.replace("/")}>
-                  Click here to reset!
-                </button>
-              </>
-            )}
-          >
+         
             <Box
               sx={{
                 // width: "100vw",
@@ -567,7 +552,10 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
+                  <ErrorBoundary history={history}>
                     <Routes childProps={childProps} />
+                  </ErrorBoundary>
+
                   </div>
                   <Palette {...props} />
                   <div className="sticky-nav">
@@ -620,7 +608,6 @@ function App(props: AppProps) {
                 <LoadingModal />
               </Dialog>
             </Box>
-          </Sentry.ErrorBoundary>
         </LanguageContext.Provider>
       </ThemeProvider>
     )

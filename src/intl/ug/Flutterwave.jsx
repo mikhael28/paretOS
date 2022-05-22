@@ -9,7 +9,7 @@ import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 
 export default function Flutterwave(props) {
   const config = {
-    public_key: process.env.REACT_APP_FLUTTERWAVE_PK,
+    public_key: import.meta.env.VITE_FLUTTERWAVE_PK,
     tx_ref: Date.now(),
     amount: 100,
     currency: "UGX",

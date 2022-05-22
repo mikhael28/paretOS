@@ -3,6 +3,7 @@ export interface ContextObjectProps {
   img: any;
   openExternalModal?: Function;
   closeExternalModal?: Function;
+  openForEdit?: Function;
   item: any;
   url?: string;
 }

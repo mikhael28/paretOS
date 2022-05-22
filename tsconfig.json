@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -16,8 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noImplicitAny": true,
+    // "types": ["vite/client"],
     "typeRoots": ["src/types/custom_types", "node_modules/@types"]
     // "typeRoots": ["./src/types/custom_types", "./node_modules/@types"]
   },
-  "include": ["src", "tests"],
+  "include": ["src", "tests"]
 }

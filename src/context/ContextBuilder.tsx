@@ -9,7 +9,7 @@ import { LibraryEntry } from "./ContextTypes";
 import ContextObject from "./ContextObject";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
-import TabPanel from "../components/TabPanel.js";
+import TabPanel from "../components/TabPanel";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -19,7 +19,7 @@ const builder = imageUrlBuilder(sanity);
  */
 
 function ContextBuilder(props: any) {
-  console.log(props);
+  // console.log(props);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState(0);
   const history = useHistory();

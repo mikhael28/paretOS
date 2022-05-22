@@ -13,7 +13,7 @@ export default function WorkRise() {
 
   async function fetchJobs() {
     try {
-      let fetchResult = await fetch(process.env.REACT_APP_WR_PUBLIC_API, {
+      let fetchResult = await fetch(import.meta.env.VITE_WR_PUBLIC_API, {
         method: "GET",
         headers: {
           "Content-type": "application/json",

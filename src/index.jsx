@@ -19,9 +19,9 @@ import "./index.css";
  * @TODO Service Worker Issue #19
  */
 
-if (process.env.NODE_ENV === "production") {
+if (import.meta.env.NODE_ENV === "production") {
   Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
+    dsn: import.meta.env.VITE_SENTRY_DSN,
     // integrations: [],
     integrations: [new Integrations.BrowserTracing()],
 
@@ -39,21 +39,21 @@ RestAPI.configure({
   endpoints: [
     {
       name: "pareto",
-      endpoint: process.env.REACT_APP_PARETO_ENDPOINT,
-      region: process.env.REACT_APP_PARETO_ENDPOINT,
+      endpoint: import.meta.env.VITE_PARETO_ENDPOINT,
+      region: import.meta.env.VITE_PARETO_ENDPOINT,
     },
     {
       name: "util",
-      endpoint: process.env.REACT_APP_UTIL_ENDPOINT,
-      region: process.env.REACT_APP_UTIL_REGION,
+      endpoint: import.meta.env.VITE_UTIL_ENDPOINT,
+      region: import.meta.env.VITE_UTIL_REGION,
     },
   ],
 });
 
 Storage.configure({
   AWSS3: {
-    bucket: process.env.REACT_APP_PROOF_BUCKET,
-    region: process.env.REACT_APP_UTIL_REGION,
+    bucket: import.meta.env.VITE_PROOF_BUCKET,
+    region: import.meta.env.VITE_UTIL_REGION,
   },
 });
 

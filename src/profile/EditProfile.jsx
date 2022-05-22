@@ -159,7 +159,7 @@ const EditProfile = () => {
         file,
         {
           contentType: "image/*",
-          bucket: process.env.REACT_APP_PHOTO_BUCKET,
+          bucket: import.meta.env.VITE_PHOTO_BUCKET,
         }
       );
       console.log("Key: ", pictureKey);
@@ -168,7 +168,7 @@ const EditProfile = () => {
         `/users/${state.user.id}`,
         {
           body: {
-            picture: `https://${process.env.REACT_APP_PHOTO_BUCKET}.s3.amazonaws.com/public/${pictureKey.key}`,
+            picture: `https://${import.meta.env.VITE_PHOTO_BUCKET}.s3.amazonaws.com/public/${pictureKey.key}`,
           },
         }
       );
