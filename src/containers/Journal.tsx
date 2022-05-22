@@ -33,7 +33,7 @@ function Journal(props: JournalProps) {
 
     editor.current = init({
       element: document.getElementById("editor") as any,
-      onChange: (html) => setHtml(html),
+      onChange: (html: any) => setHtml(html),
       defaultParagraphSeparator: "p",
       actions: [
         {
