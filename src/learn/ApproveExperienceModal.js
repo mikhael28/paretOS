@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiButtonBase-root": {
       marginTop: theme?.spacing(1) || 8,
       marginRight: 6,
-      fontSize: 16,
+      fontSize: 10,
       padding: "6px 32px",
       textTransform: "none",
     },
@@ -51,15 +51,15 @@ const ConfirmModal = ({
   markRequestRevisions,
   markComplete,
 }) => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const classes = useStyles();
 
-  const onSubmit = (data) => {
-    if (mongoExperience[activeExperience.priority].revisionsNeeded === false) {
-      markRequestRevisions(activeExperience, mongoExperience, data.coachNotes);
-    } else {
-      markComplete(activeExperience, mongoExperience, data.coachNotes);
-    }
+  const handleMarkRequestRevisions = (data) => {
+    markRequestRevisions(activeExperience, mongoExperience, data.coachNotes);
+  };
+
+  const handleMarkComplete = (data) => {
+    markComplete(activeExperience, mongoExperience, data.coachNotes);
   };
 
   return (
@@ -112,7 +112,7 @@ const ConfirmModal = ({
             </Button>
           </>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <h3>{I18n.get("coachesNotes")}</h3>
             <TextField
               id="coachNotes"
@@ -133,16 +133,24 @@ const ConfirmModal = ({
               {mongoExperience[activeExperience.priority].approved ===
               true ? null : (
                 <>
+                  {mongoExperience[activeExperience.priority]
+                    .revisionsNeeded === false ? (
+                    <Button
+                      size="medium"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit(handleMarkRequestRevisions)}
+                    >
+                      {I18n.get("requestRevisions")}
+                    </Button>
+                  ) : null}
                   <Button
                     size="large"
                     variant="contained"
                     color="primary"
-                    type="submit"
+                    onClick={handleSubmit(handleMarkComplete)}
                   >
-                    {mongoExperience[activeExperience.priority]
-                      .revisionsNeeded === false
-                      ? I18n.get("requestRevisions")
-                      : I18n.get("confirmAchievement")}
+                    {I18n.get("confirmAchievement")}
                   </Button>
                 </>
               )}
