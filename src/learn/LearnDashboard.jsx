@@ -43,7 +43,7 @@ function LearnDashboard(props) {
           className="col-xs-12 col-sm-4"
           style={{ display: "flex", flexDirection: "column" }}
         >
-          <h2>{I18n.get("myMentors")}</h2>
+          {props.coaches.length > 0 && <h2>{I18n.get("myMentors")}</h2>}
           <div className="exp-cards" style={{ justifyContent: "start" }}>
             {props.coaches.map((coach) => (
               <div
