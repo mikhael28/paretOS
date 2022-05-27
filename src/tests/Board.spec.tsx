@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Leaderboard from "../components/Board";
-import "@testing-library/jest-dom";
 
 describe("LEADERBOARD", () => {
   const users = testUsers();
