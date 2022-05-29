@@ -31,6 +31,7 @@ specifiers:
   '@types/pell': ^1.0.1
   '@types/puppeteer': ^5.4.5
   '@types/react': ^18.0.0
+  '@types/react-beautiful-dnd': ^13.1.2
   '@types/react-bootstrap': ^0.32.27
   '@types/react-dom': ^18.0.0
   '@types/react-router-dom': ^5.3.1
@@ -126,6 +127,7 @@ dependencies:
   '@testing-library/jest-dom': 5.16.4
   '@testing-library/react': 13.2.0_ef5jwxihqo6n7gxfmzogljlgcm
   '@types/pell': 1.0.1
+  '@types/react-beautiful-dnd': 13.1.2
   '@types/reactour': 1.18.2
   '@types/testing-library__jest-dom': 5.14.3
   classnames: 2.3.1
@@ -3270,6 +3272,12 @@ packages:
       '@types/node': 17.0.35
     dev: true
 
+  /@types/react-beautiful-dnd/13.1.2:
+    resolution: {integrity: sha512-+OvPkB8CdE/bGdXKyIhc/Lm2U7UAYCCJgsqmopFmh9gbAudmslkI8eOrPDjg4JhwSE6wytz4a3/wRjKtovHVJg==}
+    dependencies:
+      '@types/react': 18.0.9
+    dev: false
+
   /@types/react-bootstrap/0.32.29:
     resolution: {integrity: sha512-ynKNFi1lvLLOCC+/G3HMQ2hGE6dzfgCOt6S2+sQy6Y6jVYh2m5Qrc/e1OQN5B2DkUsQAtxr908OpW9lOup6Pgw==}
     dependencies:
@@ -3795,7 +3803,7 @@ packages:
   /axios/0.21.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.0
+      follow-redirects: 1.15.0_debug@2.6.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -6182,16 +6190,6 @@ packages:
 
   /focus-outline-manager/1.0.2:
     resolution: {integrity: sha1-e/NliGU0H7awjQQqA3udKGixGbU=}
-    dev: false
-
-  /follow-redirects/1.15.0:
-    resolution: {integrity: sha512-aExlJShTV4qOUOL7yF1U5tvLCB0xQuudbf6toyYA0E/acBNw71mvjFTnLaRp50aQaYocMR0a/RMMBIHeZnGyjQ==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
     dev: false
 
   /follow-redirects/1.15.0_debug@2.6.9:

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
-import FormControl from "react-bootstrap/lib/FormControl";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
@@ -19,7 +23,35 @@ import { errorToast } from "../libs/toasts";
  * @TODO Some sort of verification of seriousness - if someone only has one item in the sprint, should I allow it.
  * @TODO Should this be public functionality right now? I'm thinking no, not until it's fleshed out a bit more - but perhaps best to leave it in for now.
  */
-const onDragEnd = (result, columns, setColumns) => {
+
+interface CreateSprintTemplateProps {
+  user: { fName: string; lName: string; id: number };
+  history: Array<string>;
+}
+
+interface OnDragEndParams {
+  result: DropResult;
+  columns: {
+    [x: string]: any;
+    Options?: { name: string; items: never[] };
+    Morning?: { name: string; items: never[] };
+    Workday?: { name: string; items: never[] };
+    Evening?: { name: string; items: never[] };
+  };
+  setColumns: {
+    (
+      value: React.SetStateAction<{
+        Options: { name: string; items: never[] };
+        Morning: { name: string; items: never[] };
+        Workday: { name: string; items: never[] };
+        Evening: { name: string; items: never[] };
+      }>
+    ): void;
+    (arg0: any): void;
+  };
+}
+
+const onDragEnd = ({ result, columns, setColumns }: OnDragEndParams) => {
   if (!result.destination) {
     return;
   }
@@ -57,7 +89,7 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function CreateSprintTemplate(props) {
+function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const theme = useTheme();
   const [columns, setColumns] = useState({
     Options: {
@@ -82,7 +114,7 @@ function CreateSprintTemplate(props) {
   const [error, setError] = useState("");
 
   async function createTemplate() {
-    let missionsArray = [];
+    let missionsArray: never[] = [];
     columns.Morning.items.map((item) => {
       missionsArray.push(item);
     });
@@ -111,6 +143,7 @@ function CreateSprintTemplate(props) {
       await RestAPI.post("pareto", `/templates`, { body });
       props.history.push("/");
     } catch (e) {
+      // @ts-ignore
       errorToast(e, props.user);
     }
   }
@@ -150,14 +183,10 @@ function CreateSprintTemplate(props) {
     getConfiguration();
   }, []);
 
-  useEffect(() => {
-    handleChange();
-  }, [title, columns, handleChange]);
-
   // pulls the /templates api and sets the existing templates
   async function getConfiguration() {
-    let options = await RestAPI.get("pareto", "/templates");
-    setExistingTemplates(options.map((option) => option.title));
+    let options = await RestAPI.get("pareto", "/templates", {});
+    setExistingTemplates(options.map((option: { title: any }) => option.title));
   }
   // This will equal true or false, not a number
   const meetsMinimumOptionsThreshold =
@@ -191,6 +220,10 @@ function CreateSprintTemplate(props) {
     setError(message);
   };
 
+  useEffect(() => {
+    handleChange();
+  }, [title, columns, handleChange]);
+
   return (
     <>
       <h1
@@ -216,6 +249,7 @@ function CreateSprintTemplate(props) {
         </ControlLabel>
         <TextField
           color="success"
+          /* @ts-ignore */
           error={error}
           required
           helperText={error}
@@ -226,6 +260,7 @@ function CreateSprintTemplate(props) {
           onChange={(event) => setTitle(event.target.value)}
         />
         <Button
+          /* @ts-ignore */
           disabled={
             (title === "" && meetsMinimumOptionsThreshold === false) || error
           }
@@ -263,7 +298,7 @@ function CreateSprintTemplate(props) {
         }}
       >
         <DragDropContext
-          onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+          onDragEnd={(result) => onDragEnd({ result, columns, setColumns })}
         >
           {Object.entries(columns).map(([id, column]) => (
             <div
@@ -294,7 +329,7 @@ function CreateSprintTemplate(props) {
                         minHeight: 500,
                       }}
                     >
-                      {column.items.map((item, index) => (
+                      {column.items.map((item: any, index: number) => (
                         <Draggable
                           key={item._id}
                           draggableId={item._id}
