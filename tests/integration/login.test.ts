@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const username = import.meta.env.TEST_FIXTURE_USERNAME;
-const password = import.meta.env.TEST_FIXTURE_PASSWORD;
+const username = process.env.TEST_FIXTURE_USERNAME;
+const password = process.env.TEST_FIXTURE_PASSWORD;
 const url = "http://localhost:3000";
 let browser: Browser;
 let page: Page;

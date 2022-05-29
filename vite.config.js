@@ -5,7 +5,9 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
     plugins: [
-      react(),
+      react({
+        fastRefresh: process.env.NODE_ENV !== 'test'
+      }),
       {
         ...resolve({
           preferBuiltins: false,
