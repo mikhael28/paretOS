@@ -27,9 +27,6 @@ const Sprint = lazy(() => import("./arena/Sprint"));
 const CreateSprintTemplate = lazy(() => import("./arena/CreateSprintTemplate"));
 const LearnDashboard = lazy(() => import("./learn/LearnDashboard"));
 const Room = lazy(() => import("./containers/Room"));
-const PomodoroDashboard = lazy(() =>
-  import("./containers/PomodoroDashboard/PomodoroDashboard")
-);
 const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
@@ -177,13 +174,6 @@ export default ({ childProps }) => (
         component={WorkRise}
         props={childProps}
       />
-      <AuthenticatedRoute
-        path="/pomodoro-dashboard"
-        exact
-        component={PomodoroDashboard}
-        props={childProps}
-      />
-
       {/* Finally, catch all unmatched routes */}
       <Route component={NotFound} />
     </Switch>

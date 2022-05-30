@@ -2,7 +2,12 @@ import React, { useState, useEffect, MouseEvent, ReactElement } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { withRouter, RouteProps, useLocation, useHistory } from "react-router-dom";
+import {
+  withRouter,
+  RouteProps,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
@@ -31,6 +36,7 @@ import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
 import { User, Sprint } from "./types";
 import ErrorBoundary from "./utils/errorBoundary";
+import MusicPlayer from "./components/MusicPlayer";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -527,87 +533,88 @@ function App(props: AppProps) {
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-         
-            <Box
-              sx={{
-                // width: "100vw",
-                // height: "100vh",
-                bgcolor: "background.default",
-                color: "text.primary",
-                // overflow: "scroll",
-                minHeight: "100vh",
-              }}
-            >
-              {isAuthenticated ? (
-                <>
-                  <div
-                    className="sticky-logout"
-                    style={{
-                      filter: theme.palette.mode === "dark" ? "invert()" : "",
-                    }}
-                    onClick={handleLogout}
-                  >
-                    <GrLogout style={{ height: "20px" }} />
-                  </div>
+          <Box
+            sx={{
+              // width: "100vw",
+              // height: "100vh",
+              bgcolor: "background.default",
+              color: "text.primary",
+              // overflow: "scroll",
+              minHeight: "100vh",
+            }}
+          >
+            {isAuthenticated ? (
+              <>
+                <div
+                  className="sticky-logout"
+                  style={{
+                    filter: theme.palette.mode === "dark" ? "invert()" : "",
+                  }}
+                  onClick={handleLogout}
+                >
+                  <GrLogout style={{ height: "20px" }} />
+                </div>
 
-                  <div className="root-padding">
-                    <LeftNav user={userData.user as any} athletes={athletes} />
+                <div className="root-padding">
+                  <LeftNav user={userData.user as any} athletes={athletes} />
                   <ErrorBoundary history={history}>
                     <Routes childProps={childProps} />
                   </ErrorBoundary>
-
+                </div>
+                <Palette {...props} />
+                <div className="sticky-nav">
+                  <div className="sticky-chat">
+                    <img
+                      src={question}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setIsTourOpen(true);
+                      }}
+                      alt="Home page tour icon"
+                      height="40"
+                      width="40"
+                      className="sticky-btn"
+                      style={{
+                        marginRight: 12,
+                        cursor: "pointer",
+                        filter: "grayscale(100%)",
+                        outline: "2px solid white",
+                        border: "2px solid transparent",
+                        borderRadius: "50%",
+                      }}
+                    />
                   </div>
-                  <Palette {...props} />
-                  <div className="sticky-nav">
-                    <div className="sticky-chat">
-                      <img
-                        src={question}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setIsTourOpen(true);
-                        }}
-                        alt="Home page tour icon"
-                        height="40"
-                        width="40"
-                        className="sticky-btn"
-                        style={{
-                          marginRight: 12,
-                          cursor: "pointer",
-                          filter: "grayscale(100%)",
-                          outline: "2px solid white",
-                          border: "2px solid transparent",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </div>
-                    <div id="myBottomNav" className="bottom-nav">
-                      <BottomNav user={userData.user} />
-                    </div>
+                  <div className="sticky-audio">
+                    <MusicPlayer />
                   </div>
-                </>
-              ) : (
-                <Routes childProps={childProps} />
-              )}
-              <Onboarding showCloseButton />
-              <Dialog
-                style={{
-                  margin: "auto",
-                }}
-                open={loading}
-                TransitionComponent={
-                  Transition as React.JSXElementConstructor<any> | undefined
-                }
-                keepMounted
-                disableEscapeKeyDown
-                fullScreen
-                fullWidth
-                hideBackdrop={false}
-                aria-labelledby="loading"
-                aria-describedby="Please wait while the page loads"
-              >
-                <LoadingModal />
-              </Dialog>
-            </Box>
+                  <div id="myBottomNav" className="bottom-nav">
+                    <BottomNav user={userData.user} />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Routes childProps={childProps} />
+            )}
+            <Onboarding showCloseButton />
+            <Dialog
+              style={{
+                margin: "auto",
+              }}
+              open={loading}
+              TransitionComponent={
+                Transition as React.JSXElementConstructor<any> | undefined
+              }
+              keepMounted
+              disableEscapeKeyDown
+              fullScreen
+              fullWidth
+              hideBackdrop={false}
+              aria-labelledby="loading"
+              aria-describedby="Please wait while the page loads"
+            >
+              <LoadingModal />
+            </Dialog>
+          </Box>
         </LanguageContext.Provider>
       </ThemeProvider>
     )

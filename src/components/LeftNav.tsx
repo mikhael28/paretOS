@@ -10,6 +10,8 @@ import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { User, Relationship } from "../types";
+import MusicPlayer from "./MusicPlayer";
+import Pomodoro from "./Pomodoro";
 
 interface LeftNavProps {
   user: User;
@@ -191,7 +193,9 @@ function LeftNav(props: LeftNavProps) {
         </NavLink>
       </div>
 
-      {user.instructor === true ? (
+      <Pomodoro headingStyle={headingStyle} />
+
+      {user.instructor === true && athletes.length > 0 ? (
         <div style={{ marginTop: 14 }}>
           <NavLink
             to="/mentorship"
@@ -307,16 +311,6 @@ function LeftNav(props: LeftNavProps) {
         exact
       >
         &ensp;Profile
-      </NavLink>
-      <div style={{ flex: "0 0 4px" }} />
-
-      <NavLink
-        to="/sandbox"
-        style={headingStyle as any}
-        activeStyle={activeStyle}
-        exact
-      >
-        &ensp;Sandbox
       </NavLink>
 
       <div style={{ flex: "0 0 16px" }} />

@@ -151,6 +151,10 @@ input[type="file"] {
     padding-left: -24px;
   }
 
+  .sticky-audio {
+    visibility: hidden;
+  }
+
   .sticky-nav button {
     min-width: 0;
   }
@@ -180,6 +184,7 @@ input[type="file"] {
     left: calc(100vw - 52px);
   }
 
+
   .btn {
     min-width: 80px !important;
   }
@@ -205,13 +210,22 @@ input[type="file"] {
     visibility: hidden;
   }
 
+  .sticky-audio {
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    visibility: visible;
+    width: 80vw;
+    left: 20vw;
+  }
+
   .sidenav {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 270px;
+    width: 20vw;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
+    z-index: 2; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
     background-color: var(--navigation-bgColor);
@@ -222,16 +236,33 @@ input[type="file"] {
   }
 
   .sticky-chat {
-    position: fixed;
-    bottom: 90px;
-    right: 15px;
+    /* position: fixed; */
+    /* bottom: 90px;
+    right: 15px; */
     visibility: visible;
+    background-color: white;
   }
 
   .notes-overflow {
     overflow: scroll;
     max-height: 610px;
   }
+}
+
+#animation-container {
+  position: relative;
+}
+
+#animation-container canvas {
+  position: fixed;
+  border: 1px solid transparent;
+}
+
+#overlay  {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px; 
 }
 
 /* Colors */
@@ -818,9 +849,8 @@ details[open] summary {
 }
 
 .btnIcon {
-  border: 0;
-
-  /* background-color: transparent; */
+  border: 0;  
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
   background-repeat: no-repeat;
   background-position: center;
   width: 50px;
