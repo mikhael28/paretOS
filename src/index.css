@@ -248,6 +248,22 @@ input[type="file"] {
   }
 }
 
+#animation-container {
+  position: relative;
+}
+
+#animation-container canvas {
+  position: fixed;
+  border: 1px solid transparent;
+}
+
+#overlay  {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px; 
+}
+
 /* Colors */
 
 .red-white {
