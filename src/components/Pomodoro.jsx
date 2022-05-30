@@ -269,7 +269,13 @@ export default class Pomodoro extends Component {
 
     //
     return (
-      <div id="main-div">
+      <div>
+        <audio id="beep" ref={this.audio_beep}>
+          <source
+            src="https://www.pacdv.com/sounds/interface_sound_effects/beep-7.wav"
+            type="audio/mp3"
+          />
+        </audio>
         <div
           style={
             (this.props.headingStyle,
@@ -340,13 +346,6 @@ export default class Pomodoro extends Component {
             <div>Focus</div>
           </div>
         </div> */}
-
-        <audio id="beep" ref={this.audio_beep}>
-          <source
-            src="https://www.pacdv.com/sounds/interface_sound_effects/beep-7.wav"
-            type="audio/mp3"
-          />
-        </audio>
       </div>
     );
   }

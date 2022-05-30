@@ -27,6 +27,12 @@ export default function MusicPlayer(props: any) {
   const songs: Song[] = useMemo(
     () => [
       {
+        title: "By the Lights of the Silvery",
+        artist: "Fats Waller",
+        img_src: IoMdMusicalNotes,
+        src: Silvery,
+      },
+      {
         title: "At the Moving Picture Ball",
         artist: "Maurice Burkhart",
         img_src: IoMdMusicalNote,
@@ -37,12 +43,6 @@ export default function MusicPlayer(props: any) {
         artist: "Fats Waller",
         img_src: IoMdMusicalNote,
         src: FatsNY,
-      },
-      {
-        title: "By the Lights of the Silvery",
-        artist: "Fats Waller",
-        img_src: IoMdMusicalNotes,
-        src: Silvery,
       },
       {
         title: "Secret Garden",

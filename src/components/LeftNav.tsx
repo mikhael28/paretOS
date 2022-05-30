@@ -193,7 +193,9 @@ function LeftNav(props: LeftNavProps) {
         </NavLink>
       </div>
 
-      {user.instructor === true ? (
+      <Pomodoro headingStyle={headingStyle} />
+
+      {user.instructor === true && athletes.length > 0 ? (
         <div style={{ marginTop: 14 }}>
           <NavLink
             to="/mentorship"
@@ -310,8 +312,6 @@ function LeftNav(props: LeftNavProps) {
       >
         &ensp;Profile
       </NavLink>
-
-      <Pomodoro headingStyle={headingStyle} />
 
       <div style={{ flex: "0 0 16px" }} />
 
