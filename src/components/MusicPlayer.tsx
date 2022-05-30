@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   IoMdPlay,
   IoMdPause,
@@ -57,8 +57,18 @@ export default function MusicPlayer(props: any) {
   const playlist = useMemo(() => {
     return AudioPlaylist({
       files: songs.map((song: Song) => song.src),
+      loop: false,
     });
   }, [songs]);
+
+  playlist.on("start", (param) => {
+    // doesn't seem to have any data in the param
+    console.log(param);
+  });
+
+  playlist.on("end", (param) => {
+    // doesn't seem to work
+  });
 
   const handlePlay = () => {
     playlist.play();
@@ -83,7 +93,7 @@ export default function MusicPlayer(props: any) {
   const handlePrevious = () => {
     playlist.pause();
     playlist.prev();
-    setIsPlaying(false);
+    setIsPlaying(true);
     setCurrentSong(
       (currentSong) => (currentSong - 1 + songs.length) % songs.length
     );

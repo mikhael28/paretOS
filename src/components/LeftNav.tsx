@@ -11,6 +11,7 @@ import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { User, Relationship } from "../types";
 import MusicPlayer from "./MusicPlayer";
+import Pomodoro from "./Pomodoro";
 
 interface LeftNavProps {
   user: User;
@@ -309,16 +310,8 @@ function LeftNav(props: LeftNavProps) {
       >
         &ensp;Profile
       </NavLink>
-      <div style={{ flex: "0 0 4px" }} />
 
-      <NavLink
-        to="/sandbox"
-        style={headingStyle as any}
-        activeStyle={activeStyle}
-        exact
-      >
-        &ensp;Sandbox
-      </NavLink>
+      <Pomodoro headingStyle={headingStyle} />
 
       <div style={{ flex: "0 0 16px" }} />
 

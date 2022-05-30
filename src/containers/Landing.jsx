@@ -86,7 +86,7 @@ export default function Landing(props) {
 
       <ParticleField config={config} />
 	  <div id="overlay"> 
-	  <h4>Build the future</h4>
+	  <h2>Build the future</h2>
 	  <Link
 	  className="btn"
             to="/signup"

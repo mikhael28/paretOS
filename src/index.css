@@ -184,6 +184,7 @@ input[type="file"] {
     left: calc(100vw - 52px);
   }
 
+
   .btn {
     min-width: 80px !important;
   }
@@ -848,9 +849,8 @@ details[open] summary {
 }
 
 .btnIcon {
-  border: 0;
-
-  /* background-color: transparent; */
+  border: 0;  
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
   background-repeat: no-repeat;
   background-position: center;
   width: 50px;
