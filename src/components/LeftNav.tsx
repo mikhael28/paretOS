@@ -10,6 +10,7 @@ import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { User, Relationship } from "../types";
+import MusicPlayer from "./MusicPlayer";
 
 interface LeftNavProps {
   user: User;

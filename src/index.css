@@ -151,6 +151,10 @@ input[type="file"] {
     padding-left: -24px;
   }
 
+  .sticky-audio {
+    visibility: hidden;
+  }
+
   .sticky-nav button {
     min-width: 0;
   }
@@ -205,13 +209,22 @@ input[type="file"] {
     visibility: hidden;
   }
 
+  .sticky-audio {
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    visibility: visible;
+    width: 80vw;
+    left: 20vw;
+  }
+
   .sidenav {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 270px;
+    width: 20vw;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
+    z-index: 2; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
     background-color: var(--navigation-bgColor);
@@ -222,10 +235,11 @@ input[type="file"] {
   }
 
   .sticky-chat {
-    position: fixed;
-    bottom: 90px;
-    right: 15px;
+    /* position: fixed; */
+    /* bottom: 90px;
+    right: 15px; */
     visibility: visible;
+    background-color: white;
   }
 
   .notes-overflow {
