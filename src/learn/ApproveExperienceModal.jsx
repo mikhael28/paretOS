@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
-import BlockContent from "@sanity/block-content-to-react";
+import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
 
 /**
@@ -86,7 +86,7 @@ const ConfirmModal = ({
       </DialogTitle>
       <DialogContent className={classes.root}>
         <h3>{I18n.get("description")}</h3>
-        <BlockContent blocks={activeExperience.overview} />
+        <PortableText value={activeExperience.overview} />
         <h3>{I18n.get("notesForCoach")}</h3>
         <p>{mongoExperience[activeExperience.priority].athleteNotes}</p>
         <h3>{I18n.get("submitLink")}</h3>
