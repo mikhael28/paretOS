@@ -85,7 +85,7 @@ const ConfirmModal = ({
       </DialogTitle>
       <DialogContent className={classes.root}>
         <h3>{I18n.get("description")}</h3>
-        <PortableText value={props.activeExperience.overview} />
+        <PortableText value={activeExperience.overview} />
         <h3>{I18n.get("notesForCoach")}</h3>
         <p>{mongoExperience[activeExperience.priority].athleteNotes}</p>
         <h3>{I18n.get("submitLink")}</h3>
