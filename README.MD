@@ -2,7 +2,7 @@
 
 The ParetOS is a browser-based, high-level operating system designed to maximize human potential. It is designed to give you the 20% of software you need on a day-to-day basis that gives you 80% of the benefits modern tech has to offer.
 
-Live at https://paret0.com
+Live at [https://paret0.com](https://paret-os.vercel.app/)
 
 ## The Arena
 
