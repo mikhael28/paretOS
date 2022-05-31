@@ -53,9 +53,7 @@ const Transition = React.forwardRef(function Transition(
 
 /**
  * This is the initial mount of the application, at the least the high level of it (index.js is the first load, excluding the index.html))
- * @TODO GitHub Issue #3
- * @TODO ChildProps Audit - Issue #5
- * @TODO Internalization Rerender - Issue #6
+ *
  */
 
 const languageProps: LanguageProps = {

@@ -6,7 +6,6 @@ import { User } from "../types/index";
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.
  * @TODO Issue #32
- * @TODO Issue #55
  */
 
 interface JournalProps {

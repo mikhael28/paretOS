@@ -3,9 +3,7 @@ import io from "socket.io-client";
 
 /**
  * This is an experimental video chat component, with screen sharing, to be used with users of the Pareto platform as a simple videochat service instead of Zoom.
- * @TODO has the M1 issue been fixed? This component did not work on non-intel compiled browsers, something with the web rtc protocol was not finalized.
- * @TODO Extensive work needed - closing rooms, reconnecting/disconnecting, much more business logic needed. This is why there was that 'proxy' to localhost 8000
- * @TODO for production, we need an actual deployed service to track this stuff. Otherwise, it's just an experiment.
+ * @TODO #265
  * @param {*} props
  * @returns
  */

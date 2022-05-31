@@ -4,7 +4,6 @@ import getRandomQuote from "../libs/quotes";
 const { quote, author } = getRandomQuote();
 /**
  * This component is responsible for showing some sweet motivational quotes while everything loads.
- * @TODO Issue #53
  */
 
 const LoadingModal = () => {
@@ -22,7 +21,7 @@ const LoadingModal = () => {
           <h1 id="header">Un Momento</h1>
           <div className="lds-dual-ring" />
         </div>{" "}
-        <div style={{ marginBottom: 400, marginTop: 100 }}>
+        <div style={{ marginBottom: 400, marginTop: 20 }}>
           <div
             style={{
               textAlign: "center",

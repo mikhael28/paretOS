@@ -1,6 +1,6 @@
 {
   "name": "paret-os",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@aws-amplify/api-rest": "2.0.40",
@@ -81,7 +81,6 @@
     "workbox-streams": "6.5.3"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'dist/assets/*.js'",
     "start": "vite",
     "build": "vite build",
     "test": "vite-jest",

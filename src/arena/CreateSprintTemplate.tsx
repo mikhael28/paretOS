@@ -18,10 +18,7 @@ import { errorToast } from "../libs/toasts";
 /**
  *
  * This function handles the logic for handling which column owns a dragged item.
- * @TODO Warning that this page is intended to be used on a desktop.
- * @TODO Loading animation on button while sprint is being created.
- * @TODO Some sort of verification of seriousness - if someone only has one item in the sprint, should I allow it.
- * @TODO Should this be public functionality right now? I'm thinking no, not until it's fleshed out a bit more - but perhaps best to leave it in for now.
+ * @TODO This page needs a few improvements.
  */
 
 interface CreateSprintTemplateProps {

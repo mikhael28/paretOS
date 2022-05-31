@@ -16,7 +16,6 @@ import LoaderButton from "../components/LoaderButton";
 
 /**
  * This is the modal where a player submits the proof for their Arena event
- * @TODO Issue #26
  */
 
 const useStyles = makeStyles((theme) => ({

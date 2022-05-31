@@ -5,7 +5,6 @@ import { RestAPI } from "@aws-amplify/api-rest";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
- * @TODO Issue #55
  * @param {Object} props Includes the sprints object, from childProps.
  * @returns {JSX}
  */

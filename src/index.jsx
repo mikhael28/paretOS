@@ -17,12 +17,12 @@ import "./index.css";
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
  * @TODO Service Worker Issue #19
+ * @TODO Issue #262
  */
 
 if (import.meta.env.NODE_ENV === "production") {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    // integrations: [],
     integrations: [new Integrations.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%
@@ -68,7 +68,6 @@ root.render(
   </Router>
 );
 
-// @TODO register service worker for full PWA, currently disabled while in alpha
 serviceWorkerRegistration.unregister();
 
 // If you want to start measuring performance in your app, pass a function

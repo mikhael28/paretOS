@@ -18,8 +18,8 @@ import classNames from "classnames";
 
 /**
  * Analytics component is a carousel that CAN contain multiple charts. Right now it just contains one.
- * @TODO Adding in different statistical analyses, outside of just the overall performance.
- * @TODO Adding in historical information, from previous sprints/personal best.
+ * @TODO Issue #263 Potentially replace Victory with something more lightweight
+ * @TODO Issue #264 - add historical data, outside of this particular sprint.
  * @param {missions} props
  * @returns
  */

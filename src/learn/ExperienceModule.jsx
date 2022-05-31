@@ -24,7 +24,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * This module is where the bulk of the experience module system lies.
  * @TODO Issue #48
  * @TODO Issue #27
- * @TODO Issue #53
  */
 
 class ExperienceModule extends Component {
