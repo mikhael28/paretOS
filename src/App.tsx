@@ -569,11 +569,10 @@ function App(props: AppProps) {
                         setIsTourOpen(true);
                       }}
                       alt="Home page tour icon"
-                      height="40"
-                      width="40"
+                      height="24"
+                      width="24"
                       className="sticky-btn"
                       style={{
-                        marginRight: 12,
                         cursor: "pointer",
                         filter: "grayscale(100%)",
                         outline: "2px solid white",

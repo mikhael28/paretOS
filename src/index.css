@@ -365,8 +365,8 @@ input[type="file"] {
 
 .sticky-btn {
   position: fixed;
-  bottom: 26px;
-  right: 15px;
+  bottom: 72px;
+  right: 8px;
   cursor: pointer;
 }
 

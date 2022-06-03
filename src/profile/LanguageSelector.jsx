@@ -29,7 +29,7 @@ const LanguageSelector = (props) => {
   return (
     <FormGroup controlId="defaultLanguage" bsSize="large">
       {/* Here we are updating our default language */}
-      <ControlLabel>Default Language</ControlLabel>
+      <ControlLabel><h2>Default Language</h2></ControlLabel>
       <div className="flex">
         {isLoading ? (
           <>
