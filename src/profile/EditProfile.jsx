@@ -20,11 +20,10 @@ import LanguageSelector from "./LanguageSelector";
 
 const EditProfile = (props) => {
   const theme = useTheme();
-  console.log(props);
-  const currentUser = "user" in props ? props.user : props.children.childProps.user
-  const [user, setUser] = useState(currentUser || {
+  const currentUser = "user" in props ? props.user : {
       projects: [],
-    },)
+    }
+  const [user, setUser] = useState(currentUser);
   const [state, setState] = useState({
     isLoading: false,
     summaryCheck: false,
@@ -183,7 +182,6 @@ const EditProfile = (props) => {
       errorToast(e);
     }
   };
-  console.log(user.projects)
 
   return (
     <div className="flex-down">
@@ -295,7 +293,7 @@ const EditProfile = (props) => {
             <div className="flex" style={{ justifyContent: "flex-end" }}>
               <Button
                 size="large"
-                sx={{ mt: 1 }}
+                sx={{ mt: 1, mx: 2 }}
                 onClick={() =>
                   setState((prevState) => ({
                     ...prevState,
@@ -311,8 +309,9 @@ const EditProfile = (props) => {
                 // disabled={!validateForm()}
                 onClick={updateBio}
                 isLoading={state.isLoading}
-                text="Update Summary"
-                loadingText="Loading"
+                text={I18n.get("save")}
+                loadingText={I18n.get("loading")}
+                style={{ minWidth: "180px" }}
               />
             </div>
           </div>
@@ -363,6 +362,7 @@ const EditProfile = (props) => {
           </>
         )}
         {state.addProject ? (
+          <>
           <div className="block">
             <FormGroup controlId="name" bsSize="large">
               <ControlLabel>{I18n.get("projectName")}</ControlLabel>
@@ -376,21 +376,27 @@ const EditProfile = (props) => {
               <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
               <FormControl value={state.github} onChange={handleChange} />
             </FormGroup>
-            <div className="flex" style={{ justifyContent: "flex-end", marginRight: -8}}>
+          </div>
+          <div className="flex" style={{ justifyContent: "flex-end", marginRight: 8}}>
               <Button
                 onClick={() =>
                   setState((prevState) => ({ ...prevState, addProject: false }))
                 }
-                sx={{ m: 1 }}
+                sx={{ my: 1, mx: 2 }}
               >
                 {I18n.get("cancel")}
               </Button>
 
-              <Button sx={{ ml: 1 }} variant="gradient" onClick={addProject}>
-                {I18n.get("save")}
-              </Button>
+              <LoaderButton
+                type="submit"
+                onClick={addProject}
+                isLoading={state.isLoading}
+                text={I18n.get("save")}
+                loadingText="Loading"
+                style={{ minWidth: "180px"}}
+              />
             </div>
-          </div>
+            </>
         ) : null}
       </div>
       <br />
