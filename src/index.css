@@ -246,14 +246,14 @@ input[type="file"] {
   .dropdown-caret-up,
   .dropdown-caret-down {
     content: " ";
-    color: #fff;
-    border-right: 8px solid transparent;
-    border-left: 8px solid transparent;
-    margin-top: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    margin-top: 22px;
     cursor:pointer;
   }
   .dropdown-caret-down {
-    border-top: 6px solid;
+    border-top: 5px solid;
   }
 
   .dropdown-caret-up {
