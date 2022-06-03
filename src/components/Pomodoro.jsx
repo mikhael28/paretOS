@@ -15,6 +15,7 @@ export default class Pomodoro extends Component {
     super(props);
     this.time_left = createRef();
     this.audio_beep = createRef();
+    this.headingStyle = props.headingStyle;
   }
   state = {
     session_length: 25,
@@ -278,33 +279,35 @@ export default class Pomodoro extends Component {
         </audio>
         <div
           style={
-            (this.props.headingStyle,
             {
+              ...this.headingStyle,
               display: "flex",
               justifyContent: "space-between",
-              margin: 12,
-              marginLeft: 23,
+              margin: 16,
+              paddingTop: 8,
               alignItems: "center",
-            })
+            }
           }
         >
           <div>
             Pomodoro {this.timeFormat(minutes)}:{this.timeFormat(seconds)}{" "}
           </div>
-          <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            &nbsp;&nbsp;
             {!this.state.isStarted ? (
               <IoMdPlay
-                style={{ height: 30, width: 30, cursor: "pointer" }}
+                style={{ height: 18, width: 18, margin: 1, cursor: "pointer" }}
                 onClick={this.play_stop_Time}
               />
             ) : (
               <IoMdPause
-                style={{ height: 30, width: 30, cursor: "pointer" }}
+                style={{ height: 18, width: 18, margin: 1, cursor: "pointer" }}
                 onClick={this.play_stop_Time}
               />
             )}
+            &nbsp;
             <IoMdRefresh
-              style={{ height: 30, width: 30, cursor: "pointer" }}
+              style={{ height: 20, width: 20, cursor: "pointer" }}
               onClick={this.resetTime}
             />
           </div>
