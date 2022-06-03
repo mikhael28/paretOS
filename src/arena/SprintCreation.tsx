@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
 import { nanoid } from "nanoid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
+import { FormEvent } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { useSelector } from "react-redux";
@@ -14,23 +15,32 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { getActiveSprintData } from "../state/sprints";
+import { ReduxRootState } from "../state";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
+import { MinimalUser, User } from "../types";
+import { FullMission, GenMission, Mission, EnMission, ActivePersonMissionsOnDay } from "./types";
+import { RouteComponentProps } from "react-router-dom";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
  * @TODO Re-integrate 'validateForm' function, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
-function SprintCreation(props) {
-  const profile = useSelector((state) => state.profile);
+interface SprintCreationProps extends RouteComponentProps {
+  user: User;
+  connectSocket: () => {};
+}
+
+function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
+  const profile = useSelector((state: ReduxRootState) => state.profile);
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [ready, setReady] = useState(false);
   const [missions, setMissions] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [chosenMissions, setChosenMissions] = useState(null);
-  const [chosenPlayers, setChosenPlayers] = useState([]);
+  const [chosenMissions, setChosenMissions] = useState({} as {missions?: FullMission[]});
+  const [chosenPlayers, setChosenPlayers] = useState([] as MinimalUser[]);
 
   useEffect(() => {
     getConfiguration();
@@ -38,42 +48,45 @@ function SprintCreation(props) {
 
   async function getConfiguration() {
     setLoading(true);
-    let options = await RestAPI.get("pareto", "/templates");
-    let userOptions = await RestAPI.get("pareto", "/users");
+    let options = await RestAPI.get("pareto", "/templates", {});
+    let userOptions = await RestAPI.get("pareto", "/users", {});
     setMissions(options);
-    setPlayers(userOptions.filter((e) => e.id !== profile.id));
+    setPlayers(userOptions.filter((e: HTMLOptionElement) => e.id !== profile.id));
     setLoading(false);
     setLoaded(true);
   }
   async function createSprint() {
     setLoading(true);
     let dbMission;
-    let databasedMissions = [];
-    chosenMissions.missions.forEach((element) => {
-      dbMission = {
-        ...element,
-        questions: [],
-        key: "",
-        img: "",
-        completedAt: Date.now(),
-        proof: [],
-        confirmed: false,
-        completed: false,
-        description: element.summary,
-        esDescription: element.esSummary,
-        xp: element.xp,
-        title: element.title,
-        esTitle: element.esTitle,
-      };
-      databasedMissions.push(dbMission);
-    });
+    let databasedMissions: GenMission[] = [];
+    if (chosenMissions.missions) {
+      chosenMissions.missions.forEach((element) => {
+        dbMission = {
+          ...element,
+          questions: [],
+          key: "",
+          img: "",
+          completedAt: Date.now(),
+          proof: [],
+          confirmed: false,
+          completed: false,
+          description: (element as EnMission).summary,
+          esDescription: (element as Mission).esSummary,
+          xp: element.xp,
+          title: (element as EnMission).title,
+          esTitle: (element as Mission).esTitle,
+        };
+        databasedMissions.push(dbMission);
+      });
+    }
+
     let finalDBMission = {
       dailyScore: 0,
       dailyCompletion: 0,
       missions: databasedMissions,
     };
-    let databasedTeams = [];
-    let dbTeam;
+    let databasedTeams: MinimalUser[] = [];
+    let dbTeam: MinimalUser;
     let chosenCompetitors = chosenPlayers.slice();
     chosenCompetitors.push(profile);
     chosenCompetitors.forEach((el) => {
@@ -85,7 +98,7 @@ function SprintCreation(props) {
         github: el.github,
         id: el.id,
         score: 0,
-        percentage: 0,
+        percentage: '0',
         planning: [
           {
             name: "Personal",
@@ -173,8 +186,8 @@ function SprintCreation(props) {
     });
     let body = {
       id: nanoid(),
-      athleteId: props.user.id,
-      coachId: props.user.mentor,
+      athleteId: user.id,
+      coachId: user.mentor,
       // hopefully the Date type doesn't give us problems, could be a place to debug
       startDate: startDate,
       endDate: new Date(startDate.getTime() + 432000000),
@@ -187,9 +200,9 @@ function SprintCreation(props) {
     };
     try {
       await RestAPI.post("pareto", "/sprints", { body });
-      await props.connectSocket();
+      await connectSocket();
       successToast("Sprint created successfully.");
-      props.history.push("/");
+      history.push("/");
     } catch (e) {
       errorToast(e);
       setLoading(false);
@@ -199,8 +212,8 @@ function SprintCreation(props) {
   // eslint-disable-next-line no-unused-vars
   function validateForm() {
     let result;
-    // console.log(Date.now(startDate) - 5000 < Date.now(new Date()) + 4000000);
-    if (Date.now(startDate) - 5000 < Date.now(new Date())) {
+    // TODO: Where is this 5000 number coming from? In this context it equals 5 seconds. 
+    if ((new Date(startDate)).getTime() - 5000 < Date.now()) {
       result = true;
     } else {
       result = false;
@@ -208,7 +221,7 @@ function SprintCreation(props) {
     // console.log(result);
     return result;
   }
-  function renderMissionOptions(missions) {
+  function renderMissionOptions(missions: FullMission[]) {
     return missions.map((mission, i) => (
       // eslint-disable-next-line react/no-array-index-key
       <option key={i} data-value={JSON.stringify(mission)}>
@@ -216,7 +229,7 @@ function SprintCreation(props) {
       </option>
     ));
   }
-  function renderPlayerOptions(data) {
+  function renderPlayerOptions(data: MinimalUser[]) {
     return data.map((playr, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <option key={index} data-value={JSON.stringify(playr)}>
@@ -226,53 +239,54 @@ function SprintCreation(props) {
   }
 
   // eslint-disable-next-line no-unused-vars
-  function handleChange(value, _input) {
+  function handleChange(value: string) {
     let parsedJSON = JSON.parse(value);
     setChosenMissions(parsedJSON);
   }
 
-  function onInput(e) {
-    if (e.target.nextSibling.id === "players-datalist") {
-      let input = document.getElementById("players-input");
-      let opts = document.getElementById(e.target.nextSibling.id).childNodes;
+  function onInput(e: FormEvent<FormControl>) {
+    const nextSibling = (e.target as HTMLOptionElement).nextSibling as HTMLDataListElement;
+    if (nextSibling && nextSibling.id === "players-datalist") {
+      let input = document.getElementById("players-input") as HTMLInputElement;
+      let opts = nextSibling.childNodes as NodeListOf<HTMLOptionElement>;
       for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {
           // An item was selected from the list!
           // yourCallbackHere()
-          handlePlayrChange(opts[i].dataset.value, input);
+          handlePlayrChange(opts[i].dataset.value as string, input);
           break;
         }
       }
-    } else if (e.target.nextSibling.id === "sprint-options") {
-      let input = document.getElementById("sprints-input");
-      let opts = document.getElementById(e.target.nextSibling.id).childNodes;
+    } else if (nextSibling && nextSibling.id === "sprint-options") {
+      let input = document.getElementById("sprints-input") as HTMLInputElement;
+      let opts = nextSibling.childNodes as NodeListOf<HTMLOptionElement>;
       for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {
-          // An item was selected from the list!
-          // yourCallbackHere()
-          handleChange(opts[i].dataset.value, input);
+          handleChange(opts[i].dataset.value as string);
           break;
         }
       }
     }
   }
-  function handlePlayrChange(value, input) {
+  function handlePlayrChange(value: string, input: HTMLInputElement) {
     let parsedJSON = JSON.parse(value);
     let newPlayers = chosenPlayers.slice();
     newPlayers.push(parsedJSON);
     setChosenPlayers(newPlayers);
-    let idxToBeRemoved;
+    let idxToBeRemoved = -1;
     let updatedUsers = players.slice();
-    updatedUsers.map((pl, idx) => {
+    updatedUsers.map((pl: MinimalUser, idx) => {
       if (parsedJSON.id === pl.id) {
         idxToBeRemoved = idx;
       }
     });
-    updatedUsers.splice(idxToBeRemoved, 1);
-    setPlayers(updatedUsers);
-    input.value = "";
+    if (idxToBeRemoved >= 0) {
+      updatedUsers.splice(idxToBeRemoved, 1);
+      setPlayers(updatedUsers);
+      input.value = "";
+    }
   }
-  function removeChosenPlayer(chosenPlayer) {
+  function removeChosenPlayer(chosenPlayer: MinimalUser) {
     setChosenPlayers(chosenPlayers.filter((plyr) => plyr !== chosenPlayer));
   }
   return (
@@ -335,7 +349,7 @@ function SprintCreation(props) {
           openTo="day"
           value={startDate}
           onChange={(value) => {
-            setStartDate(value);
+            setStartDate(value as Date);
             setReady(true);
           }}
           renderInput={(params) => <TextField {...params} />}

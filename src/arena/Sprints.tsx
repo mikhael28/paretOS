@@ -1,17 +1,22 @@
+import { ComponentPropsWithoutRef } from "react";
 import { useSelector } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
+import { ReduxRootState } from "../state";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
  * @param {Object} props Includes the sprints object, from childProps.
  * @returns {JSX}
  */
+interface SprintProps extends ComponentPropsWithoutRef<any> {
+  reviewMode: boolean;
+}
 
-function Sprints(props) {
+function Sprints(props: SprintProps) {
   let newClassName = classNames("exp-card");
-  const sprints = useSelector((state) => state.sprint);
+  const sprints = useSelector((state: ReduxRootState) => state.sprint);
   return (
     <div style={{ marginTop: 20 }}>
       {props.reviewMode === true ? null : (
@@ -38,7 +43,7 @@ function Sprints(props) {
           {sprints.length > 0 ? (
             <div className="exp-cards">
               {sprints
-                .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+                .sort((a, b) => (new Date(b.startDate)).getTime() - (new Date(a.startDate)).getTime())
                 .map((sprint, index) => (
                   <div
                     className={newClassName}
@@ -71,7 +76,7 @@ function Sprints(props) {
                     {props.user.admin === true ? (
                       <button
                         onClick={async () => {
-                          await RestAPI.del("pareto", `/sprints/${sprint.id}`);
+                          await RestAPI.del("pareto", `/sprints/${sprint.id}`, {});
                           await props.fetchMenteeSprints(props.user.id);
                         }}
                       >

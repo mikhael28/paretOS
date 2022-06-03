@@ -12,9 +12,9 @@ export interface Mission {
   confirmed: boolean;
   img: string;
   key: string;
-  proof: [];
-  questions: [];
-  summary: string;
+  proof: any[];
+  questions: any[];
+  esSummary: string;
   type: string;
   xp: number;
   esTitle: string;
@@ -24,15 +24,19 @@ export interface Mission {
 export interface EnMission extends Omit<Mission, "esTitle" | "esDescription"> {
   title: string;
   description: string;
+  summary: string
 }
 
 export type GenMission = Mission | EnMission;
 
+export type FullMission = Mission & EnMission;
+
+// TODO: Pick a more descriptive name for this interface - there are several differen/conflicting types involving collections of missions
 export interface Missions {
   headClassName?: string;
   headText: string;
   // missions: (Mission | EnMission)[];
-  missions: GenMission[];
+  missions: ([GenMission, number])[];
   emptyMisionsMessage: string;
   lengua: string;
   missionBtnText: string;
@@ -45,4 +49,10 @@ export interface Missions {
   >;
   setView?: Dispatch<SetStateAction<string>>;
   setShowProofModal: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface ActivePersonMissionsOnDay {
+  dailyCompletion: number;
+  dailyScore: number;
+  missions: GenMission[];
 }

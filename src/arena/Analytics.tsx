@@ -15,6 +15,8 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
+import { ComponentPropsWithoutRef } from "react";
+import { ActivePersonMissionsOnDay } from "./types";
 
 /**
  * Analytics component is a carousel that CAN contain multiple charts. Right now it just contains one.
@@ -23,7 +25,10 @@ import classNames from "classnames";
  * @param {missions} props
  * @returns
  */
-function Analytics(props) {
+interface AnalyticsProps extends ComponentPropsWithoutRef<any> {
+  missions: ActivePersonMissionsOnDay[];
+}
+function Analytics(props: AnalyticsProps) {
   let blockClass = classNames("context-card", "block");
   return (
     <div className="context-cards">
@@ -36,7 +41,6 @@ function Analytics(props) {
           naturalSlideWidth={800}
           naturalSlideHeight={800}
           totalSlides={1}
-          style={{ width: 300, height: 300 }}
         >
           <Slider>
             <Slide index={0}>

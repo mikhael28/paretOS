@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import { useLocation } from "react-router-dom";
+import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
@@ -18,6 +18,10 @@ import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
+import { GenMission, ActivePersonMissionsOnDay } from "./types";
+import { ReduxRootState } from "../state";
+import { User } from "../types";
+
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
  * @TODO Add some sort of toast notification, indicating success/new state updates when sprint updates received.
@@ -25,9 +29,12 @@ import ArenaDynamicForms from "./ArenaDynamicForms";
  * @TODO Add some sort of icon set to each card.
  * @returns {JSX}
  */
+interface SprintProps extends RouteComponentProps { 
+  user: User
+}
 
-function Sprint(props) {
-  const sprints = useSelector((state) => state.sprint);
+function Sprint({ user, history }: SprintProps) {
+  const sprints = useSelector((state: ReduxRootState) => state.sprint);
   const dispatch = useDispatch();
   // Identify the sprint index
   const location = useLocation();
@@ -43,7 +50,7 @@ function Sprint(props) {
   // Identify the user's index in the team
   let sprint = sprints[SPRINT_INDEX];
   const TEAM_INDEX = sprint.teams.findIndex(
-    (team) => team.id === props.user.id
+    (team) => team.id === user.id
   );
 
   // Identify the start date of the sprint
@@ -89,18 +96,19 @@ function Sprint(props) {
     sprints[SPRINT_INDEX].teams[TEAM_INDEX].planning
   );
 
-  function handleDynamicForms(event) {
+  function handleDynamicForms(event: SyntheticEvent<HTMLInputElement, ChangeEvent>) {
     let tempObj = { ...dynamicForms };
 
     for (const obj in tempObj) {
-      if (tempObj[obj].code === event.target.id) {
-        tempObj[obj].content = event.target.value;
+      let element = event.target as HTMLInputElement
+      if (tempObj[obj].code === element.id) {
+        tempObj[obj].content = element.value;
       }
     }
     setDynamicForms(tempObj);
   }
 
-  async function handleChange(mission, idx, day, key) {
+  async function handleChange(mission: GenMission, idx: number, day: number, key: (number | string)) {
     setLoading(true);
     dispatch({
       type: "COMPLETE_SPRINT_TASK",
@@ -124,10 +132,10 @@ function Sprint(props) {
   }
 
   async function savePlanning(
-    activeSprintIndex,
-    teamIndex,
-    planningIndex,
-    content
+    activeSprintIndex: number,
+    teamIndex: number,
+    planningIndex: number,
+    content: string
   ) {
     setLoading(true);
 
@@ -159,11 +167,11 @@ function Sprint(props) {
   }
 
   let allMissions = [];
-  let finishedMissions = []; // completed daily missions
-  let upcomingMissions = []; // uncompleted daily missions
+  let finishedMissions: ([GenMission, number])[] = []; // completed daily missions
+  let upcomingMissions: ([GenMission, number])[] = []; // uncompleted daily missions
 
   allMissions =
-    sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions[displayDay].missions || []; // default to empty array
+    (sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions[displayDay] as ActivePersonMissionsOnDay).missions || []; // default to empty array
 
   [...allMissions].forEach((mission, i) =>
     mission.completed
@@ -230,7 +238,7 @@ function Sprint(props) {
 
             <Details
               displayDay={displayDay}
-              admin={props.user.admin}
+              admin={user.admin}
               missions={sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions}
               setDisplayDay={setDisplayDay}
               setStatus={setStatus}
@@ -245,8 +253,8 @@ function Sprint(props) {
               <Board
                 users={sprints[SPRINT_INDEX].teams}
                 itemsPerPage={10}
-                currentUser={props.user}
-                history={props.history}
+                currentUser={user}
+                history={history}
               />
             </div>
             <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>
@@ -260,13 +268,14 @@ function Sprint(props) {
         <ArenaProofModal
           show={showProofModal}
           day={displayDay}
+          activeSprintId={SPRINT_INDEX}
           activeMission={activeMission}
           activeIndex={activeIndex}
           handleChange={handleChange}
           handleClose={closeModal}
           sprint={sprints[SPRINT_INDEX]}
           view={view}
-          user={props.user}
+          user={user}
         />
         <Tour steps={steps} isOpen={isTourOpen} onRequestClose={closeTour} />
       </>

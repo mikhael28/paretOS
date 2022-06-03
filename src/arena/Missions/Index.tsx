@@ -1,6 +1,6 @@
 import { I18n } from "@aws-amplify/core";
 
-import { Missions as MissionsProps } from "../interface";
+import { Missions as MissionsProps } from "../types";
 import Mission from "./Mission";
 
 /**
