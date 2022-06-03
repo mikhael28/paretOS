@@ -204,7 +204,7 @@ input[type="file"] {
   }
 
   .root-padding {
-    padding: 24px 32px 24px 302px;
+    padding: 24px 32px 24px calc(max(302px, 20vw + 32px));
   }
 
   .sticky-nav {
