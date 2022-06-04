@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import { createExperience } from "../libs/createExperience";
 
 /**
@@ -11,16 +11,12 @@ import { createExperience } from "../libs/createExperience";
  * @TODO Issue #50
  */
 
-export default class Order extends Component {
-  constructor(props) {
-    super(props);
+export default function Order(props) {
+  const { handleShowSuccess } = useContext(ToastMsgContext);
 
-    this.state = {
-      isLoading: false,
-    };
-  }
+  const [isLoading, setIsLoading] = useState(false);
 
-  billUser(details) {
+  function billUser(details) {
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
@@ -32,14 +28,14 @@ export default class Order extends Component {
     });
   }
 
-  unlockLearning = async () => {
+  async function unlockLearning() {
     let body = {
       learningPurchase: true,
     };
 
     let updatedUser = await RestAPI.put(
       "pareto",
-      `/users/${this.props.user.id}`,
+      `/users/${props.user.id}`,
       {
         body,
       }
@@ -47,8 +43,8 @@ export default class Order extends Component {
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId,
-      userId: this.props.user.id,
+      expId: props.user.apprenticeshipId,
+      userId: props.user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
       description: "Learning the tools, habits and workflows of development.",
@@ -56,8 +52,8 @@ export default class Order extends Component {
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId,
-      userId: this.props.user.id,
+      expId: props.user.productId,
+      userId: props.user.id,
       type: "Product",
       title: "Capstone Project",
       description:
@@ -66,8 +62,8 @@ export default class Order extends Component {
     const createProduct = await createExperience(productParams);
     console.log("Created Product: ", createProduct);
     let interviewingParams = {
-      expId: this.props.user.masteryId,
-      userId: this.props.user.id,
+      expId: props.user.masteryId,
+      userId: props.user.id,
       type: "Interviewing",
       title: "Interviewing",
       description:
@@ -78,11 +74,11 @@ export default class Order extends Component {
 
     // const defaultMentor = await API.post('pareto', '/relationship', {
     // 	body: {
-    // 		id: `${this.state.admin.id}_${newUser.id}`,
+    // 		id: `${admin.id}_${newUser.id}`,
     // 		mentee: newUser,
-    // 		mentor: this.state.admin,
+    // 		mentor: admin,
     // 		tasks: [],
-    // 		coachId: this.state.admin.id,
+    // 		coachId: admin.id,
     // 		athleteId: newUser.id,
     // 		resources: [],
     // 		events: [],
@@ -96,64 +92,62 @@ export default class Order extends Component {
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (storage, { token, error }) => {
+  async function handleFormSubmit(storage, { token, error }) {
     if (error) {
       alert(error);
       return;
     }
 
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
-      let billing = await this.billUser({
+      let billing = await billUser({
         storage,
         source: token.id,
       });
       console.log("bill: ", billing);
-      successToast(
+      handleShowSuccess(
         "Your card has been charged successfully! We are creating your learning account."
       );
 
       if (billing.status === true) {
         // create learning account info
-        await this.unlockLearning();
+        await unlockLearning();
       }
 
-      await this.props.initialFetch(this.props.user.id);
-      this.props.history.push("/training");
+      await props.initialFetch(props.user.id);
+      props.history.push("/training");
     } catch (e) {
+      // eslint-disable-next-line no-undef
       alert(e);
-      this.setState({ isLoading: false });
     }
   };
 
-  handleFreeUnlock = async () => {
-    this.setState({ isLoading: true });
-
+  async function handleFreeUnlock() {
+    setIsLoading(true);
     try {
-      await this.unlockLearning();
-      await this.props.initialFetch(this.props.user.id);
-      this.props.history.push("/training");
+      await unlockLearning();
+      await props.initialFetch(props.user.id);
+      props.history.push("/training");
     } catch (e) {
+      // eslint-disable-next-line no-undef
       alert(e);
     }
   };
 
-  render() {
-    return (
-      <>
-        <div className="Form">
-          <StripeProvider apiKey={this.props.stripeKey}>
-            <Elements>
-              <BillingForm
-                loading={this.state.isLoading}
-                onSubmit={this.handleFormSubmit}
-              />
-            </Elements>
-          </StripeProvider>
-        </div>
-        <Button onClick={this.handleFreeUnlock}>No Donation</Button>
-      </>
-    );
-  }
+  return (
+    <>
+      <div className="Form">
+        <StripeProvider apiKey={props.stripeKey}>
+          <Elements>
+            <BillingForm
+              loading={isLoading}
+              onSubmit={handleFormSubmit}
+            />
+          </Elements>
+        </StripeProvider>
+      </div>
+      <Button onClick={handleFreeUnlock}>No Donation</Button>
+    </>
+  );
 }

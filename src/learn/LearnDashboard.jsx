@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import PaywallModal from "./PaywallModal";
 import ExperienceSummary from "./ExperienceSummary";
 
@@ -18,6 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  */
 
 function LearnDashboard(props) {
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
   const [html, setHtml] = useState(null);
   const [showPaywallDialog, setShowPaywallDialog] = useState(
     props.user.learningPurchase === false
@@ -30,9 +31,9 @@ function LearnDashboard(props) {
           notes: [html],
         },
       });
-      successToast("Journal saved 👍");
+      handleShowSuccess("Journal saved 👍");
     } catch (e) {
-      errorToast(e, props.user);
+      handleShowError(e, props.user);
     }
   }
   return (
@@ -94,7 +95,7 @@ function LearnDashboard(props) {
         onClose={(event, reason) => {
           if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
             setShowPaywallDialog(false);
-            history.push("/");
+            props.history.push("/");
           }
         }}
       >

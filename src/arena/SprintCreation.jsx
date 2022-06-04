@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { nanoid } from "nanoid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -14,7 +14,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { getActiveSprintData } from "../state/sprints";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -31,6 +31,8 @@ function SprintCreation(props) {
   const [players, setPlayers] = useState([]);
   const [chosenMissions, setChosenMissions] = useState(null);
   const [chosenPlayers, setChosenPlayers] = useState([]);
+
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   useEffect(() => {
     getConfiguration();
@@ -188,10 +190,10 @@ function SprintCreation(props) {
     try {
       await RestAPI.post("pareto", "/sprints", { body });
       await props.connectSocket();
-      successToast("Sprint created successfully.");
+      handleShowSuccess("Sprint created successfully.");
       props.history.push("/");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
       setLoading(false);
     }
     setLoading(false);
@@ -233,7 +235,9 @@ function SprintCreation(props) {
 
   function onInput(e) {
     if (e.target.nextSibling.id === "players-datalist") {
+      // eslint-disable-next-line no-undef
       let input = document.getElementById("players-input");
+      // eslint-disable-next-line no-undef
       let opts = document.getElementById(e.target.nextSibling.id).childNodes;
       for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {
@@ -244,7 +248,9 @@ function SprintCreation(props) {
         }
       }
     } else if (e.target.nextSibling.id === "sprint-options") {
+      // eslint-disable-next-line no-undef
       let input = document.getElementById("sprints-input");
+      // eslint-disable-next-line no-undef
       let opts = document.getElementById(e.target.nextSibling.id).childNodes;
       for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === input.value) {

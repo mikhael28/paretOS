@@ -2,6 +2,12 @@ import React, { useCallback, useEffect, useState, createContext } from "react";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
 
+// Temporary context to remove toasted-notes
+export const ToastMsgContext = createContext({
+  handleShowSuccess: (string) => {},
+  handleShowError: (error) => {},
+});
+
 const ToastContext = createContext();
 
 export default ToastContext;
@@ -61,6 +67,7 @@ export function ToastContextProvider({ children }) {
                 <LoaderButton
                   style={{ backgroundColor: "green" }}
                   onClick={() => {
+                    // eslint-disable-next-line no-undef
                     window.location.replace("/");
                   }}
                   text="Refresh"

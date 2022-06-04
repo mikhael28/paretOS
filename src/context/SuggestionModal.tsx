@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -10,7 +10,7 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import { generateEmail } from "../libs/errorEmail";
 
 /**
@@ -30,6 +30,8 @@ export default function SuggestionModal({
     imgUrl: "",
     type: "",
   });
+
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   useEffect(() => {
     console.log('Checking');
@@ -126,9 +128,9 @@ export default function SuggestionModal({
       setSubmissionLoading(false);
       setFormData({ title: "", summary: "", url: "", imgUrl: "", type: "" });
       handleClose();
-      successToast("Thank you for your suggestion!");
+      handleShowSuccess("Thank you for your suggestion!");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setSubmissionLoading(false);
     }
   };

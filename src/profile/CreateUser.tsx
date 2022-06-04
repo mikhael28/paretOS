@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { nanoid } from "nanoid";
@@ -12,7 +13,7 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
 
@@ -29,6 +30,8 @@ interface CreateUserProps {
 }
 
 const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+  
   const {
     register,
     handleSubmit,
@@ -123,11 +126,11 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
         },
       });
       await accountCreationEmail(tempEmail);
-      successToast("Account created!");
+      handleShowSuccess("Account created!");
       await initialFetch(uuid);
       history.push("/");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
       setLoading(false);
     }
   };

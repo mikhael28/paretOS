@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
-import { errorToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.
@@ -13,6 +13,8 @@ import { errorToast } from "../libs/toasts";
  */
 
 function Profile() {
+  const { handleShowError } = useContext(ToastMsgContext);
+
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([]);
@@ -43,7 +45,7 @@ function Profile() {
       let experiences = await RestAPI.get("pareto", `/experience/user/${id}`);
       setExperiences(experiences);
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 
@@ -53,7 +55,7 @@ function Profile() {
       setSprints(sprints);
       setLoading(false);
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 

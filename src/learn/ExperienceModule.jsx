@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
@@ -12,7 +12,7 @@ import { HiOutlineClipboardCheck } from "react-icons/hi";
 import PaywallModal from "./PaywallModal";
 import question from "../assets/help.png";
 import { generateEmail } from "../libs/errorEmail";
-import { successToast, errorToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
 
@@ -26,47 +26,40 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #27
  */
 
-class ExperienceModule extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      isTourOpen: false,
-      user: {
-        fName: "",
-        lName: "",
-        id: "8020",
-      },
-      activeExperience: {
-        title: "",
-        amount: 0,
-        overview: [],
-        completed: false,
-        priority: "_01",
-        _type: "interviewSchema",
-        github: "",
-        athleteNotes: "",
-      },
-      experience: [],
-      mongoExperience: {
-        id: "",
-      },
-      openReviewModal: false,
-      showPaywallDialog: this.props.user.learningPurchase === false,
-      experienceId: "",
-      // this shows the proof submission modal, which needs work
-      showSubmitModal: false,
-      language: "en",
-    };
-  }
+function ExperienceModule(props) {
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTourOpen, setIsTourOpen] = useState(false);
+  const [user, setUser] = useState({
+    fName: "",
+    lName: "",
+    id: "8020",
+  });
+  const [activeExperience, setActiveExperience] = useState({
+    title: "",
+    amount: 0,
+    overview: [],
+    completed: false,
+    priority: "_01",
+    _type: "interviewSchema",
+    github: "",
+    athleteNotes: "",
+  });
+  const [experience, setExperience] = useState([]);
+  const [mongoExperience, setMongoExperience] = useState({
+    id: "",
+  });
+  const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [showPaywallDialog, setShowPaywallDialog] = useState(false);
+  const [experienceID, setExperienceID] = useState("");
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [language, setLanguage] = useState("en");
 
-  closeTour = () => {
-    this.setState({
-      isTourOpen: false,
-    });
+  const closeTour = () => {
+    setIsTourOpen(false);
   };
 
-  async componentDidMount() {
+  useEffect(() => {
     let lengua;
     let str = I18n.get("close");
     if (str === "Cerrar") {
@@ -75,33 +68,23 @@ class ExperienceModule extends Component {
       lengua = "en";
     }
 
-    I18n.setLanguage(lengua);
-    this.setState({ language: lengua });
-    if (this.props.user.learningPurchase === true) {
-      await this.dataFetch();
-    }
-  }
+    const handleDataFetch = async () => {
+      const res = await dataFetch();
+      return res;
+    };
 
-  async UNSAFE_componentWillReceiveProps() {
-    let lengua;
-    let str = I18n.get("close");
-    if (str === "Close") {
-      lengua = "en";
-    } else {
-      lengua = "es";
-    }
     I18n.setLanguage(lengua);
-    this.setState({ language: lengua });
-    this.setState({ isLoading: true });
-    if (this.props.user.learningPurchase === true) {
-      await this.dataFetch();
+    setLanguage(lengua);
+    if (props.user.learningPurchase === true) {
+      handleDataFetch();
     }
-  }
+  });
 
-  async dataFetch() {
+  async function dataFetch() {
     // we need to have a admin-related fetch option, as working here
     // we also need to have a faster option to fetch data
 
+    // eslint-disable-next-line no-undef
     let pathArray = window.location.pathname.split("/");
     let path = pathArray[2];
     let expType;
@@ -109,29 +92,27 @@ class ExperienceModule extends Component {
     let comparisonData = await RestAPI.get("pareto", `/experience/${path}`);
 
     if (comparisonData[0].type === "Apprenticeship") {
-      expType = this.props.sanityTraining;
+      expType = props.sanityTraining;
     } else if (comparisonData[0].type === "Product") {
-      expType = this.props.sanityProduct;
+      expType = props.sanityProduct;
     } else if (comparisonData[0].type === "Interviewing") {
-      expType = this.props.sanityInterview;
+      expType = props.sanityInterview;
     }
 
-    this.setState({
-      experience: expType,
-      mongoExperience: comparisonData[0],
-      experienceId: comparisonData[0].id,
-      activeExperience: expType[0],
-      isLoading: false,
-    });
+    setExperience((prevState) => expType);
+    setMongoExperience((prevState) => comparisonData[0]);
+    setExperienceID((prevState) => comparisonData[0].id);
+    setActiveExperience((prevState) => expType[0]);
+    setIsLoading((prevState) => false);
 
     let athleteProfile = await RestAPI.get(
       "pareto",
       `/users/${comparisonData[0].memberId}`
     );
-    this.setState({ user: athleteProfile[0] });
+    setUser(athleteProfile[0]);
   }
 
-  markSubmitted = async (milestone, githubLink, athleteNotes) => {
+  const markSubmitted = async (milestone, githubLink, athleteNotes) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -147,33 +128,35 @@ class ExperienceModule extends Component {
     try {
       let email = generateEmail(
         `Pareto Achievement for Review!`,
-        `Your athlete ${this.state.user.fName} ${this.state.user.lName} has submitted the work submitted for the milestone called '${this.state.activeExperience.title}. There is ${milestoneXP} XP at stake - you are doing a great job providing mentorship and guidance!'`
+        `Your athlete ${user.fName} ${user.lName} has submitted the work submitted for the milestone called '${activeExperience.title}. There is ${milestoneXP} XP at stake - you are doing a great job providing mentorship and guidance!'`
       );
       const updatedExperienceModule = await RestAPI.put(
         "pareto",
-        `/experience/${this.state.experienceId}`,
+        `/experience/${experienceID}`,
         { body }
       );
-      this.setState({
-        showSubmitModal: false,
-        mongoExperience: updatedExperienceModule,
-      });
+      setShowSubmitModal(false);
+      setMongoExperience(updatedExperienceModule);
       await RestAPI.post("util", "/email", {
         body: {
-          recipient: this.props.user.email,
+          recipient: user.email,
           sender: "michael@fsa.community",
           subject: "Pareto Achievement For Review",
           htmlBody: email,
           textBody: "Pareto Achievement For Review.",
         },
       });
-      successToast("Achievement submitted successfully!");
+      handleShowSuccess("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 
-  markRequestRevisions = async (milestone, mongoExperience, coachNotes) => {
+  const markRequestRevisions = async (
+    milestone,
+    mongoExperience,
+    coachNotes
+  ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -189,33 +172,32 @@ class ExperienceModule extends Component {
     try {
       let email = generateEmail(
         `Pareto Achievement Sent Back for Review!`,
-        `Your coach has requested that the work submitted for the milestone called '${this.state.activeExperience.title}' be revised according to their feedback. Please log-in to https://arena.pareto.education for their details. There is ${milestoneXP} XP at stake - you are doing a great job learning and growing every day!'`
+        `Your coach has requested that the work submitted for the milestone called '${activeExperience.title}' be revised according to their feedback. Please log-in to https://arena.pareto.education for their details. There is ${milestoneXP} XP at stake - you are doing a great job learning and growing every day!'`
       );
       const updatedExperienceModule = await RestAPI.put(
         "pareto",
-        `/experience/${this.state.experienceId}`,
+        `/experience/${experienceID}`,
         { body }
       );
-      this.setState({
-        showSubmitModal: false,
-        mongoExperience: updatedExperienceModule,
-      });
+      setShowSubmitModal(false);
+      setMongoExperience(updatedExperienceModule);
+
       await RestAPI.post("util", "/email", {
         body: {
-          recipient: this.state.user.email,
+          recipient: user.email,
           sender: "michael@fsa.community",
           subject: "Pareto Achievement For Review",
           htmlBody: email,
           textBody: "Pareto Achievement For Review.",
         },
       });
-      successToast("Achievement sent back for further review.");
+      handleShowSuccess("Achievement sent back for further review.");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 
-  markComplete = async (milestone, mongoExperience, coachNotes) => {
+  const markComplete = async (milestone, mongoExperience, coachNotes) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -227,25 +209,24 @@ class ExperienceModule extends Component {
         revisionsNeeded: false,
         coachNotes: coachNotes,
       },
-      xpEarned: this.state.mongoExperience.xpEarned + milestoneXP,
-      achievements: this.state.mongoExperience.achievements + 1,
+      xpEarned: mongoExperience.xpEarned + milestoneXP,
+      achievements: mongoExperience.achievements + 1,
     };
     try {
       let email = generateEmail(
         `Pareto Achievement Unlocked!`,
-        `Congratulations! Your coach has approved the work submitted for the milestone called '${this.state.activeExperience.title}'. You have earned ${milestoneXP} XP - you are doing a great job!'`
+        `Congratulations! Your coach has approved the work submitted for the milestone called '${activeExperience.title}'. You have earned ${milestoneXP} XP - you are doing a great job!'`
       );
 
       const updatedExperienceModule = await RestAPI.put(
         "pareto",
-        `/experience/${this.state.experienceId}`,
+        `/experience/${experienceID}`,
         { body }
       );
-      this.setState({
-        showSubmitModal: false,
-        mongoExperience: updatedExperienceModule,
-        openReviewModal: false,
-      });
+      setShowSubmitModal(false);
+      setMongoExperience(updatedExperienceModule);
+      setOpenReviewModal(false);
+
       await RestAPI.post("util", "/email", {
         body: {
           recipient: "mikhael@hey.com",
@@ -255,20 +236,20 @@ class ExperienceModule extends Component {
           textBody: "Pareto Achievement Unlocked.",
         },
       });
-      successToast("Achievement submitted successfully!");
+      handleShowSuccess("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 
-  renderExperienceList = (topics, activeExperience, mongoExperience) => {
+  const renderExperienceList = (topics, activeExperience, mongoExperience) => {
     let inactiveBlock = classNames("block", "first-step-exp");
     let activeBlock = "highlight-block";
 
     return topics.map((topic, i) => {
       let title;
       let activeClass = false;
-      if (this.state.language === "en") {
+      if (language === "en") {
         title = topic.title;
       } else {
         title = topic.esTitle;
@@ -283,9 +264,7 @@ class ExperienceModule extends Component {
           // eslint-disable-next-line react/no-array-index-key
           key={i}
           onClick={() => {
-            this.setState({
-              activeExperience: topic,
-            });
+            setActiveExperience(topic);
           }}
           style={{ cursor: "pointer" }}
         >
@@ -315,7 +294,7 @@ class ExperienceModule extends Component {
     });
   };
 
-  renderExperienceInfo(activeExperience, mongoExperience) {
+  function renderExperienceInfo(activeExperience, mongoExperience) {
     let newClassname = classNames("flex", "fifth-step-exp");
     if (mongoExperience === undefined) {
       return <>Nothing</>;
@@ -328,19 +307,16 @@ class ExperienceModule extends Component {
               <></>
             ) : (
               <Button
-                onClick={() => this.setState({ showSubmitModal: true })}
+                onClick={() => setShowSubmitModal(true)}
                 className="btn"
                 style={{ marginTop: 16, marginRight: 10, fontSize: 16 }}
               >
                 <HiOutlineClipboardCheck /> {I18n.get("markAsComplete")}
               </Button>
             )}
-            {this.props.user.instructor === true &&
+            {user.instructor === true &&
             mongoExperience[activeExperience.priority].completed === true ? (
-              <Button
-                onClick={() => this.setState({ openReviewModal: true })}
-                className="btn"
-              >
+              <Button onClick={() => setOpenReviewModal(true)} className="btn">
                 <HiOutlineClipboardCheck /> {I18n.get("reviewWork")}
               </Button>
             ) : null}
@@ -350,62 +326,59 @@ class ExperienceModule extends Component {
     );
   }
 
-  handleCloseSubmit = () => {
-    this.setState({
-      showSubmitModal: false,
-    });
+  const handleCloseSubmit = () => {
+    setShowSubmitModal(false);
   };
 
-  render() {
-    const steps = [
-      {
-        selector: ".first-step-exp",
-        content: `${I18n.get("expFirst")}`,
-      },
-      {
-        selector: ".second-step-exp",
-        content: `${I18n.get("expSecond")}`,
-      },
-      {
-        selector: ".third-step-exp",
-        content: `${I18n.get("expThird")}`,
-      },
-      {
-        selector: ".fourth-step-exp",
-        content: `${I18n.get("expFourth")}`,
-      },
-      {
-        selector: ".fifth-step-exp",
-        content: `${I18n.get("expFifth")}`,
-      },
-      {
-        selector: ".sixth-step-exp",
-        content: `${I18n.get("expSixth")}`,
-      },
-    ];
-    let blockOverflow = classNames("block", "overflow");
-    return (
-      <div style={{ width: "100%" }}>
-        <h1>
-          {I18n.get("experienceModule")}{" "}
-          <img
-            src={question}
-            onClick={(event) => {
-              event.preventDefault();
-              this.setState({ isTourOpen: true });
-            }}
-            alt="Tour for Experience Module"
-            height="40"
-            width="40"
-            circle
-            style={{ marginLeft: 20, cursor: "pointer" }}
-          />
-        </h1>
-        <div className="experience-container flex">
-          <div style={{ flexBasis: "30%" }} className="overflow">
-            {this.state.isLoading === true ? (
-              <section style={{ marginTop: -12, marginLeft: -4 }}>
-                {/* <h2 className="section-title">
+  const steps = [
+    {
+      selector: ".first-step-exp",
+      content: `${I18n.get("expFirst")}`,
+    },
+    {
+      selector: ".second-step-exp",
+      content: `${I18n.get("expSecond")}`,
+    },
+    {
+      selector: ".third-step-exp",
+      content: `${I18n.get("expThird")}`,
+    },
+    {
+      selector: ".fourth-step-exp",
+      content: `${I18n.get("expFourth")}`,
+    },
+    {
+      selector: ".fifth-step-exp",
+      content: `${I18n.get("expFifth")}`,
+    },
+    {
+      selector: ".sixth-step-exp",
+      content: `${I18n.get("expSixth")}`,
+    },
+  ];
+  let blockOverflow = classNames("block", "overflow");
+  return (
+    <div style={{ width: "100%" }}>
+      <h1>
+        {I18n.get("experienceModule")}{" "}
+        <img
+          src={question}
+          onClick={(event) => {
+            event.preventDefault();
+            setIsTourOpen(true);
+          }}
+          alt="Tour for Experience Module"
+          height="40"
+          width="40"
+          circle
+          style={{ marginLeft: 20, cursor: "pointer" }}
+        />
+      </h1>
+      <div className="experience-container flex">
+        <div style={{ flexBasis: "30%" }} className="overflow">
+          {isLoading === true ? (
+            <section style={{ marginTop: -12, marginLeft: -4 }}>
+              {/* <h2 className="section-title">
                   <Skeleton height={100} width={860} />
                 </h2>
 
@@ -427,109 +400,103 @@ class ExperienceModule extends Component {
                 <h2 className="section-title">
                   <Skeleton height={100} width={520} />
                 </h2> */}
-              </section>
-            ) : (
-              <div>
-                {this.renderExperienceList(
-                  this.state.experience,
-                  this.state.activeExperience,
-                  this.state.mongoExperience
-                )}
-              </div>
-            )}
-          </div>
-          {this.state.isLoading === true ? (
-            <div
-              style={{
-                marginLeft: 10,
-                marginTop: 2,
-                marginRight: 8,
-                width: "100%",
-              }}
-            >
-              {/* <Skeleton height="100%" width="100%" /> */}
-            </div>
+            </section>
           ) : (
-            <div className={blockOverflow} style={{ flexBasis: "70%" }}>
-              <div className="flex-apart">
-                <h3>
-                  {this.state.language === "en"
-                    ? this.state.activeExperience.title
-                    : this.state.activeExperience.esTitle}
-                </h3>
-                {this.renderExperienceInfo(
-                  this.state.activeExperience,
-                  this.state.mongoExperience
-                )}
-              </div>
-              <h4>{this.state.activeExperience.amount} EXP</h4>
-              <div className="fourth-step-exp">
-                {this.state.language === "en" ? (
-                  <PortableText value={this.state.activeExperience.overview} />
-                ) : (
-                  <PortableText
-                    value={this.state.activeExperience.esOverview}
-                  />
-                )}
-              </div>
+            <div>
+              {renderExperienceList(
+                experience,
+                activeExperience,
+                mongoExperience
+              )}
             </div>
           )}
-          <Dialog
+        </div>
+        {isLoading === true ? (
+          <div
             style={{
-              margin: "auto",
-            }}
-            open={this.state.showPaywallDialog}
-            TransitionComponent={Transition}
-            keepMounted
-            hideBackdrop={false}
-            aria-labelledby="loading"
-            aria-describedby="Please wait while the page loads"
-            onClose={(event, reason) => {
-              if (
-                reason !== "backdropClick" &&
-                reason !== "escapeKeyDown" &&
-                this.props.user.learningPurchase === false
-              ) {
-                this.setState({ ...this.state, showPaywallDialog: false });
-                history.push("/");
-              }
+              marginLeft: 10,
+              marginTop: 2,
+              marginRight: 8,
+              width: "100%",
             }}
           >
-            <PaywallModal {...this.props} open={this.state.showPaywallDialog} />
-          </Dialog>
-        </div>
-        {this.state.isLoading === true ? (
-          <></>
+            {/* <Skeleton height="100%" width="100%" /> */}
+          </div>
         ) : (
-          <>
-            <NewSubmitModal
-              show={this.state.showSubmitModal}
-              handleClose={this.handleCloseSubmit}
-              activeExperience={this.state.activeExperience}
-              markComplete={this.markComplete}
-              markSubmitted={this.markSubmitted}
-              mongoExperience={this.state.mongoExperience}
-            />
-            <ApproveExperienceModal
-              show={this.state.openReviewModal}
-              activeExperience={this.state.activeExperience}
-              markComplete={this.markComplete}
-              markRequestRevisions={this.markRequestRevisions}
-              mongoExperience={this.state.mongoExperience}
-              closeModal={() => this.setState({ openReviewModal: false })}
-            />
-            <Tour
-              steps={steps}
-              isOpen={this.state.isTourOpen}
-              onRequestClose={this.closeTour}
-              showCloseButton
-              rewindOnClose={false}
-            />
-          </>
+          <div className={blockOverflow} style={{ flexBasis: "70%" }}>
+            <div className="flex-apart">
+              <h3>
+                {language === "en"
+                  ? activeExperience.title
+                  : activeExperience.esTitle}
+              </h3>
+              {renderExperienceInfo(activeExperience, mongoExperience)}
+            </div>
+            <h4>{activeExperience.amount} EXP</h4>
+            <div className="fourth-step-exp">
+              {language === "en" ? (
+                <PortableText value={activeExperience.overview} />
+              ) : (
+                <PortableText value={activeExperience.esOverview} />
+              )}
+            </div>
+          </div>
         )}
+        <Dialog
+          style={{
+            margin: "auto",
+          }}
+          open={showPaywallDialog}
+          TransitionComponent={Transition}
+          keepMounted
+          hideBackdrop={false}
+          aria-labelledby="loading"
+          aria-describedby="Please wait while the page loads"
+          onClose={(event, reason) => {
+            if (
+              reason !== "backdropClick" &&
+              reason !== "escapeKeyDown" &&
+              props.user.learningPurchase === false
+            ) {
+              setShowPaywallDialog(false);
+              props.history.push("/");
+            }
+          }}
+        >
+          <PaywallModal {...props} open={showPaywallDialog} />
+        </Dialog>
       </div>
-    );
-  }
+      {isLoading === true ? (
+        <></>
+      ) : (
+        <>
+          <NewSubmitModal
+            show={showSubmitModal}
+            handleClose={handleCloseSubmit}
+            activeExperience={activeExperience}
+            markComplete={markComplete}
+            markSubmitted={markSubmitted}
+            mongoExperience={mongoExperience}
+          />
+          <ApproveExperienceModal
+            show={openReviewModal}
+            activeExperience={activeExperience}
+            markComplete={markComplete}
+            markRequestRevisions={markRequestRevisions}
+            mongoExperience={mongoExperience}
+            closeModal={() => setOpenReviewModal(false)}
+          />
+          <Tour
+            steps={steps}
+            isOpen={isTourOpen}
+            onRequestClose={closeTour}
+            showCloseButton
+            rewindOnClose={false}
+          />
+        </>
+      )}
+    </div>
+  );
 }
 
 export default ExperienceModule;

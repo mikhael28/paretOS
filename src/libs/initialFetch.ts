@@ -1,8 +1,6 @@
 import { RestAPI } from "@aws-amplify/api-rest";
 import sortby from "lodash.sortby";
 import sanity from "./sanity";
-import { errorToast } from "./toasts";
-
 interface ExperienceResult {
   success: boolean;
   sanityTraining?: any;
@@ -175,7 +173,7 @@ export const fetchSanitySchemas = async () => {
     result.success = true;
     result.sanitySchemas = { technicalSchemas, economicSchemas, hubSchemas };
   } catch (e) {
-    errorToast(e);
+    console.log(e);
   }
   return result;
 };

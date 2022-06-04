@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent, ReactElement } from "react";
+import React, { useState, useEffect, MouseEvent, ReactElement, createContext } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -16,6 +16,7 @@ import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
 import { LanguageContext, LanguageProps } from "./state/LanguageContext";
+import { ToastMsgContext } from "./state/ToastContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   fetchUser,
@@ -25,9 +26,8 @@ import {
   fetchCoachingRoster,
   fetchSanitySchemas,
 } from "./libs/initialFetch";
-import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
-import { errorToast } from "./libs/toasts";
+import ToastMsg from "./libs/toasts";
 import Routes from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
@@ -60,6 +60,8 @@ const languageProps: LanguageProps = {
   language: null,
   setLanguage: () => {},
 };
+
+
 
 interface AppProps {
   location: RouteProps["location"];
@@ -127,6 +129,7 @@ function App(props: AppProps) {
   });
   const emptyArray: Array<object> = [];
   const emptyObject: object = {};
+  const emptyError: any = {}; 
   const [training, setTraining] = useState({ ...emptyObject });
   const [product, setProduct] = useState({ ...emptyObject });
   const [interviewing, setInterviewing] = useState({ ...emptyObject });
@@ -149,6 +152,8 @@ function App(props: AppProps) {
     users: [],
     relationships: [],
   });
+
+  const [toast, setToast] = useState({ msg: "", open: false, type: "info" });
 
   const updateState = (property: string, payload: Array<object> | object) => {
     switch (property) {
@@ -200,6 +205,30 @@ function App(props: AppProps) {
     setIsTourOpen(false);
   };
 
+  const handleShowError = (err: Error) => {
+    setToast({
+      msg: err.name ? `${err.name}:${err.message}` : `${err}`,
+      open: true,
+      type: "error"
+    });
+  }
+
+  const handleShowSuccess = (msg: string) => {
+    setToast({
+      msg,
+      open: true,
+      type: "success"
+    });
+  }
+
+  const handleCloseToast = () => {
+    setToast({
+      msg: "",
+      open: false,
+      type: ""
+    });
+  }
+
   useEffect(() => {
     setLoading(true);
 
@@ -227,7 +256,7 @@ function App(props: AppProps) {
           }
         }
         if (e !== "No current user") {
-          errorToast(e);
+          handleShowError(e as Error);
           setLoading(false);
         }
       }
@@ -416,7 +445,7 @@ function App(props: AppProps) {
       );
       setSprints(menteeSprints);
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
     }
   }
 
@@ -531,6 +560,7 @@ function App(props: AppProps) {
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
+          <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
           <Box
             sx={{
               // width: "100vw",
@@ -612,7 +642,9 @@ function App(props: AppProps) {
             >
               <LoadingModal />
             </Dialog>
-          </Box>
+            </Box>
+          </ToastMsgContext.Provider>
+          <ToastMsg msg={toast.msg} type={toast.type} open={toast.open} handleCloseSnackbar={handleCloseToast} />
         </LanguageContext.Provider>
       </ThemeProvider>
     )

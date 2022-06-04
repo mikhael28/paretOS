@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -8,7 +8,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
 import { Button } from "@mui/material";
-import { errorToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import LoaderButton from "../components/LoaderButton";
 import LanguageSelector from "./LanguageSelector";
 // import { initialize } from "workbox-google-analytics";
@@ -19,6 +19,7 @@ import LanguageSelector from "./LanguageSelector";
  */
 
 const EditProfile = () => {
+  const { handleShowError } = useContext(ToastMsgContext);
   const [state, setState] = useState({
     isLoading: false,
     summary: "",
@@ -179,7 +180,7 @@ const EditProfile = () => {
       }));
       // need to save the key
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
     }
   };
 

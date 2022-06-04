@@ -1,5 +1,5 @@
 // hooks import
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -10,10 +10,11 @@ import { I18n } from "@aws-amplify/core";
 import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 
 const Signup = () => {
   const theme = useTheme();
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
@@ -37,10 +38,10 @@ const Signup = () => {
     try {
       await Auth.confirmSignUp(email, confirmationCode);
       await Auth.signIn(email, password);
-      successToast("Sign up complete");
+      handleShowSuccess("Sign up complete");
       history.push("/onboarding/user");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e);
       setIsLoading(false);
     }
   };

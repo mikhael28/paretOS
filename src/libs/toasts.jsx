@@ -1,65 +1,28 @@
-import toast from "toasted-notes";
-import LoaderButton from "../components/LoaderButton";
-import logo from "../assets/Pareto-Red-01.png";
+import { Snackbar, Alert } from "@mui/material";
 
 /**
  * Toast notification for errors, and assorted messages.
  */
 
-export function errorToast(err) {
-  toast.notify(
-    ({ onClose }) => (
-      <div style={{ display: "flex" }} className="block">
-        <img src={logo} height="80" width="80" alt="Pareto Logo" />
-        <div
-          style={{ display: "flex", flexDirection: "column", marginLeft: 10 }}
-        >
-          {err.name ? (
-            <h4 style={{ color: "red", marginTop: 10 }}>
-              {err.name}: {err.message}
-            </h4>
-          ) : (
-            <h4 style={{ color: "red", marginTop: 10 }}>{err}</h4>
-          )}
-          <p style={{ marginBottom: 0, marginTop: -10, fontSize: 11 }}>
-            Please refresh the page and try again. Click the 'Report' button
-            below to send a copy of this error to the developers.
-          </p>
-          <div style={{ display: "flex", justifyContent: "end" }}>
-            <LoaderButton
-              style={{
-                backgroundColor: "rgb(220, 66, 45)",
-              }}
-              onClick={() => {
-                onClose();
-              }}
-              text="Close"
-            />
-            <LoaderButton
-              style={{ backgroundColor: "green" }}
-              onClick={() => {
-                window.location.replace("/");
-              }}
-              text="Refresh"
-            />
-          </div>
-        </div>
-      </div>
-    ),
-    {
-      position: "top-right",
-      duration: null,
-    }
-  );
-}
+export default function ToastMsg({ msg, type, open, handleCloseSnackbar }) {
+  const handleClose = () => {
+    handleCloseSnackbar();
+  };
 
-export function successToast(param) {
-  toast.notify(
-    <div>
-      <h3>{param}</h3>
-    </div>,
-    {
-      position: "top-right",
-    }
+  if (!type) {
+    type = "info";
+  }
+
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <Alert onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
+        {msg}
+      </Alert>
+    </Snackbar>
   );
 }

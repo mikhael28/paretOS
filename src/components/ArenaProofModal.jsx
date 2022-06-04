@@ -13,7 +13,6 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
 import uploadToS3 from "../libs/s3";
 
 /**
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       color: "#000",
     },
     "& .MuiButtonBase-root": {
-      marginTop: theme?.spacing(1) || 8,
+      marginTop: theme.spacing(1) || 8,
       marginRight: 6,
       fontSize: 16,
       padding: "6px 32px",
@@ -58,6 +57,7 @@ export default function ArenaProofModal({
   activeMission,
   activeSprintId,
   handleChange: propsHandleChange,
+  handleToast,
 }) {
   const [pictureKey, setPictureKey] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,9 +97,9 @@ export default function ArenaProofModal({
       );
 
       setPictureKey(pictureKey.key);
-      successToast("Proof successfully uploaded.");
+      handleToast("success", "Proof successfully uploaded.");
     } catch (e) {
-      errorToast(e);
+      handleToast("error", e);
     } finally {
       setLoading(false);
     }

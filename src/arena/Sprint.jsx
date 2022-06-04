@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { I18n } from "@aws-amplify/core";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.jsx";
-import { errorToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
@@ -89,6 +89,16 @@ function Sprint(props) {
     sprints[SPRINT_INDEX].teams[TEAM_INDEX].planning
   );
 
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+
+  const handleToast = (type, payload) => {
+    if (type === "error") {
+      handleShowError(payload);
+    } else if (type === "success") {
+      handleShowSuccess(payload);
+    }
+  };
+
   function handleDynamicForms(event) {
     let tempObj = { ...dynamicForms };
 
@@ -117,7 +127,7 @@ function Sprint(props) {
     try {
       await updateSprintData(sprints[SPRINT_INDEX], ws);
     } catch (error) {
-      errorToast(error);
+      handleShowError(error);
     } finally {
       setLoading(false);
     }
@@ -145,7 +155,7 @@ function Sprint(props) {
       await updateSprintData(sprints[SPRINT_INDEX], ws);
       setLoading(false);
     } catch (error) {
-      alert(error);
+      handleShowError(error);
     }
   }
 
@@ -267,6 +277,7 @@ function Sprint(props) {
           sprint={sprints[SPRINT_INDEX]}
           view={view}
           user={props.user}
+          handleToast={handleToast}
         />
         <Tour steps={steps} isOpen={isTourOpen} onRequestClose={closeTour} />
       </>
