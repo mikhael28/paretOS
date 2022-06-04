@@ -151,7 +151,10 @@ function LeftNav(props: LeftNavProps) {
             ),
           })),
         }
-      : { heading: {} as LeftNavItem, subHeadings: [] as LeftNavItem[] };
+      : {
+          heading: { path: "/", label: I18n.get("mentorship") },
+          subHeadings: []
+        };
 
   const trainingMenu: LeftNavSection = {
     heading: { path: "/training", label: I18n.get("basicTraining") },
