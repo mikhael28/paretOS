@@ -1,6 +1,6 @@
 {
   "plugins": ["react", "prettier"],
-  "extends": ["react-app", "airbnb", "prettier"],
+  "extends": ["airbnb", "prettier"],
   "rules": {
     "prefer-const": 0,
     "prefer-arrow-callback": 0,
