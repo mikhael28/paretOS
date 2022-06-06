@@ -13,6 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
+import { ActiveExperience } from "../types";
 
 /**
  * This component is for a Coach to approve the work of the student, and to leave feedback.
@@ -43,6 +44,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface ArenaProofModalProps {
+  show: boolean;
+  activeExperience: ActiveExperience;
+  mongoExperience: any;
+  closeModal: () => void;
+  markRequestRevisions: (activeExperience: ActiveExperience, mongoExperience: any, coachNotes: string) => void;
+  markComplete: (activeExperience: ActiveExperience, mongoExperience: any, coachNotes: string) => void;
+}
+
 const ConfirmModal = ({
   show,
   activeExperience,
@@ -50,17 +60,17 @@ const ConfirmModal = ({
   closeModal,
   markRequestRevisions,
   markComplete,
-}) => {
-  const { register, handleSubmit } = useForm();
+} : ArenaProofModalProps) => {
+  const { register, handleSubmit } = useForm<{ coachNotes: string }>();
   const classes = useStyles();
 
-  const handleMarkRequestRevisions = (data) => {
+  const handleMarkRequestRevisions = handleSubmit((data) => {
     markRequestRevisions(activeExperience, mongoExperience, data.coachNotes);
-  };
+  });
 
-  const handleMarkComplete = (data) => {
+  const handleMarkComplete = handleSubmit((data) => {
     markComplete(activeExperience, mongoExperience, data.coachNotes);
-  };
+  })
 
   return (
     <Dialog
@@ -139,7 +149,7 @@ const ConfirmModal = ({
                       size="medium"
                       variant="contained"
                       color="primary"
-                      onClick={handleSubmit(handleMarkRequestRevisions)}
+                      onClick={handleMarkRequestRevisions}
                     >
                       {I18n.get("requestRevisions")}
                     </Button>
@@ -148,7 +158,7 @@ const ConfirmModal = ({
                     size="large"
                     variant="contained"
                     color="primary"
-                    onClick={handleSubmit(handleMarkComplete)}
+                    onClick={handleMarkComplete}
                   >
                     {I18n.get("confirmAchievement")}
                   </Button>
