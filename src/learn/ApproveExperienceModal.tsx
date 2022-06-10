@@ -13,7 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
-import { ActiveExperience } from "../types";
+import { ActiveExperience, MongoExperience } from "../types";
 
 /**
  * This component is for a Coach to approve the work of the student, and to leave feedback.
@@ -47,10 +47,10 @@ const useStyles = makeStyles((theme) => ({
 export interface ArenaProofModalProps {
   show: boolean;
   activeExperience: ActiveExperience;
-  mongoExperience: any;
+  mongoExperience: MongoExperience;
   closeModal: () => void;
-  markRequestRevisions: (activeExperience: ActiveExperience, mongoExperience: any, coachNotes: string) => void;
-  markComplete: (activeExperience: ActiveExperience, mongoExperience: any, coachNotes: string) => void;
+  markRequestRevisions: (activeExperience: ActiveExperience, mongoExperience: MongoExperience, coachNotes: string) => void;
+  markComplete: (activeExperience: ActiveExperience, mongoExperience: MongoExperience, coachNotes: string) => void;
 }
 
 const ConfirmModal = ({

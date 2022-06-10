@@ -43,6 +43,21 @@ export type ActiveMission = {
   proofLink: string;
 };
 
+export type MongoExperience = {
+  [index: string] : any;
+  achievements: number;
+  approved: boolean;
+  description: string;
+  id: string;
+  memberId: string;
+  title: string;
+  type: string;
+  xp: number;
+  xpEarned: number;
+  _id: string;
+  __v: number;
+};
+
 export interface User {
   rank?: number;
   score: number;
