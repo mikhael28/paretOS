@@ -18,4 +18,8 @@ export default defineConfig({
       },
       visualizer()
   ],
+  server: {
+    // server: { hmr: { clientPort: process.env.CODESPACES ? 443 : undefined } }
+    hmr: { clientPort: 443 },
+  }
 });
