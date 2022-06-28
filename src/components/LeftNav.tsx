@@ -139,22 +139,19 @@ function LeftNav(props: LeftNavProps) {
     ],
   };
 
-  const mentorshipsMenu: LeftNavSection =
+  const mentorshipsMenu: LeftNavSection | null =
     user.instructor === true && athletes.length > 0
       ? {
-          heading: { path: "/mentorship", label: I18n.get("mentorship") },
-          subHeadings: athletes.map((relationship) => ({
-            path: `/mentorship/${relationship.id}`,
-            label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-            Icon: (
-              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
-            ),
-          })),
-        }
-      : {
-          heading: { path: "/", label: I18n.get("mentorship") },
-          subHeadings: []
-        };
+        heading: { path: "/mentorship", label: I18n.get("mentorship") },
+        subHeadings: athletes.map((relationship) => ({
+          path: `/mentorship/${relationship.id}`,
+          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+          Icon: (
+            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
+          ),
+        })),
+      }
+      : null ;
 
   const trainingMenu: LeftNavSection = {
     heading: { path: "/training", label: I18n.get("basicTraining") },
@@ -180,8 +177,11 @@ function LeftNav(props: LeftNavProps) {
   const fullMenu: LeftNavSection[] = [
     /* Arena */
     arenaMenu,
-    /* Mentorships (if applicable) */
-    mentorshipsMenu,
+  ];
+
+  if (mentorshipsMenu) fullMenu.push(mentorshipsMenu);
+  
+  fullMenu.push(
     /* Training */
     trainingMenu,
     /* Library of Context */
@@ -198,8 +198,7 @@ function LeftNav(props: LeftNavProps) {
     {
       heading: { path: `/profile/edit/${user.id}`, label: "Profile" },
       subHeadings: [],
-    },
-  ];
+    });
 
   return (
     <div id="mySidenav" className="sidenav">
