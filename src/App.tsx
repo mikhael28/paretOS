@@ -11,7 +11,6 @@ import {
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
-import * as Sentry from "@sentry/react";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import { strings } from "./libs/strings";
 import BottomNav from "./components/BottomNav";
@@ -402,8 +401,12 @@ function App(props: AppProps) {
         // alert(tempSprintData.message);
       }
     };
+    try {
+      ws.connect({ path, processMsg });
 
-    ws.connect({ path, processMsg });
+    } catch(e) {
+      alert(e);
+    }
     return result;
   }
 
