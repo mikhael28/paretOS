@@ -5,6 +5,7 @@ import { User } from "../types";
 import ProfileImg from "./ProfileImg";
 import { Column, dataTableClasses } from "./DataTable";
 import StyledDataTable from "./StyledDataTable";
+import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**
  * @component Leaderboard
@@ -15,11 +16,11 @@ import StyledDataTable from "./StyledDataTable";
  * @param {Prop} history-array of recent pages/views visited
  */
 
-export type BoardProps = {
-  users: Array<User>;
+export interface BoardProps {
+  users: User[];
   itemsPerPage: number;
   currentUser: User;
-  history: Array<String>;
+  history: RouterHistory;
 };
 
 function Leaderboard({

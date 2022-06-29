@@ -7,7 +7,7 @@ import {
   GenMission,
   Mission as IMission,
   Missions,
-} from "../interface";
+} from "../types";
 
 interface MissionProps
   extends Pick<

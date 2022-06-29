@@ -1,17 +1,24 @@
-import { useState } from "react";
+import React, { Component, ComponentPropsWithoutRef, useState } from "react";
 import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
-import ArenaDashboard from "./Sprints";
+import Sprints from "./Sprints";
 import question from "../assets/question.svg";
 import logo from "../assets/Pareto_Lockup-01.png";
+import { RouteComponentProps } from ".pnpm/@types+react-router@5.1.18/node_modules/@types/react-router";
+import { Sprint, User } from "../types";
 
 /**
  * The 'main dashboard' in the UI, that shows different things depending on what level of user you are.
  *
  */
+interface HomeDashboardProps extends RouteComponentProps {
+  sprints: Sprint[];
+  user: User;
+  fetchMenteeSprints: (userid: string) => {}
+}
 
-function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
+function HomeDashboard({ sprints, history, user, fetchMenteeSprints }: HomeDashboardProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const theme = useTheme();
@@ -64,7 +71,6 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
           alt="Arena tour icon"
           height="16"
           width="16"
-          circle
           style={{
             cursor: "pointer",
             borderRadius: "50%",
@@ -77,8 +83,7 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }) {
       </div>
       <div className="row">
         <div className="col-xs-12">
-          <ArenaDashboard
-            sprints={sprints}
+          <Sprints
             history={history}
             user={user}
             fetchMenteeSprints={fetchMenteeSprints}
