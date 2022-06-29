@@ -4,6 +4,11 @@ import resolve from "@rollup/plugin-node-resolve";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      external: [/^node:.*/],
+    },
+  },
   plugins: [
     react({
       fastRefresh: process.env.NODE_ENV !== "test",
