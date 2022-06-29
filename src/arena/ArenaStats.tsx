@@ -1,34 +1,10 @@
 import { I18n } from "@aws-amplify/core";
 
 import StatsBlock from "../components/StatsBlock";
-import { GenMission } from "./interface";
-
-interface ActivePersonMission {
-  dailyCompletion: number;
-  dailyScore: number;
-  missions: GenMission[];
-}
-
-interface ActivePersonReview {
-  code: string;
-  content: string;
-  name: string;
-}
+import { User } from "../types";
 
 interface ArenaStatsProps {
-  activePerson: {
-    email: string;
-    fName: string;
-    github: string;
-    id: string;
-    lName: string;
-    missions: ActivePersonMission[];
-    percentage: string;
-    phone: string;
-    planning: any[];
-    review: ActivePersonReview[];
-    score: string;
-  };
+  activePerson: User;
   displayDay: number;
 }
 

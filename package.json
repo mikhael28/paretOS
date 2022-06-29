@@ -85,7 +85,7 @@
     "build": "vite build",
     "test": "vite-jest",
     "test:unit": "CI=true vite-jest",
-    "test:integration": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout=30000 -r ts-node/register './tests/integration/*.ts'",
+    "test:integration": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout=60000 -r ts-node/register './tests/integration/*.ts'",
     "serve": "serve -s build"
   },
   "browserslist": [

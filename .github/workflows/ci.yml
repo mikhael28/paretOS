@@ -44,6 +44,6 @@ jobs:
       - name: Launch server and run integration tests
         run: |
           pnpm run start &
-          sleep 16 &&
+          sleep 45 &&
           curl http://localhost:3000 &&
           pnpm test:integration

@@ -1,16 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, {
+  ReactComponentElement,
+  StyleHTMLAttributes,
+  useContext,
+  useState,
+  useRef,
+  ComponentPropsWithRef,
+  useEffect,
+  SyntheticEvent,
+} from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AiFillCode } from "react-icons/ai";
 import { FaTools, FaHandsHelping } from "react-icons/fa";
 import { IoMdSchool, IoMdCreate } from "react-icons/io";
 import { BiRun } from "react-icons/bi";
-import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import { Avatar, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { User, Relationship } from "../types";
-import MusicPlayer from "./MusicPlayer";
 import Pomodoro from "./Pomodoro";
 
 interface LeftNavProps {
@@ -20,58 +28,55 @@ interface LeftNavProps {
   updateState?: any;
 }
 
+// Style definitions
+const headingStyle = {
+  textDecoration: "none",
+  fontSize: 15,
+  fontWeight: 600,
+  marginLeft: 16,
+  marginRight: 8,
+  marginTop: 24,
+  textTransform: "uppercase",
+  letterSpacing: "2.5px",
+  width: "fit-content",
+};
+const subheadingStyle = {
+  fontSize: 15,
+  marginTop: 8,
+  marginLeft: 16,
+  display: "flex",
+  alignItems: "center",
+};
+const activeStyle = {
+  opacity: 1,
+  textDecoration: "none",
+};
+
 function LeftNav(props: LeftNavProps) {
-  // @TODO add proper typing for the LanguageContext
-  const { language, setLanguage } = useContext<any>(LanguageContext);
-  const { user, athletes, chosenLanguage, updateState } = props;
+  const theme = useTheme();
+  const { language, setLanguage } = useContext(LanguageContext);
+  const { user, athletes } = props;
   const [anchorEl, setAnchorEl] = useState<any>(null);
-  const [selectedCode, setSelectedCode] = useState<string>(language.code);
+  const [selectedCode, setSelectedCode] = useState<string>(
+    (language as Language).code as string
+  );
   const open = Boolean(anchorEl);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLElement>,
-    code: string
-  ) => {
+  const handleMenuItemClick = (code: string) => {
     setSelectedCode(code);
     setAnchorEl(null);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClose = () => {setAnchorEl(null)};
 
-  const handleSetLanguage = (language: any) => {
-    setLanguage(language);
-  };
-
-  const headingStyle = {
-    textDecoration: "none",
-    fontSize: 15,
-    fontWeight: 600,
-    marginLeft: 16,
-    marginRight: 16,
-    marginTop: 24,
-    paddingTop: 8,
-    textTransform: "uppercase",
-    letterSpacing: "2.5px",
-  };
-  const subheadingStyle = {
-    fontSize: 15,
-    marginTop: 14,
-    marginLeft: 16,
-    display: "flex",
-  };
-  const activeStyle = {
-    opacity: 1,
-    textDecoration: "none",
-  };
+  const handleSetLanguage = (language: any) => {setLanguage(language)};
 
   // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
-  const renderLanguageDropdown = () => (
+  const LanguageDropdown = () => (
     <div style={{ display: "flex", alignItems: "center" }}>
       <IconButton
         onClick={handleClickListItem}
@@ -81,7 +86,10 @@ function LeftNav(props: LeftNavProps) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
       >
-        <Avatar sx={{ width: 24, height: 24 }} src={language.image} />
+        <Avatar
+          sx={{ width: 24, height: 24 }}
+          src={(language as Language).image as string}
+        />
       </IconButton>
       <Menu
         id="language-menu-button"
@@ -98,7 +106,7 @@ function LeftNav(props: LeftNavProps) {
             key={language.code}
             selected={language.code === selectedCode}
             onClick={(e) => {
-              handleMenuItemClick(e, language.code);
+              handleMenuItemClick(language.code);
               updateLanguage({
                 language,
                 id: user.id.toString(),
@@ -113,16 +121,96 @@ function LeftNav(props: LeftNavProps) {
     </div>
   );
 
+  const iconStyle = { height: 18, width: 18, margin: 3 };
+
+  const arenaMenu: LeftNavSection = {
+    heading: { path: "/", label: I18n.get("arena") },
+    subHeadings: [
+      {
+        path: "/arena/create/sprints",
+        label: I18n.get("startSprint"),
+        Icon: <BiRun style={iconStyle} />,
+      },
+      {
+        path: "/arena/create/template",
+        label: "Sprint Template",
+        Icon: <IoMdCreate style={iconStyle} />,
+      },
+    ],
+  };
+
+  const mentorshipsMenu: LeftNavSection | null =
+    user.instructor === true && athletes.length > 0
+      ? {
+        heading: { path: "/mentorship", label: I18n.get("mentorship") },
+        subHeadings: athletes.map((relationship) => ({
+          path: `/mentorship/${relationship.id}`,
+          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+          Icon: (
+            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
+          ),
+        })),
+      }
+      : null ;
+
+  const trainingMenu: LeftNavSection = {
+    heading: { path: "/training", label: I18n.get("basicTraining") },
+    subHeadings: [
+      {
+        path: `/training/${user.apprenticeshipId}`,
+        label: I18n.get("technicalTraining"),
+        Icon: <AiFillCode style={iconStyle} />,
+      },
+      {
+        path: `/training/${user.productId}`,
+        label: I18n.get("product"),
+        Icon: <FaTools style={iconStyle} />,
+      },
+      {
+        path: `/training/${user.masteryId}`,
+        label: I18n.get("interviewing"),
+        Icon: <IoMdSchool style={iconStyle} />,
+      },
+    ],
+  };
+
+  const fullMenu: LeftNavSection[] = [
+    /* Arena */
+    arenaMenu,
+  ];
+
+  if (mentorshipsMenu) fullMenu.push(mentorshipsMenu);
+  
+  fullMenu.push(
+    /* Training */
+    trainingMenu,
+    /* Library of Context */
+    {
+      heading: { path: "/context-builder", label: I18n.get("library") },
+      subHeadings: [],
+    },
+    /* Journal */
+    {
+      heading: { path: "/journal", label: I18n.get("journal") },
+      subHeadings: [],
+    },
+    /* Profile - TODO: move to dropdown from profile pic */
+    {
+      heading: { path: `/profile/edit/${user.id}`, label: "Profile" },
+      subHeadings: [],
+    });
+
   return (
     <div id="mySidenav" className="sidenav">
       <div
         style={{
           marginLeft: 16,
           marginRight: 16,
+          marginBottom: 8,
           display: "flex",
           width: "calc(100% - 32px)",
           justifyContent: "space-between",
-          alignContent: "center",
+          alignItems: "center",
         }}
       >
         <div
@@ -130,6 +218,8 @@ function LeftNav(props: LeftNavProps) {
             display: "flex",
             flexWrap: "nowrap",
             justifyContent: "flex-start",
+            alignItems: "center",
+            height: "100%",
           }}
         >
           <Avatar
@@ -144,7 +234,6 @@ function LeftNav(props: LeftNavProps) {
             style={{
               fontSize: 18,
               border: "none",
-              marginTop: 6,
               marginLeft: 12,
               fontWeight: 600,
             }}
@@ -152,180 +241,213 @@ function LeftNav(props: LeftNavProps) {
             {user.fName}
           </p>
         </div>
-        {renderLanguageDropdown()}
+        <LanguageDropdown />
       </div>
-      <div style={{ marginTop: 10 }}>
-        <NavLink
-          to="/"
-          style={headingStyle as any}
-          className="flex"
-          activeStyle={activeStyle}
-          exact
-        >
-          <p
-            style={{
-              fontWeight: "600",
-              opacity: 1,
-              marginTop: 4,
-              marginLeft: 3,
-            }}
-          >
-            {I18n.get("arena")}
-          </p>
-        </NavLink>
-        <NavLink
-          to="/arena/create/sprints"
-          style={subheadingStyle}
-          activeStyle={activeStyle}
-          exact
-        >
-          <BiRun style={{ height: 26, width: 26 }} />
-          <p style={{ marginLeft: 10 }}>{I18n.get("startSprint")}</p>
-        </NavLink>
-        <NavLink
-          to="/arena/create/template"
-          style={subheadingStyle}
-          activeStyle={activeStyle}
-          exact
-        >
-          <IoMdCreate style={{ height: 26, width: 26 }} />
-          <p style={{ marginLeft: 10 }}>Sprint Template</p>
-        </NavLink>
-      </div>
+
+      {fullMenu.map((menuSection, i) => (
+        <MenuSection key={`menu-${i}`} data={menuSection} />
+      ))}
 
       <Pomodoro headingStyle={headingStyle} />
 
-      {user.instructor === true && athletes.length > 0 ? (
-        <div style={{ marginTop: 14 }}>
-          <NavLink
-            to="/mentorship"
-            style={headingStyle as any}
-            activeStyle={activeStyle}
-            exact
-          >
-            {I18n.get("mentorship")}
-          </NavLink>
-
-          {/* Experience/Quick Info Below */}
-          <div className="small-overflow">
-            {athletes.map((relationship) => (
-              <NavLink
-                to={`/mentorship/${relationship.id}`}
-                key={relationship.id}
-                style={subheadingStyle}
-                activeStyle={activeStyle}
-                exact
-              >
-                <div
-                  className="flex"
-                  style={{
-                    fontSize: 14,
-                    alignItems: "center",
-                  }}
-                >
-                  <FaHandsHelping
-                    style={{ height: 26, width: 26, marginRight: 8 }}
-                  />
-                  <p>
-                    {relationship.mentee.fName} {relationship.mentee.lName}
-                  </p>
-                </div>
-              </NavLink>
-            ))}
-          </div>
-        </div>
-      ) : null}
-      {/* Experience/Quick Info Below */}
-      <div style={{ marginLeft: 3 }}>
-        <NavLink
-          to="/training"
-          style={headingStyle as any}
-          className="flex"
-          activeStyle={activeStyle}
-          exact
-        >
-          <p style={{ marginTop: 4 }}>{I18n.get("basicTraining")}</p>
-        </NavLink>
-      </div>
       <div
         style={{
-          // marginLeft: 22,
-          fontSize: 14,
-          color: "white",
+          width: "calc(max(254px, 20vw - 16px))",
+          backgroundColor: theme.palette.background.paper,
+          position: "fixed",
+          paddingTop: 32,
+          bottom: 24,
+          left: 16,
         }}
-        className="sixth-step-exp"
       >
-        <NavLink
-          to={`/training/${user.apprenticeshipId}`}
-          style={subheadingStyle}
-          activeStyle={activeStyle}
-          exact
-        >
-          <AiFillCode style={{ height: 26, width: 26 }} />
-          <p style={{ marginLeft: 10 }}>{I18n.get("technicalTraining")}</p>
-        </NavLink>
-        <NavLink
-          to={`/training/${user.productId}`}
-          style={subheadingStyle}
-          activeStyle={activeStyle}
-          exact
-        >
-          <FaTools style={{ height: 26, width: 26 }} />
-          <p style={{ marginLeft: 10 }}>{I18n.get("product")}</p>
-        </NavLink>
-        <NavLink
-          to={`/training/${user.masteryId}`}
-          style={subheadingStyle}
-          activeStyle={activeStyle}
-          exact
-        >
-          <IoMdSchool style={{ height: 26, width: 26 }} />
-          <p style={{ marginLeft: 10 }}>{I18n.get("interviewing")}</p>
-        </NavLink>
+        <img
+          src={white}
+          width="120"
+          style={{ opacity: 0.6 }}
+          alt="pareto logo"
+          onMouseEnter={(e) => {
+            (e.currentTarget.style.opacity as any) = 1;
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget.style.opacity as any) = 0.6;
+          }}
+        />
       </div>
-
-      <NavLink
-        to="/context-builder"
-        style={headingStyle as any}
-        activeStyle={activeStyle}
-        className="third-step"
-        exact
-      >
-        &ensp;{I18n.get("library")}
-      </NavLink>
-
-      <NavLink
-        to="/journal"
-        style={headingStyle as any}
-        activeStyle={activeStyle}
-        // className="third-step"
-        exact
-      >
-        &ensp;{I18n.get("journal")}
-      </NavLink>
-
-      <NavLink
-        to={`/profile/edit/${user.id}`}
-        style={headingStyle as any}
-        activeStyle={activeStyle}
-        exact
-      >
-        &ensp;Profile
-      </NavLink>
-
-      <div style={{ flex: "0 0 16px" }} />
-
-      <img
-        src={white}
-        width="120"
-        style={{ opacity: 0.6, position: "fixed", bottom: 30, left: 16 }}
-        alt="pareto logo"
-        // eslint-disable-next-line no-return-assign
-        onMouseEnter={(e) => ((e.currentTarget.style.opacity as any) = 1)}
-        // eslint-disable-next-line no-return-assign
-        onMouseLeave={(e) => ((e.currentTarget.style.opacity as any) = 0.6)}
-      />
     </div>
+  );
+}
+
+// Menu rending components
+interface LeftNavItem {
+  path: string;
+  label: string;
+  Icon?: React.ReactComponentElement<any>;
+}
+interface LeftNavSection {
+  heading: LeftNavItem;
+  subHeadings: LeftNavItem[];
+}
+
+interface SubHeadingsProps extends ComponentPropsWithRef<any> {
+  subHeadings: LeftNavItem[];
+}
+
+function MenuSection({ data }: { data: LeftNavSection }) {
+  const [expanded, setExpanded] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const subHeadingsRef = useRef(null);
+
+  useEffect(() => {
+    const element = subHeadingsRef.current;
+    if (expanded && element) {
+      const { top, bottom } = (
+        element as HTMLDivElement
+      ).getBoundingClientRect();
+      const height = bottom - top;
+      if (height < 250) {
+        (element as HTMLDivElement).style.maxHeight = `${height}px`;
+      }
+    }
+  });
+
+  const handleClick = (e: SyntheticEvent<HTMLDivElement, MouseEvent>) => {
+    const caratElement = e.target as HTMLDivElement;
+    const element = subHeadingsRef.current;
+    if (element && !expanded && !updating) {
+      setUpdating(true);
+      caratElement.classList.remove("dropdown-caret-down");
+      caratElement.classList.add("dropdown-caret-up");
+      (element as HTMLDivElement).style.top = `0px`;
+      (element as HTMLDivElement).style.height = `fit-content`;
+      (element as HTMLDivElement).style.maxHeight = `250px`;
+      setTimeout(() => {
+        setUpdating(false);
+        const { top, bottom } = (
+          element as HTMLDivElement
+        ).getBoundingClientRect();
+        const height = bottom - top;
+        (element as HTMLDivElement).style.maxHeight = `${height}px`;
+        setExpanded(!expanded);
+      }, 500);
+    } else if (element && expanded && !updating) {
+      const { top, bottom } = (
+        element as HTMLDivElement
+      ).getBoundingClientRect();
+      const height = bottom - top;
+      (element as HTMLDivElement).style.maxHeight = `${height}px`;
+      setUpdating(true);
+      caratElement.classList.remove("dropdown-caret-up");
+      caratElement.classList.add("dropdown-caret-down");
+      (element as HTMLDivElement).style.height = "0px";
+      (element as HTMLDivElement).style.maxHeight = "0px";
+      (element as HTMLDivElement).style.top = `-${height}px`;
+      setTimeout(() => {
+        (element as HTMLDivElement).style.maxHeight = `${height}px`;
+        (element as HTMLDivElement).style.height = `${height}px`;
+        setUpdating(false);
+        setExpanded(!expanded);
+      }, 300);
+    }
+  };
+
+  return (
+    <>
+      <Heading
+        path={data.heading.path}
+        label={data.heading.label}
+        dropdown={data.subHeadings.length > 0}
+        expanded={expanded}
+        handleClick={handleClick}
+      />
+      <div style={{ overflow: "hidden", height: "max-content" }}>
+        <div
+          ref={subHeadingsRef}
+          style={{
+            maxHeight: expanded ? `250px` : "0vh",
+            position: "relative",
+            transition: expanded
+              ? "top 0.2s ease"
+              : "max-height 0.5s ease-out, top 0.2s ease",
+            overflow: "scroll",
+          }}
+        >
+          <Subheadings subHeadings={data.subHeadings} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Heading({
+  path,
+  label,
+  dropdown,
+  expanded,
+  handleClick,
+}: {
+  path: string;
+  label: string;
+  dropdown: boolean;
+  expanded: boolean;
+  handleClick: (e: SyntheticEvent<HTMLDivElement, MouseEvent>) => void;
+}) {
+  return (
+    <div className="sidenav-dropdown">
+      <NavLink
+        to={path}
+        style={headingStyle as StyleHTMLAttributes<HTMLElement>}
+        className="flex"
+        activeStyle={activeStyle}
+        exact
+      >
+        <p
+          style={{
+            fontWeight: "600",
+            opacity: 1,
+          }}
+        >
+          {label}
+        </p>
+      </NavLink>
+      {dropdown && (
+        <div
+          className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"}
+          onClick={handleClick}
+        ></div>
+      )}
+    </div>
+  );
+}
+
+const SubHeading = ({
+  path,
+  label,
+  Icon,
+}: {
+  path: string;
+  label: string;
+  Icon: React.ReactComponentElement<any>;
+}) => {
+  return (
+    <NavLink to={path} style={subheadingStyle} activeStyle={activeStyle} exact>
+      {Icon}
+      <p style={{ marginLeft: 8 }}>{label}</p>
+    </NavLink>
+  );
+};
+
+function Subheadings(props: SubHeadingsProps) {
+  return (
+    <>
+      {props.subHeadings.map((sub) => (
+        <SubHeading
+          key={sub.label}
+          path={sub.path}
+          label={sub.label}
+          Icon={sub.Icon as ReactComponentElement<any>}
+        />
+      ))}
+    </>
   );
 }
 

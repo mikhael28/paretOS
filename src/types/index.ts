@@ -1,3 +1,5 @@
+import { ActivePersonMissionsOnDay } from "../arena/types";
+
 export type color =
   | "inherit"
   | "primary"
@@ -63,15 +65,29 @@ export interface User {
   score: number;
   _id: string;
   id: any;
+}
+
+export interface MinimalUser {
   fName: string;
   lName: string;
   email: string;
-  github: string;
-  missions: Array<Object>;
-  percentage: number;
   phone: string;
-  planning: Array<PlanningField>;
-  review: string;
+  github: string;
+  id: any;
+  score: number;
+  percentage: string;
+  planning: PlanningField[];
+  review: ({
+    code: string;
+    content: string;
+    name: string;
+  })[];
+  missions: ActivePersonMissionsOnDay[];
+}
+export interface User extends MinimalUser {
+  rank?: number;
+  _id: string;
+
   profileImg?: File;
   defaultLanguage?: string;
   instructor: boolean;
@@ -79,7 +95,6 @@ export interface User {
   productId?: string;
   masteryId: string;
   picture?: string;
-
   mentors?: Array<User>;
   projects?: Array<Project>;
   // Deprecate ideas?

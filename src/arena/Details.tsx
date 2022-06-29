@@ -8,9 +8,9 @@ interface DetailsProps {
   displayDay: number;
   missions: any[];
   admin: boolean;
-  status: string;
+  status: string | undefined;
   setDisplayDay: Dispatch<SetStateAction<number>>;
-  setStatus: Dispatch<SetStateAction<string>>;
+  setStatus: Dispatch<SetStateAction<string | undefined>>;
 }
 
 /**
