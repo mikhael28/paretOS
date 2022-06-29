@@ -53,6 +53,7 @@
     "react-router-dom": "^5.2.0",
     "react-spring": "8.0.27",
     "react-stripe-elements": "1.6.0",
+    "react-transition-group": "^4.4.2",
     "reactour": "1.18.7",
     "redux": "4.2.0",
     "rollup": "2.42.0",
