@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -15,6 +15,7 @@ import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import uploadToS3 from "../libs/s3";
+import { User, ActiveMission } from "../types";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.
@@ -47,6 +48,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface ArenaProofModalProps {
+  day: number;
+  view: string;
+  show: boolean;
+  user: User;
+  activeIndex: number;
+  sprint: { id: number };
+  activeMission: ActiveMission;
+  handleClose: () => void;
+  handleChange: (
+    activeMission: ActiveMission,
+    activeIndex: number,
+    day: number,
+    pictureKey: string,
+    message: string
+  ) => void;
+}
+
 export default function ArenaProofModal({
   day,
   view,
@@ -56,24 +75,22 @@ export default function ArenaProofModal({
   handleClose,
   activeIndex,
   activeMission,
-  activeSprintId,
-  handleChange: propsHandleChange,
-}) {
+  handleChange,
+}: ArenaProofModalProps) {
+  const { register, handleSubmit, reset } = useForm<{ trashTalk: string }>();
   const [pictureKey, setPictureKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
   const classes = useStyles();
 
   //   const [isChanging, setIsChanging] = useState(false);
   //   const validateForm = () => athleteNotes.length > 0 && github.length > 0;
 
-  const onSubmit = (data) => {
-    propsHandleChange(
+  const onSubmit = handleSubmit((data) => {
+    handleChange(
       activeMission,
       activeIndex,
       day,
       pictureKey,
-      activeSprintId,
       `${user.fName} just completed ${activeMission.title}.${
         data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
       } `
@@ -81,13 +98,17 @@ export default function ArenaProofModal({
     setPictureKey("");
     reset();
     handleClose();
-  };
+  });
 
-  const onChange = async (e) => {
+  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length) {
+      return;
+    }
+
     setLoading(true);
 
-    let fileType = e.target.files[0].name.split(".");
     const file = e.target.files[0];
+    const fileType = file.name.split(".");
     // the name to save is the sprint_id_teamIndex_dayIndex_missionIndex
     try {
       const pictureKey = await uploadToS3(
@@ -130,7 +151,7 @@ export default function ArenaProofModal({
       {view === "submit" ? (
         <>
           <DialogContent>
-            <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+            <form className={classes.root} onSubmit={onSubmit}>
               <h3>{I18n.get("trashTalkPSA")}</h3>
               <TextField
                 id="trashTalk"
