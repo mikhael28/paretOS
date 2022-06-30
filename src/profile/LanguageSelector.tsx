@@ -1,26 +1,30 @@
-import { useState, useContext } from "react";
+import { useState, useContext, FormEvent } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { MdAutorenew } from "react-icons/md";
-import LanguageContext from "../state/LanguageContext";
+import LanguageContext, { Language } from "../state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
+import { SelectChangeEvent } from "@mui/material";
+import { User } from "../types";
 
-const LanguageSelector = (props) => {
-  const { language, setLanguage } = useContext(LanguageContext);
+const LanguageSelector = (props: {user : User }) => {
+  const langContext = useContext(LanguageContext);
+  const language = langContext.language as Language;
+  const setLanguage = langContext.setLanguage;
   let [isLoading, setIsLoading] = useState(false);
 
-  const handleSetIsLoading = (bool) => {
+  const handleSetIsLoading = (bool: boolean) => {
     setIsLoading(bool);
   };
 
-  const handleSetLanguage = (language) => {
+  const handleSetLanguage = (language: Language) => {
     setLanguage(language);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: FormEvent<FormControl>) => {
     updateLanguage({
-      language: availableLanguages.find((x) => x.code === e.target.value),
+      language: availableLanguages.find((x) => x.code === (e.target as HTMLSelectElement).value),
       id: props.user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
@@ -52,8 +56,8 @@ const LanguageSelector = (props) => {
             name="newLanguage"
             componentClass="select"
             onChange={handleChange}
-            defaultValue={language.code}
-            value={language.code}
+            defaultValue={language?.code || ""}
+            value={language.code || ""}
           >
             {availableLanguages.map(({ code, name }) =>
               code === language.code ? (

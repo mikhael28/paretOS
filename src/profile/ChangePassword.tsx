@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, FormEventHandler, useState } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import FormGroup from "react-bootstrap/lib/FormGroup";
@@ -11,7 +11,7 @@ import { errorToast, successToast } from "../libs/toasts";
  * Change your password through Cognito
  */
 
-const ChangePassword = (props) => {
+const ChangePassword = (props: any) => {
   const [state, setState] = useState({
     password: "",
     oldPassword: "",
@@ -24,14 +24,14 @@ const ChangePassword = (props) => {
     state.password.length > 0 &&
     state.password === state.confirmPassword;
 
-  const handleChange = (event) => {
+  const handleChange = (event: FormEvent<FormControl>) => {
     setState({
       ...state,
-      [event.target.id]: event.target.value,
+      [(event.target as HTMLFormElement).id]: (event.target as HTMLFormElement).value,
     });
   };
 
-  const handleChangeClick = async (event) => {
+  const handleChangeClick = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setState({
       ...state,

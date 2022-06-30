@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -18,7 +18,7 @@ import LanguageSelector from "./LanguageSelector";
  * @TODO GH Issue #26
  */
 
-const EditProfile = (props) => {
+const EditProfile = (props: any) => {
   const theme = useTheme();
   const currentUser = "user" in props ? props.user : {
       projects: [],
@@ -50,10 +50,9 @@ const EditProfile = (props) => {
 
   const initializeUser = async () => {
     const path = window.location.pathname.split("/");
-    let userId;
-    userId = path[path.length - 1];
+    let userId = path[path.length - 1];
     // what we did above, was the get the user id from the navigation bar
-    const response = await RestAPI.get("pareto", `/users/${userId}`);
+    const response = await RestAPI.get("pareto", `/users/${userId}`, {});
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
     console.log('u', response);
     setState((prevState) => ({
@@ -65,14 +64,14 @@ const EditProfile = (props) => {
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | FormEvent<FormControl>) => {
     setState((prevState) => ({
       ...prevState,
-      [event.target.id]: event.target.value,
+      [(event.target as HTMLInputElement).id]: (event.target as HTMLInputElement).value,
     }));
   };
 
-  const updateBio = async (event) => {
+  const updateBio = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
@@ -96,7 +95,7 @@ const EditProfile = (props) => {
     setState((prevState) => ({ ...prevState, isLoading: false }));
   };
 
-  const editName = async (e) => {
+  const editName = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let body = {
       fName: state.fName,
@@ -150,9 +149,15 @@ const EditProfile = (props) => {
     }
   };
 
-  const uploadToS3 = async (e) => {
-    const file = e.target.files[0];
-    let fileType = e.target.files[0].name.split(".");
+  const uploadToS3 = async (e: FormEvent<HTMLInputElement>) => {
+    const targetElement = e.target as HTMLInputElement;
+    let file: File = {} as File;
+    let fileType: string[] = [];
+    if (targetElement && targetElement.files) {
+      const files = targetElement.files;
+      file = files[0]
+      fileType = files[0].name.split(".");
+    }
 
     try {
       // @TODO: check to see whether this works for video, and what safeguards may not to be added.
@@ -346,7 +351,7 @@ const EditProfile = (props) => {
           <p className="block">{I18n.get("noProjectsYet")}</p>
         ) : (
           <>
-            {user.projects.map((project) => (
+              {user.projects.map((project: { name: string; description: string; github: string }) => (
               <div className="block">
                 <h3>{project.name}</h3>
                 <p>{project.description}</p>

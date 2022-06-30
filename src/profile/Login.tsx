@@ -37,7 +37,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ initialFetch, setLoading, userHasAuthenticated }) => {
+interface LoginProps {
+  initialFetch: (id: string) => {};
+  setLoading: (b: boolean) => {};
+  userHasAuthenticated: (b: boolean) => {};
+}
+const Login = ({ initialFetch, setLoading, userHasAuthenticated }: LoginProps) => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
@@ -48,9 +53,8 @@ const Login = ({ initialFetch, setLoading, userHasAuthenticated }) => {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     setLoading(true);
-
     setIsLoading(true);
 
     try {
@@ -59,7 +63,7 @@ const Login = ({ initialFetch, setLoading, userHasAuthenticated }) => {
       userHasAuthenticated(true);
       setLoading(false);
     } catch (e) {
-      alert(e.message);
+      alert((e as Error).message);
       setIsLoading(false);
       setLoading(false);
     }

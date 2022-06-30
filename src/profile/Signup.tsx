@@ -1,5 +1,5 @@
 // hooks import
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
+import { User } from "@sentry/react";
 
 const Signup = () => {
   const theme = useTheme();
@@ -19,7 +20,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [newUser, setNewUser] = useState(null);
+  const [newUser, setNewUser] = useState({} as User);
 
   // for redirect to new route
   const history = useHistory();
@@ -29,7 +30,7 @@ const Signup = () => {
 
   const validateConfirmationForm = () => confirmationCode.length > 0;
 
-  const handleConfirmationSubmit = async (event) => {
+  const handleConfirmationSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsLoading(true);
@@ -45,7 +46,7 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsLoading(true);
@@ -57,7 +58,7 @@ const Signup = () => {
       });
       setNewUser(newUser);
     } catch (e) {
-      alert(e.message);
+      alert((e as Error).message);
     }
     setIsLoading(false);
   };
@@ -83,7 +84,7 @@ const Signup = () => {
           autoFocus
           type="tel"
           value={confirmationCode}
-          onChange={(e) => setConfirmationCode(e.target.value)}
+          onChange={(e) => setConfirmationCode((e.target as HTMLFormElement).value)}
         />
         <HelpBlock>{I18n.get("checkEmail")}</HelpBlock>
       </FormGroup>
@@ -120,14 +121,14 @@ const Signup = () => {
           autoFocus
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail((e.target as HTMLFormElement).value)}
         />
       </FormGroup>
       <FormGroup controlId="password" bsSize="large">
         <ControlLabel>{I18n.get("password")}</ControlLabel>
         <FormControl
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword((e.target as HTMLFormElement).value)}
           type="password"
         />
       </FormGroup>
@@ -135,7 +136,7 @@ const Signup = () => {
         <ControlLabel>{I18n.get("confirm")}</ControlLabel>
         <FormControl
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => setConfirmPassword((e.target as HTMLFormElement).value)}
           type="password"
         />
       </FormGroup>

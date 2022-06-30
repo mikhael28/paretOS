@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword = ({ setLoading }) => {
+const ResetPassword = ({ setLoading }: {setLoading: (b: boolean) => void}) => {
   const classes = useStyles();
 
   const [isConfirming, setIsConfirming] = useState(false);
@@ -65,7 +65,7 @@ const ResetPassword = ({ setLoading }) => {
   let password1 = watch("password");
   let email1 = getValues("email");
 
-  const handleSendCodeClick = async (data) => {
+  const handleSendCodeClick = async (data: any) => {
     setLoading(true);
 
     setIsSendingCode(true);
@@ -76,13 +76,13 @@ const ResetPassword = ({ setLoading }) => {
       setCodeSent(true);
       setLoading(false);
     } catch (e) {
-      alert(e.message);
+      alert((e as Error).message);
       setIsSendingCode(false);
       setLoading(false);
     }
   };
 
-  const handleConfirmClick = async (data) => {
+  const handleConfirmClick = async (data: any) => {
     setLoading(true);
 
     setIsConfirming(true);
@@ -92,7 +92,7 @@ const ResetPassword = ({ setLoading }) => {
       setConfirmed(true);
       setLoading(false);
     } catch (e) {
-      alert(e.message);
+      alert((e as Error).message);
       setIsConfirming(false);
       setLoading(false);
     }
