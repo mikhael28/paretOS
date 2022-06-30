@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
 import { errorToast } from "../libs/toasts";
+import { MongoExperience, Sprint, User } from "../types";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.
@@ -13,10 +14,10 @@ import { errorToast } from "../libs/toasts";
  */
 
 function Profile() {
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({} as User);
   const [loading, setLoading] = useState(true);
-  const [experiences, setExperiences] = useState([]);
-  const [sprints, setSprints] = useState([]);
+  const [experiences, setExperiences] = useState([] as MongoExperience[]);
+  const [sprints, setSprints] = useState([] as Sprint[]);
 
   useEffect(() => {
     setLoading(true);
@@ -29,8 +30,8 @@ function Profile() {
     }
   }, [window.location.pathname]);
 
-  const getUser = async (id) => {
-    let user = await RestAPI.get("pareto", `/users/${id}`);
+  const getUser = async (id: string) => {
+    let user = await RestAPI.get("pareto", `/users/${id}`, {});
     if (user.length > 0) {
       setProfile(user[0]);
     }
@@ -38,18 +39,18 @@ function Profile() {
     await getSprintsByUser(user[0].id);
   };
 
-  const getExperienceByUser = async (id) => {
+  const getExperienceByUser = async (id: string) => {
     try {
-      let experiences = await RestAPI.get("pareto", `/experience/user/${id}`);
+      let experiences = await RestAPI.get("pareto", `/experience/user/${id}`, {});
       setExperiences(experiences);
     } catch (e) {
       errorToast(e);
     }
   };
 
-  const getSprintsByUser = async (id) => {
+  const getSprintsByUser = async (id: string) => {
     try {
-      let sprints = await RestAPI.get("pareto", `/sprints/mentee/${id}`);
+      let sprints = await RestAPI.get("pareto", `/sprints/mentee/${id}`, {});
       setSprints(sprints);
       setLoading(false);
     } catch (e) {
@@ -129,7 +130,7 @@ function Profile() {
                 </a>
               </p>
               {sprints.map((sprint) => {
-                let activeTeam;
+                let activeTeam = {} as User;
                 sprint.teams.forEach((team) => {
                   if (profile.id === team.id) {
                     activeTeam = team;

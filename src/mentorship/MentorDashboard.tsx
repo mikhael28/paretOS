@@ -7,7 +7,7 @@ import Athlete from "./Athlete";
  * A simple, redux connected Sandbox for you play around with. Don't send a PR to update this file, it is perfect the way it is. Unless, you think we can improve it from a staging perspective - in that case, send it in.
  */
 
-function MentorDashboard(props) {
+function MentorDashboard(props: any) {
   // redux and dispatch replace the old connect/bind functions
   const redux = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function MentorDashboard(props) {
         <>
           <h2>{I18n.get("myMentees")}</h2>
           <div className="exp-cards" style={{ justifyContent: "start" }}>
-            {props.athletes.map((athlete) => (
+            {props.athletes.map((athlete: any) => (
               <Athlete
                 athlete={athlete.mentee}
                 key={athlete._id}
