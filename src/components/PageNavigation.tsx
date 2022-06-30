@@ -8,12 +8,20 @@ import { I18n } from "@aws-amplify/core";
  * @param {Prop} increasePage-function to increase the currentPage by 1
  * @param {Prop} decreasePage-function ot decrease the currentPage by 1
  */
+
+interface PageNavigationProps {
+  currentPage: number,
+  maxPages: number,
+  increasePage: () => {},
+  decreasePage: () => {}
+}
+
 export default function PageNavigation({
   currentPage,
   maxPages,
   increasePage,
   decreasePage,
-}) {
+}: PageNavigationProps) {
   const [nextPage, priorPage] = [currentPage + 1, currentPage - 1];
 
   return (
@@ -30,18 +38,18 @@ export default function PageNavigation({
         />
       )}
       {currentPage <= 1 ? (
-        <HiddenNav id={`page-${priorPage}`} label={priorPage} />
+        <HiddenNav id={`page-${priorPage}`} label={priorPage.toString()} />
       ) : (
         <VisibleNav
           id={`page-${priorPage}`}
           handleClick={decreasePage}
-          label={priorPage}
+          label={priorPage.toString()}
         />
       )}
       {maxPages === 1 ? (
-        <HiddenNav id="current-page" label={currentPage} />
+        <HiddenNav id="current-page" label={currentPage.toString()} />
       ) : (
-        <VisibleNav id="current-page" label={null} handleClick={null}>
+        <VisibleNav id="current-page" label={null}>
           <span
             style={{
               fontWeight: "bold",
@@ -59,12 +67,12 @@ export default function PageNavigation({
         <VisibleNav
           id={`page-${nextPage}`}
           handleClick={increasePage}
-          label={nextPage}
+          label={nextPage.toString()}
         />
       ) : (
         <HiddenNav
           id={`page-${nextPage}`}
-          label={nextPage > maxPages ? null : nextPage}
+          label={nextPage > maxPages ? null : nextPage.toString()}
         />
       )}
       {currentPage < maxPages ? (
@@ -80,7 +88,17 @@ export default function PageNavigation({
   );
 }
 
-function VisibleNav({ handleClick, label, children }) {
+interface HiddenNavProps {
+  id: String;
+  label: String | null;
+  children?: any;
+}
+
+interface VisibleNavProps extends HiddenNavProps {
+  handleClick?: () => {},
+}
+
+function VisibleNav({ handleClick, label, children }: VisibleNavProps) {
   return (
     <p style={{ cursor: "pointer", padding: "0px 15px" }} onClick={handleClick}>
       {label || children}
@@ -88,7 +106,7 @@ function VisibleNav({ handleClick, label, children }) {
   );
 }
 
-function HiddenNav({ label, children }) {
+function HiddenNav({ label, children }: HiddenNavProps) {
   return (
     <p style={{ opacity: "0.6", padding: "0px 15px" }}>{label || children}</p>
   );

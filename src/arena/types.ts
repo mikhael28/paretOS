@@ -42,10 +42,7 @@ export interface Missions {
   missionBtnText: string;
   setActiveIndex: Dispatch<SetStateAction<number>>;
   setActiveMission: Dispatch<
-    SetStateAction<{
-      title: string;
-      description: string;
-    }>
+    SetStateAction<any>
   >;
   setView?: Dispatch<SetStateAction<string>>;
   setShowProofModal: Dispatch<SetStateAction<boolean>>;
