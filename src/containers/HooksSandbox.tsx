@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 /* eslint-disable no-else-return */
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, MutableRefObject, ReactNode, LegacyRef } from "react";
 
 export function DemoComponent() {
   const [value, toggleValue] = useToggle(false);
   const [count, setCount] = useState(10);
-  const { clearTimeout, reset } = useTimeout(() => setCount(0), 1000);
+  const { clear: clearTimeout, reset } = useTimeout(() => setCount(0), 1000);
 
   const [debounceCount, setDebounceCount] = useState(10);
   useDebounce(() => alert(debounceCount), 1000, [debounceCount]);
@@ -18,7 +18,7 @@ export function DemoComponent() {
     1, 2, 3, 4, 5, 6,
   ]);
 
-  const previousCount = usePrevious();
+  const previousCount = usePrevious(null);
 
   const [name, setName, removeName] = useSessionStorage("name", "Kyle");
   const [age, setAge, removeAge] = useLocalStorage("age", 26);
@@ -32,7 +32,7 @@ export function DemoComponent() {
 
         <button onClick={() => remove(1)}>Remove Second Element</button>
 
-        <button onClick={() => filter((n) => n < 3)}>
+        <button onClick={() => filter((n: number) => n < 3)}>
           Keep numbers less than 4
         </button>
         <button onClick={() => set([1, 2])}>Set to 1, 2</button>
@@ -76,20 +76,20 @@ export function DemoComponent() {
   );
 }
 
-export function useLocalStorage(key, defaultValue) {
+export function useLocalStorage(key: string, defaultValue: any) {
   return useStorage(key, defaultValue, window.localStorage);
 }
 
-export function useSessionStorage(key, defaultValue) {
+export function useSessionStorage(key: string, defaultValue: any) {
   return useStorage(key, defaultValue, window.sessionStorage);
 }
 
-export function useStorage(key, defaultValue, storageObject) {
+export function useStorage(key: string, defaultValue: any, storageObject: any) {
   const [value, setValue] = useState(() => {
     const jsonValue = storageObject.getItem(key);
     if (jsonValue !== null) return JSON.parse(jsonValue);
 
-    if (typeof initialValue === "function") {
+    if (typeof defaultValue === "function") {
       return defaultValue();
     } else {
       return defaultValue;
@@ -108,9 +108,9 @@ export function useStorage(key, defaultValue, storageObject) {
   return [value, setValue, remove];
 }
 
-export function usePrevious(value) {
-  const currentRef = useRef(value);
-  const previousRef = useRef();
+export function usePrevious(value: number | null) {
+  const currentRef: MutableRefObject<number | null>  = useRef(value);
+  const previousRef: MutableRefObject<number | null> = useRef(null);
 
   if (currentRef.current !== value) {
     previousRef.current = currentRef.current;
@@ -119,40 +119,40 @@ export function usePrevious(value) {
   return previousRef.current;
 }
 
-export function useToggle(defaultValue) {
+export function useToggle(defaultValue: any) {
   const [value, setValue] = useState(defaultValue);
 
-  function toggleValue(value) {
-    setValue((currentValue) =>
+  function toggleValue(value: any) {
+    setValue((currentValue: any) =>
       typeof value === "boolean" ? value : !currentValue
     );
   }
   return [value, toggleValue];
 }
 
-export function useArray(defaultValue) {
+export function useArray(defaultValue: any) {
   const [array, setArray] = useState(defaultValue);
 
-  function push(element) {
-    setArray((a) => [...a, element]);
+  function push(element: any) {
+    setArray((a: any) => [...a, element]);
   }
 
-  function filter(callback) {
-    setArray((a) => a.filter(callback));
+  function filter(callback: (a: any) => boolean) {
+    setArray((a: string[]) => a.filter(callback));
   }
 
-  function update(index, newElement) {
-    setArray((a) => [
+  function update(index: number, newElement: number) {
+    setArray((a: number[]) => [
       ...a.slice(0, index),
       newElement,
       ...a.slice(index + 1, a.length - 1),
     ]);
   }
 
-  function remove(index) {
-    setArray((a) => [
+  function remove(index: number) {
+    setArray((a: number[]) => [
       ...a.slice(0, index),
-      ...a.alice(index + 1, a.length - 1),
+      ...a.slice(index + 1, a.length - 1),
     ]);
   }
 
@@ -163,9 +163,9 @@ export function useArray(defaultValue) {
   return { array, set: setArray, push, filter, update, remove, clear };
 }
 
-export function useTimeout(callback, delay) {
+export function useTimeout(callback: () => any, delay: number) {
   const callbackRef = useRef(callback);
-  const timeoutRef = useRef();
+  const timeoutRef: MutableRefObject<any> = useRef(null);
 
   useEffect(() => {
     callbackRef.current = callback;
@@ -194,13 +194,13 @@ export function useTimeout(callback, delay) {
 
 // use debounce creates a delay, before running something. Like if you are typing into a search bar, and you would like to wait for the last keystroke to finish, before sending in the API query, this is a useful function to wait until that
 
-export function useDebounce(callback, delay, dependencies) {
+export function useDebounce(callback: () => any, delay: number, dependencies: any[]) {
   const { reset, clear } = useTimeout(callback, delay);
   useEffect(reset, [...dependencies, reset]);
   useEffect(clear, []);
 }
 
-export function useUpdateEffect(callback, dependencies) {
+export function useUpdateEffect(callback: () => any, dependencies: any[]) {
   const firstRenderRef = useRef(true);
 
   useEffect(() => {
@@ -213,32 +213,35 @@ export function useUpdateEffect(callback, dependencies) {
 }
 
 export function StateWithHistoryComponent() {
-  const [count, setCount, { history, pointer, back, forward, go }] =
+  const [count, setCount, rest] =
     useStateWithHistory(1);
+  const { history, pointer, back, forward, go } = rest as any;
   const [name, setName] = useState("misha");
+
+  type Callable = (v: any) => {};
 
   return (
     <div>
-      <div>{count}</div>
+      <div>{count as ReactNode}</div>
       <div>{history.join(", ")}</div>
       <div>Pointer - {pointer}</div>
-      <button onClick={() => setCount((currentCount) => currentCount * 2)}>
+      <button onClick={() => (setCount as (v: any) => void)(((currentCount: any) => currentCount * 2) as (v: any) => {})}>
         Double
       </button>
-      <button onClick={() => setCount((currentCount) => currentCount + 1)}>
+      <button onClick={() => (setCount as (v: any) => void)((currentCount: number) => currentCount + 1)}>
         Increment
       </button>
     </div>
   );
 }
 
-export function useStateWithHistory(defaultValue, { capacity = 10 } = {}) {
+export function useStateWithHistory(defaultValue: number, { capacity = 10 } = {}) {
   const [value, setValue] = useState(defaultValue);
   const historyRef = useRef([value]);
   const pointerRef = useRef(0);
 
   const set = useCallback(
-    (v) => {
+    (v: any) => {
       const resolvedValue = typeof v === "function" ? v(value) : v;
       if (historyRef.current[pointerRef.current] !== resolvedValue) {
         if (pointerRef.current < historyRef.current.length - 1) {
@@ -267,7 +270,7 @@ export function useStateWithHistory(defaultValue, { capacity = 10 } = {}) {
     setValue(historyRef.current[pointerRef.current]);
   }, []);
 
-  const go = useCallback((index) => {
+  const go = useCallback((index: number) => {
     if (index < 0 || index >= historyRef.current.length - 1) return;
     pointerRef.current = index;
     setValue(historyRef.current[pointerRef.current]);
@@ -295,14 +298,14 @@ export function AsyncComponent() {
           success ? resolve("Success") : reject(Error);
         }, 1000);
       })
-  );
+  ) as any;
 
   const [id, setId] = useState(1);
   const { fetchLoading, fetchError, fetchValue } = useFetch(
     `https://jsonplaceholder.typicode.com/todos/id`,
     {},
-    [id]
-  );
+    []
+  ) as any;
 
   return (
     <div>
@@ -328,7 +331,7 @@ const DEFAULT_OPTIONS = {
   headers: { "Content-Type": "application/json" },
 };
 
-export function useFetch(url, options = {}, dependencies = []) {
+export function useFetch(url: string, options = {}, dependencies = []) {
   return useAsync(
     () =>
       fetch(url, { ...DEFAULT_OPTIONS, ...options }).then((res) => {
@@ -339,7 +342,7 @@ export function useFetch(url, options = {}, dependencies = []) {
   );
 }
 
-export function useAsync(callback, dependencies = []) {
+export function useAsync(callback: () => any, dependencies = []) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [value, setValue] = useState();
@@ -364,14 +367,14 @@ export function useAsync(callback, dependencies = []) {
 export function ScriptComponent() {
   const { loading, error } = useScript(
     `https://code.jquery.com/jquery-3.6.0.min.js`
-  );
+  ) as any;
 
   if (loading) return <div>Loading</div>;
   if (error) return <div>Error</div>;
-  return <div>{window.$(window).width()}</div>;
+  return <div>{(window as any).$(window).width()}</div>;
 }
 
-export function useScript(url) {
+export function useScript(url: string) {
   return useAsync(() => {
     const script = document.createElement("script");
     script.src = url;
@@ -387,21 +390,21 @@ export function useScript(url) {
 
 export function EventListenerComponent() {
   const [key, setKey] = useState("");
-  useEventListener("keydown", (e) => {
+  useEventListener("keydown", (e: KeyboardEvent) => {
     setKey(e.key);
   });
 
   return <div>Last Key: {key}</div>;
 }
 
-export function useEventListener(eventType, callback, element = window) {
+export function useEventListener(eventType: string, callback: (e: any) => void, element = window) {
   const callbackRef = useRef(callback);
   useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);
 
   useEffect(() => {
-    const handler = (e) => callbackRef.current(e);
+    const handler = (e: any) => callbackRef.current(e);
     element.addEventListener(eventType, handler);
 
     return () => element.removeEventListener(eventType, handler);
@@ -416,12 +419,12 @@ export function OnScreenComponent() {
     <div>
       <h1>Header</h1>
       <p>Bunch of text</p>
-      <h1 ref={headerTwoRef}>Header 2 {visible && "(Visible)"}</h1>
+      <h1 ref={headerTwoRef as LegacyRef<any>}>Header 2 {visible && "(Visible)"}</h1>
     </div>
   );
 }
 
-export function useOnScreen(ref, rootMargin = "0px") {
+export function useOnScreen(ref: any, rootMargin = "0px") {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

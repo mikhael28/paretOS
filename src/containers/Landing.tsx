@@ -9,7 +9,7 @@ import ParticleField from "react-particles-webgl";
  * This is the Landing page component, that has the testimonials from members of our community.
  */
 
-export default function Landing(props) {
+export default function Landing() {
   const theme = useTheme();
 
   const config = {
