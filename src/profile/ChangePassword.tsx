@@ -1,4 +1,4 @@
-import React, { FormEvent, FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import FormGroup from "react-bootstrap/lib/FormGroup";

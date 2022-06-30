@@ -1,11 +1,10 @@
 import { Box } from "@mui/material";
-import { FunctionComponent, ReactElement, ReactNode } from "react";
 
 interface TabPanelProps {
   children: any;
   value: number;
   index: number | string;
-  className: string;
+  className?: string;
 }
 
 export default function TabPanel({ children, value, index, ...other }: TabPanelProps) {

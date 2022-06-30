@@ -1,4 +1,4 @@
-import { useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -14,12 +14,11 @@ import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { getActiveSprintData } from "../state/sprints";
 import { ReduxRootState } from "../state";
 import { errorToast, successToast } from "../libs/toasts";
 import LoaderButton from "../components/LoaderButton";
 import { MinimalUser, User } from "../types";
-import { FullMission, GenMission, Mission, EnMission, ActivePersonMissionsOnDay } from "./types";
+import { FullMission, GenMission, Mission, EnMission } from "./types";
 import { RouteComponentProps } from "react-router-dom";
 
 /**

@@ -11,7 +11,7 @@ import { User } from "../types";
 interface LoadingModalProps {
   history: RouterHistory;
   user: User;
-  initialFetch: () => {};
+  initialFetch: (id: string) => {};
 }
 
 function LoadingModal({ history, user, initialFetch}: LoadingModalProps) {

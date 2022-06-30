@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import Athlete from "./Athlete";

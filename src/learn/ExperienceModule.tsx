@@ -31,7 +31,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 interface ExperienceModuleProps extends RouteComponentProps{
   user: User;
-  initialFetch: () => {};
+  initialFetch: (id: string) => {};
   sanityTraining: any[];
   sanityProduct: any[];
   sanityInterview: any[];

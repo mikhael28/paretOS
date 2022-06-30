@@ -1,5 +1,5 @@
-import React, { ChangeEvent, SyntheticEvent } from "react";
-import { Paper, Tabs, Tab, useTheme, TabsTypeMap, TabsProps } from "@mui/material";
+import { SyntheticEvent, useState } from "react";
+import { Paper, Tabs, Tab, useTheme, TabsProps } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
   GrAchievement,
@@ -10,9 +10,6 @@ import {
 } from "react-icons/gr";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { User } from "../types";
-import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { Value } from "classnames";
-
 /**
  * This component is a mobile view only bottom navigation bar that helps mobile PWA users navigate the site more effectively
  */
@@ -28,7 +25,7 @@ interface BottomNavProps extends RouteComponentProps{
 function BottomNav({ user, history }: BottomNavProps) {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event: SyntheticEvent<any, any>) => {
     setValue((event.target as TabsProps).value);

@@ -1,6 +1,5 @@
-import { UnknownNodeType } from "@portabletext/react";
-import React, { useRef, useEffect } from "react";
-import io, { Socket, SocketOptions } from "socket.io-client";
+import { useRef, useEffect } from "react";
+import io, { Socket } from "socket.io-client";
 
 /**
  * This is an experimental video chat component, with screen sharing, to be used with users of the Pareto platform as a simple videochat service instead of Zoom.

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { useForm } from "react-hook-form";

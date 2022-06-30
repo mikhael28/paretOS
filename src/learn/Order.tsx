@@ -15,7 +15,7 @@ import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 interface OrderProps {
   user: User,
-  initialFetch: () => void;
+  initialFetch: (id: string) => void;
   history: RouterHistory; 
   stripeKey: string;
 }
@@ -128,7 +128,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
         await this.unlockLearning();
       }
 
-      await this.props.initialFetch();
+      await this.props.initialFetch(this.props.user._id);
       this.props.history.push("/training");
     } catch (e) {
       alert(e);
@@ -141,7 +141,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
 
     try {
       await this.unlockLearning();
-      await this.props.initialFetch();
+      await this.props.initialFetch(this.props.user._id);
       this.props.history.push("/training");
     } catch (e) {
       alert(e);

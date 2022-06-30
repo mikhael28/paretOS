@@ -18,7 +18,7 @@ import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
-import { GenMission, ActivePersonMissionsOnDay, EnMission } from "./types";
+import { GenMission, ActivePersonMissionsOnDay } from "./types";
 import { ReduxRootState } from "../state";
 import { ActiveMission, User } from "../types";
 

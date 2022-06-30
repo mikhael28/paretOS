@@ -16,7 +16,6 @@ import LoaderButton from "./LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import uploadToS3 from "../libs/s3";
 import { User, ActiveMission, Sprint } from "../types";
-import { GenMission } from "../arena/types";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.
