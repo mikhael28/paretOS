@@ -5,6 +5,7 @@ interface TabPanelProps {
   children: any;
   value: number;
   index: number | string;
+  className: string;
 }
 
 export default function TabPanel({ children, value, index, ...other }: TabPanelProps) {

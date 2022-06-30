@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ReactElement } from "react";
 import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
@@ -15,9 +15,12 @@ import { generateEmail } from "../libs/errorEmail";
 import { successToast, errorToast } from "../libs/toasts";
 import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
+import { ActiveExperience, MongoExperience, User } from "../types";
+import { RouteComponentProps } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  const { children, ...rest } = props as any;
+  return <Slide direction="up" ref={ref} children={children} {...rest} />;
 });
 
 /**
@@ -26,8 +29,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #27
  */
 
-class ExperienceModule extends Component {
-  constructor(props) {
+interface ExperienceModuleProps extends RouteComponentProps{
+  user: User;
+  initialFetch: () => {};
+  sanityTraining: any[];
+  sanityProduct: any[];
+  sanityInterview: any[];
+}
+
+interface ExperienceModuleState {
+  isLoading: boolean;
+  isTourOpen: boolean;
+  user: User;
+  activeExperience: ActiveExperience,
+  experience: any[] | undefined;
+  mongoExperience: MongoExperience,
+  openReviewModal: boolean;
+  showPaywallDialog: boolean;
+  experienceId: string;
+  // this shows the proof submission modal, which needs work
+  showSubmitModal: boolean;
+  language: string;
+}
+
+class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModuleState> {
+  constructor(props: any) {
     super(props);
     this.state = {
       isLoading: true,
@@ -36,7 +62,7 @@ class ExperienceModule extends Component {
         fName: "",
         lName: "",
         id: "8020",
-      },
+      } as User,
       activeExperience: {
         title: "",
         amount: 0,
@@ -46,11 +72,11 @@ class ExperienceModule extends Component {
         _type: "interviewSchema",
         github: "",
         athleteNotes: "",
-      },
+      } as ActiveExperience,
       experience: [],
       mongoExperience: {
         id: "",
-      },
+      } as MongoExperience,
       openReviewModal: false,
       showPaywallDialog: this.props.user.learningPurchase === false,
       experienceId: "",
@@ -106,7 +132,7 @@ class ExperienceModule extends Component {
     let path = pathArray[2];
     let expType;
 
-    let comparisonData = await RestAPI.get("pareto", `/experience/${path}`);
+    let comparisonData = await RestAPI.get("pareto", `/experience/${path}`, {});
 
     if (comparisonData[0].type === "Apprenticeship") {
       expType = this.props.sanityTraining;
@@ -120,18 +146,19 @@ class ExperienceModule extends Component {
       experience: expType,
       mongoExperience: comparisonData[0],
       experienceId: comparisonData[0].id,
-      activeExperience: expType[0],
+      activeExperience: (expType as any[])[0],
       isLoading: false,
     });
 
     let athleteProfile = await RestAPI.get(
       "pareto",
-      `/users/${comparisonData[0].memberId}`
+      `/users/${comparisonData[0].memberId}`,
+      {}
     );
     this.setState({ user: athleteProfile[0] });
   }
 
-  markSubmitted = async (milestone, githubLink, athleteNotes) => {
+  markSubmitted = async (milestone: any, githubLink: string, athleteNotes: string) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -173,7 +200,7 @@ class ExperienceModule extends Component {
     }
   };
 
-  markRequestRevisions = async (milestone, mongoExperience, coachNotes) => {
+  markRequestRevisions = async (milestone: any, mongoExperience: any, coachNotes: string) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -215,7 +242,7 @@ class ExperienceModule extends Component {
     }
   };
 
-  markComplete = async (milestone, mongoExperience, coachNotes) => {
+  markComplete = async (milestone: any, mongoExperience: any, coachNotes: string) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -261,7 +288,7 @@ class ExperienceModule extends Component {
     }
   };
 
-  renderExperienceList = (topics, activeExperience, mongoExperience) => {
+  renderExperienceList = (topics: any[], activeExperience: ActiveExperience, mongoExperience: MongoExperience) => {
     let inactiveBlock = classNames("block", "first-step-exp");
     let activeBlock = "highlight-block";
 
@@ -315,7 +342,7 @@ class ExperienceModule extends Component {
     });
   };
 
-  renderExperienceInfo(activeExperience, mongoExperience) {
+  renderExperienceInfo(activeExperience: ActiveExperience, mongoExperience: MongoExperience) {
     let newClassname = classNames("flex", "fifth-step-exp");
     if (mongoExperience === undefined) {
       return <>Nothing</>;
@@ -397,8 +424,7 @@ class ExperienceModule extends Component {
             alt="Tour for Experience Module"
             height="40"
             width="40"
-            circle
-            style={{ marginLeft: 20, cursor: "pointer" }}
+            style={{ marginLeft: 20, cursor: "pointer", borderRadius: 40, overflow: "hidden" }}
           />
         </h1>
         <div className="experience-container flex">
@@ -431,7 +457,7 @@ class ExperienceModule extends Component {
             ) : (
               <div>
                 {this.renderExperienceList(
-                  this.state.experience,
+                  this.state.experience as any,
                   this.state.activeExperience,
                   this.state.mongoExperience
                 )}
@@ -468,7 +494,7 @@ class ExperienceModule extends Component {
                   <PortableText value={this.state.activeExperience.overview} />
                 ) : (
                   <PortableText
-                    value={this.state.activeExperience.esOverview}
+                    value={this.state.activeExperience.esOverview as any}
                   />
                 )}
               </div>
@@ -479,7 +505,7 @@ class ExperienceModule extends Component {
               margin: "auto",
             }}
             open={this.state.showPaywallDialog}
-            TransitionComponent={Transition}
+            TransitionComponent={Transition as any}
             keepMounted
             hideBackdrop={false}
             aria-labelledby="loading"
@@ -491,11 +517,11 @@ class ExperienceModule extends Component {
                 this.props.user.learningPurchase === false
               ) {
                 this.setState({ ...this.state, showPaywallDialog: false });
-                history.push("/");
+                this.props.history.push("/");
               }
             }}
           >
-            <PaywallModal {...this.props} open={this.state.showPaywallDialog} />
+            <PaywallModal {...this.props} />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (
@@ -506,9 +532,7 @@ class ExperienceModule extends Component {
               show={this.state.showSubmitModal}
               handleClose={this.handleCloseSubmit}
               activeExperience={this.state.activeExperience}
-              markComplete={this.markComplete}
               markSubmitted={this.markSubmitted}
-              mongoExperience={this.state.mongoExperience}
             />
             <ApproveExperienceModal
               show={this.state.openReviewModal}
@@ -523,7 +547,6 @@ class ExperienceModule extends Component {
               isOpen={this.state.isTourOpen}
               onRequestClose={this.closeTour}
               showCloseButton
-              rewindOnClose={false}
             />
           </>
         )}

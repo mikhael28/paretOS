@@ -6,9 +6,11 @@ import { I18n } from "@aws-amplify/core";
 import { errorToast, successToast } from "../libs/toasts";
 import PaywallModal from "./PaywallModal";
 import ExperienceSummary from "./ExperienceSummary";
+import { Coach } from "../types";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  const { children, ...rest } = props as any;
+  return <Slide direction="up" ref={ref} {...rest} children={children} />;
 });
 
 /**
@@ -17,7 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #55
  */
 
-function LearnDashboard(props) {
+function LearnDashboard(props: any) {
   const [html, setHtml] = useState(null);
   const [showPaywallDialog, setShowPaywallDialog] = useState(
     props.user.learningPurchase === false
@@ -32,7 +34,7 @@ function LearnDashboard(props) {
       });
       successToast("Journal saved 👍");
     } catch (e) {
-      errorToast(e, props.user);
+      errorToast(e);
     }
   }
   return (
@@ -45,7 +47,7 @@ function LearnDashboard(props) {
         >
           {props.coaches.length > 0 && <h2>{I18n.get("myMentors")}</h2>}
           <div className="exp-cards" style={{ justifyContent: "start" }}>
-            {props.coaches.map((coach) => (
+            {props.coaches.map((coach: Coach) => (
               <div
                 className="exp-card"
                 style={{ display: "flex", justifyContent: "flex-start" }}
@@ -86,7 +88,7 @@ function LearnDashboard(props) {
           margin: "auto",
         }}
         open={showPaywallDialog}
-        TransitionComponent={Transition}
+        TransitionComponent={Transition as any}
         keepMounted
         hideBackdrop={false}
         aria-labelledby="loading"
@@ -94,7 +96,7 @@ function LearnDashboard(props) {
         onClose={(event, reason) => {
           if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
             setShowPaywallDialog(false);
-            history.push("/");
+            props.history.push("/");
           }
         }}
       >

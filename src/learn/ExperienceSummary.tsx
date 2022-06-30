@@ -2,13 +2,14 @@ import classNames from "classnames";
 import { GrAchievement } from "react-icons/gr";
 import { GiCoins } from "react-icons/gi";
 import { useTheme } from "@mui/material";
+import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**
  * The Experience summary component is shown as a shortcut to enter a particular training module by ID. The coach can see this when viewing his/her students, and the students see this in the learning dashboard.
  * @TODO Issue #48
  */
 
-export default function ExperienceSummary(props) {
+export default function ExperienceSummary(props: { type: string; history: RouterHistory; id: string; xp: number; xpEarned: number; achievements: number }) {
   const theme = useTheme();
   let blockClass = classNames("exp-card");
   let name;

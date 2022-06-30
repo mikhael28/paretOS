@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, ComponentProps, ComponentType, FormEvent, FormEventHandler } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import { CardElement, injectStripe } from "react-stripe-elements";
+import { CardElement, injectStripe, StripeProvider } from "react-stripe-elements";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -10,10 +10,28 @@ import LoaderButton from "../components/LoaderButton";
  * @TODO Issue #50
  */
 
-class BillingForm extends Component {
-  constructor(props) {
-    super(props);
+interface BillingFormProps extends ComponentProps<any> {
+  stripe: any;
+  onSubmit: any;
+  loading: boolean;
+}
 
+interface BillingState {
+  name?: string;
+  storage?: number | string;
+  isProcessing?: boolean;
+  isCardComplete?: boolean;
+  street?: string;
+  city?: string;
+  zip?: string;
+}
+
+class BillingForm extends Component<BillingFormProps, BillingState> {
+  loading: boolean;
+
+  constructor({ loading, onSubmit, stripe }: BillingFormProps) {
+    super({loading, onSubmit, stripe});
+    this.loading = this.props.loading;
     this.state = {
       name: "",
       storage: 1,
@@ -34,20 +52,20 @@ class BillingForm extends Component {
     );
   }
 
-  handleFieldChange = (event) => {
+  handleFieldChange = (event: FormEvent<FormControl>) => {
     this.setState({
-      [event.target.id]: event.target.value,
-    });
+      [(event.target as HTMLInputElement).id]: (event.target as HTMLInputElement).value,
+    } as BillingState);
   };
 
-  handleCardFieldChange = (event) => {
+  handleCardFieldChange = (event: any) => {
     this.setState({
       isCardComplete: event.complete,
     });
   };
 
-  handleSubmitClick = async (event) => {
-    event.preventDefault();
+  handleSubmitClick = async (event: FormEvent<HTMLFormElement>) => {
+    (event as any).preventDefault();
 
     const { name } = this.state;
 
@@ -126,4 +144,4 @@ class BillingForm extends Component {
   }
 }
 
-export default injectStripe(BillingForm);
+export default injectStripe(BillingForm as ComponentType<BillingFormProps & any>);

@@ -13,7 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "../components/LoaderButton";
-import { ActiveExperience } from "../types";
+import { ActiveExperience, MongoExperience } from "../types";
 
 /**
  * This is the modal where a player submits the proof for their Arena event

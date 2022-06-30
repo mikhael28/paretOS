@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { DialogContent, Button } from "@mui/material";
 import Order from "./Order";
+import { RouterHistory } from "@sentry/react/types/reactrouter";
+import { User } from "../types";
 
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.
  */
 
-function LoadingModal(props) {
+interface LoadingModalProps {
+  history: RouterHistory;
+  user: User;
+  initialFetch: () => {};
+}
+
+function LoadingModal({ history, user, initialFetch}: LoadingModalProps) {
   const [stripeKey, setStripeKey] = useState(null);
 
   useEffect(() => {
@@ -54,7 +62,7 @@ function LoadingModal(props) {
           <div className="flex-evenly">
             <Button
               className="btn-cancel"
-              onClick={() => props.history.push("/")}
+              onClick={() => history.push("/")}
             >
               Cancel
             </Button>
@@ -66,7 +74,7 @@ function LoadingModal(props) {
       ) : (
         <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
           <div>
-            <Order {...props} stripeKey={stripeKey} />
+              <Order history={history} user={user} initialFetch={initialFetch} stripeKey={stripeKey || ""} />
           </div>
         </DialogContent>
       )}
