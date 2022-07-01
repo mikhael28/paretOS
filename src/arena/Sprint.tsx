@@ -4,7 +4,7 @@ import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
-import TabPanel from "../components/TabPanel.jsx";
+import TabPanel from "../components/TabPanel.js";
 import { errorToast } from "../libs/toasts";
 import ws from "../libs/websocket";
 import question from "../assets/question.svg";
@@ -20,7 +20,7 @@ import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
 import { GenMission, ActivePersonMissionsOnDay } from "./types";
 import { ReduxRootState } from "../state";
-import { User } from "../types";
+import { ActiveMission, User } from "../types";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -82,10 +82,7 @@ function Sprint({ user, history }: SprintProps) {
 
   const [status, setStatus] = useState(initialStatus);
   const [displayDay, setDisplayDay] = useState(initialDisplayDay);
-  const [activeMission, setActiveMission] = useState({
-    title: "",
-    description: "",
-  });
+  const [activeMission, setActiveMission] = useState({} as ActiveMission);
   const [activeIndex, setActiveIndex] = useState(0);
   const [showProofModal, setShowProofModal] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
@@ -108,7 +105,7 @@ function Sprint({ user, history }: SprintProps) {
     setDynamicForms(tempObj);
   }
 
-  async function handleChange(mission: GenMission, idx: number, day: number, key: (number | string)) {
+  async function handleChange(mission: ActiveMission, idx: number, day: number, key: (number | string)) {
     setLoading(true);
     dispatch({
       type: "COMPLETE_SPRINT_TASK",
@@ -268,7 +265,6 @@ function Sprint({ user, history }: SprintProps) {
         <ArenaProofModal
           show={showProofModal}
           day={displayDay}
-          activeSprintId={SPRINT_INDEX}
           activeMission={activeMission}
           activeIndex={activeIndex}
           handleChange={handleChange}

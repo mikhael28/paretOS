@@ -30,8 +30,10 @@ export interface Project {
 
 export type ActiveExperience = {
   title: string;
+  esTitle?: string;
   amount: number;
   overview: [];
+  esOverview?: string;
   completed: boolean;
   priority: string;
   _type: string;
@@ -183,4 +185,13 @@ export interface Sprint {
   };
   createdAt: Date;
   updatedAt: Date;
+}
+
+export type Coach = {
+  _id: string;
+  mentor: {
+    picture: string;
+    fName: string;
+    lName: string;
+  }
 }

@@ -1,4 +1,8 @@
-export default function StatsBlock({ statName, score }) {
+interface StatsBlockProps {
+  statName: string;
+  score: number | string;
+}
+export default function StatsBlock({ statName, score }: StatsBlockProps) {
   return (
     <div className="block stats-block">
       <div

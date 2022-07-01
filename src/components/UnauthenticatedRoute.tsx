@@ -1,6 +1,7 @@
+import { ComponentProps, FunctionComponent } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-function querystring(name, url = window.location.href) {
+function querystring(name: string, url = window.location.href) {
   name = name.replace(/[[]]/g, "\\$&");
 
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`, "i");
@@ -16,7 +17,12 @@ function querystring(name, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-export default ({ component: C, props: cProps, ...rest }) => {
+interface UnauthenticatedRouteProps {
+  component: FunctionComponent;
+  props: ComponentProps<any>;
+}
+
+export default ({ component: C, props: cProps, ...rest }: UnauthenticatedRouteProps) => {
   const redirect = querystring("redirect");
   return (
     <Route

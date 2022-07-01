@@ -5,14 +5,23 @@ import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
 import { successToast } from "../libs/toasts";
 import { createExperience } from "../libs/createExperience";
+import { User } from "../types";
+import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**
  * Parent component of the Billing form.
  * @TODO Issue #50
  */
 
-export default class Order extends Component {
-  constructor(props) {
+interface OrderProps {
+  user: User,
+  initialFetch: (id: string) => void;
+  history: RouterHistory; 
+  stripeKey: string;
+}
+
+export default class Order extends Component<OrderProps, { isLoading: boolean }> {
+  constructor(props: OrderProps) {
     super(props);
 
     this.state = {
@@ -20,7 +29,7 @@ export default class Order extends Component {
     };
   }
 
-  billUser(details) {
+  billUser(details: any) {
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
@@ -96,7 +105,7 @@ export default class Order extends Component {
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (storage, { token, error }) => {
+  handleFormSubmit = async (storage: any, { token, error }: {token: any, error: Error}) => {
     if (error) {
       alert(error);
       return;
@@ -119,7 +128,7 @@ export default class Order extends Component {
         await this.unlockLearning();
       }
 
-      await this.props.initialFetch(this.props.user.id);
+      await this.props.initialFetch(this.props.user._id);
       this.props.history.push("/training");
     } catch (e) {
       alert(e);
@@ -132,7 +141,7 @@ export default class Order extends Component {
 
     try {
       await this.unlockLearning();
-      await this.props.initialFetch(this.props.user.id);
+      await this.props.initialFetch(this.props.user._id);
       this.props.history.push("/training");
     } catch (e) {
       alert(e);
@@ -157,3 +166,9 @@ export default class Order extends Component {
     );
   }
 }
+
+//(property) loading: boolean
+//Type '{ 
+//      loading: boolean; 
+//       onSubmit: (storage: any, { token, error }: { token: any; error: any; }) => Promise<void>; }' is not assignable to type 'IntrinsicAttributes & object'.
+ // Property 'loading' does not exist on type 'IntrinsicAttributes & object'.ts(2322)

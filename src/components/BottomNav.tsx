@@ -1,5 +1,5 @@
-import React from "react";
-import { Paper, Tabs, Tab, useTheme } from "@mui/material";
+import { SyntheticEvent, useState } from "react";
+import { Paper, Tabs, Tab, useTheme, TabsProps } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
   GrAchievement,
@@ -8,8 +8,8 @@ import {
   GrChat,
   GrCli,
 } from "react-icons/gr";
-import { withRouter } from "react-router-dom";
-
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { User } from "../types";
 /**
  * This component is a mobile view only bottom navigation bar that helps mobile PWA users navigate the site more effectively
  */
@@ -18,13 +18,17 @@ const useStyles = makeStyles({
   root: {},
 });
 
-function BottomNav(props) {
+interface BottomNavProps extends RouteComponentProps{
+  user: User;
+}
+
+function BottomNav({ user, history }: BottomNavProps) {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent<any, any>) => {
+    setValue((event.target as TabsProps).value);
   };
 
   return (
@@ -43,16 +47,16 @@ function BottomNav(props) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => props.history.push("/")}
+          onClick={() => history.push("/")}
         />
-        {props.user.instructor !== true ? (
+        {user.instructor !== true ? (
           <Tab
             icon={<GrCli />}
             style={{
               fontSize: 20,
               filter: theme.palette.mode === "dark" ? "invert()" : "",
             }}
-            onClick={() => props.history.push("/training")}
+            onClick={() => history.push("/training")}
           />
         ) : null}
         <Tab
@@ -61,7 +65,7 @@ function BottomNav(props) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => props.history.push("/context-builder")}
+          onClick={() => history.push("/context-builder")}
         />
         <Tab
           icon={<GrChat />}
@@ -69,7 +73,7 @@ function BottomNav(props) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => props.history.push("/chat")}
+          onClick={() => history.push("/chat")}
         />
         <Tab
           icon={<GrFingerPrint />}
@@ -77,7 +81,7 @@ function BottomNav(props) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => props.history.push(`/profile/edit/${props.user.id}`)}
+          onClick={() => history.push(`/profile/edit/${user.id}`)}
         />
       </Tabs>
     </Paper>

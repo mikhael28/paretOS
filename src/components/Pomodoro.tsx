@@ -1,4 +1,4 @@
-import { Component, createRef } from "react";
+import { Component, createRef, MutableRefObject, StyleHTMLAttributes } from "react";
 import {
   IoMdPlay,
   IoMdPause,
@@ -6,18 +6,37 @@ import {
   IoMdSkipBackward,
   IoMdRefresh,
 } from "react-icons/io";
-let timer;
+let timer: NodeJS.Timer;
 
 // borrowed from here for initial code: https://gist.github.com/harunpehlivan/fe7b52218b6b99d70a0c5fe88538ea2d
 
+interface PomodoroProps {
+  headingStyle: StyleHTMLAttributes<any>;
+}
+
+interface PomodoroState {
+  session_length: number;
+  session_state: String;
+  break_length: number;
+  break_state: String;
+  minutes: number;
+  seconds: number;
+  title: String;
+  isStarted: boolean;
+}
+
 export default class Pomodoro extends Component {
-  constructor(props) {
+  time_left: MutableRefObject<any>;
+  audio_beep: MutableRefObject<any>;
+  headingStyle: StyleHTMLAttributes<any>;
+
+  constructor(props: PomodoroProps) {
     super(props);
     this.time_left = createRef();
     this.audio_beep = createRef();
     this.headingStyle = props.headingStyle;
   }
-  state = {
+  state: PomodoroState = {
     session_length: 25,
     session_state: "started",
     break_length: 5,
@@ -43,14 +62,14 @@ export default class Pomodoro extends Component {
   incrementSession = () => {
     if (!this.state.isStarted) {
       if (this.state.session_length < 60) {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             session_length: prevState.session_length + 1,
           };
         });
       }
       if (this.state.session_state === "started") {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             minutes: prevState.session_length,
             seconds: 0,
@@ -63,14 +82,14 @@ export default class Pomodoro extends Component {
   decrementSession = () => {
     if (!this.state.isStarted) {
       if (this.state.session_length > 1) {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             session_length: prevState.session_length - 1,
           };
         });
       }
       if (this.state.session_state === "started") {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             minutes: prevState.session_length,
             seconds: 0,
@@ -83,14 +102,14 @@ export default class Pomodoro extends Component {
   incrementBreak = () => {
     if (!this.state.isStarted) {
       if (this.state.break_length < 60) {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             break_length: prevState.break_length + 1,
           };
         });
         let { session_length } = this.state;
         if (session_length === 0) {
-          this.setState((prevState) => {
+          this.setState((prevState: PomodoroState) => {
             return {
               break_length: prevState.break_length + 1,
             };
@@ -98,7 +117,7 @@ export default class Pomodoro extends Component {
         }
       }
       if (this.state.break_state === "started") {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             minutes: prevState.break_length,
             seconds: 0,
@@ -111,14 +130,14 @@ export default class Pomodoro extends Component {
   decrementBreak = () => {
     if (!this.state.isStarted) {
       if (this.state.break_length > 1) {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             break_length: prevState.break_length - 1,
           };
         });
         let { session_length } = this.state;
         if (session_length === 0) {
-          this.setState((prevState) => {
+          this.setState((prevState: PomodoroState) => {
             return {
               break_length: prevState.break_length - 1,
             };
@@ -126,7 +145,7 @@ export default class Pomodoro extends Component {
         }
       }
       if (this.state.break_state === "started") {
-        this.setState((prevState) => {
+        this.setState((prevState: PomodoroState) => {
           return {
             minutes: prevState.break_length,
             seconds: 0,
@@ -244,11 +263,11 @@ export default class Pomodoro extends Component {
   };
 
   //set time format:
-  timeFormat = (time_unit) => {
+  timeFormat = (time_unit: number): String => {
     if (time_unit >= 0 && time_unit < 10) {
-      time_unit = "0" + time_unit;
+      return "0" + time_unit;
     }
-    return time_unit;
+    return time_unit.toString();
   };
 
   render() {

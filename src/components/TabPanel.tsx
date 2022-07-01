@@ -1,7 +1,13 @@
 import { Box } from "@mui/material";
 
-export default function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+interface TabPanelProps {
+  children: any;
+  value: number;
+  index: number | string;
+  className?: string;
+}
+
+export default function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 
   return (
     <div

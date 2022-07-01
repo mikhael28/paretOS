@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-White.png";
 import ParticleField from "react-particles-webgl";
+import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**
  * This is the Landing page component, that has the testimonials from members of our community.
  */
 
-export default function Landing(props) {
+export default function Landing({ history } : { history: RouterHistory }) {
   const theme = useTheme();
 
   const config = {

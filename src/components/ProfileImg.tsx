@@ -3,7 +3,7 @@
  * @desc Displays either the user's current profile image or a generic image if none exists
  * @param {Prop} profileImg-the profile image object
  */
-export default function ProfileImg({ profileImg }) {
+export default function ProfileImg({ profileImg }: { profileImg: string}) {
   return (
     <div className="profile-image">
       {profileImg ? (

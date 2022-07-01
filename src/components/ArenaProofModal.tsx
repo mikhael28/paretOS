@@ -15,7 +15,7 @@ import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
 import { errorToast, successToast } from "../libs/toasts";
 import uploadToS3 from "../libs/s3";
-import { User, ActiveMission } from "../types";
+import { User, ActiveMission, Sprint } from "../types";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.
@@ -54,7 +54,7 @@ export interface ArenaProofModalProps {
   show: boolean;
   user: User;
   activeIndex: number;
-  sprint: { id: number };
+  sprint: { id: number } | Sprint;
   activeMission: ActiveMission;
   handleClose: () => void;
   handleChange: (
