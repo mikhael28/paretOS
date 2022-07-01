@@ -15,6 +15,7 @@ specifiers:
   '@mui/types': 7.1.3
   '@mui/x-date-pickers': 5.0.0-alpha.2
   '@portabletext/react': 1.0.6
+  '@reduxjs/toolkit': ^1.8.3
   '@rollup/plugin-node-resolve': 13.3.0
   '@sanity/client': 3.3.0
   '@sanity/image-url': 1.0.1
@@ -122,6 +123,7 @@ dependencies:
   '@mui/system': 5.2.3_2f7y4c3dlygqpuszd3d43oslwi
   '@mui/x-date-pickers': 5.0.0-alpha.2_ksrqobpkr4427t62mc6tvufrfi
   '@portabletext/react': 1.0.6_react@18.1.0
+  '@reduxjs/toolkit': 1.8.3_j24pcqpkbsj43woxscsovlj4au
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.42.0
   '@sanity/client': 3.3.0
   '@sanity/image-url': 1.0.1
@@ -2902,6 +2904,25 @@ packages:
       - encoding
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /@reduxjs/toolkit/1.8.3_j24pcqpkbsj43woxscsovlj4au:
+    resolution: {integrity: sha512-lU/LDIfORmjBbyDLaqFN2JB9YmAT1BElET9y0ZszwhSBa5Ef3t6o5CrHupw5J1iOXwd+o92QfQZ8OJpwXvsssg==}
+    peerDependencies:
+      react: ^16.9.0 || ^17.0.0 || ^18
+      react-redux: ^7.2.1 || ^8.0.2
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-redux:
+        optional: true
+    dependencies:
+      immer: 9.0.15
+      react: 18.1.0
+      react-redux: 8.0.1_3tnlozirwmhkgsvpqlddrgyflu
+      redux: 4.2.0
+      redux-thunk: 2.4.1_redux@4.2.0
+      reselect: 4.1.6
     dev: false
 
   /@rollup/plugin-node-resolve/13.3.0_rollup@2.42.0:
@@ -6799,6 +6820,10 @@ packages:
     hasBin: true
     dev: false
 
+  /immer/9.0.15:
+    resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
+    dev: false
+
   /import-fresh/2.0.0:
     resolution: {integrity: sha512-eZ5H8rcgYazHbKC3PG4ClHNykCSxtAhxSSEM+2mb+7evD2CKF5V7c0dNum7AdpDh0ZdICwZY9sRSn8f+KH96sg==}
     engines: {node: '>=4'}
@@ -10299,6 +10324,14 @@ packages:
       indent-string: 4.0.0
       strip-indent: 3.0.0
 
+  /redux-thunk/2.4.1_redux@4.2.0:
+    resolution: {integrity: sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==}
+    peerDependencies:
+      redux: ^4
+    dependencies:
+      redux: 4.2.0
+    dev: false
+
   /redux/4.2.0:
     resolution: {integrity: sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==}
     dependencies:
@@ -10410,6 +10443,10 @@ packages:
 
   /requires-port/1.0.0:
     resolution: {integrity: sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=}
+    dev: false
+
+  /reselect/4.1.6:
+    resolution: {integrity: sha512-ZovIuXqto7elwnxyXbBtCPo9YFEr3uJqj2rRbcOOog1bmu2Ag85M4hixSwFWyaBMKXNgvPaJ9OSu9SkBPIeJHQ==}
     dev: false
 
   /resize-observer-polyfill/1.5.1:
