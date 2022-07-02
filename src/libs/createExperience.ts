@@ -5,8 +5,16 @@ import { RestAPI } from "@aws-amplify/api-rest";
  * @TODO Issue #48
  */
 
+interface CreateExperienceParams {
+  expId: string;
+  userId: string;
+  type: string;
+  title: string;
+  description: string;
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export async function createExperience(params) {
+export async function createExperience(params: CreateExperienceParams) {
   const { expId, userId, type, title, description } = params;
   let achievement = {
     completed: false,

@@ -46,7 +46,7 @@ export default function WorkRise() {
   }, []);
 
   return (
-    !fetching && (
+    !fetching ? (
       <div>
         <h1>Work & Rise Jobs</h1>
         <div className="context-cards">
@@ -56,6 +56,6 @@ export default function WorkRise() {
           ))}
         </div>
       </div>
-    )
+    ) : null
   );
 }

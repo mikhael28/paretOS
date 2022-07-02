@@ -19,6 +19,7 @@ export interface Mission {
   xp: number;
   esTitle: string;
   esDescription: string;
+  proofLink?: string;
 }
 
 export interface EnMission extends Omit<Mission, "esTitle" | "esDescription"> {

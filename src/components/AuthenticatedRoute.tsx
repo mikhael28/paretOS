@@ -1,8 +1,8 @@
-import { ComponentProps, FunctionComponent } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { ComponentProps, FunctionComponent, LazyExoticComponent } from "react";
+import { Route, Redirect, RouteProps } from "react-router-dom";
 
-interface AuthenticatedRouteProps {
-  component: FunctionComponent;
+interface AuthenticatedRouteProps extends RouteProps {
+  component: FunctionComponent | LazyExoticComponent<any>;
   props: ComponentProps<any>;
 }
 

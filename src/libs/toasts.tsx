@@ -6,7 +6,7 @@ import logo from "../assets/Pareto-Red-01.png";
  * Toast notification for errors, and assorted messages.
  */
 
-export function errorToast(err) {
+export function errorToast(err: Error) {
   toast.notify(
     ({ onClose }) => (
       <div style={{ display: "flex" }} className="block">
@@ -19,7 +19,7 @@ export function errorToast(err) {
               {err.name}: {err.message}
             </h4>
           ) : (
-            <h4 style={{ color: "red", marginTop: 10 }}>{err}</h4>
+            <h4 style={{ color: "red", marginTop: 10 }}>{JSON.stringify(err)}</h4>
           )}
           <p style={{ marginBottom: 0, marginTop: -10, fontSize: 11 }}>
             Please refresh the page and try again. Click the 'Report' button
@@ -53,7 +53,7 @@ export function errorToast(err) {
   );
 }
 
-export function successToast(param) {
+export function successToast(param: string) {
   toast.notify(
     <div>
       <h3>{param}</h3>

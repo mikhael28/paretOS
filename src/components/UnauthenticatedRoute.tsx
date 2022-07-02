@@ -1,5 +1,6 @@
-import { ComponentProps, FunctionComponent } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { FunctionComponent, LazyExoticComponent } from "react";
+import { Route, Redirect, RouteProps } from "react-router-dom";
+import { ChildProps } from "../Routes";
 
 function querystring(name: string, url = window.location.href) {
   name = name.replace(/[[]]/g, "\\$&");
@@ -17,9 +18,9 @@ function querystring(name: string, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-interface UnauthenticatedRouteProps {
-  component: FunctionComponent;
-  props: ComponentProps<any>;
+interface UnauthenticatedRouteProps extends RouteProps {
+  component: FunctionComponent | LazyExoticComponent<any>;
+  props: ChildProps;
 }
 
 export default ({ component: C, props: cProps, ...rest }: UnauthenticatedRouteProps) => {

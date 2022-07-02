@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState, createContext } from "react";
+import React, { useCallback, useEffect, useState, createContext, ComponentPropsWithoutRef } from "react";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
 
-const ToastContext = createContext();
+// Leaving toast type as any for now as it is a work in progress
+const ToastContext = createContext({ addToast: (t: any) => {} });
 
 export default ToastContext;
 
-export function ToastContextProvider({ children }) {
-  const [toasts, setToasts] = useState([]);
+export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>) {
+  const [toasts, setToasts] = useState([] as any[]);
 
   useEffect(() => {
     if (toasts.length > 0) {
@@ -20,14 +21,14 @@ export function ToastContextProvider({ children }) {
   }, [toasts]);
 
   const addToast = useCallback(
-    function (toast) {
-      setToasts((toasts) => [...toasts, toast]);
+    function (toast: any) {
+      setToasts((toasts: any[]) => [...toasts, toast]);
     },
     [setToasts]
   );
 
   return (
-    <ToastContext.Provider value={addToast}>
+    <ToastContext.Provider value={{ addToast }}>
       {children}
       <div className="toasts-wrapper">
         {toasts.map((toast) => (
