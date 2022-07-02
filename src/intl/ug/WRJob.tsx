@@ -8,7 +8,16 @@ import classNames from "classnames";
  * @TODO review UI for this, it's probably pretty ugly. Only spent an hour putting this together.
  */
 
-export default function Job(props) {
+export interface Job {
+  id: string;
+  title: string;
+  description: string;
+  job_location: string;
+  type: string;
+  rate: string;
+}
+
+export default function Job(props: { job: Job }) {
   let splitTitle = props.job.title.split(".");
   let newTitle = splitTitle[splitTitle.length - 1];
 
@@ -72,7 +81,6 @@ export default function Job(props) {
           </p>
         </div>
         <Button
-          block
           className="btn"
           onClick={() => {
             window.open(`https://workandrise.com/jobs/${props.job.id}/details`);
