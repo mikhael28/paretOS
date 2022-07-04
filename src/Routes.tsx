@@ -1,9 +1,10 @@
 import { lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, RouteProps, Switch } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
+import { Sprint as SprintInterface, User } from "./types";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -31,7 +32,39 @@ const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
-export default ({ childProps }) => (
+export interface ChildProps {
+  isAuthenticated: boolean;
+  userHasAuthenticated: (b: boolean) => void;
+  user: User;
+  setLoading: (b: boolean) => void;
+  connectSocket: (id?: string) => Promise<{
+    success: boolean;
+    sprints: [];
+  }>;
+  product: {};
+  interviewing: {};
+  training: {};
+  sanityTraining: {};
+  sanityInterview: {};
+  sanityProduct: {};
+  experiences: {};
+  fetchMenteeSprints: (id: string) => void;
+  initialFetch: (id: string) => void;
+  sprints: SprintInterface[];
+  athletes: any[];
+  sanitySchemas: {
+    technicalSchemas: object[];
+    economicSchemas: object[];
+    hubSchemas: object[];
+  }
+  coaches: any[];
+}
+
+export interface RouteWithChildProps extends RouteProps {
+  childProps: ChildProps;
+}
+
+export default ({ childProps }: RouteWithChildProps) => (
   <Suspense fallback={<Spinner />}>
     <Switch>
       <AppliedRoute path="/" exact component={Home} props={childProps} />

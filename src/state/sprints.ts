@@ -1,7 +1,8 @@
 import cloneDeep from "lodash.clonedeep";
+import { AnyAction } from "redux";
+import { Sprint } from "../types";
 
 export const COMPLETE_SPRINT_TASK = "COMPLETE_SPRINT_TASK";
-export const NEXT_DAY = "NEXT_DAY";
 export const GET_ACTIVE_SPRINT_DATA = "GET_ACTIVE_SPRINT_DATA";
 export const GET_INITIAL_SPRINT_DATA = "GET_INITIAL_SPRINT_DATA";
 export const PUT_UPDATED_SPRINT_DATA = "PUT_UPDATED_SPRINT_DATA";
@@ -252,7 +253,7 @@ const initialState = [
   },
 ];
 
-function sprint(state = [], action) {
+function sprint(state = [] as Sprint[], action: AnyAction) {
   switch (action.type) {
     case GET_ACTIVE_SPRINT_DATA:
       state = action.payload;
@@ -321,8 +322,6 @@ function sprint(state = [], action) {
       let newForms = state.slice();
       newForms[action.payload.activeSprintIndex].teams = newFormsState;
       return [...newForms];
-    case NEXT_DAY:
-      return { ...state, day: state.day + 1 };
     case PUT_UPDATED_SPRINT_DATA:
       state = action.payload;
       return state;
@@ -331,28 +330,38 @@ function sprint(state = [], action) {
   }
 }
 
-export function updatePlanningForms(payload) {
+interface UpdatePlanningFormsPayload {
+  activeSprintIndex: number;
+  teamIndex: number;
+  planningIndex: number;
+  content: string;
+}
+
+interface CompleteSprintTaskPayload {
+  activeSprintIndex: number;
+  index: number;
+  day: number;
+  key: string;
+}
+
+export function updatePlanningForms(payload: UpdatePlanningFormsPayload) {
   return { type: PLANNING_FORMS, payload };
 }
 
-export function getActiveSprintData(payload) {
+export function getActiveSprintData(payload: Sprint[]) {
   return { type: GET_ACTIVE_SPRINT_DATA, payload };
 }
 
-export function getInitialSprintData(payload) {
+export function getInitialSprintData(payload: Sprint[]) {
   return { type: GET_INITIAL_SPRINT_DATA, payload };
 }
 
-export function completeSprintTask(payload) {
+export function completeSprintTask(payload: CompleteSprintTaskPayload) {
   return { type: COMPLETE_SPRINT_TASK, payload };
 }
 
-export function putUpdatedSprintData(payload) {
+export function putUpdatedSprintData(payload: Sprint[]) {
   return { type: PUT_UPDATED_SPRINT_DATA, payload };
-}
-
-export function nextDay() {
-  return { type: NEXT_DAY };
 }
 
 export default sprint;

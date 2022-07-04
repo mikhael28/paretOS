@@ -1,5 +1,6 @@
 import React from "react";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import { User } from "../../types";
 
 /**
  * This is an MVP, of a component to accept payments in Ugandan UGX - to replace the Stripe payment component in the paywall for the UG market.
@@ -7,10 +8,10 @@ import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
  * @returns
  */
 
-export default function Flutterwave(props) {
+export default function Flutterwave(props: { user: User}) {
   const config = {
     public_key: import.meta.env.VITE_FLUTTERWAVE_PK,
-    tx_ref: Date.now(),
+    tx_ref: Date.now().toString(),
     amount: 100,
     currency: "UGX",
     payment_options: "card,mobilemoney,ussd",

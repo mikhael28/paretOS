@@ -77,7 +77,7 @@ export interface MinimalUser {
   github: string;
   id: any;
   score: number;
-  percentage: string;
+  percentage: string | number;
   planning: PlanningField[];
   review: ({
     code: string;
@@ -101,7 +101,7 @@ export interface User extends MinimalUser {
   projects?: Array<Project>;
   // Deprecate ideas?
   ideas?: Array<any>;
-  notes: Array<any>;
+  notes?: Array<any>;
 
   // deprecate actions?
   actions: Array<any>;

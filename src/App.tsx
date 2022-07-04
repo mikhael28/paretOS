@@ -27,7 +27,7 @@ import {
 import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { errorToast } from "./libs/toasts";
-import Routes from "./Routes";
+import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
 import theme from "./libs/theme";
@@ -92,7 +92,7 @@ function App(props: AppProps) {
       admin: false,
       instructor: false,
       learningPurchase: false,
-      review: "",
+      review: {} as any,
       mentor: "",
       mentors: [],
       country: "",
@@ -119,9 +119,9 @@ function App(props: AppProps) {
       actions: [],
       achievements: [],
       expo: "",
-      missions: [{}, {}],
-      planning: [{}, {}],
-    },
+      missions: [] as any,
+      planning: [] as any,
+    } as User,
     chosenLanguage: availableLanguages[0],
   });
   const emptyArray: Array<object> = [];
@@ -226,7 +226,7 @@ function App(props: AppProps) {
           }
         }
         if (e !== "No current user") {
-          errorToast(e);
+          errorToast(e as Error);
           setLoading(false);
         }
       }
@@ -337,7 +337,7 @@ function App(props: AppProps) {
   }
 
   async function connectSocketToSprint(userID = userData.user.id) {
-    let result = { success: false, sprints: [] };
+    let result = { success: false, sprints: [] as any };
     try {
       const fetchedSprints = await RestAPI.get(
         "pareto",
@@ -419,7 +419,7 @@ function App(props: AppProps) {
       );
       setSprints(menteeSprints);
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   }
 
@@ -498,7 +498,7 @@ function App(props: AppProps) {
     );
   };
   const Onboarding = withRouter(OnboardingWithoutRouter);
-  const childProps = {
+  const childProps: ChildProps = {
     // authentication related state
     isAuthenticated,
     userHasAuthenticated,
