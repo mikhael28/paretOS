@@ -1,4 +1,4 @@
-import React, { Component, ComponentPropsWithoutRef, useState } from "react";
+import { useState } from "react";
 import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -13,12 +13,11 @@ import { Sprint, User } from "../types";
  *
  */
 interface HomeDashboardProps extends RouteComponentProps {
-  sprints: Sprint[];
   user: User;
   fetchMenteeSprints: (userid: string) => {}
 }
 
-function HomeDashboard({ sprints, history, user, fetchMenteeSprints }: HomeDashboardProps) {
+function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const theme = useTheme();
@@ -84,6 +83,7 @@ function HomeDashboard({ sprints, history, user, fetchMenteeSprints }: HomeDashb
       <div className="row">
         <div className="col-xs-12">
           <Sprints
+            reviewMode={false}
             history={history}
             user={user}
             fetchMenteeSprints={fetchMenteeSprints}

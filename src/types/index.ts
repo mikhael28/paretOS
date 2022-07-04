@@ -30,8 +30,10 @@ export interface Project {
 
 export type ActiveExperience = {
   title: string;
+  esTitle?: string;
   amount: number;
   overview: [];
+  esOverview?: string;
   completed: boolean;
   priority: string;
   _type: string;
@@ -75,7 +77,7 @@ export interface MinimalUser {
   github: string;
   id: any;
   score: number;
-  percentage: string;
+  percentage: string | number;
   planning: PlanningField[];
   review: ({
     code: string;
@@ -99,7 +101,7 @@ export interface User extends MinimalUser {
   projects?: Array<Project>;
   // Deprecate ideas?
   ideas?: Array<any>;
-  notes: Array<any>;
+  notes?: Array<any>;
 
   // deprecate actions?
   actions: Array<any>;
@@ -183,4 +185,13 @@ export interface Sprint {
   };
   createdAt: Date;
   updatedAt: Date;
+}
+
+export type Coach = {
+  _id: string;
+  mentor: {
+    picture: string;
+    fName: string;
+    lName: string;
+  }
 }
