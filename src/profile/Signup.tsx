@@ -30,7 +30,9 @@ const Signup = () => {
 
   const validateConfirmationForm = () => confirmationCode.length > 0;
 
-  const handleConfirmationSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleConfirmationSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     setIsLoading(true);
@@ -84,7 +86,9 @@ const Signup = () => {
           autoFocus
           type="tel"
           value={confirmationCode}
-          onChange={(e) => setConfirmationCode((e.target as HTMLFormElement).value)}
+          onChange={(e) =>
+            setConfirmationCode((e.target as HTMLFormElement).value)
+          }
         />
         <HelpBlock>{I18n.get("checkEmail")}</HelpBlock>
       </FormGroup>
@@ -136,7 +140,9 @@ const Signup = () => {
         <ControlLabel>{I18n.get("confirm")}</ControlLabel>
         <FormControl
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword((e.target as HTMLFormElement).value)}
+          onChange={(e) =>
+            setConfirmPassword((e.target as HTMLFormElement).value)
+          }
           type="password"
         />
       </FormGroup>
@@ -153,7 +159,9 @@ const Signup = () => {
   );
   return (
     <div className="Form">
-      {newUser === null ? renderForm() : renderConfirmationForm()}
+      {Object.keys(newUser).length === 0
+        ? renderForm()
+        : renderConfirmationForm()}
     </div>
   );
 };
