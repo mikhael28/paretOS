@@ -127,7 +127,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
       await initialFetch(uuid);
       history.push("/");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
       setLoading(false);
     }
   };

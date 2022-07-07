@@ -184,7 +184,7 @@ const EditProfile = (props: any) => {
       setUser(updatedProfile);
       // need to save the key
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 

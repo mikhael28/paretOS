@@ -111,10 +111,10 @@ function Journal(props: JournalProps) {
       ] as any,
     });
     let newActiveNote: any;
-    if (props.user.notes.length < 1) {
+    if ((props.user.notes || []).length < 1) {
       newActiveNote = "<p></p>";
     } else {
-      newActiveNote = props.user.notes[0];
+      newActiveNote = (props.user.notes || [])[0];
     }
     setTimeout(() => {
       editor.current.content.innerHTML = newActiveNote;
@@ -131,7 +131,7 @@ function Journal(props: JournalProps) {
       setNotes(result.notes);
       successToast("Journal saved 👍");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   }
 

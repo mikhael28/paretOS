@@ -141,7 +141,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       props.history.push("/");
     } catch (e) {
       // @ts-ignore
-      errorToast(e, props.user);
+      errorToast(e as Error);
     }
   }
 

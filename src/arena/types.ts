@@ -38,7 +38,7 @@ export interface Missions {
   headText: string;
   // missions: (Mission | EnMission)[];
   missions: ([GenMission, number])[];
-  emptyMisionsMessage: string;
+  emptyMissionsMessage: string;
   lengua: string;
   missionBtnText: string;
   setActiveIndex: Dispatch<SetStateAction<number>>;
