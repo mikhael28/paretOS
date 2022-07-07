@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { errorToast, successToast } from "../utils/toasts";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
 

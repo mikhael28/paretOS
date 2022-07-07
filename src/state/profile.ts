@@ -1,6 +1,6 @@
 import { DispatchProp } from "react-redux";
 import { AnyAction } from "redux";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 export const GET_USER = "GET_USER";
 

@@ -9,7 +9,7 @@ import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
-import { LibraryEntry } from "./ContextTypes";
+import { LibraryEntry } from "../types/ContextTypes";
 import classNames from "classnames";
 
 const builder = imageUrlBuilder(sanity);

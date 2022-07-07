@@ -5,6 +5,7 @@ import logo from "../assets/Pareto-Red-01.png";
 /**
  * Toast notification for errors, and assorted messages.
  */
+//TODO remove and replace with MUI Snackbars
 
 export function errorToast(err: Error) {
   toast.notify(

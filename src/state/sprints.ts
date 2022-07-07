@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import { AnyAction } from "redux";
-import { Sprint } from "../types";
+import { Sprint } from "../types/ArenaTypes";
 
 export const COMPLETE_SPRINT_TASK = "COMPLETE_SPRINT_TASK";
 export const GET_ACTIVE_SPRINT_DATA = "GET_ACTIVE_SPRINT_DATA";

@@ -8,7 +8,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
 import { Button, TextField, useTheme } from "@mui/material";
-import { errorToast } from "../libs/toasts";
+import { errorToast } from "../utils/toasts";
 import LoaderButton from "../components/LoaderButton";
 import LanguageSelector from "./LanguageSelector";
 // import { initialize } from "workbox-google-analytics";

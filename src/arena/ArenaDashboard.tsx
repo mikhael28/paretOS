@@ -6,7 +6,7 @@ import Sprints from "./Sprints";
 import question from "../assets/question.svg";
 import logo from "../assets/Pareto_Lockup-01.png";
 import { RouteComponentProps } from ".pnpm/@types+react-router@5.1.18/node_modules/@types/react-router";
-import { Sprint, User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 /**
  * The 'main dashboard' in the UI, that shows different things depending on what level of user you are.

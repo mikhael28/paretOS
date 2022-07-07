@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 
 import classNames from "classnames";
-import { ContextObjectProps } from "./ContextTypes";
+import { ContextObjectProps } from "../types/ContextTypes";
 
 const useStyles = makeStyles({
   root: {

@@ -13,7 +13,7 @@ import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
-import { errorToast } from "../libs/toasts";
+import { errorToast } from "../utils/toasts";
 
 /**
  *

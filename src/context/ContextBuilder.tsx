@@ -5,7 +5,7 @@ import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import classNames from "classnames";
-import { LibraryEntry } from "./ContextTypes";
+import { LibraryEntry } from "../types/ContextTypes";
 import ContextObject from "./ContextObject";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";

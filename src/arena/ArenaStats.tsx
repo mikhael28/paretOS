@@ -1,7 +1,7 @@
 import { I18n } from "@aws-amplify/core";
 
 import StatsBlock from "../components/StatsBlock";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 interface ArenaStatsProps {
   activePerson: User;

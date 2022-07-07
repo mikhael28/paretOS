@@ -16,7 +16,7 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { ComponentPropsWithoutRef } from "react";
-import { ActivePersonMissionsOnDay } from "./types";
+import { ActivePersonMissionsOnDay } from "../types/ArenaTypes";
 
 /**
  * Analytics component is a carousel that CAN contain multiple charts. Right now it just contains one.

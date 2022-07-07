@@ -23,18 +23,19 @@ import {
   fetchCoaches,
   fetchCoachingRoster,
   fetchSanitySchemas,
-} from "./libs/initialFetch";
+} from "./utils/initialFetch";
 import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
-import { errorToast } from "./libs/toasts";
+import { errorToast } from "./utils/toasts";
 import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
-import { User, Sprint } from "./types";
-import ErrorBoundary from "./utils/errorBoundary";
+import { User } from "./types/ProfileTypes";
+import { Sprint } from "./types/ArenaTypes";
+import ErrorBoundary from "./components/ErrorBoundary";
 import MusicPlayer from "./components/MusicPlayer";
 
 const Transition = React.forwardRef(function Transition(

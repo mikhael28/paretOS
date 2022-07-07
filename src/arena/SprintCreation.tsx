@@ -15,10 +15,10 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { ReduxRootState } from "../state";
-import { errorToast, successToast } from "../libs/toasts";
+import { errorToast, successToast } from "../utils/toasts";
 import LoaderButton from "../components/LoaderButton";
-import { MinimalUser, User } from "../types";
-import { FullMission, GenMission, Mission, EnMission } from "./types";
+import { MinimalUser, User } from "../types/ProfileTypes";
+import { FullMission, GenMission, Mission, EnMission } from "../types/ArenaTypes";
 import { RouteComponentProps } from "react-router-dom";
 
 /**
