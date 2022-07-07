@@ -44,7 +44,7 @@ function Profile() {
       let experiences = await RestAPI.get("pareto", `/experience/user/${id}`, {});
       setExperiences(experiences);
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 
@@ -54,7 +54,7 @@ function Profile() {
       setSprints(sprints);
       setLoading(false);
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 

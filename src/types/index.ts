@@ -90,7 +90,7 @@ export interface User extends MinimalUser {
   rank?: number;
   _id: string;
 
-  profileImg?: File;
+  profileImg?: string;
   defaultLanguage?: string;
   instructor: boolean;
   apprenticeshipId?: string;

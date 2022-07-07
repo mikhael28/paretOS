@@ -196,7 +196,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
       });
       successToast("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 
@@ -238,7 +238,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
       });
       successToast("Achievement sent back for further review.");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 
@@ -284,7 +284,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
       });
       successToast("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   };
 

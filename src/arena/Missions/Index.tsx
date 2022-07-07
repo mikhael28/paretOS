@@ -20,7 +20,7 @@ function Missions(props: MissionsProps) {
           ))}
         </ul>
       ) : (
-        <p>{props.emptyMisionsMessage}</p>
+        <p>{props.emptyMissionsMessage}</p>
       )}
     </section>
   );

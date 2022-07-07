@@ -1,4 +1,4 @@
-import { Component, createRef, MutableRefObject, StyleHTMLAttributes } from "react";
+import { Component, createRef, CSSProperties, MutableRefObject } from "react";
 import {
   IoMdPlay,
   IoMdPause,
@@ -11,7 +11,7 @@ let timer: NodeJS.Timer;
 // borrowed from here for initial code: https://gist.github.com/harunpehlivan/fe7b52218b6b99d70a0c5fe88538ea2d
 
 interface PomodoroProps {
-  headingStyle: StyleHTMLAttributes<any>;
+  headingStyle: CSSProperties;
 }
 
 interface PomodoroState {
@@ -23,12 +23,13 @@ interface PomodoroState {
   seconds: number;
   title: String;
   isStarted: boolean;
+  isPaused: boolean;
 }
 
-export default class Pomodoro extends Component {
+export default class Pomodoro extends Component<PomodoroProps, PomodoroState> {
   time_left: MutableRefObject<any>;
   audio_beep: MutableRefObject<any>;
-  headingStyle: StyleHTMLAttributes<any>;
+  headingStyle: CSSProperties;
 
   constructor(props: PomodoroProps) {
     super(props);
@@ -45,6 +46,7 @@ export default class Pomodoro extends Component {
     seconds: 0,
     title: "Session",
     isStarted: false,
+    isPaused: false,
   };
 
   // this is dev state, to bring the initial start time from 25 minutes to 10 seconds

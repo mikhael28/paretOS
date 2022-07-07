@@ -189,7 +189,7 @@ function Dais({ user, rank, ranks }: DaisProps) {
           <div className="dais-image-container">
             <div className="dais-image-lockup">
               <ProfileImg
-                profileImg={user.profileImg ? user.profileImg : null}
+                profileImg={user.profileImg ? user.profileImg : ""}
               />
               <div
                 className="dais-image-label"

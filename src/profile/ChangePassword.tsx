@@ -44,7 +44,7 @@ const ChangePassword = (props: any) => {
       successToast("Password successfully changed.");
       props.history.push("/");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
       setState({
         ...state,
         isChanging: false,
