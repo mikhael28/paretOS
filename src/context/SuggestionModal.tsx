@@ -128,7 +128,7 @@ export default function SuggestionModal({
       handleClose();
       successToast("Thank you for your suggestion!");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
       setSubmissionLoading(false);
     }
   };

@@ -203,7 +203,7 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
       successToast("Sprint created successfully.");
       history.push("/");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
       setLoading(false);
     }
     setLoading(false);

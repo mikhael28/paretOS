@@ -43,7 +43,7 @@ const Signup = () => {
       successToast("Sign up complete");
       history.push("/onboarding/user");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
       setIsLoading(false);
     }
   };

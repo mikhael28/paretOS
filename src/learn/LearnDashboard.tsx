@@ -34,7 +34,7 @@ function LearnDashboard(props: any) {
       });
       successToast("Journal saved 👍");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     }
   }
   return (
