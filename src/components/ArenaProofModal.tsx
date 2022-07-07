@@ -120,7 +120,7 @@ export default function ArenaProofModal({
       setPictureKey(pictureKey.key);
       successToast("Proof successfully uploaded.");
     } catch (e) {
-      errorToast(e);
+      errorToast(e as Error);
     } finally {
       setLoading(false);
     }

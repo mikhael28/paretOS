@@ -175,7 +175,7 @@ export const fetchSanitySchemas = async () => {
     result.success = true;
     result.sanitySchemas = { technicalSchemas, economicSchemas, hubSchemas };
   } catch (e) {
-    errorToast(e);
+    errorToast(e as Error);
   }
   return result;
 };

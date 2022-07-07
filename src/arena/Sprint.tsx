@@ -122,7 +122,7 @@ function Sprint({ user, history }: SprintProps) {
     try {
       await updateSprintData(sprints[SPRINT_INDEX], ws);
     } catch (error) {
-      errorToast(error);
+      errorToast(error as Error);
     } finally {
       setLoading(false);
     }
@@ -212,7 +212,7 @@ function Sprint({ user, history }: SprintProps) {
             <Missions
               headText="upcomingMission"
               missions={upcomingMissions}
-              emptyMisionsMessage="You have completed all the available achievements for today."
+              emptyMissionsMessage="You have completed all the available achievements for today."
               lengua={LENGUA}
               missionBtnText="markAsComplete"
               setShowProofModal={setShowProofModal}
@@ -224,7 +224,7 @@ function Sprint({ user, history }: SprintProps) {
               headClassName="third-step-arena"
               headText="finishedMissions"
               missions={finishedMissions}
-              emptyMisionsMessage="You have not reported any achievements yet today."
+              emptyMissionsMessage="You have not reported any achievements yet today."
               lengua={LENGUA}
               missionBtnText="seeTheProof"
               setActiveIndex={setActiveIndex}
