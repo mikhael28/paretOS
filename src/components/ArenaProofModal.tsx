@@ -13,9 +13,10 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
-import uploadToS3 from "../libs/s3";
-import { User, ActiveMission, Sprint } from "../types";
+import { errorToast, successToast } from "../utils/toasts";
+import uploadToS3 from "../utils/s3";
+import { User } from "../types/ProfileTypes";
+import { ActiveMission, Sprint } from "../types/ArenaTypes";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.

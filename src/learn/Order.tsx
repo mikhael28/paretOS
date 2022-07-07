@@ -3,9 +3,9 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { successToast } from "../libs/toasts";
-import { createExperience } from "../libs/createExperience";
-import { User } from "../types";
+import { successToast } from "../utils/toasts";
+import { createExperience } from "../utils/createExperience";
+import { User } from "../types/ProfileTypes";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**
@@ -56,7 +56,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId,
+      expId: this.props.user.apprenticeshipId || "",
       userId: this.props.user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -65,7 +65,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId,
+      expId: this.props.user.productId || "",
       userId: this.props.user.id,
       type: "Product",
       title: "Capstone Project",

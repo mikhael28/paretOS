@@ -49,7 +49,6 @@ function Details({
         <div className="options-buttons">
           {missions.map((mission, idx) => (
             <Button
-              // variant="gradient" // fixme: this is supposed to work but unfortunately it doesn't. This is related to custom typings for variants in the file ./src/types/custom_types/mui.d.ts. It's also related to the fact that the variant="gradient" is not a valid prop for the button component(at the moment).
               variant="text"
               onClick={() => setDisplayDay(idx)}
               key={idx}

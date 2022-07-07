@@ -3,10 +3,10 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
-import { errorToast, successToast } from "../libs/toasts";
+import { errorToast, successToast } from "../utils/toasts";
 import PaywallModal from "./PaywallModal";
 import ExperienceSummary from "./ExperienceSummary";
-import { Coach } from "../types";
+import { Coach } from "../types/MentorshipTypes";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   const { children, ...rest } = props as any;

@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
 import profile from "./profile";
 import sprints from "./sprints";
-import { Sprint, User } from "../types";
+import { Sprint } from "../types/ArenaTypes";
+import { User } from "../types/ProfileTypes";
 
 export interface ReduxRootState {
   profile: User;

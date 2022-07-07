@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { init, exec } from "pell";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { errorToast, successToast } from "../libs/toasts";
-import { User } from "../types/index";
+import { errorToast, successToast } from "../utils/toasts";
+import { User } from "../types/ProfileTypes";
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.
  * @TODO Issue #32

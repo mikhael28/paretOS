@@ -10,8 +10,8 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
-import { generateEmail } from "../libs/errorEmail";
+import { errorToast, successToast } from "../utils/toasts";
+import { generateEmail } from "../utils/generateErrorEmail";
 
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.

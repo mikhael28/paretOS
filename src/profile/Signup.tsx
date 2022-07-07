@@ -10,7 +10,7 @@ import { I18n } from "@aws-amplify/core";
 import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { errorToast, successToast } from "../utils/toasts";
 import { User } from "@sentry/react";
 
 const Signup = () => {

@@ -13,7 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
-import { ActiveExperience, MongoExperience } from "../types";
+import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
 
 /**
  * This component is for a Coach to approve the work of the student, and to leave feedback.

@@ -5,7 +5,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { errorToast, successToast } from "../utils/toasts";
 
 /**
  * Change your password through Cognito

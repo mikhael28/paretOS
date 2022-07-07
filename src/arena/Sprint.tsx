@@ -5,22 +5,23 @@ import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
-import { errorToast } from "../libs/toasts";
+import { errorToast } from "../utils/toasts";
 import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
 import ArenaProofModal from "../components/ArenaProofModal";
-import { steps, updateSprintData } from "./utils";
+import { steps } from "../libs/tour";
+import { updateSprintData } from "../utils/updateSprintData";
 import Missions from "./Missions/Index";
 import getFormattedDay from "../utils/getFormattedDay";
-import ArenaTabsHeader from "./ArenaTabsHeadr";
+import ArenaTabsHeader from "./ArenaTabsHeader";
 import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
-import { GenMission, ActivePersonMissionsOnDay } from "./types";
+import { GenMission, ActiveMission, ActivePersonMissionsOnDay } from "../types/ArenaTypes";
 import { ReduxRootState } from "../state";
-import { ActiveMission, User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -50,7 +51,7 @@ function Sprint({ user, history }: SprintProps) {
   // Identify the user's index in the team
   let sprint = sprints[SPRINT_INDEX];
   const TEAM_INDEX = sprint.teams.findIndex(
-    (team) => team.id === user.id
+    (team: User) => team.id === user.id
   );
 
   // Identify the start date of the sprint
