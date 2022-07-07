@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, useState } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
@@ -14,22 +14,16 @@ import { RouterHistory } from "@sentry/react/types/reactrouter";
  */
 
 interface OrderProps {
-  user: User,
+  user: User;
   initialFetch: (id: string) => void;
-  history: RouterHistory; 
+  history: RouterHistory;
   stripeKey: string;
 }
 
-export default class Order extends Component<OrderProps, { isLoading: boolean }> {
-  constructor(props: OrderProps) {
-    super(props);
+const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    this.state = {
-      isLoading: false,
-    };
-  }
-
-  billUser(details: any) {
+  const billUser = (details: any) => {
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
@@ -39,25 +33,21 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     return RestAPI.post("util", route, {
       body: details,
     });
-  }
+  };
 
-  unlockLearning = async () => {
+  const unlockLearning = async () => {
     let body = {
       learningPurchase: true,
     };
 
-    let updatedUser = await RestAPI.put(
-      "pareto",
-      `/users/${this.props.user.id}`,
-      {
-        body,
-      }
-    );
+    let updatedUser = await RestAPI.put("pareto", `/users/${user.id}`, {
+      body,
+    });
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId,
-      userId: this.props.user.id,
+      expId: user.apprenticeshipId,
+      userId: user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
       description: "Learning the tools, habits and workflows of development.",
@@ -65,8 +55,8 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId,
-      userId: this.props.user.id,
+      expId: user.productId,
+      userId: user.id,
       type: "Product",
       title: "Capstone Project",
       description:
@@ -75,8 +65,8 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     const createProduct = await createExperience(productParams);
     console.log("Created Product: ", createProduct);
     let interviewingParams = {
-      expId: this.props.user.masteryId,
-      userId: this.props.user.id,
+      expId: user.masteryId,
+      userId: user.id,
       type: "Interviewing",
       title: "Interviewing",
       description:
@@ -105,16 +95,19 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (storage: any, { token, error }: {token: any, error: Error}) => {
+  const handleFormSubmit = async (
+    storage: any,
+    { token, error }: { token: any; error: Error }
+  ) => {
     if (error) {
       alert(error);
       return;
     }
 
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
-      let billing = await this.billUser({
+      let billing = await billUser({
         storage,
         source: token.id,
       });
@@ -125,50 +118,47 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
 
       if (billing.status === true) {
         // create learning account info
-        await this.unlockLearning();
+        await unlockLearning();
       }
 
-      await this.props.initialFetch(this.props.user._id);
-      this.props.history.push("/training");
+      await initialFetch(user._id);
+      history.push("/training");
     } catch (e) {
       alert(e);
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  handleFreeUnlock = async () => {
-    this.setState({ isLoading: true });
+  const handleFreeUnlock = async () => {
+    setIsLoading(true);
 
     try {
-      await this.unlockLearning();
-      await this.props.initialFetch(this.props.user._id);
-      this.props.history.push("/training");
+      await unlockLearning();
+      await initialFetch(user._id);
+      history.push("/training");
     } catch (e) {
       alert(e);
     }
   };
 
-  render() {
-    return (
-      <>
-        <div className="Form">
-          <StripeProvider apiKey={this.props.stripeKey}>
-            <Elements>
-              <BillingForm
-                loading={this.state.isLoading}
-                onSubmit={this.handleFormSubmit}
-              />
-            </Elements>
-          </StripeProvider>
-        </div>
-        <Button onClick={this.handleFreeUnlock}>No Donation</Button>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="Form">
+        <StripeProvider apiKey={stripeKey}>
+          <Elements>
+            <BillingForm loading={isLoading} onSubmit={handleFormSubmit} />
+          </Elements>
+        </StripeProvider>
+      </div>
+      <Button onClick={handleFreeUnlock}>No Donation</Button>
+    </>
+  );
+};
+
+export default Order;
 
 //(property) loading: boolean
-//Type '{ 
-//      loading: boolean; 
+//Type '{
+//      loading: boolean;
 //       onSubmit: (storage: any, { token, error }: { token: any; error: any; }) => Promise<void>; }' is not assignable to type 'IntrinsicAttributes & object'.
- // Property 'loading' does not exist on type 'IntrinsicAttributes & object'.ts(2322)
+// Property 'loading' does not exist on type 'IntrinsicAttributes & object'.ts(2322)
