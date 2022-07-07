@@ -7,6 +7,7 @@ import React, {
   ComponentPropsWithRef,
   useEffect,
   SyntheticEvent,
+  CSSProperties,
 } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
@@ -29,7 +30,7 @@ interface LeftNavProps {
 }
 
 // Style definitions
-const headingStyle = {
+const headingStyle: CSSProperties = {
   textDecoration: "none",
   fontSize: 15,
   fontWeight: 600,
