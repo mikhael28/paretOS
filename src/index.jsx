@@ -32,7 +32,7 @@ if (import.meta.env.NODE_ENV === "production") {
   });
 }
 
-const store = configureStore({
+export const store = configureStore({
   reducer,
 });
 

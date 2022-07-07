@@ -1,4 +1,4 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
 import { I18n } from "@aws-amplify/core";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +21,7 @@ import ArenaDynamicForms from "./ArenaDynamicForms";
 import { GenMission, ActivePersonMissionsOnDay } from "./types";
 import { ReduxRootState } from "../state";
 import { ActiveMission, User } from "../types";
+import { store } from "..";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -105,59 +106,66 @@ function Sprint({ user, history }: SprintProps) {
     setDynamicForms(tempObj);
   }
 
-  async function handleChange(
-    mission: ActiveMission,
-    idx: number,
-    day: number,
-    key: number | string
-  ) {
-    setLoading(true);
-    dispatch({
-      type: "COMPLETE_SPRINT_TASK",
-      payload: {
-        mission,
-        idx,
-        day,
-        key,
-        index: TEAM_INDEX,
-        activeSprintIndex: SPRINT_INDEX,
-      },
-    });
+  const handleChange = useCallback(
+    async (
+      mission: ActiveMission,
+      idx: number,
+      day: number,
+      key: number | string
+    ) => {
+      setLoading(true);
+      dispatch({
+        type: "COMPLETE_SPRINT_TASK",
+        payload: {
+          mission,
+          idx,
+          day,
+          key,
+          index: TEAM_INDEX,
+          activeSprintIndex: SPRINT_INDEX,
+        },
+      });
+      const { sprint } = store.getState();
+      try {
+        await updateSprintData(sprint[SPRINT_INDEX], ws);
+      } catch (error: any) {
+        errorToast(error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch, SPRINT_INDEX, TEAM_INDEX]
+  );
 
-    try {
-      await updateSprintData(sprints[SPRINT_INDEX], ws);
-    } catch (error: any) {
-      errorToast(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const savePlanning = useCallback(
+    async (
+      activeSprintIndex: number,
+      teamIndex: number,
+      planningIndex: number,
+      content: string
+    ) => {
+      setLoading(true);
 
-  async function savePlanning(
-    activeSprintIndex: number,
-    teamIndex: number,
-    planningIndex: number,
-    content: string
-  ) {
-    setLoading(true);
+      dispatch({
+        type: "PLANNING_FORMS",
+        payload: {
+          activeSprintIndex,
+          teamIndex,
+          planningIndex,
+          content,
+        },
+      });
+      const { sprint } = store.getState();
 
-    dispatch({
-      type: "PLANNING_FORMS",
-      payload: {
-        activeSprintIndex,
-        teamIndex,
-        planningIndex,
-        content,
-      },
-    });
-
-    try {
-      await updateSprintData(sprints[SPRINT_INDEX], ws);
-      setLoading(false);
-    } catch (error) {
-      alert(error);
-    }
-  }
+      try {
+        await updateSprintData(sprint[SPRINT_INDEX], ws);
+        setLoading(false);
+      } catch (error) {
+        alert(error);
+      }
+    },
+    [dispatch, SPRINT_INDEX]
+  );
 
   function closeModal() {
     setShowProofModal(false);
