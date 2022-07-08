@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { ReduxRootState } from "../state";
-import { Sprint } from "../types";
+import { selectSortedSprints } from "../selectors/select-sorted-sprints";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -14,14 +13,6 @@ import { Sprint } from "../types";
 interface SprintProps extends ComponentPropsWithoutRef<any> {
   reviewMode: boolean;
 }
-
-const selectSortedSprints = (state: ReduxRootState) => {
-  const sprints = [...state.sprint];
-  return sprints.sort(
-    (a: Sprint, b: Sprint) =>
-      new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-  );
-};
 
 function Sprints(props: SprintProps) {
   let newClassName = classNames("exp-card");
