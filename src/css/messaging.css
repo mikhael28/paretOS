@@ -1,0 +1,81 @@
+/* CSS for Messaging styles */
+
+/* Messaging styles */
+
+* {
+    box-sizing: border-box;
+  }
+  
+  .messaging {
+    height: 100vh;
+  }
+  
+  .messaging-container {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    background: white;
+    border-radius: 16px;
+    box-shadow: rgb(0 0 0 / 30%) 0 1px 4px 0;
+    border-color: rgb(17 16 16);
+    visibility: visible;
+    transition: all 0.5s ease 0s;
+  }
+  
+  .messages-scroller {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow-y: scroll;
+  }
+  
+  .message {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 8px 12px;
+    max-width: 280px;
+    background: #339c51;
+    border-radius: 16px;
+    font-size: 14px;
+    color: rgb(255 255 254);
+  }
+  
+  .message.league {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 8px 12px;
+    max-width: 280px;
+    background: black;
+    border-radius: 16px;
+    font-size: 14px;
+    color: rgb(255 255 254);
+  }
+  
+  .message.me {
+    align-self: flex-end;
+    background: rgb(220 66 45);
+    color: white;
+  }
+  
+  .chat-bar {
+    height: 10vh;
+    border-top: 1px solid #ddd;
+  }
+  
+  .chat-bar form {
+    height: 100%;
+    padding: 16px;
+  }
+  
+  .chat-bar form input {
+    width: 100%;
+    height: 32px;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    outline: none;
+  }
+  
+  .chat-bar form input:focus {
+    border: 1px solid #f19e38;
+  }
