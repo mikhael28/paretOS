@@ -1,0 +1,162 @@
+/* CSS for button styles */
+
+/* button styles */
+
+.LoaderButton .spinning,
+.loading-icon.spinning {
+  margin-right: 7px;
+  top: 2px;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.btn {
+  border: 0;
+  background: linear-gradient(70deg, var(--primary), var(--secondary));
+  min-width: 180px;
+  color: #fff;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s;
+  margin-right: 10px;
+}
+
+.block .btn {
+  text-transform: uppercase;
+}
+
+.options {
+  padding: 0 24px;
+  margin-top: -16px;
+  max-width: calc(100vw - 64px);
+  overflow: scroll;
+}
+
+.options-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.options .btn {
+  background: #555;
+  min-width: 80px;
+  padding: 12px 24px;
+  border-radius: 40px;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.options .btn-default:hover .options .btn-default:active {
+  background: #777 !important;
+}
+
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+}
+
+summary {
+  font-weight: bold;
+  margin: -0.5em -0.5em 0;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+details[open] {
+  padding: 0.5em;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+
+.btn:hover {
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
+  color: white;
+}
+
+.btn:active,
+.btn:focus {
+  outline: 0;
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
+  color: white;
+}
+
+.options .btn:hover,
+.options .btn:active {
+  background: #777 !important;
+}
+
+.btn-cancel {
+  background: #f44336;
+  border: 0;
+  width: 180px;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 1000;
+  transition: background 0.3s;
+  max-height: 30px;
+  margin-right: 10px;
+}
+
+.btn-cancel:hover {
+  background: #af3b32;
+  color: white;
+}
+
+.btn-cancel:active,
+.btn-cancel:focus {
+  outline: 0;
+  background: #af3b32;
+  color: white;
+}
+
+.btnIcon {
+  border: 0;  
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  background-size: 40px;
+  transition: opacity 0.3s;
+}
+
+.btnIcon:hover {
+  opacity: 0.8;
+}
+
+.btnIcon:active,
+.btnIcon:focus {
+  outline: 0;
+  opacity: 0.5;
+}
+
+.btn-outline {
+  background: none;
+  color: #30944c;
+  border: 2px solid #30944c;
+}
+
+.btn-outline:hover {
+  background: linear-gradient(70deg, #db6e4d, #e0526e);
+}

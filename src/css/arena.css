@@ -1,0 +1,22 @@
+/* CSS for Arena styles */
+
+/* Arena Dashboard */
+
+.sprints-top {
+    height: 100vh;
+  }
+  
+  .sprints-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80vh;
+    visibility: visible;
+    transition: all 0.5s ease 0s;
+  }
+  
+  .sprints-scroller {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
