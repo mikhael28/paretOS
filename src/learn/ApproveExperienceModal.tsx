@@ -60,7 +60,7 @@ const ConfirmModal = ({
   closeModal,
   markRequestRevisions,
   markComplete,
-} : ArenaProofModalProps) => {
+}: ArenaProofModalProps) => {
   const { register, handleSubmit } = useForm<{ coachNotes: string }>();
   const classes = useStyles();
 
@@ -141,7 +141,7 @@ const ConfirmModal = ({
                 {I18n.get("close")}
               </Button>
               {mongoExperience[activeExperience.priority].approved ===
-              true ? null : (
+                true ? null : (
                 <>
                   {mongoExperience[activeExperience.priority]
                     .revisionsNeeded === false ? (

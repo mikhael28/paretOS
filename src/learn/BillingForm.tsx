@@ -30,7 +30,7 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
   loading: boolean;
 
   constructor({ loading, onSubmit, stripe }: BillingFormProps) {
-    super({loading, onSubmit, stripe});
+    super({ loading, onSubmit, stripe });
     this.loading = this.props.loading;
     this.state = {
       name: "",

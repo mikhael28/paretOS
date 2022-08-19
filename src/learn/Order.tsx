@@ -1,9 +1,8 @@
-import { Component } from "react";
+import { Component, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { successToast } from "../libs/toasts";
 import { createExperience } from "../libs/createExperience";
 import { User } from "../types";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
@@ -16,7 +15,7 @@ import { RouterHistory } from "@sentry/react/types/reactrouter";
 interface OrderProps {
   user: User,
   initialFetch: (id: string) => void;
-  history: RouterHistory; 
+  history: RouterHistory;
   stripeKey: string;
 }
 
@@ -56,7 +55,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId,
+      expId: this.props.user.apprenticeshipId ?? '',
       userId: this.props.user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -65,7 +64,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId,
+      expId: this.props.user.productId ?? '',
       userId: this.props.user.id,
       type: "Product",
       title: "Capstone Project",
@@ -105,7 +104,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (storage: any, { token, error }: {token: any, error: Error}) => {
+  handleFormSubmit = async (storage: any, { token, error }: { token: any, error: Error }) => {
     if (error) {
       alert(error);
       return;
@@ -119,9 +118,9 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
         source: token.id,
       });
       console.log("bill: ", billing);
-      successToast(
-        "Your card has been charged successfully! We are creating your learning account."
-      );
+      // handleShowSuccess(
+      //   "Your card has been charged successfully! We are creating your learning account."
+      // );
 
       if (billing.status === true) {
         // create learning account info

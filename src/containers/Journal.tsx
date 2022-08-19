@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { init, exec } from "pell";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import { User } from "../types/index";
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.
@@ -19,6 +19,8 @@ function Journal(props: JournalProps) {
   // @TODO update this typing with what the Notes turns out to be
   const [notes, setNotes] = useState<any>([]);
   const [activeNote, setActiveNote] = useState(0);
+
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   useEffect(() => {
     setHtml(notes[activeNote]);
@@ -129,9 +131,9 @@ function Journal(props: JournalProps) {
         },
       });
       setNotes(result.notes);
-      successToast("Journal saved 👍");
+      handleShowSuccess("Journal saved 👍");
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   }
 
