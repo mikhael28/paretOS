@@ -31,10 +31,10 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
       selector: ".second-step-home",
       content: `${I18n.get("homeSecond")}`,
     },
-    // {
-    // 	selector: '.third-step-home',
-    // 	content: `${I18n.get('homeThird')}`
-    // }
+    {
+      selector: '.third-step-home',
+      content: `${I18n.get('homeThird')}`
+    }
   ];
   return (
     <div className="flex-down">
@@ -95,8 +95,8 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
-        // showCloseButton={true}
-        // rewindOnClose={false}
+      // showCloseButton={true}
+      // rewindOnClose={false}
       />
     </div>
   );

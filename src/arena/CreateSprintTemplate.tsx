@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
+import { ToastMsgContext } from "../state/ToastContext";
 import TextField from "@mui/material/TextField";
 import {
   DragDropContext,
@@ -13,7 +14,6 @@ import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
-import { errorToast } from "../libs/toasts";
 
 /**
  *
@@ -87,6 +87,7 @@ const onDragEnd = ({ result, columns, setColumns }: OnDragEndParams) => {
 };
 
 function CreateSprintTemplate(props: CreateSprintTemplateProps) {
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
   const theme = useTheme();
   const [columns, setColumns] = useState({
     Options: {
@@ -141,7 +142,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       props.history.push("/");
     } catch (e) {
       // @ts-ignore
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   }
 
@@ -188,8 +189,8 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   // This will equal true or false, not a number
   const meetsMinimumOptionsThreshold =
     columns.Morning.items.length +
-      columns.Workday.items.length +
-      columns.Evening.items.length >=
+    columns.Workday.items.length +
+    columns.Evening.items.length >=
     3;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

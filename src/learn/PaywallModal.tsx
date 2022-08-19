@@ -14,7 +14,7 @@ interface LoadingModalProps {
   initialFetch: (id: string) => {};
 }
 
-function LoadingModal({ history, user, initialFetch}: LoadingModalProps) {
+function LoadingModal({ history, user, initialFetch }: LoadingModalProps) {
   const [stripeKey, setStripeKey] = useState(null);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function LoadingModal({ history, user, initialFetch}: LoadingModalProps) {
       ) : (
         <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
           <div>
-              <Order history={history} user={user} initialFetch={initialFetch} stripeKey={stripeKey || ""} />
+            <Order history={history} user={user} initialFetch={initialFetch} stripeKey={stripeKey || ""} />
           </div>
         </DialogContent>
       )}

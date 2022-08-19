@@ -48,7 +48,7 @@ export type ActiveMission = {
 };
 
 export type MongoExperience = {
-  [index: string] : any;
+  [index: string]: any;
   achievements: number;
   approved: boolean;
   description: string;

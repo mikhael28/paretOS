@@ -12,7 +12,6 @@ import { HiOutlineClipboardCheck } from "react-icons/hi";
 import PaywallModal from "./PaywallModal";
 import question from "../assets/help.png";
 import { generateEmail } from "../libs/errorEmail";
-import { successToast, errorToast } from "../libs/toasts";
 import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
 import { ActiveExperience, MongoExperience, User } from "../types";
@@ -29,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #27
  */
 
-interface ExperienceModuleProps extends RouteComponentProps{
+interface ExperienceModuleProps extends RouteComponentProps {
   user: User;
   initialFetch: (id: string) => {};
   sanityTraining: any[];
@@ -194,9 +193,9 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
           textBody: "Pareto Achievement For Review.",
         },
       });
-      successToast("Achievement submitted successfully!");
+      // handleShowSuccess("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e as Error);
+      // handleShowError(e as Error);
     }
   };
 
@@ -236,9 +235,9 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
           textBody: "Pareto Achievement For Review.",
         },
       });
-      successToast("Achievement sent back for further review.");
+      // handleShowSuccess("Achievement sent back for further review.");
     } catch (e) {
-      errorToast(e as Error);
+      // handleShowError(e as Error);
     }
   };
 
@@ -282,9 +281,9 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
           textBody: "Pareto Achievement Unlocked.",
         },
       });
-      successToast("Achievement submitted successfully!");
+      // handleShowSuccess("Achievement submitted successfully!");
     } catch (e) {
-      errorToast(e as Error);
+      // handleShowError(e as Error);
     }
   };
 
@@ -321,11 +320,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
             {mongoExperience._01 ? (
               <div className="second-step-exp">
                 {mongoExperience[topic.priority].approved === true &&
-                mongoExperience[topic.priority].completed === true ? (
+                  mongoExperience[topic.priority].completed === true ? (
                   <ImCheckmark />
                 ) : null}
                 {mongoExperience[topic.priority].completed === true &&
-                mongoExperience[topic.priority].approved === false ? (
+                  mongoExperience[topic.priority].approved === false ? (
                   <FaSearch />
                 ) : null}
                 {mongoExperience[topic.priority].completed === false ? (
@@ -363,7 +362,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
               </Button>
             )}
             {this.props.user.instructor === true &&
-            mongoExperience[activeExperience.priority].completed === true ? (
+              mongoExperience[activeExperience.priority].completed === true ? (
               <Button
                 onClick={() => this.setState({ openReviewModal: true })}
                 className="btn"
