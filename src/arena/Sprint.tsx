@@ -1,4 +1,4 @@
-import { ChangeEvent, SyntheticEvent, useState, useContext } from "react";
+import { ChangeEvent, SyntheticEvent, useCallback, useState, useContext } from "react";
 import { I18n } from "@aws-amplify/core";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +21,7 @@ import ArenaDynamicForms from "./ArenaDynamicForms";
 import { GenMission, ActivePersonMissionsOnDay } from "./types";
 import { ReduxRootState } from "../state";
 import { ActiveMission, User } from "../types";
+import { store } from "..";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -30,7 +31,7 @@ import { ActiveMission, User } from "../types";
  * @returns {JSX}
  */
 interface SprintProps extends RouteComponentProps {
-  user: User
+  user: User;
 }
 
 function Sprint({ user, history }: SprintProps) {
@@ -51,9 +52,7 @@ function Sprint({ user, history }: SprintProps) {
 
   // Identify the user's index in the team
   let sprint = sprints[SPRINT_INDEX];
-  const TEAM_INDEX = sprint.teams.findIndex(
-    (team) => team.id === user.id
-  );
+  const TEAM_INDEX = sprint.teams.findIndex((team) => team.id === user.id);
 
   // Identify the start date of the sprint
   let currentTS = Date.now();
@@ -95,11 +94,13 @@ function Sprint({ user, history }: SprintProps) {
     sprints[SPRINT_INDEX].teams[TEAM_INDEX].planning
   );
 
-  function handleDynamicForms(event: SyntheticEvent<HTMLInputElement, ChangeEvent>) {
+  function handleDynamicForms(
+    event: SyntheticEvent<HTMLInputElement, ChangeEvent>
+  ) {
     let tempObj = { ...dynamicForms };
 
     for (const obj in tempObj) {
-      let element = event.target as HTMLInputElement
+      let element = event.target as HTMLInputElement;
       if (tempObj[obj].code === element.id) {
         tempObj[obj].content = element.value;
       }
@@ -107,54 +108,75 @@ function Sprint({ user, history }: SprintProps) {
     setDynamicForms(tempObj);
   }
 
-  async function handleChange(mission: ActiveMission, idx: number, day: number, key: (number | string)) {
-    setLoading(true);
-    dispatch({
-      type: "COMPLETE_SPRINT_TASK",
-      payload: {
-        mission,
-        idx,
-        day,
-        key,
-        index: TEAM_INDEX,
-        activeSprintIndex: SPRINT_INDEX,
-      },
-    });
+  const handleChange = useCallback(
+    async (
+      mission: ActiveMission,
+      idx: number,
+      day: number,
+      key: number | string
+    ) => {
+      setLoading(true);
+      dispatch({
+        type: "COMPLETE_SPRINT_TASK",
+        payload: {
+          mission,
+          idx,
+          day,
+          key,
+          index: TEAM_INDEX,
+          activeSprintIndex: SPRINT_INDEX,
+        },
+      });
+      const { sprint } = store.getState();
+      try {
+        await updateSprintData(sprint[SPRINT_INDEX], ws);
+      } catch (error: any) {
+        errorToast(error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch, SPRINT_INDEX, TEAM_INDEX]
+  );
 
-    try {
-      await updateSprintData(sprints[SPRINT_INDEX], ws);
-    } catch (error) {
-      handleShowError(error as Error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const savePlanning = useCallback(
+    async (
+      activeSprintIndex: number,
+      teamIndex: number,
+      planningIndex: number,
+      content: string
+    ) => {
+      setLoading(true);
 
-  async function savePlanning(
-    activeSprintIndex: number,
-    teamIndex: number,
-    planningIndex: number,
-    content: string
-  ) {
-    setLoading(true);
 
-    dispatch({
-      type: "PLANNING_FORMS",
-      payload: {
-        activeSprintIndex,
-        teamIndex,
-        planningIndex,
-        content,
-      },
-    });
+      dispatch({
+        type: "PLANNING_FORMS",
+        payload: {
+          activeSprintIndex,
+          teamIndex,
+          planningIndex,
+          content,
+        },
+      });
+      const { sprint } = store.getState();
 
-    try {
-      await updateSprintData(sprints[SPRINT_INDEX], ws);
-      setLoading(false);
-    } catch (error) {
-      alert(error);
-    }
-  }
+      try {
+        await updateSprintData(sprint[SPRINT_INDEX], ws);
+      } catch (error) {
+        errorToast(error as Error);
+      } finally {
+        setLoading(false);
+      }
+
+      /*   try {
+        await updateSprintData(sprint[SPRINT_INDEX], ws);
+        setLoading(false);
+      } catch (error) {
+        alert(error);
+      } */
+    },
+    [dispatch, SPRINT_INDEX]
+  );
 
   function closeModal() {
     setShowProofModal(false);
@@ -166,11 +188,15 @@ function Sprint({ user, history }: SprintProps) {
   }
 
   let allMissions = [];
-  let finishedMissions: ([GenMission, number])[] = []; // completed daily missions
-  let upcomingMissions: ([GenMission, number])[] = []; // uncompleted daily missions
+  let finishedMissions: [GenMission, number][] = []; // completed daily missions
+  let upcomingMissions: [GenMission, number][] = []; // uncompleted daily missions
 
   allMissions =
-    (sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions[displayDay] as ActivePersonMissionsOnDay).missions || []; // default to empty array
+    (
+      sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions[
+        displayDay
+      ] as ActivePersonMissionsOnDay
+    ).missions || []; // default to empty array
 
   [...allMissions].forEach((mission, i) =>
     mission.completed

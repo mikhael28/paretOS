@@ -16,6 +16,7 @@
     "@mui/system": "5.8.1",
     "@mui/x-date-pickers": "5.0.0-alpha.2",
     "@portabletext/react": "1.0.6",
+    "@reduxjs/toolkit": "^1.8.3",
     "@rollup/plugin-node-resolve": "13.3.0",
     "@sanity/client": "3.3.0",
     "@sanity/image-url": "1.0.1",
