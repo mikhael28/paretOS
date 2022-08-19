@@ -1,11 +1,11 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useCallback, useState, useContext } from "react";
 import { I18n } from "@aws-amplify/core";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { ToastMsgContext } from "../state/ToastContext";
 import Tour from "reactour";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
-import { errorToast } from "../libs/toasts";
 import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
@@ -42,6 +42,8 @@ function Sprint({ user, history }: SprintProps) {
   let path = location.pathname.split("/");
   let sprintId = path[3];
   const SPRINT_INDEX = sprints.findIndex((spr) => spr.id === sprintId);
+
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   // Identify the language
   let str = I18n.get("close");
@@ -145,6 +147,7 @@ function Sprint({ user, history }: SprintProps) {
       content: string
     ) => {
       setLoading(true);
+
 
       dispatch({
         type: "PLANNING_FORMS",

@@ -46,6 +46,8 @@ To fix a bug or contribute a new feature, follow these steps:
         2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
         3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support. Lock files will be removed in a separate PR.
 - Run `pnpm install` to install the dependencies, once you have `cd`'d into the directory
+    a. There is a known issue where Puppeteer's install script may hang indefinitely. In this case, first try updating to Node 16 and running again.
+    b. If this does not work, this will sound weird, but try using a different wireless connection. Yours may be too slow, or have some weird configuration settings. `https://github.com/puppeteer/puppeteer/issues/5611`
 - Run `pnpm start` to start the dev server
     a. `pnpm add <package_name>` to add a new npm dependency to the project.
 - You will get an es-lint error about some config - go to `package.json`, and press Command+S - the error should go away.

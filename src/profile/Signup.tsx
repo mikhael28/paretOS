@@ -1,5 +1,5 @@
 // hooks import
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -10,8 +10,8 @@ import { I18n } from "@aws-amplify/core";
 import { useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
 import { User } from "@sentry/react";
+import { ToastMsgContext } from "../state/ToastContext";
 
 const Signup = () => {
   const theme = useTheme();
@@ -21,6 +21,8 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
   const [newUser, setNewUser] = useState({} as User);
+
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   // for redirect to new route
   const history = useHistory();
@@ -40,10 +42,10 @@ const Signup = () => {
     try {
       await Auth.confirmSignUp(email, confirmationCode);
       await Auth.signIn(email, password);
-      successToast("Sign up complete");
+      handleShowSuccess("Sign up complete");
       history.push("/onboarding/user");
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
       setIsLoading(false);
     }
   };

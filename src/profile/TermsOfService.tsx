@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/material";
-import { strings } from "../libs/strings";
+import strings from "../intl/localization";
 import Modal from "../components/Modal";
 import LoaderButton from "../components/LoaderButton";
 import { SyntheticEvent } from "react";

@@ -164,7 +164,7 @@ declare module "@mui/material/Chip" {
 }
 
 declare module "@mui/styles/defaultTheme" {
-  interface DefaultTheme extends Theme {}
+  interface DefaultTheme extends Theme { }
 }
 
 export default theme;

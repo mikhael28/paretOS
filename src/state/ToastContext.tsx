@@ -1,9 +1,41 @@
 import React, { useCallback, useEffect, useState, createContext, ComponentPropsWithoutRef } from "react";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
+import { Snackbar, Alert } from "@mui/material";
+
 
 // Leaving toast type as any for now as it is a work in progress
-const ToastContext = createContext({ addToast: (t: any) => {} });
+
+export const ToastMsgContext = createContext({
+  handleShowSuccess: (st: any) => {
+    ToastMsg({ msg: st, type: 'success', open: () => { }, handleCloseSnackbar: () => { } })
+  },
+  handleShowError: (error: any) => { },
+});
+const ToastContext = createContext({ addToast: (t: any) => { } });
+
+export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
+  const handleClose = () => {
+    handleCloseSnackbar();
+  };
+
+  if (!type) {
+    type = "info";
+  }
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <Alert onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
+        {msg}
+      </Alert>
+    </Snackbar>
+  );
+}
+
 
 export default ToastContext;
 
@@ -62,6 +94,7 @@ export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>
                 <LoaderButton
                   style={{ backgroundColor: "green" }}
                   onClick={() => {
+                    // eslint-disable-next-line no-undef
                     window.location.replace("/");
                   }}
                   text="Refresh"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
@@ -19,10 +19,19 @@ const builder = imageUrlBuilder(sanity);
  */
 
 function ContextBuilder(props: any) {
-  // console.log(props);
+  console.log({ props });
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState<number>(0);
   const history = useHistory();
+
+  useEffect(() => {
+    let initialTab = localStorage.getItem('contextTab');
+    if (initialTab !== null) {
+      setValue(parseInt(initialTab, 10));
+    }
+  }, []);
+
+
 
   const renderTopicsList = (topics: LibraryEntry[]) => {
     const newCardClass = classNames("context-card", "second-step-library");
@@ -84,7 +93,10 @@ function ContextBuilder(props: any) {
       >
         <Tabs
           value={value}
-          onChange={(_, newValue) => setValue(newValue)}
+          onChange={(_, newValue) => {
+            localStorage.setItem('contextTab', newValue.toString());
+            setValue(newValue);
+          }}
           aria-label="Select the topics you wish to see in this group of tab"
         >
           <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />
@@ -110,7 +122,7 @@ function ContextBuilder(props: any) {
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-        // rewindOnClose={false}
+      // rewindOnClose={false}
       />
     </div>
   );

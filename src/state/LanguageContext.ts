@@ -17,7 +17,7 @@ const emptyLanguageProps: LanguageProps = {
     code: "",
     image: "",
   },
-  setLanguage: () => {},
+  setLanguage: () => { },
 };
 export const LanguageContext = createContext(emptyLanguageProps);
 

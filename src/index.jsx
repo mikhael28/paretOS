@@ -59,6 +59,7 @@ Storage.configure({
   },
 });
 
+// eslint-disable-next-line no-undef
 const container = document.getElementById("root");
 const root = createRoot(container);
 
