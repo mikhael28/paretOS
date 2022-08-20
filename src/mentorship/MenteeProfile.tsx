@@ -6,11 +6,10 @@ import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
 import { MongoExperience, Sprint, User } from "../types";
 import { ToastMsgContext } from "../state/ToastContext";
+import Skeleton from "@mui/material/Skeleton/Skeleton";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.
- * @TODO UI work - GH Issue #9 https://github.com/mikhael28/paretOS/issues/9
- * @TODO GH Issue #10 https://github.com/mikhael28/paretOS/issues/10
  */
 
 function Profile() {
@@ -60,21 +59,14 @@ function Profile() {
   };
 
   let blockCardClass = classNames("context-cards");
+  let blockOverflow = classNames("block");
 
   return (
     <div style={{ marginTop: 28 }}>
       {loading === true ? (
-        <section style={{ marginTop: -12 }}>
-          {/* <h2 className="section-title">
-            <Skeleton height={60} width="100%" />
-          </h2>
-          <h2 className="section-title">
-            <Skeleton height={120} width="100%" />
-          </h2>
-          <h2 className="section-title">
-            <Skeleton height={200} width="100%" />
-          </h2> */}
-        </section>
+        <div className={blockOverflow}>
+          <Skeleton height={720} width="100%" />
+        </div>
       ) : (
         <>
           <div className="flex">
@@ -120,16 +112,6 @@ function Profile() {
           {sprints.length > 0 ? (
             <div>
               <h2>Mentee Sprints</h2>
-              <p>
-                Note: UI needs work, refer to this{" "}
-                <a
-                  href="https://github.com/mikhael28/paretOS/issues/9"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  GH Issue
-                </a>
-              </p>
               {sprints.map((sprint) => {
                 let activeTeam = {} as User;
                 sprint.teams.forEach((team) => {

@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Slide, Dialog, Button } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton/Skeleton";
 import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -429,30 +430,9 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
         <div className="experience-container flex">
           <div style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
-              <section style={{ marginTop: -12, marginLeft: -4 }}>
-                {/* <h2 className="section-title">
-                  <Skeleton height={100} width={860} />
-                </h2>
-
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2> */}
-              </section>
+              <div className={blockOverflow}>
+                <Skeleton height={800} width="100%" />
+              </div>
             ) : (
               <div>
                 {this.renderExperienceList(
@@ -464,15 +444,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
             )}
           </div>
           {this.state.isLoading === true ? (
-            <div
-              style={{
-                marginLeft: 10,
-                marginTop: 2,
-                marginRight: 8,
-                width: "100%",
-              }}
-            >
-              {/* <Skeleton height="100%" width="100%" /> */}
+            <div className={blockOverflow} style={{ flexBasis: "70%" }}>
+              <h2>
+
+                <Skeleton height={800} width="90%" />
+              </h2>
             </div>
           ) : (
             <div className={blockOverflow} style={{ flexBasis: "70%" }}>
