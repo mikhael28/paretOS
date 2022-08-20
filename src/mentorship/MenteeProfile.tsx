@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
-import { errorToast } from "../utils/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
+import Skeleton from "@mui/material/Skeleton/Skeleton";
 import { MongoExperience } from "../types/LearnTypes";
 import { Sprint } from "../types/ArenaTypes";
 import { User } from "../types/ProfileTypes";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.
- * @TODO UI work - GH Issue #9 https://github.com/mikhael28/paretOS/issues/9
- * @TODO GH Issue #10 https://github.com/mikhael28/paretOS/issues/10
  */
 
 function Profile() {
@@ -20,6 +19,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([] as MongoExperience[]);
   const [sprints, setSprints] = useState([] as Sprint[]);
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   useEffect(() => {
     setLoading(true);
@@ -46,7 +46,7 @@ function Profile() {
       let experiences = await RestAPI.get("pareto", `/experience/user/${id}`, {});
       setExperiences(experiences);
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   };
 
@@ -56,26 +56,19 @@ function Profile() {
       setSprints(sprints);
       setLoading(false);
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   };
 
   let blockCardClass = classNames("context-cards");
+  let blockOverflow = classNames("block");
 
   return (
     <div style={{ marginTop: 28 }}>
       {loading === true ? (
-        <section style={{ marginTop: -12 }}>
-          {/* <h2 className="section-title">
-            <Skeleton height={60} width="100%" />
-          </h2>
-          <h2 className="section-title">
-            <Skeleton height={120} width="100%" />
-          </h2>
-          <h2 className="section-title">
-            <Skeleton height={200} width="100%" />
-          </h2> */}
-        </section>
+        <div className={blockOverflow}>
+          <Skeleton height={720} width="100%" />
+        </div>
       ) : (
         <>
           <div className="flex">
@@ -121,16 +114,6 @@ function Profile() {
           {sprints.length > 0 ? (
             <div>
               <h2>Mentee Sprints</h2>
-              <p>
-                Note: UI needs work, refer to this{" "}
-                <a
-                  href="https://github.com/mikhael28/paretOS/issues/9"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  GH Issue
-                </a>
-              </p>
               {sprints.map((sprint) => {
                 let activeTeam = {} as User;
                 sprint.teams.forEach((team) => {

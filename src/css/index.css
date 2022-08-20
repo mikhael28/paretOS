@@ -1,0 +1,496 @@
+/* CSS for index styles
+All CSS that loads on every page should be placed here.
+*/
+
+:root {
+  --backgroundColor: rgb(0 0 0);
+  --backgroundColor-light: rgb(255 255 255);
+  --color: rgb(242 243 243);
+  --color-light: rgb(34 34 34);
+  --navigation-bgColor: rgb(34 34 34);
+  --navigation-color: rgb(242 243 243);
+  --primary: #d95b35;
+  --secondary: #de4665;
+  --tertiary: #c84994;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Futura Std Book", sans-serif;
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dropdown-menu {
+  left: unset;
+  right: 0;
+  background: transparent;
+}
+
+.dropdown-menu > div {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* global mobile style media query, primarily for navigation layout */
+
+.sticky-logout {
+  position: fixed;
+  bottom: 24px;
+  left: calc(max(210px, 20vw - 60px));
+  opacity: 0.6;
+  cursor: pointer;
+  font-size: 32px;
+  z-index: 999;
+  background-color: transparent;
+  color: white !important;
+  border-radius: 100px;
+  padding: 10px 8px 0px 14px;
+  line-height: 28px;
+}
+
+section {
+  margin-bottom: 16px;
+}
+
+.stats-container.flex {
+  display: flex;
+  justify-content: flex-start !important;
+  margin: 8px -8px;
+  flex-wrap: wrap;
+}
+
+.experience-container.flex {
+  margin: 8px -8px;
+}
+
+/* Typography */
+
+h1 {
+  font-size: 32px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+  text-shadow: 0.5px 0 0 white;
+  letter-spacing: 0.5px;
+}
+
+h3 {
+  margin: 0;
+  font-weight: 600;
+  text-shadow: 0.5px 0 0;
+  letter-spacing: 0.5px;
+  font-size: 18px;
+}
+
+h5 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: var(--tertiary);
+  text-transform: uppercase;
+  font-weight: 600;
+  text-shadow: 0.5px 0 0;
+  letter-spacing: 3px;
+  margin: 16px 0;
+}
+
+select.form-control,
+textarea.form-control,
+input.form-control {
+  font-size: 16px;
+  background-color: var(--navigation-bgColor);
+}
+
+input[type="file"] {
+  width: 100%;
+}
+
+/* mobile/tablet styling */
+
+@media screen and (max-width: 768px) {
+  html {
+    padding-top: -74px;
+  }
+
+  h1 {
+    font-weight: 400;
+    font-size: 9vw;
+  }
+
+  header span {
+    font-size: 3vw;
+  }
+
+  .tabPanelCont {
+    margin: -8.5vw;
+    margin-bottom: 6vh;
+  }
+
+  .root-padding {
+    padding: 8px 16px 12vh;
+  }
+
+  .sticky-nav {
+    position: fixed;
+    bottom: 0;
+    visibility: visible;
+    width: 100%;
+    padding-left: -24px;
+  }
+
+  .sticky-audio {
+    visibility: hidden;
+  }
+
+  .sticky-nav button {
+    min-width: 0;
+  }
+
+  .sidenav {
+    height: 100vh;
+    position: fixed;
+    min-width: 270px;
+    z-index: 1;
+    padding-top: 24px;
+    background-color: var(--navigation-bgCol);
+    transform: translate3d(-100%, 0, 0);
+    transition: all 0.5s ease 0s;
+    visibility: hidden;
+  }
+
+  .sticky-chat {
+    visibility: hidden;
+  }
+
+  .notes-overflow {
+    overflow: scroll;
+    max-height: 180px;
+  }
+
+  .sticky-logout {
+    bottom: 50px;
+    left: calc(100vw - 52px);
+  }
+
+
+  .btn {
+    min-width: 80px !important;
+  }
+
+  .options .btn {
+    min-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Global tablet+ media query */
+
+@media screen and (min-width: 768px) {
+  html {
+    padding-top: -74px;
+  }
+
+  .root-padding {
+    padding: 24px 32px 24px calc(max(302px, 20vw + 32px));
+  }
+
+  .sticky-nav {
+    visibility: hidden;
+  }
+
+  .sticky-audio {
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    visibility: visible;
+    width: calc(min(80vw, 100vw - 270px));
+    left: calc(max(20vw, 270px));
+  }
+
+  .sidenav {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 20vw;
+    min-width: 270px;
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 2; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: var(--navigation-bgColor);
+    padding-top: 24px;
+    padding-bottom: 88px;
+    color: var(--navigation-color);
+    list-style: none;
+    transition: all 0.5s;
+  }
+
+  .sidenav-dropdown {
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-caret-up,
+  .dropdown-caret-down {
+    content: " ";
+    color: rgba(255, 255, 255, 0.7);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    margin-top: 22px;
+    cursor:pointer;
+  }
+  .dropdown-caret-down {
+    border-top: 5px solid;
+  }
+
+  .dropdown-caret-up {
+    border-bottom: 6px solid;
+  }
+
+  .sticky-chat {
+    /* position: fixed; */
+    /* bottom: 90px;
+    right: 15px; */
+    visibility: visible;
+    background-color: white;
+  }
+
+  .notes-overflow {
+    overflow: scroll;
+    max-height: 610px;
+  }
+}
+
+#animation-container {
+  position: relative;
+}
+
+#animation-container canvas {
+  position: fixed;
+  border: 1px solid transparent;
+}
+
+#overlay  {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px; 
+}
+
+/* Colors */
+
+.red-white {
+  background-color: rgb(220 66 45);
+  color: rgb(255 255 254);
+}
+
+.red-black {
+  background-color: rgb(220 66 45);
+  color: rgb(52 58 64);
+}
+
+.blue-white {
+  background-color: rgb(0 170 212);
+  color: rgb(255 255 254);
+}
+
+.blue-black {
+  background-color: rgb(0 170 212);
+  color: rgb(52 58 64);
+}
+
+/* Overflow classes */
+
+.overflow {
+  overflow: scroll;
+  max-height: 80vh;
+}
+
+.small-overflow {
+  overflow: scroll;
+  height: fit-content;
+  max-height: 300px;
+}
+
+.visible-overflow {
+  overflow: visible;
+}
+
+/* Navigation and fixed elements styles */
+
+.sidenav a {
+  color: var(--navigation-color);
+  transition: 0.3s;
+  opacity: 0.6;
+}
+
+.sidenav a:hover {
+  text-decoration: none;
+  opacity: 1;
+}
+
+.sidenav a:enabled {
+  text-decoration: none;
+  opacity: 1;
+}
+
+.sidenav h4 {
+  padding-left: 20px;
+  color: var(--navigation-bgColor);
+}
+
+.sidenav p {
+  margin-bottom: 0;
+}
+
+.landing-page-nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--navigation-bgColor);
+  height: 55px;
+}
+
+.sticky-btn {
+  position: fixed;
+  bottom: 72px;
+  right: 8px;
+  cursor: pointer;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Flex shortcut classes */
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex-down {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  text-align: "center";
+}
+
+.flex-apart {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.flex-columns {
+  display: flex;
+  flex-wrap: wrap;  
+}
+
+
+/* CSS Below is for the spinning animation in the loading screen */
+.ipl-progress-indicator.available {
+  opacity: 0;
+}
+
+.ipl-progress-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
+  z-index: 9999;
+}
+
+.lds-dual-ring {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-self: center;
+  justify-content: center;
+  margin-top: 1%;
+}
+
+.lds-dual-ring::after {
+  content: " ";
+  display: block;
+  width: 92px;
+  height: 92px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 7px solid var(--color);
+  border-color: var(--color) transparent var(--color) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

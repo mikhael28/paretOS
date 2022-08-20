@@ -3,7 +3,7 @@ import { I18n } from "@aws-amplify/core";
 import Athlete from "./Athlete";
 
 /**
- * A simple, redux connected Sandbox for you play around with. Don't send a PR to update this file, it is perfect the way it is. Unless, you think we can improve it from a staging perspective - in that case, send it in.
+ * The 'dashboard' where a mentor can see a list of their mentees, and where in the future they can see a backlog of tasks.
  */
 
 function MentorDashboard(props: any) {
@@ -13,12 +13,7 @@ function MentorDashboard(props: any) {
 
   return (
     <div>
-      <h1>Mentorship Dashboard</h1>
-      <p>
-        This is a work in progress. Our immediate backlog consists of a queue of
-        mentorship tasks for you to review, specifically review of completed
-        curriculum by your mentees.
-      </p>
+      <h1>Coaching Dashboard</h1>
       {props.athletes.length > 0 ? (
         <>
           <h2>{I18n.get("myMentees")}</h2>

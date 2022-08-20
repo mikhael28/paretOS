@@ -11,13 +11,13 @@ import {
 
 interface MissionProps
   extends Pick<
-    Missions,
-    | "lengua"
-    | "setActiveIndex"
-    | "setActiveMission"
-    | "setView"
-    | "setShowProofModal"
-    | "missionBtnText"
+  Missions,
+  | "lengua"
+  | "setActiveIndex"
+  | "setActiveMission"
+  | "setView"
+  | "setShowProofModal"
+  | "missionBtnText"
   > {
   mission: GenMission;
   id: number;

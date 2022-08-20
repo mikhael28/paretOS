@@ -9,7 +9,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
  */
 
 export function generateEmail(messageTitle: string, messageDescription: string) {
-  let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns:v="urn:schemas-microsoft-com:vml">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -260,17 +260,17 @@ export function generateEmail(messageTitle: string, messageDescription: string) 
 		
 		</body>
 	</html>`;
-  return email;
+	return email;
 }
 
 export function generateErrorEmail(
-  fName: string,
-  lName: string,
-  timestamp: any,
-  errorTitle: string,
-  errorMessage: string
+	fName: string,
+	lName: string,
+	timestamp: any,
+	errorTitle: string,
+	errorMessage: string
 ) {
-  let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	let email = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns:v="urn:schemas-microsoft-com:vml">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -521,12 +521,12 @@ export function generateErrorEmail(
 		
 		</body>
 	</html>`;
-  let body = {
-    recipient: "mikhael@hey.com",
-    sender: "michael@fsa.community",
-    subject: "Bug: Network Request",
-    htmlBody: email,
-    textBody: "Hello",
-  };
-  return RestAPI.post("util", "/email", { body });
+	let body = {
+		recipient: "mikhael@hey.com",
+		sender: "michael@fsa.community",
+		subject: "Bug: Network Request",
+		htmlBody: email,
+		textBody: "Hello",
+	};
+	return RestAPI.post("util", "/email", { body });
 }

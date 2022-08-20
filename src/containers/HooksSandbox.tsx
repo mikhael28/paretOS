@@ -109,7 +109,7 @@ export function useStorage(key: string, defaultValue: any, storageObject: any) {
 }
 
 export function usePrevious(value: number | null) {
-  const currentRef: MutableRefObject<number | null>  = useRef(value);
+  const currentRef: MutableRefObject<number | null> = useRef(value);
   const previousRef: MutableRefObject<number | null> = useRef(null);
 
   if (currentRef.current !== value) {

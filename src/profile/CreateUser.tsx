@@ -1,7 +1,7 @@
 import { Auth } from "@aws-amplify/auth";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { nanoid } from "nanoid";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState, useContext } from "react";
 import {
   FormControl,
   TextField,
@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../utils/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
 
@@ -39,6 +39,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showTOS, setShowTOS] = useState(false);
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   const accountCreationEmail = async (email: string) => {
     let body = {
@@ -123,11 +124,11 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
         },
       });
       await accountCreationEmail(tempEmail);
-      successToast("Account created!");
+      handleShowSuccess("Account created!");
       await initialFetch(uuid);
       history.push("/");
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
       setLoading(false);
     }
   };

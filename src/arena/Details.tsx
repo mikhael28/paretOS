@@ -53,11 +53,10 @@ function Details({
               onClick={() => setDisplayDay(idx)}
               key={idx}
               sx={{
-                backgroundColor: `${
-                  displayDay === idx
+                backgroundColor: `${displayDay === idx
                     ? "rgba(255, 255, 255, 0.44)"
                     : "rgba(255, 255, 255, 0.16)"
-                }`,
+                  }`,
                 color: "rgb(242, 243, 243)",
                 fontSize: theme.spacing(2),
                 padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
@@ -66,11 +65,10 @@ function Details({
                 transition: "all 0.2s ease-in-out",
 
                 "&:hover": {
-                  backgroundColor: `${
-                    displayDay === idx
+                  backgroundColor: `${displayDay === idx
                       ? "rgba(255, 255, 255, 0.44)"
                       : "rgba(255, 255, 255, 0.16)"
-                  }`,
+                    }`,
                   color: "rgb(242, 243, 243)",
                   opacity: 0.8,
                 },

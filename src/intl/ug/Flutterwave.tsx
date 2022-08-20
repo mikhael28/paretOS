@@ -8,7 +8,7 @@ import { User } from "../../types/ProfileTypes";
  * @returns
  */
 
-export default function Flutterwave(props: { user: User}) {
+export default function Flutterwave(props: { user: User }) {
   const config = {
     public_key: import.meta.env.VITE_FLUTTERWAVE_PK,
     tx_ref: Date.now().toString(),
@@ -40,7 +40,7 @@ export default function Flutterwave(props: { user: User}) {
               console.log(response);
               closePaymentModal(); // this will close the modal programmatically
             },
-            onClose: () => {},
+            onClose: () => { },
           });
         }}
       >

@@ -7,7 +7,7 @@ import LanguageContext, { Language } from "../state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import { User } from "../types/ProfileTypes";
 
-const LanguageSelector = (props: {user : User }) => {
+const LanguageSelector = (props: { user: User }) => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;

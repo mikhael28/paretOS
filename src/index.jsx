@@ -4,7 +4,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./App";
@@ -12,7 +12,15 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
 import reducer from "./state/index";
-import "./index.css";
+// import css below
+import "./css/index.css";
+import "./css/arena.css";
+import "./css/cards.css";
+import "./css/form.css";
+import "./css/leaderboard.css";
+import "./css/messaging.css";
+import "./css/modal.css";
+
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -32,7 +40,9 @@ if (import.meta.env.NODE_ENV === "production") {
   });
 }
 
-const store = createStore(reducer);
+export const store = configureStore({
+  reducer,
+});
 
 Amplify.configure(awsmobile);
 RestAPI.configure({
@@ -57,6 +67,7 @@ Storage.configure({
   },
 });
 
+// eslint-disable-next-line no-undef
 const container = document.getElementById("root");
 const root = createRoot(container);
 

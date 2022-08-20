@@ -17,7 +17,7 @@ export class WS {
     return WS.instance;
   }
 
-  constructor(path: string = "", processMsg: Function | null = () => {}) {
+  constructor(path: string = "", processMsg: Function | null = () => { }) {
     this.socketRef = null;
     this.path = path;
     this.connectInterval = null;

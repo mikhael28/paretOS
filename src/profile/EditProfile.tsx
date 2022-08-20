@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent, ChangeEvent } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent, useContext } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
@@ -8,9 +8,9 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
 import { Button, TextField, useTheme } from "@mui/material";
-import { errorToast } from "../utils/toasts";
 import LoaderButton from "../components/LoaderButton";
 import LanguageSelector from "./LanguageSelector";
+import { ToastMsgContext } from "../state/ToastContext";
 // import { initialize } from "workbox-google-analytics";
 
 /**
@@ -21,8 +21,8 @@ import LanguageSelector from "./LanguageSelector";
 const EditProfile = (props: any) => {
   const theme = useTheme();
   const currentUser = "user" in props ? props.user : {
-      projects: [],
-    }
+    projects: [],
+  }
   const [user, setUser] = useState(currentUser);
   const [state, setState] = useState({
     isLoading: false,
@@ -40,6 +40,8 @@ const EditProfile = (props: any) => {
     picture:
       "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
   });
+
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   useEffect(() => {
     if (!props.user.id) {
@@ -184,7 +186,7 @@ const EditProfile = (props: any) => {
       setUser(updatedProfile);
       // need to save the key
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   };
 
@@ -216,8 +218,8 @@ const EditProfile = (props: any) => {
           ) : (
             <div className="flex" style={{ alignItems: "flex-start" }}>
               {/* Here we are actually editing our names/choosing a photo to upload to s3. */}
-                <img
-                  src={user.picture || state.picture || ""}
+              <img
+                src={user.picture || state.picture || ""}
                 height="60"
                 width="60"
                 alt="Profile"
@@ -234,7 +236,7 @@ const EditProfile = (props: any) => {
                   />
                 </div>
               </div>
-                <div className="flex-down" style={{ marginTop: 24 }}>
+              <div className="flex-down" style={{ marginTop: 24 }}>
                 <h3 style={{ marginBottom: 8, fontSize: "1rem" }}>{I18n.get("editName")}</h3>
                 <form onSubmit={editName}>
                   <div className="flex">
@@ -250,19 +252,19 @@ const EditProfile = (props: any) => {
                       label={I18n.get("lastName")}
                       defaultValue={user.lName}
                       onChange={handleChange}
-                      sx={{ m: 1, minWidth: "180px"  }}
+                      sx={{ m: 1, minWidth: "180px" }}
                     />
                   </div>
-                    <div style={{ width: "100%" }}>
-                      <Button
-                        sx={{ m: 1 }}
-                        onClick={() =>
-                          setState((prevState) => ({ ...prevState, editName: false }))
-                        }
-                      >
-                        {I18n.get("cancel")}
-                      </Button>
-                      <Button variant="gradient" sx={{ m: 1 }} style={{ width: `calc(100% - 102px)` }}>
+                  <div style={{ width: "100%" }}>
+                    <Button
+                      sx={{ m: 1 }}
+                      onClick={() =>
+                        setState((prevState) => ({ ...prevState, editName: false }))
+                      }
+                    >
+                      {I18n.get("cancel")}
+                    </Button>
+                    <Button variant="gradient" sx={{ m: 1 }} style={{ width: `calc(100% - 102px)` }}>
                       {I18n.get("save")}
                     </Button>
 
@@ -351,7 +353,7 @@ const EditProfile = (props: any) => {
           <p className="block">{I18n.get("noProjectsYet")}</p>
         ) : (
           <>
-              {user.projects.map((project: { name: string; description: string; github: string }) => (
+            {user.projects.map((project: { name: string; description: string; github: string }) => (
               <div className="block">
                 <h3>{project.name}</h3>
                 <p>{project.description}</p>
@@ -368,21 +370,21 @@ const EditProfile = (props: any) => {
         )}
         {state.addProject ? (
           <>
-          <div className="block">
-            <FormGroup controlId="name" bsSize="large">
-              <ControlLabel>{I18n.get("projectName")}</ControlLabel>
-              <FormControl value={state.name} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup controlId="description" bsSize="large">
-              <ControlLabel>{I18n.get("description")}</ControlLabel>
-              <FormControl value={state.description} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup controlId="github" bsSize="large">
-              <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
-              <FormControl value={state.github} onChange={handleChange} />
-            </FormGroup>
-          </div>
-          <div className="flex" style={{ justifyContent: "flex-end", marginRight: 8}}>
+            <div className="block">
+              <FormGroup controlId="name" bsSize="large">
+                <ControlLabel>{I18n.get("projectName")}</ControlLabel>
+                <FormControl value={state.name} onChange={handleChange} />
+              </FormGroup>
+              <FormGroup controlId="description" bsSize="large">
+                <ControlLabel>{I18n.get("description")}</ControlLabel>
+                <FormControl value={state.description} onChange={handleChange} />
+              </FormGroup>
+              <FormGroup controlId="github" bsSize="large">
+                <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
+                <FormControl value={state.github} onChange={handleChange} />
+              </FormGroup>
+            </div>
+            <div className="flex" style={{ justifyContent: "flex-end", marginRight: 8 }}>
               <Button
                 onClick={() =>
                   setState((prevState) => ({ ...prevState, addProject: false }))
@@ -398,10 +400,10 @@ const EditProfile = (props: any) => {
                 isLoading={state.isLoading}
                 text={I18n.get("save")}
                 loadingText="Loading"
-                style={{ minWidth: "180px"}}
+                style={{ minWidth: "180px" }}
               />
             </div>
-            </>
+          </>
         ) : null}
       </div>
       <br />

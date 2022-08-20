@@ -1,11 +1,11 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useContext } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../utils/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 
 /**
  * Change your password through Cognito
@@ -41,16 +41,18 @@ const ChangePassword = (props: any) => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
       await Auth.changePassword(currentUser, state.oldPassword, state.password);
-      successToast("Password successfully changed.");
+      handleShowSuccess("Password successfully changed.");
       props.history.push("/");
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
       setState({
         ...state,
         isChanging: false,
       });
     }
   };
+
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   return (
     <div className="Form">

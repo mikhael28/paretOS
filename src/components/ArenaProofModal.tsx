@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,7 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
-import { errorToast, successToast } from "../utils/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import uploadToS3 from "../utils/s3";
 import { User } from "../types/ProfileTypes";
 import { ActiveMission, Sprint } from "../types/ArenaTypes";
@@ -83,6 +83,8 @@ export default function ArenaProofModal({
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+
   //   const [isChanging, setIsChanging] = useState(false);
   //   const validateForm = () => athleteNotes.length > 0 && github.length > 0;
 
@@ -92,8 +94,7 @@ export default function ArenaProofModal({
       activeIndex,
       day,
       pictureKey,
-      `${user.fName} just completed ${activeMission.title}.${
-        data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
+      `${user.fName} just completed ${activeMission.title}.${data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
       } `
     );
     setPictureKey("");
@@ -119,9 +120,9 @@ export default function ArenaProofModal({
       );
 
       setPictureKey(pictureKey.key);
-      successToast("Proof successfully uploaded.");
+      handleShowSuccess("Proof successfully uploaded.");
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     } finally {
       setLoading(false);
     }
