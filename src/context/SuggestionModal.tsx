@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -10,7 +10,7 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import { generateEmail } from "../libs/errorEmail";
 
 /**
@@ -30,11 +30,11 @@ export default function SuggestionModal({
     imgUrl: "",
     type: "",
   });
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+
 
   useEffect(() => {
-    console.log('Checking');
     if (activeItem !== undefined) {
-
       setFormData(activeItem);
     }
   }, [activeItem]);
@@ -44,7 +44,7 @@ export default function SuggestionModal({
   const handleChange = (event: any) => {
     console.log(event.target.id);
     console.log(event.target.value);
-    
+
     setFormData({
       ...formData,
       [event.target.id]: event.target.value,
@@ -126,9 +126,9 @@ export default function SuggestionModal({
       setSubmissionLoading(false);
       setFormData({ title: "", summary: "", url: "", imgUrl: "", type: "" });
       handleClose();
-      successToast("Thank you for your suggestion!");
+      handleShowSuccess("Thank you for your suggestion!");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setSubmissionLoading(false);
     }
   };

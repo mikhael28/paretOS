@@ -1,9 +1,8 @@
-import { Component, useState } from "react";
+import { Component, useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { successToast } from "../libs/toasts";
 import { createExperience } from "../libs/createExperience";
 import { User } from "../types";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
@@ -46,7 +45,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: user.apprenticeshipId,
+      expId: user.apprenticeshipId ?? '',
       userId: user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -55,7 +54,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: user.productId,
+      expId: user.productId ?? '',
       userId: user.id,
       type: "Product",
       title: "Capstone Project",
@@ -112,9 +111,9 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
         source: token.id,
       });
       console.log("bill: ", billing);
-      successToast(
-        "Your card has been charged successfully! We are creating your learning account."
-      );
+      // handleShowSuccess(
+      //   "Your card has been charged successfully! We are creating your learning account."
+      // );
 
       if (billing.status === true) {
         // create learning account info

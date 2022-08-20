@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   root: {},
 });
 
-interface BottomNavProps extends RouteComponentProps{
+interface BottomNavProps extends RouteComponentProps {
   user: User;
 }
 

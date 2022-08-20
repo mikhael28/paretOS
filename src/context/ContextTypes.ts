@@ -25,4 +25,24 @@ export interface LibraryEntry {
   title: string;
   type: string;
   summary?: string;
+  logo?: any;
+}
+
+export interface Hub {
+  title: string;
+  // TODO define Slug type
+  slug: any;
+  description: string;
+  // TODO import sanity types, type out block content/portable text
+  body: any;
+  admin: Admin[];
+}
+
+export interface Admin {
+  name: string;
+  email: string;
+  github: string;
+  // type out sanity pictures
+  adminPicture?: any;
+  btc?: string;
 }

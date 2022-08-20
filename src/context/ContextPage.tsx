@@ -9,8 +9,10 @@ import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
-import { LibraryEntry } from "./ContextTypes";
+import { LibraryEntry, Admin, Hub } from "./ContextTypes";
 import classNames from "classnames";
+import { AiFillGithub } from 'react-icons/ai';
+import { BiBitcoin } from "react-icons/bi";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -18,6 +20,14 @@ const builder = imageUrlBuilder(sanity);
  * The Digest page, displaying Context Objects about a particular topic.
  * @TODO Issue #27
  */
+
+interface ContextSuggestionForm {
+  title: string;
+  summary: string;
+  url: string;
+  imgUrl: string;
+  type: string;
+}
 
 function ContextPage(props: any) {
   const [items, setItems] = useState([]);
@@ -41,7 +51,7 @@ function ContextPage(props: any) {
     },
     title: "",
   });
-  const [activeItem, setActiveItem] = useState<any>({
+  const [activeItem, setActiveItem] = useState<ContextSuggestionForm | LibraryEntry>({
     title: "",
     summary: "",
     url: "",
@@ -78,7 +88,7 @@ function ContextPage(props: any) {
     setOpenModal(true);
   };
 
-  const openEditSuggestionModal = (item: any) => {
+  const openEditSuggestionModal = (item: LibraryEntry) => {
     setMethod("put");
     setActiveItem(item);
     setOpenModal(true);
@@ -165,10 +175,20 @@ function ContextPage(props: any) {
 
   const steps = [
     {
+      selector: ".first-step-library",
+      content: `${I18n.get("libraryFirst")}`,
+    },
+    {
+      selector: ".second-step-library",
+      content: `${I18n.get("librarySecond")}`,
+    },
+    {
       selector: ".third-step-library",
       content: `${I18n.get("libraryThird")}`,
     },
   ];
+
+  console.log(schemaObject);
 
   return (
     <div style={{ marginTop: 10 }}>
@@ -192,16 +212,41 @@ function ContextPage(props: any) {
       </div>
 
       <Button
-          onClick={() => {
-            openSuggestionModal();
-          }}
-          style={{color: 'white'}}
-          className={classNames("third-step-library", "btn")}
+        onClick={() => {
+          openSuggestionModal();
+        }}
+        style={{ color: 'white' }}
+        className={classNames("third-step-library", "btn")}
 
-        >Suggest New Resource</Button>
+      >Suggest New Resource</Button>
 
       {renderType === "hubs" ? (
         <>
+          {schemaObject.Admin ? (
+            <div>
+
+              <h2>Curator Profile(s)</h2>
+              {schemaObject.Admin.map((person: Admin, i: number) => {
+                function urlFor(source: any) {
+                  return builder.image(source);
+                }
+                let url;
+                if (!person.adminPicture) {
+                  url = "na";
+                } else {
+                  url = urlFor(person.adminPicture.asset._ref);
+                }
+                return (
+                  <div key={i} className={classNames('flex', 'block')}>
+                    <img src={url.toString()} height="60" width="60" />
+                    <p>{person.name} <br /> {'\n'} {person.email}</p>
+                    <AiFillGithub onClick={() => { }} style={{ cursor: 'pointer' }} />
+                    <BiBitcoin onClick={() => { }} style={{ cursor: 'pointer' }} />
+                  </div>
+                )
+              })}
+            </div>
+          ) : null}
           <PortableText value={schemaObject.body} />
 
           <h3>Local Communities & Meetups</h3>
@@ -213,15 +258,15 @@ function ContextPage(props: any) {
               }}
             >
               Click&nbsp;
-              <p style={{ cursor: "pointer", textDecoration: "underline" }}>
+              <span style={{ cursor: "pointer", textDecoration: "underline" }}>
                 {" "}
                 here{" "}
-              </p>
+              </span>
               &nbsp;to suggest a resource into our community knowledge base.
             </p>
           ) : (
             <div className="context-cards-start">
-              {community.map((item: any) => {
+              {community.map((item: LibraryEntry) => {
                 function urlFor(source: any) {
                   return builder.image(source);
                 }
@@ -255,7 +300,7 @@ function ContextPage(props: any) {
           <h3>Start-up Incubators & Venture Capital</h3>
           {support.length === 0 ? null : (
             <div className="context-cards-start">
-              {support.map((item: any) => {
+              {support.map((item: LibraryEntry) => {
                 function urlFor(source: any) {
                   return builder.image(source);
                 }
@@ -304,7 +349,7 @@ function ContextPage(props: any) {
             </p>
           ) : (
             <div className="context-cards-start">
-              {companies.map((item: any) => {
+              {companies.map((item: LibraryEntry) => {
                 function urlFor(source: any) {
                   return builder.image(source);
                 }
@@ -339,7 +384,7 @@ function ContextPage(props: any) {
           <h3>Local News & Industry Trends</h3>
           {news.length === 0 ? null : (
             <div className="context-cards-start">
-              {news.map((item: any) => {
+              {news.map((item: LibraryEntry) => {
                 function urlFor(source: any) {
                   return builder.image(source);
                 }
@@ -374,7 +419,7 @@ function ContextPage(props: any) {
           <h3>The Best of the Rest</h3>
           {assorted.length === 0 ? null : (
             <div className="context-cards-start">
-              {assorted.map((item: any) => {
+              {assorted.map((item: LibraryEntry) => {
                 function urlFor(source: string) {
                   return builder.image(source);
                 }
@@ -417,7 +462,7 @@ function ContextPage(props: any) {
             <PortableText value={schemaObject.body} />
           </details>
           <div className="context-cards">
-            {items.map((item: any) => {
+            {items.map((item: LibraryEntry) => {
               function urlFor(source: string) {
                 return builder.image(source);
               }

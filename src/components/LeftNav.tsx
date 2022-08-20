@@ -7,6 +7,7 @@ import React, {
   ComponentPropsWithRef,
   useEffect,
   SyntheticEvent,
+  CSSProperties,
 } from "react";
 import { NavLink } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
@@ -29,7 +30,7 @@ interface LeftNavProps {
 }
 
 // Style definitions
-const headingStyle = {
+const headingStyle: CSSProperties = {
   textDecoration: "none",
   fontSize: 15,
   fontWeight: 600,
@@ -71,9 +72,9 @@ function LeftNav(props: LeftNavProps) {
     setAnchorEl(null);
   };
 
-  const handleClose = () => {setAnchorEl(null)};
+  const handleClose = () => { setAnchorEl(null) };
 
-  const handleSetLanguage = (language: any) => {setLanguage(language)};
+  const handleSetLanguage = (language: any) => { setLanguage(language) };
 
   // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
   const LanguageDropdown = () => (
@@ -151,7 +152,7 @@ function LeftNav(props: LeftNavProps) {
           ),
         })),
       }
-      : null ;
+      : null;
 
   const trainingMenu: LeftNavSection = {
     heading: { path: "/training", label: I18n.get("basicTraining") },
@@ -180,7 +181,7 @@ function LeftNav(props: LeftNavProps) {
   ];
 
   if (mentorshipsMenu) fullMenu.push(mentorshipsMenu);
-  
+
   fullMenu.push(
     /* Training */
     trainingMenu,

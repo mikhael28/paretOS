@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { nanoid } from "nanoid";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
@@ -15,7 +15,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { ReduxRootState } from "../state";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import LoaderButton from "../components/LoaderButton";
 import { MinimalUser, User } from "../types";
 import { FullMission, GenMission, Mission, EnMission } from "./types";
@@ -38,8 +38,10 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
   const [ready, setReady] = useState(false);
   const [missions, setMissions] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [chosenMissions, setChosenMissions] = useState({} as {missions?: FullMission[]});
+  const [chosenMissions, setChosenMissions] = useState({} as { missions?: FullMission[] });
   const [chosenPlayers, setChosenPlayers] = useState([] as MinimalUser[]);
+
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   useEffect(() => {
     getConfiguration();
@@ -200,10 +202,10 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
     try {
       await RestAPI.post("pareto", "/sprints", { body });
       await connectSocket();
-      successToast("Sprint created successfully.");
+      handleShowSuccess("Sprint created successfully.");
       history.push("/");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setLoading(false);
     }
     setLoading(false);
@@ -342,7 +344,8 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
           </div>
         </div>
       ))}
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      {/* TODO had to add any, review what's going on */}
+      <LocalizationProvider dateAdapter={AdapterDateFns as any}>
         <StaticDatePicker
           orientation="portrait"
           openTo="day"

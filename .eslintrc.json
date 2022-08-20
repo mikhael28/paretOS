@@ -1,6 +1,15 @@
 {
-  "plugins": ["react", "prettier"],
-  "extends": ["react-app", "airbnb", "prettier"],
+  "plugins": [
+    "react",
+    "prettier"
+  ],
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
   "rules": {
     "prefer-const": 0,
     "prefer-arrow-callback": 0,
@@ -12,10 +21,10 @@
     "no-restricted-syntax": [
       "error",
       {
-          "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
-          "message": "Unexpected property on console object was called"
+        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+        "message": "Unexpected property on console object was called"
       }
-  ],
+    ],
     "no-use-before-define": 0,
     "consistent-return": 0,
     "no-plusplus": 0,
@@ -62,7 +71,12 @@
     "react/jsx-filename-extension": [
       "warn",
       {
-        "extensions": [".js", ".jsx", "tsx", "ts"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          "tsx",
+          "ts"
+        ]
       }
     ],
     "no-console": "off",

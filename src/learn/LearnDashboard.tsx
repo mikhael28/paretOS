@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import classNames from "classnames";
 import { Slide, Dialog } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";;
 import PaywallModal from "./PaywallModal";
 import ExperienceSummary from "./ExperienceSummary";
 import { Coach } from "../types";
@@ -25,6 +25,8 @@ function LearnDashboard(props: any) {
     props.user.learningPurchase === false
   );
 
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+
   async function editNote() {
     try {
       await RestAPI.put("pareto", `/users/${props.user.id}`, {
@@ -32,9 +34,9 @@ function LearnDashboard(props: any) {
           notes: [html],
         },
       });
-      successToast("Journal saved 👍");
+      handleShowSuccess("Journal saved 👍");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
     }
   }
   return (

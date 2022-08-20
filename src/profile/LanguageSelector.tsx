@@ -8,7 +8,7 @@ import { availableLanguages, updateLanguage } from "../libs/languages";
 import { SelectChangeEvent } from "@mui/material";
 import { User } from "../types";
 
-const LanguageSelector = (props: {user : User }) => {
+const LanguageSelector = (props: { user: User }) => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;

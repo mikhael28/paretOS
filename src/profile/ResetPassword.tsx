@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword = ({ setLoading }: {setLoading: (b: boolean) => void}) => {
+const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => {
   const classes = useStyles();
 
   const [isConfirming, setIsConfirming] = useState(false);
@@ -227,8 +227,8 @@ const ResetPassword = ({ setLoading }: {setLoading: (b: boolean) => void}) => {
       {!codeSent
         ? renderRequestCodeForm()
         : !confirmed
-        ? renderConfirmationForm()
-        : renderSuccessMessage()}
+          ? renderConfirmationForm()
+          : renderSuccessMessage()}
     </div>
   );
 };

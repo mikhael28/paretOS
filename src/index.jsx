@@ -4,7 +4,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./App";
@@ -32,7 +32,9 @@ if (import.meta.env.NODE_ENV === "production") {
   });
 }
 
-const store = createStore(reducer);
+export const store = configureStore({
+  reducer,
+});
 
 Amplify.configure(awsmobile);
 RestAPI.configure({
@@ -57,6 +59,7 @@ Storage.configure({
   },
 });
 
+// eslint-disable-next-line no-undef
 const container = document.getElementById("root");
 const root = createRoot(container);
 

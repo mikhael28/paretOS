@@ -52,7 +52,7 @@ function ArenaStats({ activePerson, displayDay }: ArenaStatsProps) {
           //   index
           // ].percentage.toFixed(0)}%`}
 
-          score={`${parseInt(activePerson.percentage, 10).toFixed(0)}%`}
+          score={`${parseInt(activePerson.percentage.toString(), 10).toFixed(0)}%`}
         />
       </div>
     </section>

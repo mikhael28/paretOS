@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent, ReactElement } from "react";
+import React, { useState, useEffect, MouseEvent, ReactElement, useContext } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
-import { strings } from "./libs/strings";
+import strings from './intl/localization';
 import BottomNav from "./components/BottomNav";
 import { LanguageContext, LanguageProps } from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
@@ -24,9 +24,8 @@ import {
   fetchCoachingRoster,
   fetchSanitySchemas,
 } from "./libs/initialFetch";
-import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
-import { errorToast } from "./libs/toasts";
+import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
@@ -57,7 +56,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => {},
+  setLanguage: () => { },
 };
 
 interface AppProps {
@@ -78,6 +77,8 @@ function App(props: AppProps) {
     username: "",
     session: {},
   });
+  const [toast, setToast] = useState({ msg: "", open: false, type: "info" });
+  const emptyError: any = {};
   const [userData, setUserData] = useState({
     user: {
       id: "8020",
@@ -149,6 +150,30 @@ function App(props: AppProps) {
     relationships: [],
   });
 
+  const handleShowError = (err: Error) => {
+    setToast({
+      msg: err.name ? `${err.name}:${err.message}` : `${err}`,
+      open: true,
+      type: "error"
+    });
+  }
+
+  const handleShowSuccess = (msg: string) => {
+    setToast({
+      msg,
+      open: true,
+      type: "success"
+    });
+  }
+
+  const handleCloseToast = () => {
+    setToast({
+      msg: "",
+      open: false,
+      type: ""
+    });
+  }
+
   const updateState = (property: string, payload: Array<object> | object) => {
     switch (property) {
       case "training":
@@ -201,7 +226,7 @@ function App(props: AppProps) {
 
   useEffect(() => {
     setLoading(true);
-
+    console.log(strings);
     I18n.putVocabularies(strings);
 
     const loadData = async () => {
@@ -226,7 +251,7 @@ function App(props: AppProps) {
           }
         }
         if (e !== "No current user") {
-          errorToast(e as Error);
+          handleShowError(e as Error);
           setLoading(false);
         }
       }
@@ -404,7 +429,7 @@ function App(props: AppProps) {
     try {
       ws.connect({ path, processMsg });
 
-    } catch(e) {
+    } catch (e) {
       alert(e);
     }
     return result;
@@ -419,7 +444,7 @@ function App(props: AppProps) {
       );
       setSprints(menteeSprints);
     } catch (e) {
-      errorToast(e as Error);
+      handleShowError(e as Error);
     }
   }
 
@@ -534,87 +559,90 @@ function App(props: AppProps) {
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-          <Box
-            sx={{
-              // width: "100vw",
-              // height: "100vh",
-              bgcolor: "background.default",
-              color: "text.primary",
-              // overflow: "scroll",
-              minHeight: "100vh",
-            }}
-          >
-            {isAuthenticated ? (
-              <>
-                <div
-                  className="sticky-logout"
-                  style={{
-                    filter: theme.palette.mode === "dark" ? "invert()" : "",
-                  }}
-                  onClick={handleLogout}
-                >
-                  <GrLogout style={{ height: "20px" }} />
-                </div>
-
-                <div className="root-padding">
-                  <LeftNav user={userData.user as any} athletes={athletes} />
-                  <ErrorBoundary history={history}>
-                    <Routes childProps={childProps} />
-                  </ErrorBoundary>
-                </div>
-                <Palette {...props} />
-                <div className="sticky-nav">
-                  <div className="sticky-chat">
-                    <img
-                      src={question}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        setIsTourOpen(true);
-                      }}
-                      alt="Home page tour icon"
-                      height="24"
-                      width="24"
-                      className="sticky-btn"
-                      style={{
-                        cursor: "pointer",
-                        filter: "grayscale(100%)",
-                        outline: "2px solid white",
-                        border: "2px solid transparent",
-                        borderRadius: "50%",
-                      }}
-                    />
-                  </div>
-                  <div className="sticky-audio">
-                    <MusicPlayer />
-                  </div>
-                  <div id="myBottomNav" className="bottom-nav">
-                    <BottomNav user={userData.user} />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <Routes childProps={childProps} />
-            )}
-            <Onboarding showCloseButton />
-            <Dialog
-              style={{
-                margin: "auto",
+          <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
+            <Box
+              sx={{
+                // width: "100vw",
+                // height: "100vh",
+                bgcolor: "background.default",
+                color: "text.primary",
+                // overflow: "scroll",
+                minHeight: "100vh",
               }}
-              open={loading}
-              TransitionComponent={
-                Transition as React.JSXElementConstructor<any> | undefined
-              }
-              keepMounted
-              disableEscapeKeyDown
-              fullScreen
-              fullWidth
-              hideBackdrop={false}
-              aria-labelledby="loading"
-              aria-describedby="Please wait while the page loads"
             >
-              <LoadingModal />
-            </Dialog>
-          </Box>
+              {isAuthenticated ? (
+                <>
+                  <div
+                    className="sticky-logout"
+                    style={{
+                      filter: theme.palette.mode === "dark" ? "invert()" : "",
+                    }}
+                    onClick={handleLogout}
+                  >
+                    <GrLogout style={{ height: "20px" }} />
+                  </div>
+
+                  <div className="root-padding">
+                    <LeftNav user={userData.user as any} athletes={athletes} />
+                    <ErrorBoundary history={history}>
+                      <Routes childProps={childProps} />
+                    </ErrorBoundary>
+                  </div>
+                  <Palette {...props} />
+                  <div className="sticky-nav">
+                    <div className="sticky-chat">
+                      <img
+                        src={question}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setIsTourOpen(true);
+                        }}
+                        alt="Home page tour icon"
+                        height="24"
+                        width="24"
+                        className="sticky-btn"
+                        style={{
+                          cursor: "pointer",
+                          filter: "grayscale(100%)",
+                          outline: "2px solid white",
+                          border: "2px solid transparent",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                    <div className="sticky-audio">
+                      <MusicPlayer />
+                    </div>
+                    <div id="myBottomNav" className="bottom-nav">
+                      <BottomNav user={userData.user} />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Routes childProps={childProps} />
+              )}
+              <Onboarding showCloseButton />
+              <Dialog
+                style={{
+                  margin: "auto",
+                }}
+                open={loading}
+                TransitionComponent={
+                  Transition as React.JSXElementConstructor<any> | undefined
+                }
+                keepMounted
+                disableEscapeKeyDown
+                fullScreen
+                fullWidth
+                hideBackdrop={false}
+                aria-labelledby="loading"
+                aria-describedby="Please wait while the page loads"
+              >
+                <LoadingModal />
+              </Dialog>
+            </Box>
+          </ToastMsgContext.Provider>
+          <ToastMsg msg={toast.msg} type={toast.type} open={toast.open} handleCloseSnackbar={handleCloseToast} />
         </LanguageContext.Provider>
       </ThemeProvider>
     )

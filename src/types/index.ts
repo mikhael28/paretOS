@@ -48,7 +48,7 @@ export type ActiveMission = {
 };
 
 export type MongoExperience = {
-  [index: string] : any;
+  [index: string]: any;
   achievements: number;
   approved: boolean;
   description: string;
@@ -90,7 +90,7 @@ export interface User extends MinimalUser {
   rank?: number;
   _id: string;
 
-  profileImg?: File;
+  profileImg?: string;
   defaultLanguage?: string;
   instructor: boolean;
   apprenticeshipId?: string;

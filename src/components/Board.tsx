@@ -39,8 +39,7 @@ function Leaderboard({
       id: "fName",
       label: I18n.get("name"),
       valueGetter: (user) =>
-        `${user.fName || ""} ${
-          user.lName.substring(0, 1).toUpperCase() || ""
+        `${user.fName || ""} ${user.lName.substring(0, 1).toUpperCase() || ""
         }.`,
     },
     {
@@ -119,7 +118,7 @@ function Leaderboard({
             itemsPerPage={itemsPerPage}
             startPage={Math.floor(
               rankedUsers.findIndex((u) => u.id === currentUser.id) /
-                itemsPerPage
+              itemsPerPage
             )}
             getRowClassName={(row) =>
               row.id === currentUser.id
@@ -189,7 +188,7 @@ function Dais({ user, rank, ranks }: DaisProps) {
           <div className="dais-image-container">
             <div className="dais-image-lockup">
               <ProfileImg
-                profileImg={user.profileImg ? user.profileImg : null}
+                profileImg={user.profileImg ? user.profileImg : ""}
               />
               <div
                 className="dais-image-label"
