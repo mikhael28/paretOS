@@ -24,7 +24,6 @@ import {
   fetchCoachingRoster,
   fetchSanitySchemas,
 } from "./utils/initialFetch";
-import "toasted-notes/src/styles.css";
 import LeftNav from "./components/LeftNav";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
