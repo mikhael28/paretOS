@@ -53,11 +53,13 @@ function Leaderboard({
   // Sort a copy of the user array and add rankings
   const sortedUsers = [...users].sort((a, b) => b.score - a.score);
   const rankedUsers = sortedUsers.map((user, i) => {
-    user.rank =
-      // eslint-disable-next-line eqeqeq
-      i > 0 && user.score === sortedUsers[i - 1].score
-        ? sortedUsers[i - 1].rank
-        : i + 1;
+    user = {
+      ...user, rank:
+        // eslint-disable-next-line eqeqeq
+        i > 0 && user.score === sortedUsers[i - 1].score
+          ? sortedUsers[i - 1].rank
+          : i + 1
+    };
     return user;
   });
 
