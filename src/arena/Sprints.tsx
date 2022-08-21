@@ -47,11 +47,10 @@ function Sprints(props: SprintProps) {
                   className={newClassName}
                   key={sprint.id}
                   style={{ cursor: "pointer", textAlign: "center" }}
-                  onClick={() =>
-                    props.history.push(`/arena/sprints/${sprint.id}`)
-                  }
                 >
-                  <div>
+                  <div onClick={() =>
+                    props.history.push(`/arena/sprints/${sprint.id}`)
+                  }>
                     <h3 style={{ fontWeight: "bold" }}>
                       {index === 0
                         ? "Most Recent Sprint"
@@ -71,15 +70,25 @@ function Sprints(props: SprintProps) {
                     </p>
                   </div>
 
-                  {props.user.admin === true ? (
+                  {props.user.admin === true || sprint.teams.length === 1 ? (
                     <button
+                      style={{ display: 'flex', justifyContent: 'end', backgroundColor: 'black' }}
                       onClick={async () => {
-                        await RestAPI.del(
-                          "pareto",
-                          `/sprints/${sprint.id}`,
-                          {}
-                        );
-                        await props.fetchMenteeSprints(props.user.id);
+                        try {
+                          let response = await RestAPI.del(
+                            "pareto",
+                            `/sprints/${sprint.id}`,
+                            {}
+                          );
+                          if (response) {
+                            alert('Succesfully deleted.');
+                            window.location.reload();
+                          }
+                        } catch (e) {
+                          alert(e);
+                        }
+                        // TODO this is broken, fix this at some point
+                        // await props.fetchMenteeSprints(props.user.id);
                       }}
                     >
                       {I18n.get("delete")}

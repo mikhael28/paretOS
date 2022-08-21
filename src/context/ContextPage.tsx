@@ -534,6 +534,7 @@ function ContextPage(props: any) {
           }}
           onClick={() => {
             let win = window.open(externalModal.url, "_blank");
+            closeExternalModal()
             win?.focus();
           }}
         >

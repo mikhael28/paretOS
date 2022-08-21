@@ -192,10 +192,11 @@ function LeftNav(props: LeftNavProps) {
       subHeadings: [],
     },
     /* Journal */
-    {
-      heading: { path: "/journal", label: I18n.get("journal") },
-      subHeadings: [],
-    },
+    // TODO re-enable journal once it's ready
+    // {
+    //   heading: { path: "/journal", label: I18n.get("journal") },
+    //   subHeadings: [],
+    // },
     /* Profile - TODO: move to dropdown from profile pic */
     {
       heading: { path: `/profile/edit/${user.id}`, label: "Profile" },
