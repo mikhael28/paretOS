@@ -1,5 +1,19 @@
 /* This file contains all interface common among arena components. */
 import { Dispatch, SetStateAction } from "react";
+import { User } from "./ProfileTypes"
+
+export type ActiveMission = {
+  title: string;
+  description: string;
+  proofLink: string;
+};
+
+
+export interface ActivePersonMissionsOnDay {
+  dailyCompletion: number;
+  dailyScore: number;
+  missions: GenMission[];
+}
 
 export interface Mission {
   _createdAt: string;
@@ -49,8 +63,29 @@ export interface Missions {
   setShowProofModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface ActivePersonMissionsOnDay {
-  dailyCompletion: number;
-  dailyScore: number;
-  missions: GenMission[];
+export type PlanningField = {
+  name: string;
+  code: string;
+  content: string;
+};
+
+export interface Sprint {
+  id: string;
+  athleteId: string;
+  coachId: string;
+  startDate: Date;
+  endDate: Date;
+  started: boolean;
+  events: Array<object>;
+  studySessions: Array<object>;
+  type: string;
+  verified: boolean;
+  teams: Array<User>;
+  stake: {
+    title: string;
+    value: string;
+    conditions: Array<any>;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }

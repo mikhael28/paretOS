@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { DialogContent, Button } from "@mui/material";
 import Order from "./Order";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.

@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 import { useCallback, useState } from "react";
 import { I18n } from "@aws-amplify/core";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 import ProfileImg from "./ProfileImg";
 import { Column, dataTableClasses } from "./DataTable";
 import StyledDataTable from "./StyledDataTable";

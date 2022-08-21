@@ -23,7 +23,7 @@ import {
   fetchCoaches,
   fetchCoachingRoster,
   fetchSanitySchemas,
-} from "./libs/initialFetch";
+} from "./utils/initialFetch";
 import LeftNav from "./components/LeftNav";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
@@ -32,8 +32,9 @@ import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
-import { User, Sprint } from "./types";
-import ErrorBoundary from "./utils/errorBoundary";
+import { User } from "./types/ProfileTypes";
+import { Sprint } from "./types/ArenaTypes";
+import ErrorBoundary from "./components/ErrorBoundary";
 import MusicPlayer from "./components/MusicPlayer";
 
 const Transition = React.forwardRef(function Transition(

@@ -1,6 +1,6 @@
 import { RestAPI } from "@aws-amplify/api-rest";
 import sortby from "lodash.sortby";
-import sanity from "./sanity";
+import sanity from "../libs/sanity";
 
 interface ExperienceResult {
   success: boolean;

@@ -17,8 +17,8 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { ReduxRootState } from "../state";
 import { ToastMsgContext } from "../state/ToastContext";;
 import LoaderButton from "../components/LoaderButton";
-import { MinimalUser, User } from "../types";
-import { FullMission, GenMission, Mission, EnMission } from "./types";
+import { MinimalUser, User } from "../types/ProfileTypes";
+import { FullMission, GenMission, Mission, EnMission } from "../types/ArenaTypes";
 import { RouteComponentProps } from "react-router-dom";
 
 /**

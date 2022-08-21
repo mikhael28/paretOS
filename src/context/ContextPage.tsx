@@ -9,7 +9,7 @@ import help from "../assets/help.png";
 import sanity from "../libs/sanity";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
-import { LibraryEntry, Admin, Hub } from "./ContextTypes";
+import { LibraryEntry, Admin, Hub } from "../types/ContextTypes";
 import classNames from "classnames";
 import { AiFillGithub } from 'react-icons/ai';
 import { BiBitcoin } from "react-icons/bi";

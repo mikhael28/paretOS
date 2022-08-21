@@ -4,9 +4,11 @@ import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
-import { MongoExperience, Sprint, User } from "../types";
 import { ToastMsgContext } from "../state/ToastContext";
 import Skeleton from "@mui/material/Skeleton/Skeleton";
+import { MongoExperience } from "../types/LearnTypes";
+import { Sprint } from "../types/ArenaTypes";
+import { User } from "../types/ProfileTypes";
 
 /**
  * This is the profile component, that is seen by the coaches of their students.

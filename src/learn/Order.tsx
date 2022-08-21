@@ -3,8 +3,8 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { createExperience } from "../libs/createExperience";
-import { User } from "../types";
+import { createExperience } from "../utils/createExperience";
+import { User } from "../types/ProfileTypes";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
 
 /**

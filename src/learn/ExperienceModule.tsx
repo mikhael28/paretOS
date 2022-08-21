@@ -12,10 +12,11 @@ import classNames from "classnames";
 import { HiOutlineClipboardCheck } from "react-icons/hi";
 import PaywallModal from "./PaywallModal";
 import question from "../assets/help.png";
-import { generateEmail } from "../libs/errorEmail";
+import { generateEmail } from "../utils/generateErrorEmail";
 import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
-import { ActiveExperience, MongoExperience, User } from "../types";
+import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
+import { User } from "../types/ProfileTypes";
 import { RouteComponentProps } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {

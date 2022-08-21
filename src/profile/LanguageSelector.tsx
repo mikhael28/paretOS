@@ -5,8 +5,7 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import { MdAutorenew } from "react-icons/md";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import { SelectChangeEvent } from "@mui/material";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 const LanguageSelector = (props: { user: User }) => {
   const langContext = useContext(LanguageContext);

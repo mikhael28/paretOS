@@ -4,7 +4,8 @@ import Spinner from "./components/Spinner";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
-import { Sprint as SprintInterface, User } from "./types";
+import { Sprint as SprintInterface } from "./types/ArenaTypes";
+import { User } from "./types/ProfileTypes";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
