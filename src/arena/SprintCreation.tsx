@@ -52,7 +52,7 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
     let options = await RestAPI.get("pareto", "/templates", {});
     let userOptions = await RestAPI.get("pareto", "/users", {});
     setMissions(options);
-    setPlayers(userOptions.filter((e: HTMLOptionElement) => e.id !== profile.id));
+    setPlayers(userOptions.filter((e: HTMLOptionElement) => e.id !== user.id));
     setLoading(false);
     setLoaded(true);
   }
@@ -89,7 +89,7 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
     let databasedTeams: MinimalUser[] = [];
     let dbTeam: MinimalUser;
     let chosenCompetitors = chosenPlayers.slice();
-    chosenCompetitors.push(profile);
+    chosenCompetitors.push(user);
     chosenCompetitors.forEach((el) => {
       dbTeam = {
         fName: el.fName,
@@ -290,6 +290,8 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
   function removeChosenPlayer(chosenPlayer: MinimalUser) {
     setChosenPlayers(chosenPlayers.filter((plyr) => plyr !== chosenPlayer));
   }
+
+  console.log(chosenPlayers);
   return (
     <div>
       <h1>{I18n.get("startSprint")}</h1>
