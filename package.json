@@ -77,7 +77,9 @@
     "workbox-range-requests": "6.5.3",
     "workbox-routing": "6.5.3",
     "workbox-strategies": "6.5.3",
-    "workbox-streams": "6.5.3"
+    "workbox-streams": "6.5.3",
+    "yup": "^0.32.11",
+    "@hookform/resolvers":"2.9.7"
   },
   "scripts": {
     "start": "vite",
@@ -126,33 +128,33 @@
     "ts-node": "10.8.0"
   },
   "strict-peer-dependencies": false,
-   "pnpm": {
-     "peerDependencyRules": {
-       "ignoreMissing": [
-         "*",
-         "react-native"
-       ]
-     },
-     "packageExtensions": {
-       "reactour": {
-         "dependencies": {
-           "styled-components": "*"
-         }
-       },
-       "react-native-get-random-values": {
-         "peerDependenciesMeta": {
-           "react-native": {
-             "optional": true
-           }
-         }
-       },
-       "@reach/component-component": {
-         "peerDependenciesMeta": {
-           "prop-types": {
-             "optional": true
-           }
-         }
-       }
-     }
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "*",
+        "react-native"
+      ]
+    },
+    "packageExtensions": {
+      "reactour": {
+        "dependencies": {
+          "styled-components": "*"
+        }
+      },
+      "react-native-get-random-values": {
+        "peerDependenciesMeta": {
+          "react-native": {
+            "optional": true
+          }
+        }
+      },
+      "@reach/component-component": {
+        "peerDependenciesMeta": {
+          "prop-types": {
+            "optional": true
+          }
+        }
+      }
+    }
   }
 }

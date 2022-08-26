@@ -1,47 +1,108 @@
 // hooks import
-import { FormEvent, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
-import HelpBlock from "react-bootstrap/lib/HelpBlock";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import { useTheme } from "@mui/material";
+import { FormControl, FormHelperText, Input, InputLabel, TextField, useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 import { User } from "@sentry/react";
 import { ToastMsgContext } from "../state/ToastContext";
+import { useForm } from "react-hook-form";
+import { makeStyles } from "@mui/styles";
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(5),
+    width: 300,
+
+    "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
+      backgroundColor: theme.palette.background.paper,
+    },
+    "& .MuiTextField-root": {
+      width: 300,
+    },
+    "& .MuiFormLabel-root": {
+      fontSize: 16,
+      color: theme.palette.primary.main,
+    },
+    "& .MuiInputBase-input": {
+      fontSize: 16,
+    },
+    "& .MuiButtonBase-root": {
+      marginTop: theme.spacing(1),
+      fontSize: 16,
+    },
+    "& .error": {
+      fontSize: 14,
+      color: "rgb(220, 66, 45)",
+    },
+  },
+}));
+
+type UserSignUpForm = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+type CodeConfirmationForm = {
+  confirmationCode: string;
+};
 
 const Signup = () => {
   const theme = useTheme();
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmationCode, setConfirmationCode] = useState("");
-  const [newUser, setNewUser] = useState({} as User);
-
+  const classes = useStyles();
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required('Email is required')
+      .email('Email is invalid'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters')
+      .max(40, 'Password must not exceed 40 characters'),
+    confirmPassword: Yup.string()
+      .required('Confirm Password is required')
+      .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
+  });
+
+  const _validationSchema = Yup.object().shape({
+    confirmationCode: Yup.string()
+      .required('Confirmation code is required')
+  });
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch
+  } = useForm<UserSignUpForm>({ resolver: yupResolver(validationSchema) });
+
+  const {
+    register: _register,
+    formState: { errors: _errors },
+    handleSubmit: _handleSubmit,
+  } = useForm<CodeConfirmationForm>({ resolver: yupResolver(_validationSchema) });
+
+  const [formValues, setFormValues] = useState({email: "", password: ""});
+  const [newUser, setNewUser] = useState({} as User);
+  const [isLoading, setIsLoading] = useState(false);
+  const [disabled] = useState(false);
+
 
   // for redirect to new route
   const history = useHistory();
 
-  const validateForm = () =>
-    email.length > 0 && password.length > 0 && password === confirmPassword;
-
-  const validateConfirmationForm = () => confirmationCode.length > 0;
-
-  const handleConfirmationSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
-
+  const handleConfirmationSubmit = async (data: any) => {
     setIsLoading(true);
 
     try {
-      await Auth.confirmSignUp(email, confirmationCode);
-      await Auth.signIn(email, password);
+      await Auth.confirmSignUp(formValues.email, data.confirmationCode);
+      await Auth.signIn(formValues.email, formValues.password);
       handleShowSuccess("Sign up complete");
       history.push("/onboarding/user");
     } catch (e) {
@@ -50,25 +111,28 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const onSubmit = async (data: any) => {
     setIsLoading(true);
 
     try {
       const newUser = await Auth.signUp({
-        username: email,
-        password,
+        username: data.email,
+        password: data.password,
+      });
+      setFormValues({
+        email: data.email,
+        password: data.password,
       });
       setNewUser(newUser);
     } catch (e) {
       alert((e as Error).message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const renderConfirmationForm = () => (
-    <form onSubmit={handleConfirmationSubmit}>
+    <div className="Form">
       <div className="flex-center">
         <img
           src={logo}
@@ -82,32 +146,34 @@ const Signup = () => {
           }}
         />
       </div>
-      <FormGroup controlId="confirmationCode" bsSize="large">
-        <ControlLabel>{I18n.get("confirmationCode")}</ControlLabel>
-        <FormControl
-          autoFocus
-          type="tel"
-          value={confirmationCode}
-          onChange={(e) =>
-            setConfirmationCode((e.target as HTMLFormElement).value)
-          }
+      <form className={classes.root} onSubmit={_handleSubmit(handleConfirmationSubmit)}>
+        <FormControl sx={{paddingBottom:"10px"}}>
+          <TextField
+            id="confirmationCode"
+            variant="outlined"
+            size="medium"
+            type="tel"
+            label={I18n.get("confirmationCode")}
+            {..._register("confirmationCode")}
+          />
+          <span className="error">{_errors.confirmationCode?.message}</span>
+        </FormControl>
+        <span>{formValues.email}</span>
+        <LoaderButton
+          text={I18n.get("verify")}
+          loadingText={I18n.get("nowVerifying")}
+          isLoading={isLoading}
+          disabled={disabled}
+          type="submit"
+          color="primary"
+          variant="contained"
         />
-        <HelpBlock>{I18n.get("checkEmail")}</HelpBlock>
-      </FormGroup>
-      <LoaderButton
-        block
-        size="large"
-        disabled={!validateConfirmationForm()}
-        type="submit"
-        isLoading={isLoading}
-        text={I18n.get("verify")}
-        loadingText={I18n.get("nowVerifying")}
-      />
-    </form>
+      </form>
+    </div>
   );
 
   const renderForm = () => (
-    <form onSubmit={handleSubmit}>
+    <div className="Form">
       <div className="flex-center">
         <img
           src={logo}
@@ -121,44 +187,57 @@ const Signup = () => {
           }}
         />
       </div>
-      <FormGroup controlId="email" bsSize="large">
-        <ControlLabel>{I18n.get("email")}</ControlLabel>
-        <FormControl
-          autoFocus
-          type="email"
-          value={email}
-          onChange={(e) => setEmail((e.target as HTMLFormElement).value)}
+
+      <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+        <FormControl sx={{paddingBottom:"20px"}}>
+          <TextField 
+            id="email"
+            variant="outlined"
+            size="medium"
+            autoFocus={true}
+            label={I18n.get("email")}
+            {...register("email")}            
+          />
+          <span className="error">{errors.email?.message}</span>
+        </FormControl>
+
+        <FormControl sx={{paddingBottom:"20px"}}>
+          <TextField
+            id="password"
+            variant="outlined"
+            size="medium"
+            type="password"
+            label={I18n.get("password")}
+            {...register("password")}
+          />
+          <span className="error">{errors.password?.message}</span>
+        </FormControl>
+
+        <FormControl sx={{paddingBottom:"20px"}}>
+          <TextField
+            id="confirmPassword"
+            variant="outlined"
+            size="medium"
+            type="password"
+            label={I18n.get("confirm")}
+            {...register("confirmPassword")}
+          />
+          <span className="error">{errors.confirmPassword?.message}</span>        
+        </FormControl>
+
+        <LoaderButton
+          text={I18n.get("signup")}
+          loadingText={I18n.get("signingUp")}
+          isLoading={isLoading}
+          disabled={disabled}
+          type="submit"
+          color="primary"
+          variant="contained"
         />
-      </FormGroup>
-      <FormGroup controlId="password" bsSize="large">
-        <ControlLabel>{I18n.get("password")}</ControlLabel>
-        <FormControl
-          value={password}
-          onChange={(e) => setPassword((e.target as HTMLFormElement).value)}
-          type="password"
-        />
-      </FormGroup>
-      <FormGroup controlId="confirmPassword" bsSize="large">
-        <ControlLabel>{I18n.get("confirm")}</ControlLabel>
-        <FormControl
-          value={confirmPassword}
-          onChange={(e) =>
-            setConfirmPassword((e.target as HTMLFormElement).value)
-          }
-          type="password"
-        />
-      </FormGroup>
-      <LoaderButton
-        block
-        size="large"
-        disabled={!validateForm()}
-        type="submit"
-        isLoading={isLoading}
-        text={I18n.get("signup")}
-        loadingText={I18n.get("signingUp")}
-      />
-    </form>
+      </form>
+    </div>
   );
+
   return (
     <div className="Form">
       {Object.keys(newUser).length === 0
