@@ -15,11 +15,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(5),
+    paddingTop: theme.spacing(3),
     width: 300,
 
     "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
       backgroundColor: theme.palette.background.paper,
+    },
+    "& .MuiFormControl-root": {
+      marginTop: theme.spacing(1),
     },
     "& .MuiTextField-root": {
       width: 300,
@@ -36,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 16,
     },
     "& .error": {
+      marginTop: theme.spacing(1),
       fontSize: 14,
       color: "rgb(220, 66, 45)",
     },
@@ -147,7 +151,7 @@ const Signup = () => {
         />
       </div>
       <form className={classes.root} onSubmit={_handleSubmit(handleConfirmationSubmit)}>
-        <FormControl sx={{paddingBottom:"10px"}}>
+        <FormControl>
           <TextField
             id="confirmationCode"
             variant="outlined"
@@ -173,7 +177,7 @@ const Signup = () => {
   );
 
   const renderForm = () => (
-    <div className="Form">
+    <div>
       <div className="flex-center">
         <img
           src={logo}
@@ -189,7 +193,7 @@ const Signup = () => {
       </div>
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-        <FormControl sx={{paddingBottom:"20px"}}>
+        <FormControl>
           <TextField 
             id="email"
             variant="outlined"
@@ -201,7 +205,7 @@ const Signup = () => {
           <span className="error">{errors.email?.message}</span>
         </FormControl>
 
-        <FormControl sx={{paddingBottom:"20px"}}>
+        <FormControl>
           <TextField
             id="password"
             variant="outlined"
@@ -213,7 +217,7 @@ const Signup = () => {
           <span className="error">{errors.password?.message}</span>
         </FormControl>
 
-        <FormControl sx={{paddingBottom:"20px"}}>
+        <FormControl>
           <TextField
             id="confirmPassword"
             variant="outlined"
