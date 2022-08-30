@@ -1,5 +1,5 @@
 // hooks import
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
@@ -81,16 +81,22 @@ const Signup = () => {
 
   const {
     register,
-    formState: { errors },
+    formState: {isValid, errors},
     handleSubmit,
     watch
-  } = useForm<UserSignUpForm>({ resolver: yupResolver(validationSchema) });
+  } = useForm<UserSignUpForm>({ 
+    mode: "onChange",
+    resolver: yupResolver(validationSchema)
+  });
 
   const {
     register: _register,
-    formState: { errors: _errors },
+    formState: {isValid:_isValid, errors:_errors},
     handleSubmit: _handleSubmit,
-  } = useForm<CodeConfirmationForm>({ resolver: yupResolver(_validationSchema) });
+  } = useForm<CodeConfirmationForm>({ 
+    mode: "onChange",
+    resolver: yupResolver(_validationSchema) 
+  });
 
   const [formValues, setFormValues] = useState({email: "", password: ""});
   const [newUser, setNewUser] = useState({} as User);
@@ -156,7 +162,6 @@ const Signup = () => {
             id="confirmationCode"
             variant="outlined"
             size="medium"
-            type="tel"
             label={I18n.get("confirmationCode")}
             {..._register("confirmationCode")}
           />
@@ -167,7 +172,7 @@ const Signup = () => {
           text={I18n.get("verify")}
           loadingText={I18n.get("nowVerifying")}
           isLoading={isLoading}
-          disabled={disabled}
+          disabled={!_isValid}
           type="submit"
           color="primary"
           variant="contained"
@@ -233,7 +238,7 @@ const Signup = () => {
           text={I18n.get("signup")}
           loadingText={I18n.get("signingUp")}
           isLoading={isLoading}
-          disabled={disabled}
+          disabled={!isValid}
           type="submit"
           color="primary"
           variant="contained"
