@@ -205,7 +205,8 @@ const Signup = () => {
             size="medium"
             autoFocus={true}
             label={I18n.get("email")}
-            {...register("email")}            
+            {...register("email")}  
+            key={1}          
           />
           <span className="error">{errors.email?.message}</span>
         </FormControl>
@@ -218,6 +219,7 @@ const Signup = () => {
             type="password"
             label={I18n.get("password")}
             {...register("password")}
+            key={2}          
           />
           <span className="error">{errors.password?.message}</span>
         </FormControl>
@@ -230,6 +232,7 @@ const Signup = () => {
             type="password"
             label={I18n.get("confirm")}
             {...register("confirmPassword")}
+            key={3}          
           />
           <span className="error">{errors.confirmPassword?.message}</span>        
         </FormControl>
