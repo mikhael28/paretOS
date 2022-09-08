@@ -11,7 +11,7 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
-import reducer from "./state/index";
+import { store } from "./redux/store";
 // import css below
 import "./css/index.css";
 import "./css/arena.css";
@@ -20,7 +20,6 @@ import "./css/form.css";
 import "./css/leaderboard.css";
 import "./css/messaging.css";
 import "./css/modal.css";
-
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -39,10 +38,6 @@ if (import.meta.env.NODE_ENV === "production") {
     tracesSampleRate: 1.0,
   });
 }
-
-export const store = configureStore({
-  reducer,
-});
 
 Amplify.configure(awsmobile);
 RestAPI.configure({

@@ -8,10 +8,12 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import { Storage } from "@aws-amplify/storage";
 import { Button, TextField, useTheme } from "@mui/material";
-import LoaderButton from "../components/LoaderButton";
-import LanguageSelector from "./LanguageSelector";
-import { ToastMsgContext } from "../state/ToastContext";
+import LoaderButton from "../../components/LoaderButton";
+import LanguageSelector from "../LanguageSelector";
+import { ToastMsgContext } from "../../redux/state/ToastContext";
 // import { initialize } from "workbox-google-analytics";
+import { useForm } from "react-hook-form";
+import { Summary } from "./Summary";
 
 /**
  * These are the forms where you can edit your profile.
@@ -20,9 +22,18 @@ import { ToastMsgContext } from "../state/ToastContext";
 
 const EditProfile = (props: any) => {
   const theme = useTheme();
-  const currentUser = "user" in props ? props.user : {
-    projects: [],
-  }
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const currentUser =
+    "user" in props
+      ? props.user
+      : {
+          projects: [],
+        };
   const [user, setUser] = useState(currentUser);
   const [state, setState] = useState({
     isLoading: false,
@@ -56,7 +67,7 @@ const EditProfile = (props: any) => {
     // what we did above, was the get the user id from the navigation bar
     const response = await RestAPI.get("pareto", `/users/${userId}`, {});
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
-    console.log('u', response);
+    console.log("u", response);
     setState((prevState) => ({
       ...prevState,
       user: response[0],
@@ -66,10 +77,16 @@ const EditProfile = (props: any) => {
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | FormEvent<FormControl>) => {
+  const handleChange = (
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | FormEvent<FormControl>
+  ) => {
     setState((prevState) => ({
       ...prevState,
-      [(event.target as HTMLInputElement).id]: (event.target as HTMLInputElement).value,
+      [(event.target as HTMLInputElement).id]: (
+        event.target as HTMLInputElement
+      ).value,
     }));
   };
 
@@ -157,31 +174,25 @@ const EditProfile = (props: any) => {
     let fileType: string[] = [];
     if (targetElement && targetElement.files) {
       const files = targetElement.files;
-      file = files[0]
+      file = files[0];
       fileType = files[0].name.split(".");
     }
 
     try {
       // @TODO: check to see whether this works for video, and what safeguards may not to be added.
       // @TODO: update this manual id for a dynamically generated one
-      let pictureKey = await Storage.put(
-        `${user.id}.${fileType[1]}`,
-        file,
-        {
-          contentType: "image/*",
-          bucket: import.meta.env.VITE_PHOTO_BUCKET,
-        }
-      );
+      let pictureKey = await Storage.put(`${user.id}.${fileType[1]}`, file, {
+        contentType: "image/*",
+        bucket: import.meta.env.VITE_PHOTO_BUCKET,
+      });
       console.log("Key: ", pictureKey);
-      let updatedProfile = await RestAPI.put(
-        "pareto",
-        `/users/${user.id}`,
-        {
-          body: {
-            picture: `https://${import.meta.env.VITE_PHOTO_BUCKET}.s3.amazonaws.com/public/${pictureKey.key}`,
-          },
-        }
-      );
+      let updatedProfile = await RestAPI.put("pareto", `/users/${user.id}`, {
+        body: {
+          picture: `https://${
+            import.meta.env.VITE_PHOTO_BUCKET
+          }.s3.amazonaws.com/public/${pictureKey.key}`,
+        },
+      });
       console.log(updatedProfile);
       setUser(updatedProfile);
       // need to save the key
@@ -226,7 +237,9 @@ const EditProfile = (props: any) => {
                 style={{ margin: "16px 16px 16px 0px", borderRadius: 50 }}
               />
               <div className="flex-down" style={{ marginTop: 24 }}>
-                <h3 style={{ marginBottom: 8, fontSize: "1rem" }}>{I18n.get("changePicture")}</h3>
+                <h3 style={{ marginBottom: 8, fontSize: "1rem" }}>
+                  {I18n.get("changePicture")}
+                </h3>
                 <div className="flex">
                   <input
                     type="file"
@@ -237,7 +250,9 @@ const EditProfile = (props: any) => {
                 </div>
               </div>
               <div className="flex-down" style={{ marginTop: 24 }}>
-                <h3 style={{ marginBottom: 8, fontSize: "1rem" }}>{I18n.get("editName")}</h3>
+                <h3 style={{ marginBottom: 8, fontSize: "1rem" }}>
+                  {I18n.get("editName")}
+                </h3>
                 <form onSubmit={editName}>
                   <div className="flex">
                     <TextField
@@ -259,34 +274,47 @@ const EditProfile = (props: any) => {
                     <Button
                       sx={{ m: 1 }}
                       onClick={() =>
-                        setState((prevState) => ({ ...prevState, editName: false }))
+                        setState((prevState) => ({
+                          ...prevState,
+                          editName: false,
+                        }))
                       }
                     >
                       {I18n.get("cancel")}
                     </Button>
-                    <Button variant="gradient" sx={{ m: 1 }} style={{ width: `calc(100% - 102px)` }}>
+                    <Button
+                      variant="gradient"
+                      sx={{ m: 1 }}
+                      style={{ width: `calc(100% - 102px)` }}
+                    >
                       {I18n.get("save")}
                     </Button>
-
                   </div>
                 </form>
               </div>
-
             </div>
           )}
         </div>
       </div>
-      <div>
+      <Summary />
+      {/* <div>
         <h2 style={{ display: "inline-block", marginLeft: 8 }}>About you</h2>{" "}
-        {state.summaryCheck == false && (<BsPencil
-          onClick={() =>
-            setState((prevState) => ({
-              ...prevState,
-              summaryCheck: true,
-            }))
-          }
-          style={{ marginLeft: 8, width: "18px", height: "18px", cursor: "pointer" }}
-        />)}
+        {state.summaryCheck == false && (
+          <BsPencil
+            onClick={() =>
+              setState((prevState) => ({
+                ...prevState,
+                summaryCheck: true,
+              }))
+            }
+            style={{
+              marginLeft: 8,
+              width: "18px",
+              height: "18px",
+              cursor: "pointer",
+            }}
+          />
+        )}
         {state.summaryCheck ? (
           <div style={{ margin: 8 }}>
             <FormGroup controlId="summary" bsSize="large">
@@ -325,47 +353,61 @@ const EditProfile = (props: any) => {
         ) : (
           <>
             <div className="block">
-              <p>
-                {user.summary}{" "}
-              </p>
+              <p>{user.summary} </p>
             </div>
           </>
         )}
       </div>
-
+ */}
       {/* This is where we are adding projects to your profile */}
       <div>
-        <h2 style={{ display: "inline-block", marginLeft: 8, marginTop: 24 }} className="third-step-home">
+        <h2
+          style={{ display: "inline-block", marginLeft: 8, marginTop: 24 }}
+          className="third-step-home"
+        >
           {I18n.get("projects")}{" "}
-          {state.addProject == false && (<BsPlusLg
-            width="30"
-            height="30"
-            onClick={() =>
-              setState((prevState) => ({
-                ...prevState,
-                addProject: true,
-              }))
-            }
-            style={{ height: "18px", width: "18px", marginLeft: 8, cursor: "pointer" }}
-          />)}
+          {state.addProject == false && (
+            <BsPlusLg
+              width="30"
+              height="30"
+              onClick={() =>
+                setState((prevState) => ({
+                  ...prevState,
+                  addProject: true,
+                }))
+              }
+              style={{
+                height: "18px",
+                width: "18px",
+                marginLeft: 8,
+                cursor: "pointer",
+              }}
+            />
+          )}
         </h2>
         {user.projects.length < 1 && state.addProject == false ? (
           <p className="block">{I18n.get("noProjectsYet")}</p>
         ) : (
           <>
-            {user.projects.map((project: { name: string; description: string; github: string }) => (
-              <div className="block">
-                <h3>{project.name}</h3>
-                <p>{project.description}</p>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub Link Here
-                </a>
-              </div>
-            ))}
+            {user.projects.map(
+              (project: {
+                name: string;
+                description: string;
+                github: string;
+              }) => (
+                <div className="block">
+                  <h3>{project.name}</h3>
+                  <p>{project.description}</p>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub Link Here
+                  </a>
+                </div>
+              )
+            )}
           </>
         )}
         {state.addProject ? (
@@ -377,14 +419,20 @@ const EditProfile = (props: any) => {
               </FormGroup>
               <FormGroup controlId="description" bsSize="large">
                 <ControlLabel>{I18n.get("description")}</ControlLabel>
-                <FormControl value={state.description} onChange={handleChange} />
+                <FormControl
+                  value={state.description}
+                  onChange={handleChange}
+                />
               </FormGroup>
               <FormGroup controlId="github" bsSize="large">
                 <ControlLabel>{I18n.get("githubRepository")}</ControlLabel>
                 <FormControl value={state.github} onChange={handleChange} />
               </FormGroup>
             </div>
-            <div className="flex" style={{ justifyContent: "flex-end", marginRight: 8 }}>
+            <div
+              className="flex"
+              style={{ justifyContent: "flex-end", marginRight: 8 }}
+            >
               <Button
                 onClick={() =>
                   setState((prevState) => ({ ...prevState, addProject: false }))

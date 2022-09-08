@@ -3,7 +3,7 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { MdAutorenew } from "react-icons/md";
-import LanguageContext, { Language } from "../state/LanguageContext";
+import LanguageContext, { Language } from "../redux/state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import { User } from "../types/ProfileTypes";
 
@@ -23,7 +23,9 @@ const LanguageSelector = (props: { user: User }) => {
 
   const handleChange = (e: FormEvent<FormControl>) => {
     updateLanguage({
-      language: availableLanguages.find((x) => x.code === (e.target as HTMLSelectElement).value),
+      language: availableLanguages.find(
+        (x) => x.code === (e.target as HTMLSelectElement).value
+      ),
       id: props.user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
@@ -32,7 +34,9 @@ const LanguageSelector = (props: { user: User }) => {
   return (
     <FormGroup controlId="defaultLanguage" bsSize="large">
       {/* Here we are updating our default language */}
-      <ControlLabel><h2>Default Language</h2></ControlLabel>
+      <ControlLabel>
+        <h2>Default Language</h2>
+      </ControlLabel>
       <div className="flex">
         {isLoading ? (
           <>

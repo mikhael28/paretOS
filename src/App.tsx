@@ -1,4 +1,10 @@
-import React, { useState, useEffect, MouseEvent, ReactElement, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  MouseEvent,
+  ReactElement,
+  useContext,
+} from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
@@ -12,9 +18,9 @@ import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
-import strings from './intl/localization';
+import strings from "./intl/localization";
 import BottomNav from "./components/BottomNav";
-import { LanguageContext, LanguageProps } from "./state/LanguageContext";
+import { LanguageContext, LanguageProps } from "./redux/state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   fetchUser,
@@ -25,7 +31,7 @@ import {
   fetchSanitySchemas,
 } from "./utils/initialFetch";
 import LeftNav from "./components/LeftNav";
-import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
+import { ToastMsgContext, ToastMsg } from "./redux/state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
@@ -57,7 +63,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => { },
+  setLanguage: () => {},
 };
 
 interface AppProps {
@@ -155,25 +161,25 @@ function App(props: AppProps) {
     setToast({
       msg: err.name ? `${err.name}:${err.message}` : `${err}`,
       open: true,
-      type: "error"
+      type: "error",
     });
-  }
+  };
 
   const handleShowSuccess = (msg: string) => {
     setToast({
       msg,
       open: true,
-      type: "success"
+      type: "success",
     });
-  }
+  };
 
   const handleCloseToast = () => {
     setToast({
       msg: "",
       open: false,
-      type: ""
+      type: "",
     });
-  }
+  };
 
   const updateState = (property: string, payload: Array<object> | object) => {
     switch (property) {
@@ -429,7 +435,6 @@ function App(props: AppProps) {
     };
     try {
       ws.connect({ path, processMsg });
-
     } catch (e) {
       alert(e);
     }
@@ -560,7 +565,9 @@ function App(props: AppProps) {
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-          <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
+          <ToastMsgContext.Provider
+            value={{ handleShowError, handleShowSuccess }}
+          >
             <Box
               sx={{
                 // width: "100vw",
@@ -643,7 +650,12 @@ function App(props: AppProps) {
               </Dialog>
             </Box>
           </ToastMsgContext.Provider>
-          <ToastMsg msg={toast.msg} type={toast.type} open={toast.open} handleCloseSnackbar={handleCloseToast} />
+          <ToastMsg
+            msg={toast.msg}
+            type={toast.type}
+            open={toast.open}
+            handleCloseSnackbar={handleCloseToast}
+          />
         </LanguageContext.Provider>
       </ThemeProvider>
     )

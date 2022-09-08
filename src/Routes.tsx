@@ -57,7 +57,7 @@ export interface ChildProps {
     technicalSchemas: object[];
     economicSchemas: object[];
     hubSchemas: object[];
-  }
+  };
   coaches: any[];
 }
 
