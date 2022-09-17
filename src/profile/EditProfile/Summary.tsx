@@ -30,7 +30,6 @@ const Summary = () => {
   });
 
   const {
-    getValues,
     register,
     formState: { errors },
     handleSubmit,
@@ -86,38 +85,26 @@ const Summary = () => {
       )}
       {state.summaryCheck ? (
         <form style={{ margin: 8 }} onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup controlId="summary" bsSize="large">
-            <ControlLabel>{I18n.get("bio")}</ControlLabel>
-            {/*   <FormControl
-              defaultValue={summary}
-              //onChange={handleChange}
-              componentClass="textarea"
-            /> */}
-            {/*  <TextField className="textarea" /> */}
-
-            {/*   <TextareaAutosize
-              className="textarea"
-              maxRows={4}
-              aria-label="maximum height"
-              placeholder="Maximum 4 rows"
-              defaultValue={summary}
-              style={{ width: 200, height: 100 }}
-            /> */}
-          </FormGroup>
           <FormControl component="fieldset" variant="filled" fullWidth disabled>
-            <FormLabel style={{ fontSize: 17, color: "#fff", fontWeight: 600 }}>
+            <FormLabel style={{ fontSize: 18, color: "#fff", fontWeight: 600 }}>
               {I18n.get("bio")}
             </FormLabel>
+
             <TextareaAutosize
               {...register("summary", {
                 required: "Public bio is required",
               })}
               className="textarea"
               maxRows={4}
-              aria-label="maximum height"
-              placeholder="Maximum 4 rows"
+              aria-label="Public Bio"
               defaultValue={summary}
-              style={{ width: "100%", height: 100, background: "transparent" }}
+              style={{
+                padding: "10px 16px",
+                width: "100%",
+                height: 70,
+                borderRadius: "6px",
+                background: "var(--navigation-bgColor)",
+              }}
             />
           </FormControl>
           <div className="flex" style={{ justifyContent: "flex-end" }}>
@@ -136,8 +123,6 @@ const Summary = () => {
 
             <LoaderButton
               type="submit"
-              // disabled={!validateForm()}
-              //onClick={updateBio}
               isLoading={state.isLoading}
               text={I18n.get("save")}
               loadingText={I18n.get("loading")}

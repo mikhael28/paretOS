@@ -58,11 +58,11 @@ export async function updateLanguage({
   }
   let body = { defaultLanguage: language.code };
   try {
-    I18n.setLanguage(language.code);
-    setLanguage(language);
     await RestAPI.put("pareto", `/users/${id}`, {
       body,
     });
+    I18n.setLanguage(language.code);
+    setLanguage(language);
   } catch (e) {
     console.error(e);
   }

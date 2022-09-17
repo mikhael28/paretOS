@@ -1,13 +1,18 @@
-import { useState, useContext, FormEvent } from "react";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
+import { useState, useContext } from "react";
 import { MdAutorenew } from "react-icons/md";
 import LanguageContext, { Language } from "../redux/state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import { User } from "../types/ProfileTypes";
+import {
+  FormLabel,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import { selectProfile } from "@src/redux/selectors/profile/select-profile";
+import { store } from "@src/redux/store";
 
-const LanguageSelector = (props: { user: User }) => {
+const LanguageSelector = () => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;
@@ -21,62 +26,77 @@ const LanguageSelector = (props: { user: User }) => {
     setLanguage(language);
   };
 
-  const handleChange = (e: FormEvent<FormControl>) => {
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    const user = selectProfile(store.getState());
     updateLanguage({
       language: availableLanguages.find(
         (x) => x.code === (e.target as HTMLSelectElement).value
       ),
-      id: props.user.id,
+      id: user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
     });
   };
+
   return (
-    <FormGroup controlId="defaultLanguage" bsSize="large">
-      {/* Here we are updating our default language */}
-      <ControlLabel>
-        <h2>Default Language</h2>
-      </ControlLabel>
-      <div className="flex">
+    <div>
+      <FormControl fullWidth sx={{ m: 1, minWidth: 120 }}>
+        <FormLabel style={{ fontSize: 18, color: "#fff", fontWeight: 600 }}>
+          <h2>Default Language</h2>
+        </FormLabel>
         {isLoading ? (
-          <>
-            <FormControl
-              name="newLanguage"
-              componentClass="select"
-              onChange={handleChange}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Select
+              value={"default"}
+              defaultValue={"default"}
+              style={{
+                background: "var(--navigation-bgColor)",
+              }}
+              fullWidth
+              variant="filled"
+              disabled
             >
-              <option value="">
+              <MenuItem value="default">
                 Please wait - saving language preferences.
-              </option>
-            </FormControl>
+              </MenuItem>
+            </Select>
             <MdAutorenew
               style={{ margin: 8, height: "100%" }}
               className="loading-icon spinning"
             />
-          </>
+          </div>
         ) : (
-          <FormControl
-            name="newLanguage"
-            componentClass="select"
-            onChange={handleChange}
+          <Select
+            value={language?.code || ""}
             defaultValue={language?.code || ""}
-            value={language.code || ""}
+            style={{
+              background: "var(--navigation-bgColor)",
+            }}
+            fullWidth
+            variant="filled"
+            onChange={handleChange}
+            disabled={isLoading}
           >
             {availableLanguages.map(({ code, name }) =>
               code === language.code ? (
-                <option key={code} value={code} selected>
+                <MenuItem key={code} value={code} selected>
                   {name}
-                </option>
+                </MenuItem>
               ) : (
-                <option key={code} value={code}>
+                <MenuItem key={code} value={code}>
                   {name}
-                </option>
+                </MenuItem>
               )
             )}
-          </FormControl>
+          </Select>
         )}
-      </div>
-    </FormGroup>
+      </FormControl>
+    </div>
   );
 };
 export default LanguageSelector;
