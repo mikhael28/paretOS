@@ -19,7 +19,8 @@
     "types": [
       "vite/client",
       "jest",
-      "@types/react"
+      "@types/react",
+      "vitest/globals"
     ],
     "typeRoots": ["node_modules/@types"]
   },

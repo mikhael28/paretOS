@@ -45,5 +45,5 @@ jobs:
         run: |
           pnpm run start &
           sleep 45 &&
-          curl http://localhost:3000 &&
+          curl http://localhost:5173 &&
           pnpm test:integration
