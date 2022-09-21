@@ -6,6 +6,7 @@ import BillingForm from "./BillingForm";
 import { createExperience } from "../utils/createExperience";
 import { User } from "../types/ProfileTypes";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 /**
  * Parent component of the Billing form.
@@ -27,6 +28,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
       isLoading: false,
     };
   }
+
 
   billUser(details: any) {
     let route;
@@ -111,8 +113,10 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     }
 
     this.setState({ isLoading: true });
+    let navigate = useNavigate();
 
     try {
+
       let billing = await this.billUser({
         storage,
         source: token.id,
@@ -128,7 +132,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
       }
 
       await this.props.initialFetch(this.props.user._id);
-      this.props.history.push("/training");
+      navigate("/training");
     } catch (e) {
       alert(e);
       this.setState({ isLoading: false });
@@ -137,11 +141,13 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
 
   handleFreeUnlock = async () => {
     this.setState({ isLoading: true });
+    let navigate = useNavigate();
+
 
     try {
       await this.unlockLearning();
       await this.props.initialFetch(this.props.user._id);
-      this.props.history.push("/training");
+      navigate("/training");
     } catch (e) {
       alert(e);
     }

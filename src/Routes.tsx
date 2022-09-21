@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Route, RouteProps, Switch } from "react-router-dom";
+import {CompatRoute, Navigate} from "react-router-dom-v5-compat";
 import Spinner from "./components/Spinner";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
@@ -65,16 +66,24 @@ export interface RouteWithChildProps extends RouteProps {
   childProps: ChildProps;
 }
 
-export default ({ childProps }: RouteWithChildProps) => (
+// function RequireAuth({ childProps, redirectTo }) {
+//   const redirect = querystring("redirect");
+
+//   console.log(childProps, "isAuthenticated");
+//   return isAuthenticated ? childProps : <Navigate to={redirect === "" || redirect === null ? "/" : redirect} />;
+// }
+
+
+export default ({ childProps, ...rest }: RouteWithChildProps) => (
+  console.log("Routes", childProps),
   <Suspense fallback={<Spinner />}>
     <Switch>
-      <AppliedRoute path="/" exact component={Home} props={childProps} />
-      <AppliedRoute path="/order" exact component={Order} props={childProps} />
-      <UnauthenticatedRoute
-        path="/login"
-        exact
-        component={Login}
-        props={childProps}
+      <CompatRoute path="/" {...rest} exact children={<Home {...childProps}/>}   />
+        <CompatRoute path="/order" {...rest} exact children={<Order  {...childProps} />} />
+      <CompatRoute
+          path="/login"
+          exact
+          children={<UnauthenticatedRoute ><Login {...childProps} /></UnauthenticatedRoute>}
       />
       <UnauthenticatedRoute
         path="/login/reset"
@@ -213,3 +222,5 @@ export default ({ childProps }: RouteWithChildProps) => (
     </Switch>
   </Suspense>
 );
+
+

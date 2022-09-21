@@ -1,5 +1,6 @@
 import { FunctionComponent, LazyExoticComponent } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { Navigate } from "react-router-dom-v5-compat";
 import { ChildProps } from "../Routes";
 
 function querystring(name: string, url = window.location.href) {
@@ -19,24 +20,22 @@ function querystring(name: string, url = window.location.href) {
 }
 
 interface UnauthenticatedRouteProps extends RouteProps {
-  component: FunctionComponent | LazyExoticComponent<any>;
   props: ChildProps;
+  children: any;
 }
 
-export default ({ component: C, props: cProps, ...rest }: UnauthenticatedRouteProps) => {
+const UnauthenticatedRoute = ({ children }:UnauthenticatedRouteProps) => {
   const redirect = querystring("redirect");
+  const { props } = children;
   return (
-    <Route
-      {...rest}
-      render={(props) =>
-        !cProps.isAuthenticated ? (
-          <C {...props} {...cProps} />
-        ) : (
-          <Redirect
-            to={redirect === "" || redirect === null ? "/" : redirect}
-          />
-        )
-      }
-    />
-  );
-};
+    !props.isAuthenticated ?
+      children : (
+        <Navigate
+          to={redirect === "" || redirect === null ? "/" : redirect}
+        />
+      )
+  )
+
+}
+
+export default UnauthenticatedRoute;
