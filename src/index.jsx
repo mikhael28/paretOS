@@ -3,6 +3,7 @@ import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
 import { BrowserRouter as Router } from "react-router-dom";
+import { CompatRouter } from "react-router-dom-v5-compat";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
@@ -20,7 +21,6 @@ import "./css/form.css";
 import "./css/leaderboard.css";
 import "./css/messaging.css";
 import "./css/modal.css";
-
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -73,9 +73,12 @@ const root = createRoot(container);
 
 root.render(
   <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    {/* This is a wrapper that makes v5 and v6 work together for compatibility */}
+    <CompatRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </CompatRouter>
   </Router>
 );
 
