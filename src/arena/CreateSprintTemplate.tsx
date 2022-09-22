@@ -15,6 +15,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
 import { errorToast } from "../libs/toasts";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 /**
  *
@@ -24,7 +25,7 @@ import { errorToast } from "../libs/toasts";
 
 interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
-  history: Array<string>;
+  // history: Array<string>;
 }
 
 interface OnDragEndParams {
@@ -89,6 +90,7 @@ const onDragEnd = ({ result, columns, setColumns }: OnDragEndParams) => {
 
 function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+
   const theme = useTheme();
   const [columns, setColumns] = useState({
     Options: {
@@ -139,8 +141,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
+      const navigate = useNavigate();
       await RestAPI.post("pareto", `/templates`, { body });
-      props.history.push("/");
+      navigate("/");
     } catch (e) {
       // @ts-ignore
       handleShowError(e as Error);
@@ -190,8 +193,8 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   // This will equal true or false, not a number
   const meetsMinimumOptionsThreshold =
     columns.Morning.items.length +
-    columns.Workday.items.length +
-    columns.Evening.items.length >=
+      columns.Workday.items.length +
+      columns.Evening.items.length >=
     3;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -248,8 +251,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         </ControlLabel>
         <TextField
           color="success"
-          /* @ts-ignore */
-          error={error}
+          error={!!error}
           required
           helperText={error}
           style={{ width: 300 }}

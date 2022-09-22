@@ -4,6 +4,7 @@ import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { selectSortedSprints } from "../selectors/select-sorted-sprints";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -17,6 +18,8 @@ interface SprintProps extends ComponentPropsWithoutRef<any> {
 function Sprints(props: SprintProps) {
   let newClassName = classNames("exp-card");
   const sprints = useSelector(selectSortedSprints);
+  const navigate = useNavigate();
+
   return (
     <div style={{ marginTop: 20 }}>
       {props.reviewMode === true ? null : (
@@ -48,9 +51,7 @@ function Sprints(props: SprintProps) {
                   key={sprint.id}
                   style={{ cursor: "pointer", textAlign: "center" }}
                 >
-                  <div onClick={() =>
-                    props.history.push(`/arena/sprints/${sprint.id}`)
-                  }>
+                  <div onClick={() => navigate(`/arena/sprints/${sprint.id}`)}>
                     <h3 style={{ fontWeight: "bold" }}>
                       {index === 0
                         ? "Most Recent Sprint"
@@ -72,7 +73,11 @@ function Sprints(props: SprintProps) {
 
                   {props.user.admin === true || sprint.teams.length === 1 ? (
                     <button
-                      style={{ display: 'flex', justifyContent: 'end', backgroundColor: 'black' }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "end",
+                        backgroundColor: "black",
+                      }}
                       onClick={async () => {
                         try {
                           let response = await RestAPI.del(
@@ -81,7 +86,7 @@ function Sprints(props: SprintProps) {
                             {}
                           );
                           if (response) {
-                            alert('Succesfully deleted.');
+                            alert("Succesfully deleted.");
                             window.location.reload();
                           }
                         } catch (e) {

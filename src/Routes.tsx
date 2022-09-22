@@ -7,6 +7,7 @@ import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import { Sprint as SprintInterface } from "./types/ArenaTypes";
 import { User } from "./types/ProfileTypes";
+import ExperienceSummary from "./learn/ExperienceSummary";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -35,6 +36,9 @@ const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 export interface ChildProps {
+  // history: any;
+  // location: any;
+  // match: any;
   reviewMode: boolean;
   isAuthenticated: boolean;
   userHasAuthenticated: (b: boolean) => void;
@@ -149,6 +153,7 @@ export default ({ childProps, ...rest }: RouteWithChildProps) => (
               <Journal {...childProps} />
             </AuthenticatedRoute>
           }
+          // props={childProps}
         />
         <CompatRoute
           path="/arena"
@@ -160,47 +165,70 @@ export default ({ childProps, ...rest }: RouteWithChildProps) => (
             </AuthenticatedRoute>
           }
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/arena/create/sprints"
           exact
-          component={SprintCreation}
-          props={childProps}
+          {...rest}
+          children={
+            <AuthenticatedRoute>
+              <SprintCreation {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/arena/create/template"
           exact
-          component={CreateSprintTemplate}
-          props={childProps}
+          {...rest}
+          children={
+            <AuthenticatedRoute>
+              <CreateSprintTemplate {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/arena/sprints/:id"
           exact
-          component={Sprint}
-          props={childProps}
+          children={
+            <AuthenticatedRoute>
+              <Sprint {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/training"
           exact
-          component={LearnDashboard}
+          {...rest}
           props={childProps}
+          children={
+            <AuthenticatedRoute>
+              <LearnDashboard {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/training/:id"
           exact
-          component={ExperienceModule}
-          props={childProps}
+          children={
+            <AuthenticatedRoute>
+              <ExperienceModule {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
-        <AppliedRoute
+        <CompatRoute
           path="/chat/:id"
           exact
-          component={Room}
-          props={childProps}
+          /* @ts-ignore */
+          children={<Room {...childProps} />}
+          // props={childProps}
         />
-        <AuthenticatedRoute
+        <CompatRoute
           path="/settings/password"
           exact
-          component={ChangePassword}
-          props={childProps}
+          children={
+            <AuthenticatedRoute>
+              <ChangePassword {...childProps} />
+            </AuthenticatedRoute>
+          }
         />
         <AuthenticatedRoute
           path="/profile/:id"
@@ -251,7 +279,7 @@ export default ({ childProps, ...rest }: RouteWithChildProps) => (
           props={childProps}
         />
         {/* Finally, catch all unmatched routes */}
-        <Route component={NotFound} />
+        <Route children={<NotFound />} />
       </Switch>
     </Suspense>
   )

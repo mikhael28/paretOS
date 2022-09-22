@@ -15,22 +15,28 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { ReduxRootState } from "../state";
-import { ToastMsgContext } from "../state/ToastContext";;
+import { ToastMsgContext } from "../state/ToastContext";
 import LoaderButton from "../components/LoaderButton";
 import { MinimalUser, User } from "../types/ProfileTypes";
-import { FullMission, GenMission, Mission, EnMission } from "../types/ArenaTypes";
+import {
+  FullMission,
+  GenMission,
+  Mission,
+  EnMission,
+} from "../types/ArenaTypes";
 import { RouteComponentProps } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
  * @TODO Re-integrate 'validateForm' function, to prevent people from selecting days in the past. Rethink what other purposes this could have.
  */
-interface SprintCreationProps extends RouteComponentProps {
+interface SprintCreationProps {
   user: User;
   connectSocket: () => {};
 }
 
-function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
+function SprintCreation({ user, connectSocket }: SprintCreationProps) {
   const profile = useSelector((state: ReduxRootState) => state.profile);
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
@@ -38,7 +44,9 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
   const [ready, setReady] = useState(false);
   const [missions, setMissions] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [chosenMissions, setChosenMissions] = useState({} as { missions?: FullMission[] });
+  const [chosenMissions, setChosenMissions] = useState(
+    {} as { missions?: FullMission[] }
+  );
   const [chosenPlayers, setChosenPlayers] = useState([] as MinimalUser[]);
 
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
@@ -99,7 +107,7 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
         github: el.github,
         id: el.id,
         score: 0,
-        percentage: '0',
+        percentage: "0",
         planning: [
           {
             name: "Personal",
@@ -200,10 +208,12 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
       teams: databasedTeams,
     };
     try {
+      const navigate = useNavigate();
+      console.log(navigate, "navigate");
       await RestAPI.post("pareto", "/sprints", { body });
       await connectSocket();
       handleShowSuccess("Sprint created successfully.");
-      history.push("/");
+      navigate("/");
     } catch (e) {
       handleShowError(e as Error);
       setLoading(false);
@@ -213,8 +223,8 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
   // eslint-disable-next-line no-unused-vars
   function validateForm() {
     let result;
-    // TODO: Where is this 5000 number coming from? In this context it equals 5 seconds. 
-    if ((new Date(startDate)).getTime() - 5000 < Date.now()) {
+    // TODO: Where is this 5000 number coming from? In this context it equals 5 seconds.
+    if (new Date(startDate).getTime() - 5000 < Date.now()) {
       result = true;
     } else {
       result = false;
@@ -246,7 +256,8 @@ function SprintCreation({ user, connectSocket, history }: SprintCreationProps) {
   }
 
   function onInput(e: FormEvent<FormControl>) {
-    const nextSibling = (e.target as HTMLOptionElement).nextSibling as HTMLDataListElement;
+    const nextSibling = (e.target as HTMLOptionElement)
+      .nextSibling as HTMLDataListElement;
     if (nextSibling && nextSibling.id === "players-datalist") {
       let input = document.getElementById("players-input") as HTMLInputElement;
       let opts = nextSibling.childNodes as NodeListOf<HTMLOptionElement>;

@@ -1,4 +1,10 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState, useContext } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 import { I18n } from "@aws-amplify/core";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,7 +25,11 @@ import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
-import { GenMission, ActiveMission, ActivePersonMissionsOnDay } from "../types/ArenaTypes";
+import {
+  GenMission,
+  ActiveMission,
+  ActivePersonMissionsOnDay,
+} from "../types/ArenaTypes";
 import { ReduxRootState } from "../state";
 import { User } from "../types/ProfileTypes";
 import { store } from "..";
@@ -31,7 +41,7 @@ import { store } from "..";
  * @TODO Add some sort of icon set to each card.
  * @returns {JSX}
  */
-interface SprintProps extends RouteComponentProps {
+interface SprintProps {
   user: User;
 }
 
@@ -150,7 +160,6 @@ function Sprint({ user, history }: SprintProps) {
       content: string
     ) => {
       setLoading(true);
-
 
       dispatch({
         type: "PLANNING_FORMS",

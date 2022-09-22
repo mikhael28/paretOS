@@ -7,8 +7,9 @@ interface AuthenticatedRouteProps {
 }
 
 const AuthenticatedRoute = ({ children }: AuthenticatedRouteProps) => {
+  const location = useLocation();
   const { props } = children;
-  console.log(props, "children", location);
+  // console.log(props, "children", location);
   return props.isAuthenticated ? (
     children
   ) : (
