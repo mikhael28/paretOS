@@ -19,8 +19,7 @@ function querystring(name: string, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-interface UnauthenticatedRouteProps extends RouteProps {
-  props: ChildProps;
+interface UnauthenticatedRouteProps {
   children: any;
 }
 

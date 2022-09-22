@@ -14,10 +14,14 @@ import { User } from "../types/ProfileTypes";
  */
 interface HomeDashboardProps extends RouteComponentProps {
   user: User;
-  fetchMenteeSprints: (userid: string) => {}
+  fetchMenteeSprints: (userid: string) => {};
 }
 
-function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps) {
+function HomeDashboard({
+  history,
+  user,
+  fetchMenteeSprints,
+}: HomeDashboardProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const theme = useTheme();
@@ -32,9 +36,9 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
       content: `${I18n.get("homeSecond")}`,
     },
     {
-      selector: '.third-step-home',
-      content: `${I18n.get('homeThird')}`
-    }
+      selector: ".third-step-home",
+      content: `${I18n.get("homeThird")}`,
+    },
   ];
   return (
     <div className="flex-down">
@@ -95,8 +99,8 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
-      // showCloseButton={true}
-      // rewindOnClose={false}
+        // showCloseButton={true}
+        // rewindOnClose={false}
       />
     </div>
   );

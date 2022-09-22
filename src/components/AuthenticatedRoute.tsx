@@ -1,22 +1,19 @@
 import { ComponentProps, FunctionComponent, LazyExoticComponent } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom-v5-compat";
 
-interface AuthenticatedRouteProps extends RouteProps {
-  component: FunctionComponent | LazyExoticComponent<any>;
-  props: ComponentProps<any>;
+interface AuthenticatedRouteProps {
+  children: any;
 }
 
-export default ({ component: C, props: cProps, ...rest }: AuthenticatedRouteProps) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      cProps.isAuthenticated ? (
-        <C {...props} {...cProps} />
-      ) : (
-        <Redirect
-          to={`/login?redirect=${props.location.pathname}${props.location.search}`}
-        />
-      )
-    }
-  />
-);
+const AuthenticatedRoute = ({ children }: AuthenticatedRouteProps) => {
+  const { props } = children;
+  console.log(props, "children", location);
+  return props.isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to={`/login?redirect=${location.pathname}${location.search}`} />
+  );
+};
+
+export default AuthenticatedRoute;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
@@ -22,7 +22,7 @@ function ContextBuilder(props: any) {
   console.log({ props });
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState<number>(0);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let initialTab = localStorage.getItem('contextTab');
@@ -39,14 +39,15 @@ function ContextBuilder(props: any) {
     return (
       <div className="context-cards">
         {topics?.length > 0 &&
-          topics.map((topic) => {
+          topics.map((topic, index) => {
             const link = topic.type === "hub" ? "hubs" : "context";
             const img = builder.image(topic.mainImage.asset._ref);
 
             return (
               <div
                 className={newCardClass}
-                onClick={() => history.push(`/${link}/${topic.slug.current}`)}
+                key={index}
+                onClick={() => navigate(`/${link}/${topic.slug.current}`)}
               >
                 <ContextObject item={topic} img={img} />
               </div>

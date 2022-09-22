@@ -1,17 +1,24 @@
 // hooks import
 import { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import { FormControl, FormHelperText, Input, InputLabel, TextField, useTheme } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 import { User } from "@sentry/react";
 import { ToastMsgContext } from "../state/ToastContext";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,50 +69,46 @@ const Signup = () => {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .required('Email is required')
-      .email('Email is invalid'),
+    email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
-      .max(40, 'Password must not exceed 40 characters'),
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .max(40, "Password must not exceed 40 characters"),
     confirmPassword: Yup.string()
-      .required('Confirm Password is required')
-      .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password"), null], "Confirm Password does not match"),
   });
 
   const _validationSchema = Yup.object().shape({
-    confirmationCode: Yup.string()
-      .required('Confirmation code is required')
+    confirmationCode: Yup.string().required("Confirmation code is required"),
   });
 
   const {
     register,
-    formState: {isValid, errors},
+    formState: { isValid, errors },
     handleSubmit,
-    watch
-  } = useForm<UserSignUpForm>({ 
+    watch,
+  } = useForm<UserSignUpForm>({
     mode: "onChange",
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
   });
 
   const {
     register: _register,
-    formState: {isValid:_isValid, errors:_errors},
+    formState: { isValid: _isValid, errors: _errors },
     handleSubmit: _handleSubmit,
-  } = useForm<CodeConfirmationForm>({ 
+  } = useForm<CodeConfirmationForm>({
     mode: "onChange",
-    resolver: yupResolver(_validationSchema) 
+    resolver: yupResolver(_validationSchema),
   });
 
-  const [formValues, setFormValues] = useState({email: "", password: ""});
+  const [formValues, setFormValues] = useState({ email: "", password: "" });
   const [newUser, setNewUser] = useState({} as User);
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
 
-
   // for redirect to new route
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleConfirmationSubmit = async (data: any) => {
     setIsLoading(true);
@@ -114,7 +117,7 @@ const Signup = () => {
       await Auth.confirmSignUp(formValues.email, data.confirmationCode);
       await Auth.signIn(formValues.email, formValues.password);
       handleShowSuccess("Sign up complete");
-      history.push("/onboarding/user");
+      navigate("/onboarding/user");
     } catch (e) {
       handleShowError(e as Error);
       setIsLoading(false);
@@ -156,7 +159,10 @@ const Signup = () => {
           }}
         />
       </div>
-      <form className={classes.root} onSubmit={_handleSubmit(handleConfirmationSubmit)}>
+      <form
+        className={classes.root}
+        onSubmit={_handleSubmit(handleConfirmationSubmit)}
+      >
         <FormControl>
           <TextField
             id="confirmationCode"
@@ -199,14 +205,14 @@ const Signup = () => {
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
-          <TextField 
+          <TextField
             id="email"
             variant="outlined"
             size="medium"
             autoFocus={true}
             label={I18n.get("email")}
-            {...register("email")}  
-            key={1}          
+            {...register("email")}
+            key={1}
           />
           <span className="error">{errors.email?.message}</span>
         </FormControl>
@@ -219,7 +225,7 @@ const Signup = () => {
             type="password"
             label={I18n.get("password")}
             {...register("password")}
-            key={2}          
+            key={2}
           />
           <span className="error">{errors.password?.message}</span>
         </FormControl>
@@ -232,9 +238,9 @@ const Signup = () => {
             type="password"
             label={I18n.get("confirm")}
             {...register("confirmPassword")}
-            key={3}          
+            key={3}
           />
-          <span className="error">{errors.confirmPassword?.message}</span>        
+          <span className="error">{errors.confirmPassword?.message}</span>
         </FormControl>
 
         <LoaderButton
