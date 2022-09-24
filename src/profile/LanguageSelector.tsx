@@ -9,13 +9,15 @@ import {
 import { MdAutorenew } from "react-icons/md";
 import LanguageContext, { Language } from "../redux/state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import { User } from "../types/ProfileTypes";
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { selectProfile } from "@src/redux/selectors/profile/select-profile";
 
 const LanguageSelector = () => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;
+  const user = useSelector(selectProfile);
   let [isLoading, setIsLoading] = useState(false);
   const { control } = useForm({ reValidateMode: "onChange" });
 
@@ -32,7 +34,7 @@ const LanguageSelector = () => {
       language: availableLanguages.find(
         (x) => x.code === (e.target as HTMLInputElement).value
       ),
-      id: props.user.id,
+      id: user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
     });
