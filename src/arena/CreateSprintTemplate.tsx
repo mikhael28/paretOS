@@ -15,7 +15,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
 import { errorToast } from "../libs/toasts";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 /**
  *
@@ -92,6 +92,8 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const [columns, setColumns] = useState({
     Options: {
       name: "Options",
@@ -116,6 +118,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
 
   async function createTemplate() {
     let missionsArray: never[] = [];
+
     columns.Morning.items.map((item) => {
       missionsArray.push(item);
     });
@@ -141,7 +144,6 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
-      const navigate = useNavigate();
       await RestAPI.post("pareto", `/templates`, { body });
       navigate("/");
     } catch (e) {
@@ -263,7 +265,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         <Button
           /* @ts-ignore */
           disabled={
-            (title === "" && meetsMinimumOptionsThreshold === false) || error
+            (title === "" && meetsMinimumOptionsThreshold === false) || !!error
           }
           variant="gradient"
           onClick={createTemplate}

@@ -24,8 +24,7 @@ import {
   Mission,
   EnMission,
 } from "../types/ArenaTypes";
-import { RouteComponentProps } from "react-router-dom";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { RouteComponentProps, useNavigate } from "react-router-dom";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
@@ -209,7 +208,6 @@ function SprintCreation({ user, connectSocket }: SprintCreationProps) {
     };
     try {
       const navigate = useNavigate();
-      console.log(navigate, "navigate");
       await RestAPI.post("pareto", "/sprints", { body });
       await connectSocket();
       handleShowSuccess("Sprint created successfully.");

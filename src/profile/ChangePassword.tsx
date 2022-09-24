@@ -6,7 +6,7 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
 import { ToastMsgContext } from "../state/ToastContext";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Change your password through Cognito

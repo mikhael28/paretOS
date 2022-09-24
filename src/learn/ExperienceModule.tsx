@@ -18,7 +18,7 @@ import NewSubmitModal from "./NewSubmitProofModal";
 import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
 import { User } from "../types/ProfileTypes";
 import { RouteComponentProps } from "react-router-dom";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   const { children, ...rest } = props as any;

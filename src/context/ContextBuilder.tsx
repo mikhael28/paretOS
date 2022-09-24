@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";

@@ -1,8 +1,18 @@
-import React, { Component, ComponentProps, ComponentType, FormEvent, FormEventHandler } from "react";
+import React, {
+  Component,
+  ComponentProps,
+  ComponentType,
+  FormEvent,
+  FormEventHandler,
+} from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import { CardElement, injectStripe, StripeProvider } from "react-stripe-elements";
+import {
+  CardElement,
+  injectStripe,
+  StripeProvider,
+} from "react-stripe-elements";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -54,7 +64,9 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
 
   handleFieldChange = (event: FormEvent<FormControl>) => {
     this.setState({
-      [(event.target as HTMLInputElement).id]: (event.target as HTMLInputElement).value,
+      [(event.target as HTMLInputElement).id]: (
+        event.target as HTMLInputElement
+      ).value,
     } as BillingState);
   };
 
@@ -131,7 +143,7 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
           }}
         />
         <LoaderButton
-          block
+          block="true"
           size="large"
           type="submit"
           text="Purchase"
@@ -144,4 +156,6 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
   }
 }
 
-export default injectStripe(BillingForm as ComponentType<BillingFormProps & any>);
+export default injectStripe(
+  BillingForm as ComponentType<BillingFormProps & any>
+);

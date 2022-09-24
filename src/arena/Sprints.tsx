@@ -4,7 +4,7 @@ import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { selectSortedSprints } from "../selectors/select-sorted-sprints";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.

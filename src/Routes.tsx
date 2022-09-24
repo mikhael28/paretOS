@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Route, RouteProps, Switch } from "react-router-dom";
-import { CompatRoute, Navigate } from "react-router-dom-v5-compat";
+import { Route, RouteProps, Routes } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
@@ -71,216 +70,231 @@ export interface RouteWithChildProps extends RouteProps {
   childProps: ChildProps;
 }
 
-// function RequireAuth({ childProps, redirectTo }) {
-//   const redirect = querystring("redirect");
-
-//   console.log(childProps, "isAuthenticated");
-//   return isAuthenticated ? childProps : <Navigate to={redirect === "" || redirect === null ? "/" : redirect} />;
-// }
-
 export default ({ childProps, ...rest }: RouteWithChildProps) => (
-  console.log("Routes", childProps),
-  (
-    <Suspense fallback={<Spinner />}>
-      <Switch>
-        <CompatRoute
-          path="/"
-          {...rest}
-          exact
-          children={<Home {...childProps} />}
-        />
-        <CompatRoute
-          path="/order"
-          {...rest}
-          exact
-          children={<Order {...childProps} />}
-        />
-        <CompatRoute
-          path="/login"
-          {...rest}
-          exact
-          children={
-            <UnauthenticatedRoute>
-              <Login {...childProps} />
-            </UnauthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/login/reset"
-          {...rest}
-          exact
-          children={
-            <UnauthenticatedRoute>
-              <ResetPassword {...childProps} />
-            </UnauthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/signup"
-          {...rest}
-          exact
-          children={
-            <UnauthenticatedRoute>
-              <Signup {...childProps} />
-            </UnauthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/context-builder"
-          {...rest}
-          exact
-          children={<ContextBuilder {...childProps} />}
-        />
-        <CompatRoute
-          path="/context/:id"
-          {...rest}
-          exact
-          children={<ContextPage {...childProps} />}
-        />
-        <CompatRoute
-          path="/hubs/:id"
-          {...rest}
-          exact
-          children={<ContextPage {...childProps} />}
-          props={childProps}
-        />
-        <CompatRoute
-          path="/journal"
-          {...rest}
-          exact
-          children={
-            <AuthenticatedRoute>
-              <Journal {...childProps} />
-            </AuthenticatedRoute>
-          }
-          // props={childProps}
-        />
-        <CompatRoute
-          path="/arena"
-          {...rest}
-          exact
-          children={
-            <AuthenticatedRoute>
-              <ArenaDashboard {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/arena/create/sprints"
-          exact
-          {...rest}
-          children={
-            <AuthenticatedRoute>
-              <SprintCreation {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/arena/create/template"
-          exact
-          {...rest}
-          children={
-            <AuthenticatedRoute>
-              <CreateSprintTemplate {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/arena/sprints/:id"
-          exact
-          children={
-            <AuthenticatedRoute>
-              <Sprint {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/training"
-          exact
-          {...rest}
-          props={childProps}
-          children={
-            <AuthenticatedRoute>
-              <LearnDashboard {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/training/:id"
-          exact
-          children={
-            <AuthenticatedRoute>
-              <ExperienceModule {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <CompatRoute
-          path="/chat/:id"
-          exact
-          /* @ts-ignore */
-          children={<Room {...childProps} />}
-          // props={childProps}
-        />
-        <CompatRoute
-          path="/settings/password"
-          exact
-          children={
-            <AuthenticatedRoute>
-              <ChangePassword {...childProps} />
-            </AuthenticatedRoute>
-          }
-        />
-        <AuthenticatedRoute
-          path="/profile/:id"
-          exact
-          component={Profile}
-          props={childProps}
-        />
-        <AuthenticatedRoute
-          path="/profile/edit/:id"
-          exact
-          component={EditProfile}
-          props={childProps}
-        />
-        <AuthenticatedRoute
-          path="/profile/languages/:id"
-          exact
-          component={LanguageSelector}
-          props={childProps}
-        />
-        <AppliedRoute
-          path="/onboarding/user"
-          exact
-          component={CreateUser}
-          props={childProps}
-        />
-        <AuthenticatedRoute
-          path="/sandbox"
-          exact
-          component={Sandbox}
-          props={childProps}
-        />
-        <AuthenticatedRoute
-          path="/mentorship"
-          exact
-          component={MentorDashboard}
-          props={childProps}
-        />
-        <AuthenticatedRoute
-          path="/mentorship/:id"
-          exact
-          component={Profile}
-          props={childProps}
-        />
-        <AppliedRoute
-          path="/workandrise"
-          exact
-          component={WorkRise}
-          props={childProps}
-        />
-        {/* Finally, catch all unmatched routes */}
-        <Route children={<NotFound />} />
-      </Switch>
-    </Suspense>
-  )
+  <Suspense fallback={<Spinner />}>
+    <Routes>
+      <Route path="/" {...rest} exact element={<Home {...childProps} />} />
+      <Route
+        path="/order"
+        {...rest}
+        exact
+        element={<Order {...childProps} />}
+      />
+      <Route
+        path="/login"
+        {...rest}
+        exact
+        element={
+          <UnauthenticatedRoute>
+            <Login {...childProps} />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path="/login/reset"
+        {...rest}
+        exact
+        element={
+          <UnauthenticatedRoute>
+            <ResetPassword {...childProps} />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        {...rest}
+        exact
+        element={
+          <UnauthenticatedRoute>
+            <Signup {...childProps} />
+          </UnauthenticatedRoute>
+        }
+      />
+      <Route
+        path="/context-builder"
+        {...rest}
+        exact
+        element={<ContextBuilder {...childProps} />}
+      />
+      <Route
+        path="/context/:id"
+        {...rest}
+        exact
+        element={<ContextPage {...childProps} />}
+      />
+      <Route
+        path="/hubs/:id"
+        {...rest}
+        exact
+        element={<ContextPage {...childProps} />}
+        props={childProps}
+      />
+      <Route
+        path="/journal"
+        {...rest}
+        exact
+        element={
+          <AuthenticatedRoute>
+            <Journal {...childProps} />
+          </AuthenticatedRoute>
+        }
+        // props={childProps}
+      />
+      <Route
+        path="/arena"
+        {...rest}
+        exact
+        element={
+          <AuthenticatedRoute>
+            <ArenaDashboard {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/arena/create/sprints"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <SprintCreation {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/arena/create/template"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <CreateSprintTemplate {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/arena/sprints/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <Sprint {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/training"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <LearnDashboard {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/training/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <ExperienceModule {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/chat/:id"
+        exact
+        {...rest}
+        /* @ts-ignore */
+        element={<Room {...childProps} />}
+        // props={childProps}
+      />
+      <Route
+        path="/settings/password"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <ChangePassword {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/profile/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            {/* @ts-ignore */}
+            <Profile {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/profile/edit/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <EditProfile {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/profile/languages/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <LanguageSelector {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/onboarding/user"
+        exact
+        {...rest}
+        element={<CreateUser {...childProps} />}
+      />
+      <Route
+        path="/sandbox"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <Sandbox {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/mentorship"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            <MentorDashboard {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/mentorship/:id"
+        exact
+        {...rest}
+        element={
+          <AuthenticatedRoute>
+            {/* @ts-ignore */}
+            <Profile {...childProps} />
+          </AuthenticatedRoute>
+        }
+      />
+      <Route
+        path="/workandrise"
+        exact
+        {...rest}
+        // @ts-ignore
+        element={<WorkRise {...childProps} />}
+      />
+      {/* Finally, catch all unmatched routes */}
+      <Route element={<NotFound />} />
+    </Routes>
+  </Suspense>
 );

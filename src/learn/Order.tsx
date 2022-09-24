@@ -6,7 +6,7 @@ import BillingForm from "./BillingForm";
 import { createExperience } from "../utils/createExperience";
 import { User } from "../types/ProfileTypes";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Parent component of the Billing form.
@@ -14,13 +14,16 @@ import { useNavigate } from "react-router-dom-v5-compat";
  */
 
 interface OrderProps {
-  user: User,
+  user: User;
   initialFetch: (id: string) => void;
   history: RouterHistory;
   stripeKey: string;
 }
 
-export default class Order extends Component<OrderProps, { isLoading: boolean }> {
+export default class Order extends Component<
+  OrderProps,
+  { isLoading: boolean }
+> {
   constructor(props: OrderProps) {
     super(props);
 
@@ -28,7 +31,6 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
       isLoading: false,
     };
   }
-
 
   billUser(details: any) {
     let route;
@@ -57,7 +59,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId ?? '',
+      expId: this.props.user.apprenticeshipId ?? "",
       userId: this.props.user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -66,7 +68,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId ?? '',
+      expId: this.props.user.productId ?? "",
       userId: this.props.user.id,
       type: "Product",
       title: "Capstone Project",
@@ -106,7 +108,10 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (storage: any, { token, error }: { token: any, error: Error }) => {
+  handleFormSubmit = async (
+    storage: any,
+    { token, error }: { token: any; error: Error }
+  ) => {
     if (error) {
       alert(error);
       return;
@@ -116,7 +121,6 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
     let navigate = useNavigate();
 
     try {
-
       let billing = await this.billUser({
         storage,
         source: token.id,
@@ -142,7 +146,6 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
   handleFreeUnlock = async () => {
     this.setState({ isLoading: true });
     let navigate = useNavigate();
-
 
     try {
       await this.unlockLearning();
@@ -173,7 +176,7 @@ export default class Order extends Component<OrderProps, { isLoading: boolean }>
 }
 
 //(property) loading: boolean
-//Type '{ 
-//      loading: boolean; 
+//Type '{
+//      loading: boolean;
 //       onSubmit: (storage: any, { token, error }: { token: any; error: any; }) => Promise<void>; }' is not assignable to type 'IntrinsicAttributes & object'.
- // Property 'loading' does not exist on type 'IntrinsicAttributes & object'.ts(2322)
+// Property 'loading' does not exist on type 'IntrinsicAttributes & object'.ts(2322)

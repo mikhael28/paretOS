@@ -2,8 +2,7 @@ import { createRoot } from "react-dom/client";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
-import { BrowserRouter as Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
@@ -72,14 +71,18 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <Router>
-    {/* This is a wrapper that makes v5 and v6 work together for compatibility */}
-    <CompatRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </CompatRouter>
-  </Router>
+  <BrowserRouter>
+    <Routes>
+      <Route
+        path="*"
+        element={
+          <Provider store={store}>
+            <App />
+          </Provider>
+        }
+      />
+    </Routes>
+  </BrowserRouter>
 );
 
 serviceWorkerRegistration.unregister();

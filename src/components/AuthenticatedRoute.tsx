@@ -1,7 +1,5 @@
 import { ComponentProps, FunctionComponent, LazyExoticComponent } from "react";
-import { Route, Redirect, RouteProps } from "react-router-dom";
-import { Navigate, useLocation } from "react-router-dom-v5-compat";
-
+import { Navigate, useLocation } from "react-router-dom";
 interface AuthenticatedRouteProps {
   children: any;
 }
@@ -9,7 +7,6 @@ interface AuthenticatedRouteProps {
 const AuthenticatedRoute = ({ children }: AuthenticatedRouteProps) => {
   const location = useLocation();
   const { props } = children;
-  // console.log(props, "children", location);
   return props.isAuthenticated ? (
     children
   ) : (

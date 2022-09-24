@@ -3,7 +3,7 @@ import { GrAchievement } from "react-icons/gr";
 import { GiCoins } from "react-icons/gi";
 import { useTheme } from "@mui/material";
 import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The Experience summary component is shown as a shortcut to enter a particular training module by ID. The coach can see this when viewing his/her students, and the students see this in the learning dashboard.
