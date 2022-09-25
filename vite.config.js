@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import resolve from "@rollup/plugin-node-resolve";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { visualizer } from "rollup-plugin-visualizer";
 import tsconfigPaths from "vite-tsconfig-paths";
 

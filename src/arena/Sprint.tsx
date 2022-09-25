@@ -1,8 +1,13 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState, useContext } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 import { I18n } from "@aws-amplify/core";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { ToastMsgContext } from "../state/ToastContext";
 import Tour from "reactour";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
@@ -19,10 +24,15 @@ import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
-import { GenMission, ActiveMission, ActivePersonMissionsOnDay } from "../types/ArenaTypes";
-import { ReduxRootState } from "../state";
+import {
+  GenMission,
+  ActiveMission,
+  ActivePersonMissionsOnDay,
+} from "../types/ArenaTypes";
 import { User } from "../types/ProfileTypes";
-import { store } from "..";
+import { ToastMsgContext } from "@src/redux/state/ToastContext";
+import { store } from "@src/redux/store";
+import { ReduxRootState } from "@src/redux/state";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -134,7 +144,7 @@ function Sprint({ user, history }: SprintProps) {
       try {
         await updateSprintData(sprint[SPRINT_INDEX], ws);
       } catch (error: any) {
-        errorToast(error);
+        handleShowError(error);
       } finally {
         setLoading(false);
       }
@@ -151,7 +161,6 @@ function Sprint({ user, history }: SprintProps) {
     ) => {
       setLoading(true);
 
-
       dispatch({
         type: "PLANNING_FORMS",
         payload: {
@@ -166,7 +175,7 @@ function Sprint({ user, history }: SprintProps) {
       try {
         await updateSprintData(sprint[SPRINT_INDEX], ws);
       } catch (error) {
-        errorToast(error as Error);
+        handleShowError(error as Error);
       } finally {
         setLoading(false);
       }
