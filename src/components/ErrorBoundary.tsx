@@ -68,4 +68,4 @@ class ErrorBoundary extends Component<any, any> {
   }
 }
 
-export default ErrorBoundary;
+export default withRouter(ErrorBoundary);

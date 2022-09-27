@@ -592,9 +592,9 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
-                    <ErrorBoundaryCopy navigate={navigate}>
+                    <ErrorBoundary navigate={navigate}>
                       <Routes childProps={childProps} />
-                    </ErrorBoundaryCopy>
+                    </ErrorBoundary>
                   </div>
                   <Palette {...props} />
                   <div className="sticky-nav">
