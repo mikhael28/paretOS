@@ -36,8 +36,7 @@ import ws from "./libs/websocket";
 import { User } from "./types/ProfileTypes";
 import { Sprint } from "./types/ArenaTypes";
 import ErrorBoundary from "./components/ErrorBoundary";
-import ErrorBoundaryCopy from "./components/ErrorBoundaryCopy";
-
+import customHistory from "./utils/customHistory";
 import MusicPlayer from "./components/MusicPlayer";
 
 const Transition = React.forwardRef(function Transition(
@@ -593,7 +592,7 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
-                    <ErrorBoundary navigate={navigate}>
+                    <ErrorBoundary history={customHistory}>
                       <Routes childProps={childProps} />
                     </ErrorBoundary>
                   </div>

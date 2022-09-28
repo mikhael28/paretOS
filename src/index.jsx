@@ -8,6 +8,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./App";
+import { CustomRouter } from "./utils/CustomBrowswerRouter";
+import customHistory from "./utils/customHistory";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
@@ -71,18 +73,11 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route
-        path="*"
-        element={
-          <Provider store={store}>
-            <App />
-          </Provider>
-        }
-      />
-    </Routes>
-  </BrowserRouter>
+  <CustomRouter history={customHistory}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </CustomRouter>
 );
 
 serviceWorkerRegistration.unregister();

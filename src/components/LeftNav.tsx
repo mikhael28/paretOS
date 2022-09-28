@@ -49,7 +49,7 @@ const subheadingStyle = {
   display: "flex",
   alignItems: "center",
 };
-const activestyle = {
+const activeStyle = {
   opacity: 1,
   textDecoration: "none",
 };
@@ -405,7 +405,7 @@ function Heading({
         to={path}
         style={headingStyle as StyleHTMLAttributes<HTMLElement>}
         className="flex"
-        activestyle={activestyle}
+        activestyle={activeStyle}
         end
       >
         <p
@@ -437,7 +437,7 @@ const SubHeading = ({
   Icon: React.ReactComponentElement<any>;
 }) => {
   return (
-    <NavLink end to={path} style={subheadingStyle} activestyle={activestyle}>
+    <NavLink end to={path} style={subheadingStyle} activestyle={activeStyle}>
       {Icon}
       <p style={{ marginLeft: 8 }}>{label}</p>
     </NavLink>
