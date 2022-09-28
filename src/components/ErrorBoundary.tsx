@@ -10,22 +10,25 @@ class ErrorBoundary extends Component<any, any> {
   private unregisterListener: any;
 
   public componentDidMount() {
-    const { navigate } = this.props;
-    console.log(this.props, navigate, "history");
+    const { router } = this.props;
+    console.log(router, "history");
 
     // Creating an event listener to unmount the ErrorBoundary when navigating away/soft reloading the route
     // Otherwise, the error boundary will persist in the entire route tree.
     // If the component/container still has an error after a soft-reload, the ErrorBoundary will catch it again.
-    this.unregisterListener = navigate((location: any, action: any) => {
-      if (
-        (action === "PUSH" || action === "REPLACE") &&
-        this.state.hasError === true
-      ) {
-        this.setState({
-          hasError: false,
-        });
+    this.unregisterListener = this.props.history.listen(
+      (location: any, action: any) => {
+        console.log(this.unregisterListener, "unregisterListener");
+        if (
+          (action === "PUSH" || action === "REPLACE") &&
+          this.state.hasError === true
+        ) {
+          this.setState({
+            hasError: false,
+          });
+        }
       }
-    });
+    );
   }
 
   public static getDerivedStateFromError(_: Error): any {

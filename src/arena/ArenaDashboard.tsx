@@ -1,26 +1,27 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import Sprints from "./Sprints";
 import question from "../assets/question.svg";
 import logo from "../assets/Pareto_Lockup-01.png";
-import { RouteComponentProps } from ".pnpm/@types+react-router@5.1.18/node_modules/@types/react-router";
 import { User } from "../types/ProfileTypes";
 
 /**
  * The 'main dashboard' in the UI, that shows different things depending on what level of user you are.
  *
  */
-interface HomeDashboardProps extends RouteComponentProps {
+interface HomeDashboardProps {
   user: User;
   fetchMenteeSprints: (userid: string) => {};
+  navigate: typeof useNavigate;
 }
 
 function HomeDashboard({
-  history,
   user,
   fetchMenteeSprints,
+  navigate,
 }: HomeDashboardProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
@@ -88,7 +89,7 @@ function HomeDashboard({
         <div className="col-xs-12">
           <Sprints
             reviewMode={false}
-            history={history}
+            navigate={navigate}
             user={user}
             fetchMenteeSprints={fetchMenteeSprints}
           />

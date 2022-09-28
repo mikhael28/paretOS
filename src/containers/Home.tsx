@@ -12,7 +12,7 @@ export default function Home(props: any) {
       {props.isAuthenticated ? (
         <Dashboard {...props} />
       ) : (
-        <Landing history={navigate} />
+        <Landing navigate={navigate} />
       )}
     </>
   );

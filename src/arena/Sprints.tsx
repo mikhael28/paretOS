@@ -1,10 +1,11 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, useContext } from "react";
 import { useSelector } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { selectSortedSprints } from "../selectors/select-sorted-sprints";
 import { useNavigate } from "react-router-dom";
+import { ToastMsgContext } from "../state/ToastContext";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -19,6 +20,7 @@ function Sprints(props: SprintProps) {
   let newClassName = classNames("exp-card");
   const sprints = useSelector(selectSortedSprints);
   const navigate = useNavigate();
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   return (
     <div style={{ marginTop: 20 }}>
@@ -86,11 +88,11 @@ function Sprints(props: SprintProps) {
                             {}
                           );
                           if (response) {
-                            alert("Succesfully deleted.");
+                            handleShowSuccess("Successfully deleted.");
                             window.location.reload();
                           }
                         } catch (e) {
-                          alert(e);
+                          handleShowError(e as Error);
                         }
                         // TODO this is broken, fix this at some point
                         // await props.fetchMenteeSprints(props.user.id);

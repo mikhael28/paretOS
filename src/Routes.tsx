@@ -7,6 +7,7 @@ import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import { Sprint as SprintInterface } from "./types/ArenaTypes";
 import { User } from "./types/ProfileTypes";
 import ExperienceSummary from "./learn/ExperienceSummary";
+import { Coach } from "./types/MentorshipTypes";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -35,9 +36,6 @@ const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 export interface ChildProps {
-  // history: any;
-  // location: any;
-  // match: any;
   reviewMode: boolean;
   isAuthenticated: boolean;
   userHasAuthenticated: (b: boolean) => void;
@@ -63,7 +61,7 @@ export interface ChildProps {
     economicSchemas: object[];
     hubSchemas: object[];
   };
-  coaches: any[];
+  coaches: Array<Coach>;
 }
 
 export interface RouteWithChildProps extends RouteProps {
@@ -224,7 +222,6 @@ export default ({ childProps, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            {/* @ts-ignore */}
             <Profile {...childProps} />
           </AuthenticatedRoute>
         }
@@ -281,7 +278,6 @@ export default ({ childProps, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            {/* @ts-ignore */}
             <Profile {...childProps} />
           </AuthenticatedRoute>
         }

@@ -1,10 +1,14 @@
 import React, { Component, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function withRouter(Component: any) {
-  return (props: JSX.IntrinsicAttributes) => (
-    <Component {...props} navigate={useNavigate()} location={useLocation()} />
-  );
+  function ComponentWithRouter(props: any) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return <Component {...props} router={{ location, navigate, params }} />;
+  }
+  return ComponentWithRouter;
 }
 
 export default withRouter;

@@ -327,6 +327,7 @@ function App(props: AppProps) {
           .filter((r) => r !== false)
           .forEach((item) => {
             const { success, ...rest } = item;
+            console.log(rest, "rest");
             if (success === true) {
               const keys = Object.keys(rest);
               keys.forEach((k: string) => {

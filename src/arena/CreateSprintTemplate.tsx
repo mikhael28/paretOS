@@ -14,7 +14,6 @@ import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
-import { errorToast } from "../libs/toasts";
 import { useNavigate } from "react-router-dom";
 
 /**
@@ -25,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
-  // history: Array<string>;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 interface OnDragEndParams {
@@ -92,7 +91,6 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const [columns, setColumns] = useState({
     Options: {
@@ -144,10 +142,10 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
+      const navigate = useNavigate();
       await RestAPI.post("pareto", `/templates`, { body });
       navigate("/");
     } catch (e) {
-      // @ts-ignore
       handleShowError(e as Error);
     }
   }
