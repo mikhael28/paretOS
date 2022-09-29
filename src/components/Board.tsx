@@ -23,12 +23,7 @@ export interface BoardProps {
   navigate: typeof useNavigate;
 }
 
-function Leaderboard({
-  users,
-  itemsPerPage,
-  currentUser,
-  navigate,
-}: BoardProps) {
+function Leaderboard({ users, itemsPerPage, currentUser }: BoardProps) {
   // Define users to show on podium
   const podiumCount = 3;
 

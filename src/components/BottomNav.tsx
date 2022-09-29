@@ -8,7 +8,7 @@ import {
   GrChat,
   GrCli,
 } from "react-icons/gr";
-import { RouteComponentProps, withRouter, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { User } from "../types/ProfileTypes";
 /**
  * This component is a mobile view only bottom navigation bar that helps mobile PWA users navigate the site more effectively

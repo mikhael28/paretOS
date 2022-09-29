@@ -25,13 +25,11 @@ function ContextBuilder(props: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let initialTab = localStorage.getItem('contextTab');
+    let initialTab = localStorage.getItem("contextTab");
     if (initialTab !== null) {
       setValue(parseInt(initialTab, 10));
     }
   }, []);
-
-
 
   const renderTopicsList = (topics: LibraryEntry[]) => {
     const newCardClass = classNames("context-card", "second-step-library");
@@ -39,14 +37,14 @@ function ContextBuilder(props: any) {
     return (
       <div className="context-cards">
         {topics?.length > 0 &&
-          topics.map((topic, index) => {
+          topics.map((topic) => {
             const link = topic.type === "hub" ? "hubs" : "context";
             const img = builder.image(topic.mainImage.asset._ref);
 
             return (
               <div
                 className={newCardClass}
-                key={index}
+                key={topic._id}
                 onClick={() => navigate(`/${link}/${topic.slug.current}`)}
               >
                 <ContextObject item={topic} img={img} />
@@ -95,7 +93,7 @@ function ContextBuilder(props: any) {
         <Tabs
           value={value}
           onChange={(_, newValue) => {
-            localStorage.setItem('contextTab', newValue.toString());
+            localStorage.setItem("contextTab", newValue.toString());
             setValue(newValue);
           }}
           aria-label="Select the topics you wish to see in this group of tab"
@@ -123,7 +121,7 @@ function ContextBuilder(props: any) {
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-      // rewindOnClose={false}
+        // rewindOnClose={false}
       />
     </div>
   );

@@ -17,7 +17,7 @@ import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
 import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
 import { User } from "../types/ProfileTypes";
-import { RouteComponentProps } from "react-router-dom";
+import { LibraryEntry } from "../types/ContextTypes";
 import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -31,12 +31,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #27
  */
 
-interface ExperienceModuleProps extends RouteComponentProps {
+interface ExperienceModuleProps {
   user: User;
   initialFetch: (id: string) => {};
   sanityTraining: any[];
   sanityProduct: any[];
   sanityInterview: any[];
+  history: string[];
+  navigate: typeof useNavigate;
 }
 
 interface ExperienceModuleState {
@@ -164,7 +166,7 @@ class ExperienceModule extends Component<
   }
 
   markSubmitted = async (
-    milestone: any,
+    milestone: { amount: string; priority: any },
     githubLink: string,
     athleteNotes: string
   ) => {
@@ -210,8 +212,8 @@ class ExperienceModule extends Component<
   };
 
   markRequestRevisions = async (
-    milestone: any,
-    mongoExperience: any,
+    milestone: { amount: string; priority: string | number },
+    mongoExperience: MongoExperience,
     coachNotes: string
   ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
@@ -256,8 +258,8 @@ class ExperienceModule extends Component<
   };
 
   markComplete = async (
-    milestone: any,
-    mongoExperience: any,
+    milestone: { amount: string; priority: any },
+    mongoExperience: MongoExperience,
     coachNotes: string
   ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
@@ -304,16 +306,15 @@ class ExperienceModule extends Component<
       // handleShowError(e as Error);
     }
   };
-
   renderExperienceList = (
-    topics: any[],
+    topics: LibraryEntry[],
     activeExperience: ActiveExperience,
     mongoExperience: MongoExperience
   ) => {
     let inactiveBlock = classNames("block", "first-step-exp");
     let activeBlock = "highlight-block";
 
-    return topics.map((topic, i) => {
+    return topics.map((topic) => {
       let title;
       let activeClass = false;
       if (this.state.language === "en") {
@@ -328,8 +329,7 @@ class ExperienceModule extends Component<
       return (
         <div
           className={activeClass === true ? activeBlock : inactiveBlock}
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={topic._id}
           onClick={() => {
             this.setState({
               activeExperience: topic,
@@ -517,11 +517,10 @@ class ExperienceModule extends Component<
               if (
                 reason !== "backdropClick" &&
                 reason !== "escapeKeyDown" &&
-                this.props.user.learningPurchase === false
+                this.props.user.learningPurchase === true
               ) {
-                const navigate = useNavigate();
                 this.setState({ ...this.state, showPaywallDialog: false });
-                navigate("/");
+                this.props.history.push("/");
               }
             }}
           >

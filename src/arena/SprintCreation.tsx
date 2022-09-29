@@ -24,7 +24,7 @@ import {
   Mission,
   EnMission,
 } from "../types/ArenaTypes";
-import { RouteComponentProps, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.

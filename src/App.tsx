@@ -593,7 +593,7 @@ function App(props: AppProps) {
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
                     <ErrorBoundary history={customHistory}>
-                      <Routes childProps={childProps} />
+                      <Routes history={customHistory} childProps={childProps} />
                     </ErrorBoundary>
                   </div>
                   <Palette {...props} />

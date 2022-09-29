@@ -5,8 +5,6 @@ import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
 import { createExperience } from "../utils/createExperience";
 import { User } from "../types/ProfileTypes";
-import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Parent component of the Billing form.
@@ -16,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 interface OrderProps {
   user: User;
   initialFetch: (id: string) => void;
-  history: RouterHistory;
   stripeKey: string;
+  navigate: (arg0: string) => void;
 }
 
 export default class Order extends Component<
@@ -33,6 +31,7 @@ export default class Order extends Component<
   }
 
   billUser(details: any) {
+    console.log("details", details);
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
@@ -109,7 +108,7 @@ export default class Order extends Component<
   };
 
   handleFormSubmit = async (
-    storage: any,
+    storage: number,
     { token, error }: { token: any; error: Error }
   ) => {
     if (error) {
@@ -118,7 +117,6 @@ export default class Order extends Component<
     }
 
     this.setState({ isLoading: true });
-    let navigate = useNavigate();
 
     try {
       let billing = await this.billUser({
@@ -136,7 +134,7 @@ export default class Order extends Component<
       }
 
       await this.props.initialFetch(this.props.user._id);
-      navigate("/training");
+      this.props.navigate("/training");
     } catch (e) {
       alert(e);
       this.setState({ isLoading: false });
@@ -145,12 +143,11 @@ export default class Order extends Component<
 
   handleFreeUnlock = async () => {
     this.setState({ isLoading: true });
-    let navigate = useNavigate();
 
     try {
       await this.unlockLearning();
       await this.props.initialFetch(this.props.user._id);
-      navigate("/training");
+      this.props.navigate("/training");
     } catch (e) {
       alert(e);
     }
