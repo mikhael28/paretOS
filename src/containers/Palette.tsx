@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: "/arena",
-    name: "GOTO Library",
+    name: "GOTO Arena",
   },
   {
     path: "/arena/create/sprints",
