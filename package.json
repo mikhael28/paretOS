@@ -51,7 +51,7 @@
     "react-redux": "8.0.2",
     "react-router-dom": "6.4.1",
     "react-spring": "9.5.4",
-    "react-stripe-elements": "1.6.0",
+    "react-stripe-elements": "6.1.2",
     "reactour": "1.18.7",
     "redux": "4.2.0",
     "rollup": "2.79.0",
