@@ -4,7 +4,7 @@ import { Button, Dialog } from "@mui/material";
 import "ninja-keys";
 import sanity from "../libs/sanity";
 import ExternalSiteModal from "../context/ExternalSiteModal";
-
+import { useHistory } from "react-router-dom"
 /**
  * A simple, redux connected Sandbox for you play around with. Don't send a PR to update this file, it is perfect the way it is. Unless, you think we can improve it from a staging perspective - in that case, send it in.
  */
@@ -42,6 +42,7 @@ const routes = [
 
 function CommandPalette(props: any) {
   const ninjaKeys = useRef<any>(null);
+  const history = useHistory()
 
   const [externalModal, setExternalModal] = useState({
     display: false,
@@ -62,7 +63,7 @@ function CommandPalette(props: any) {
       id: route.name,
       title: route.name,
       handler: () => {
-        props.history.push(route.path);
+        history.push(route.path);
       },
     }));
     fetchSanityItems().then((knowledge: any) => {
