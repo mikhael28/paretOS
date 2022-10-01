@@ -5,7 +5,7 @@ import { User } from "../types/ProfileTypes";
 import ProfileImg from "./ProfileImg";
 import { Column, dataTableClasses } from "./DataTable";
 import StyledDataTable from "./StyledDataTable";
-import { RouterHistory } from "@sentry/react/types/reactrouter";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @component Leaderboard
@@ -13,22 +13,17 @@ import { RouterHistory } from "@sentry/react/types/reactrouter";
  * @param {Prop} users-an array of objects with name and score properties
  * @param {Prop} itemsPerPage-integer to determine how many users to display on each page
  * @param {Prop} currentUser-currently logged in user
- * @param {Prop} history-array of recent pages/views visited
+ * @param {Prop} navigate-array of recent pages/views visited
  */
 
 export interface BoardProps {
   users: User[];
   itemsPerPage: number;
   currentUser: User;
-  history: RouterHistory;
-};
+  navigate: typeof useNavigate;
+}
 
-function Leaderboard({
-  users,
-  itemsPerPage,
-  currentUser,
-  history,
-}: BoardProps) {
+function Leaderboard({ users, itemsPerPage, currentUser }: BoardProps) {
   // Define users to show on podium
   const podiumCount = 3;
 
@@ -39,7 +34,8 @@ function Leaderboard({
       id: "fName",
       label: I18n.get("name"),
       valueGetter: (user) =>
-        `${user.fName || ""} ${user.lName.substring(0, 1).toUpperCase() || ""
+        `${user.fName || ""} ${
+          user.lName.substring(0, 1).toUpperCase() || ""
         }.`,
     },
     {
@@ -54,11 +50,12 @@ function Leaderboard({
   const sortedUsers = [...users].sort((a, b) => b.score - a.score);
   const rankedUsers = sortedUsers.map((user, i) => {
     user = {
-      ...user, rank:
+      ...user,
+      rank:
         // eslint-disable-next-line eqeqeq
         i > 0 && user.score === sortedUsers[i - 1].score
           ? sortedUsers[i - 1].rank
-          : i + 1
+          : i + 1,
     };
     return user;
   });
@@ -88,7 +85,8 @@ function Leaderboard({
    * @param id user's ID
    */
   function handleCellClick(id: number | string) {
-    history.push(`/profile/${id}`);
+    const navigate = useNavigate();
+    navigate(`/profile/${id}`);
   }
 
   return (
@@ -120,7 +118,7 @@ function Leaderboard({
             itemsPerPage={itemsPerPage}
             startPage={Math.floor(
               rankedUsers.findIndex((u) => u.id === currentUser.id) /
-              itemsPerPage
+                itemsPerPage
             )}
             getRowClassName={(row) =>
               row.id === currentUser.id
@@ -189,9 +187,7 @@ function Dais({ user, rank, ranks }: DaisProps) {
         <div className="dais-user" style={{ height: profileHeightCalc }}>
           <div className="dais-image-container">
             <div className="dais-image-lockup">
-              <ProfileImg
-                profileImg={user.profileImg ? user.profileImg : ""}
-              />
+              <ProfileImg profileImg={user.profileImg ? user.profileImg : ""} />
               <div
                 className="dais-image-label"
                 style={{ verticalAlign: "middle", textAlign: "center" }}

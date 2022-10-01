@@ -9,4 +9,5 @@
     "amplify/backend/awscloudformation": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true
 }
