@@ -6,7 +6,7 @@ import {
   useContext,
 } from "react";
 import { I18n } from "@aws-amplify/core";
-import { RouteComponentProps, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Tour from "reactour";
 import Board from "../components/Board";
@@ -41,11 +41,12 @@ import { ReduxRootState } from "@src/redux/state";
  * @TODO Add some sort of icon set to each card.
  * @returns {JSX}
  */
-interface SprintProps extends RouteComponentProps {
+interface SprintProps {
   user: User;
+  navigate: typeof useNavigate;
 }
 
-function Sprint({ user, history }: SprintProps) {
+function Sprint({ user, navigate }: SprintProps) {
   const sprints = useSelector((state: ReduxRootState) => state.sprint);
   const dispatch = useDispatch();
   // Identify the sprint index
@@ -291,7 +292,7 @@ function Sprint({ user, history }: SprintProps) {
                 users={sprints[SPRINT_INDEX].teams}
                 itemsPerPage={10}
                 currentUser={user}
-                history={history}
+                navigate={navigate}
               />
             </div>
             <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>

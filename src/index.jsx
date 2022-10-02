@@ -2,12 +2,14 @@ import { createRoot } from "react-dom/client";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./App";
+import { CustomRouter } from "./utils/CustomBrowswerRouter";
+import customHistory from "./utils/customHistory";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
@@ -67,11 +69,11 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <Router>
+  <CustomRouter history={customHistory}>
     <Provider store={store}>
       <App />
     </Provider>
-  </Router>
+  </CustomRouter>
 );
 
 serviceWorkerRegistration.unregister();

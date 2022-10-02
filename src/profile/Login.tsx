@@ -42,7 +42,11 @@ interface LoginProps {
   setLoading: (b: boolean) => {};
   userHasAuthenticated: (b: boolean) => {};
 }
-const Login = ({ initialFetch, setLoading, userHasAuthenticated }: LoginProps) => {
+const Login = ({
+  initialFetch,
+  setLoading,
+  userHasAuthenticated,
+}: LoginProps) => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);

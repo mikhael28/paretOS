@@ -36,7 +36,7 @@ export default function TermsOfService({
           <div>
             <LoaderButton
               style={{ marginLeft: "auto" }}
-              block
+              block="true"
               size="small"
               isLoading={isLoading}
               onClick={onClickAgree}
