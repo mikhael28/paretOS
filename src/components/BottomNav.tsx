@@ -8,7 +8,7 @@ import {
   GrChat,
   GrCli,
 } from "react-icons/gr";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { User } from "../types/ProfileTypes";
 /**
  * This component is a mobile view only bottom navigation bar that helps mobile PWA users navigate the site more effectively
@@ -18,14 +18,15 @@ const useStyles = makeStyles({
   root: {},
 });
 
-interface BottomNavProps extends RouteComponentProps {
+interface BottomNavProps {
   user: User;
 }
 
-function BottomNav({ user, history }: BottomNavProps) {
+function BottomNav({ user }: BottomNavProps) {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = useState(0);
+  const navigate = useNavigate();
 
   const handleChange = (event: SyntheticEvent<any, any>) => {
     setValue((event.target as TabsProps).value);
@@ -47,7 +48,7 @@ function BottomNav({ user, history }: BottomNavProps) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => history.push("/")}
+          onClick={() => navigate("/")}
         />
         {user.instructor !== true ? (
           <Tab
@@ -56,7 +57,7 @@ function BottomNav({ user, history }: BottomNavProps) {
               fontSize: 20,
               filter: theme.palette.mode === "dark" ? "invert()" : "",
             }}
-            onClick={() => history.push("/training")}
+            onClick={() => navigate("/training")}
           />
         ) : null}
         <Tab
@@ -65,7 +66,7 @@ function BottomNav({ user, history }: BottomNavProps) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => history.push("/context-builder")}
+          onClick={() => navigate("/context-builder")}
         />
         <Tab
           icon={<GrChat />}
@@ -73,7 +74,7 @@ function BottomNav({ user, history }: BottomNavProps) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => history.push("/chat")}
+          onClick={() => navigate("/chat")}
         />
         <Tab
           icon={<GrFingerPrint />}
@@ -81,11 +82,12 @@ function BottomNav({ user, history }: BottomNavProps) {
             fontSize: 20,
             filter: theme.palette.mode === "dark" ? "invert()" : "",
           }}
-          onClick={() => history.push(`/profile/edit/${user.id}`)}
+          onClick={() => navigate(`/profile/edit/${user.id}`)}
         />
       </Tabs>
     </Paper>
   );
 }
 
-export default withRouter(BottomNav);
+// export default withRouter(BottomNav);
+export default BottomNav;

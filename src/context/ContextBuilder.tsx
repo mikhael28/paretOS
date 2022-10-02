@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
@@ -22,16 +22,14 @@ function ContextBuilder(props: any) {
   console.log({ props });
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState<number>(0);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    let initialTab = localStorage.getItem('contextTab');
+    let initialTab = localStorage.getItem("contextTab");
     if (initialTab !== null) {
       setValue(parseInt(initialTab, 10));
     }
   }, []);
-
-
 
   const renderTopicsList = (topics: LibraryEntry[]) => {
     const newCardClass = classNames("context-card", "second-step-library");
@@ -46,7 +44,8 @@ function ContextBuilder(props: any) {
             return (
               <div
                 className={newCardClass}
-                onClick={() => history.push(`/${link}/${topic.slug.current}`)}
+                key={topic._id}
+                onClick={() => navigate(`/${link}/${topic.slug.current}`)}
               >
                 <ContextObject item={topic} img={img} />
               </div>
@@ -94,7 +93,7 @@ function ContextBuilder(props: any) {
         <Tabs
           value={value}
           onChange={(_, newValue) => {
-            localStorage.setItem('contextTab', newValue.toString());
+            localStorage.setItem("contextTab", newValue.toString());
             setValue(newValue);
           }}
           aria-label="Select the topics you wish to see in this group of tab"
@@ -122,7 +121,7 @@ function ContextBuilder(props: any) {
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
         showCloseButton
-      // rewindOnClose={false}
+        // rewindOnClose={false}
       />
     </div>
   );

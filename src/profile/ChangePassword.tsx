@@ -5,7 +5,8 @@ import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import { ToastMsgContext } from "../state/ToastContext";;
+import { ToastMsgContext } from "../state/ToastContext";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Change your password through Cognito
@@ -27,7 +28,8 @@ const ChangePassword = (props: any) => {
   const handleChange = (event: FormEvent<FormControl>) => {
     setState({
       ...state,
-      [(event.target as HTMLFormElement).id]: (event.target as HTMLFormElement).value,
+      [(event.target as HTMLFormElement).id]: (event.target as HTMLFormElement)
+        .value,
     });
   };
 
@@ -39,10 +41,11 @@ const ChangePassword = (props: any) => {
     });
 
     try {
+      navigate = useNavigate();
       const currentUser = await Auth.currentAuthenticatedUser();
       await Auth.changePassword(currentUser, state.oldPassword, state.password);
       handleShowSuccess("Password successfully changed.");
-      props.history.push("/");
+      navigate("/");
     } catch (e) {
       handleShowError(e as Error);
       setState({
@@ -83,7 +86,7 @@ const ChangePassword = (props: any) => {
           />
         </FormGroup>
         <LoaderButton
-          block
+          block="true"
           type="submit"
           size="large"
           text={I18n.get("confirm")}

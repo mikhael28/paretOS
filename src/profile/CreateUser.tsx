@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { ToastMsgContext } from "../state/ToastContext";;
+import { ToastMsgContext } from "../state/ToastContext";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Functionality for new user signup, creating their profile.
@@ -25,10 +26,9 @@ import TermsOfService from "./TermsOfService";
 interface CreateUserProps {
   setLoading: Function;
   initialFetch: Function;
-  history: Array<string>;
 }
 
-const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
+const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
   const {
     register,
     handleSubmit,
@@ -36,6 +36,8 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
     control,
     formState: { errors, isValid },
   } = useForm({ mode: "onBlur" });
+
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [showTOS, setShowTOS] = useState(false);
@@ -126,7 +128,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
       await accountCreationEmail(tempEmail);
       handleShowSuccess("Account created!");
       await initialFetch(uuid);
-      history.push("/");
+      navigate("/");
     } catch (e) {
       handleShowError(e as Error);
       setLoading(false);
@@ -202,6 +204,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
                     <FormControl error={invalid} style={formStyle}>
                       <InputLabel id="user-type">User Type</InputLabel>
                       <Select
+                        defaultValue={""}
                         labelId="user-type"
                         id="user-type"
                         label="User Type"
@@ -250,6 +253,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
                         labelId="country"
                         id="country"
                         label="Country"
+                        defaultValue={""}
                         {...register("state", { required: true })}
                       >
                         {countries.map((country, index) => (

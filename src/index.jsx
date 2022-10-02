@@ -2,12 +2,14 @@ import { createRoot } from "react-dom/client";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./App";
+import { CustomRouter } from "./utils/CustomBrowswerRouter";
+import customHistory from "./utils/customHistory";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
@@ -20,7 +22,6 @@ import "./css/form.css";
 import "./css/leaderboard.css";
 import "./css/messaging.css";
 import "./css/modal.css";
-
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
@@ -72,11 +73,11 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <Router>
+  <CustomRouter history={customHistory}>
     <Provider store={store}>
       <App />
     </Provider>
-  </Router>
+  </CustomRouter>
 );
 
 serviceWorkerRegistration.unregister();
