@@ -31,7 +31,6 @@ export default class Order extends Component<
   }
 
   billUser(details: any) {
-    console.log("details", details);
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
