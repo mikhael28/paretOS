@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Route, RouteProps, Routes } from "react-router-dom";
+import { Route, RouteProps, Routes, useNavigate } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
@@ -36,6 +36,8 @@ const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 export interface ChildProps {
+  stripeKey: string;
+  navigate: ReturnType<typeof useNavigate>;
   reviewMode: boolean;
   isAuthenticated: boolean;
   userHasAuthenticated: (b: boolean) => void;
@@ -66,23 +68,17 @@ export interface ChildProps {
 
 export interface RouteWithChildProps extends RouteProps {
   childProps: ChildProps;
-  history;
+  history: Array<string>;
 }
 
 export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
   <Suspense fallback={<Spinner />}>
     <Routes>
-      <Route path="/" {...rest} exact element={<Home {...childProps} />} />
-      <Route
-        path="/order"
-        {...rest}
-        exact
-        element={<Order {...childProps} />}
-      />
+      <Route path="/" {...rest} element={<Home {...childProps} />} />
+      <Route path="/order" {...rest} element={<Order {...childProps} />} />
       <Route
         path="/login"
         {...rest}
-        exact
         element={
           <UnauthenticatedRoute>
             <Login {...childProps} />
@@ -92,7 +88,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       <Route
         path="/login/reset"
         {...rest}
-        exact
         element={
           <UnauthenticatedRoute>
             <ResetPassword {...childProps} />
@@ -102,7 +97,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       <Route
         path="/signup"
         {...rest}
-        exact
         element={
           <UnauthenticatedRoute>
             <Signup {...childProps} />
@@ -112,26 +106,21 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       <Route
         path="/context-builder"
         {...rest}
-        exact
         element={<ContextBuilder {...childProps} />}
       />
       <Route
         path="/context/:id"
         {...rest}
-        exact
         element={<ContextPage {...childProps} />}
       />
       <Route
         path="/hubs/:id"
         {...rest}
-        exact
         element={<ContextPage {...childProps} />}
-        props={childProps}
       />
       <Route
         path="/journal"
         {...rest}
-        exact
         element={
           <AuthenticatedRoute>
             <Journal {...childProps} />
@@ -142,7 +131,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       <Route
         path="/arena"
         {...rest}
-        exact
         element={
           <AuthenticatedRoute>
             <ArenaDashboard {...childProps} />
@@ -151,7 +139,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/arena/create/sprints"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -161,7 +148,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/arena/create/template"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -171,7 +157,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/arena/sprints/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -181,7 +166,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/training"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -191,7 +175,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/training/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -201,7 +184,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/chat/:id"
-        exact
         {...rest}
         /* @ts-ignore */
         element={<Room {...childProps} />}
@@ -209,7 +191,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/settings/password"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -219,17 +200,15 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/profile/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
-            <Profile {...childProps} />
+            <Profile />
           </AuthenticatedRoute>
         }
       />
       <Route
         path="/profile/edit/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -239,7 +218,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/profile/languages/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -249,13 +227,11 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/onboarding/user"
-        exact
         {...rest}
         element={<CreateUser {...childProps} />}
       />
       <Route
         path="/sandbox"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -265,7 +241,6 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/mentorship"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
@@ -275,23 +250,16 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
       />
       <Route
         path="/mentorship/:id"
-        exact
         {...rest}
         element={
           <AuthenticatedRoute>
-            <Profile {...childProps} />
+            <Profile />
           </AuthenticatedRoute>
         }
       />
-      <Route
-        path="/workandrise"
-        exact
-        {...rest}
-        // @ts-ignore
-        element={<WorkRise {...childProps} />}
-      />
+      <Route path="/workandrise" {...rest} element={<WorkRise />} />
       {/* Finally, catch all unmatched routes */}
-      <Route element={<NotFound />} />
+      <Route path="/*" element={<NotFound />} />
     </Routes>
   </Suspense>
 );

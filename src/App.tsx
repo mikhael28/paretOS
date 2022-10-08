@@ -8,7 +8,7 @@ import React, {
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, RouteProps } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
