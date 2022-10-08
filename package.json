@@ -122,7 +122,7 @@
     "stylelint": "14.13.0",
     "stylelint-config-standard": "28.0.0",
     "ts-node": "10.9.1",
-    "vitest": "^0.23.2"
+    "vitest": "^0.24.0"
   },
   "strict-peer-dependencies": false,
   "pnpm": {
