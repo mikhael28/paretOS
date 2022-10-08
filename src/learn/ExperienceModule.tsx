@@ -517,7 +517,7 @@ class ExperienceModule extends Component<
               if (
                 reason !== "backdropClick" &&
                 reason !== "escapeKeyDown" &&
-                this.props.user.learningPurchase === true
+                this.props.user.learningPurchase === false
               ) {
                 this.setState({ ...this.state, showPaywallDialog: false });
                 this.props.history.push("/");

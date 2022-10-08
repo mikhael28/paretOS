@@ -63,7 +63,7 @@ type CodeConfirmationForm = {
   confirmationCode: string;
 };
 
-const Signup = () => {
+const Signup = (_props: any) => {
   const theme = useTheme();
   const classes = useStyles();
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
