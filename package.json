@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api-rest": "2.0.53",
-    "@aws-amplify/auth": "4.6.6",
+    "@aws-amplify/auth": "4.6.8",
     "@aws-amplify/core": "4.7.4",
     "@aws-amplify/storage": "4.5.6",
     "@date-io/date-fns": "2.15.0",
@@ -119,7 +119,7 @@
     "prettier": "2.7.1",
     "puppeteer": "17.1.3",
     "rollup-plugin-visualizer": "5.8.1",
-    "stylelint": "14.11.0",
+    "stylelint": "14.13.0",
     "stylelint-config-standard": "28.0.0",
     "ts-node": "10.9.1",
     "vitest": "^0.23.2"
