@@ -11,7 +11,7 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
 import { ToastMsgContext } from "../state/ToastContext";;
-import { generateEmail } from "../libs/errorEmail";
+import { generateEmail } from "../utils/generateErrorEmail";
 
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
@@ -138,8 +138,6 @@ export default function SuggestionModal({
     return result.charAt(0).toUpperCase() + result.slice(1);
   };
 
-  // console.log('No way: ', activeItem);
-
   return (
     <div>
       <DialogContent>
@@ -154,7 +152,7 @@ export default function SuggestionModal({
           <FormControl value={formData.title} onChange={handleChange} />
         </FormGroup>
         <FormGroup controlId="summary" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>summary</ControlLabel>
+          <ControlLabel style={{ fontSize: "14px" }}>Summary</ControlLabel>
           <FormControl value={formData.summary} onChange={handleChange} />
         </FormGroup>
         <FormGroup controlId="url" bsSize="large">

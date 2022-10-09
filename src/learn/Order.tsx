@@ -1,11 +1,11 @@
-import { Component, useState, useContext } from "react";
+import { useState } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
-import { createExperience } from "../libs/createExperience";
-import { User } from "../types";
-import { RouterHistory } from "@sentry/react/types/reactrouter";
+import { createExperience } from "../utils/createExperience";
+import { User } from "../types/ProfileTypes";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Parent component of the Billing form.
@@ -15,11 +15,12 @@ import { RouterHistory } from "@sentry/react/types/reactrouter";
 interface OrderProps {
   user: User;
   initialFetch: (id: string) => void;
-  history: RouterHistory;
   stripeKey: string;
+  navigate: (arg0: string) => void;
 }
 
-const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
+const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const billUser = (details: any) => {
@@ -45,7 +46,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: user.apprenticeshipId ?? '',
+      expId: user.apprenticeshipId ?? "",
       userId: user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -54,7 +55,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: user.productId ?? '',
+      expId: user.productId ?? "",
       userId: user.id,
       type: "Product",
       title: "Capstone Project",
@@ -121,7 +122,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
       }
 
       await initialFetch(user._id);
-      history.push("/training");
+      navigate("/training");
     } catch (e) {
       alert(e);
       setIsLoading(false);
@@ -134,7 +135,7 @@ const Order = ({ user, initialFetch, history, stripeKey }: OrderProps) => {
     try {
       await unlockLearning();
       await initialFetch(user._id);
-      history.push("/training");
+      navigate("/training");
     } catch (e) {
       alert(e);
     }

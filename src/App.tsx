@@ -1,18 +1,19 @@
-import React, { useState, useEffect, MouseEvent, ReactElement, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  MouseEvent,
+  ReactElement,
+  useContext,
+} from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import {
-  withRouter,
-  RouteProps,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
-import strings from './intl/localization';
+import strings from "./intl/localization";
 import BottomNav from "./components/BottomNav";
 import { LanguageContext, LanguageProps } from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
@@ -23,7 +24,7 @@ import {
   fetchCoaches,
   fetchCoachingRoster,
   fetchSanitySchemas,
-} from "./libs/initialFetch";
+} from "./utils/initialFetch";
 import LeftNav from "./components/LeftNav";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
@@ -32,8 +33,10 @@ import Palette from "./containers/Palette";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
-import { User, Sprint } from "./types";
-import ErrorBoundary from "./utils/errorBoundary";
+import { User } from "./types/ProfileTypes";
+import { Sprint } from "./types/ArenaTypes";
+import ErrorBoundary from "./components/ErrorBoundary";
+import customHistory from "./utils/customHistory";
 import MusicPlayer from "./components/MusicPlayer";
 
 const Transition = React.forwardRef(function Transition(
@@ -56,7 +59,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => { },
+  setLanguage: () => {},
 };
 
 interface AppProps {
@@ -64,6 +67,7 @@ interface AppProps {
   children: RouteProps["children"];
   isAuthenticated: boolean;
   history: Array<string>;
+  navigate: (path: string) => void;
 }
 
 function App(props: AppProps) {
@@ -154,25 +158,25 @@ function App(props: AppProps) {
     setToast({
       msg: err.name ? `${err.name}:${err.message}` : `${err}`,
       open: true,
-      type: "error"
+      type: "error",
     });
-  }
+  };
 
   const handleShowSuccess = (msg: string) => {
     setToast({
       msg,
       open: true,
-      type: "success"
+      type: "success",
     });
-  }
+  };
 
   const handleCloseToast = () => {
     setToast({
       msg: "",
       open: false,
-      type: ""
+      type: "",
     });
-  }
+  };
 
   const updateState = (property: string, payload: Array<object> | object) => {
     switch (property) {
@@ -322,6 +326,7 @@ function App(props: AppProps) {
           .filter((r) => r !== false)
           .forEach((item) => {
             const { success, ...rest } = item;
+            console.log(rest, "rest");
             if (success === true) {
               const keys = Object.keys(rest);
               keys.forEach((k: string) => {
@@ -428,7 +433,6 @@ function App(props: AppProps) {
     };
     try {
       ws.connect({ path, processMsg });
-
     } catch (e) {
       alert(e);
     }
@@ -458,7 +462,7 @@ function App(props: AppProps) {
     const signout = async () => {
       await Auth.signOut();
       userHasAuthenticated(false);
-      (props as AppProps).history.push("/login");
+      (props as AppProps).navigate("/login");
     };
     signout();
   }
@@ -522,7 +526,8 @@ function App(props: AppProps) {
       />
     );
   };
-  const Onboarding = withRouter(OnboardingWithoutRouter);
+
+  const Onboarding = OnboardingWithoutRouter;
   const childProps: ChildProps = {
     // authentication related state
     isAuthenticated,
@@ -549,17 +554,20 @@ function App(props: AppProps) {
     athletes,
     sanitySchemas,
     coaches,
+    reviewMode: false,
   };
   languageProps.language = userData.chosenLanguage;
   languageProps.setLanguage = updateLanguage;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     !isAuthenticating && (
       <ThemeProvider theme={theme}>
         <LanguageContext.Provider value={languageProps}>
-          <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
+          <ToastMsgContext.Provider
+            value={{ handleShowError, handleShowSuccess }}
+          >
             <Box
               sx={{
                 // width: "100vw",
@@ -584,8 +592,8 @@ function App(props: AppProps) {
 
                   <div className="root-padding">
                     <LeftNav user={userData.user as any} athletes={athletes} />
-                    <ErrorBoundary history={history}>
-                      <Routes childProps={childProps} />
+                    <ErrorBoundary history={customHistory}>
+                      <Routes history={customHistory} childProps={childProps} />
                     </ErrorBoundary>
                   </div>
                   <Palette {...props} />
@@ -642,7 +650,12 @@ function App(props: AppProps) {
               </Dialog>
             </Box>
           </ToastMsgContext.Provider>
-          <ToastMsg msg={toast.msg} type={toast.type} open={toast.open} handleCloseSnackbar={handleCloseToast} />
+          <ToastMsg
+            msg={toast.msg}
+            type={toast.type}
+            open={toast.open}
+            handleCloseSnackbar={handleCloseToast}
+          />
         </LanguageContext.Provider>
       </ThemeProvider>
     )

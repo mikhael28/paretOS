@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Slide, Dialog, Button } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton/Skeleton";
 import { PortableText } from "@portabletext/react";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
@@ -11,11 +12,13 @@ import classNames from "classnames";
 import { HiOutlineClipboardCheck } from "react-icons/hi";
 import PaywallModal from "./PaywallModal";
 import question from "../assets/help.png";
-import { generateEmail } from "../libs/errorEmail";
+import { generateEmail } from "../utils/generateErrorEmail";
 import ApproveExperienceModal from "./ApproveExperienceModal";
 import NewSubmitModal from "./NewSubmitProofModal";
-import { ActiveExperience, MongoExperience, User } from "../types";
-import { RouteComponentProps } from "react-router-dom";
+import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
+import { User } from "../types/ProfileTypes";
+import { LibraryEntry } from "../types/ContextTypes";
+import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   const { children, ...rest } = props as any;
@@ -28,21 +31,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @TODO Issue #27
  */
 
-interface ExperienceModuleProps extends RouteComponentProps {
+interface ExperienceModuleProps {
   user: User;
   initialFetch: (id: string) => {};
   sanityTraining: any[];
   sanityProduct: any[];
   sanityInterview: any[];
+  history: string[];
+  navigate: typeof useNavigate;
 }
 
 interface ExperienceModuleState {
   isLoading: boolean;
   isTourOpen: boolean;
   user: User;
-  activeExperience: ActiveExperience,
+  activeExperience: ActiveExperience;
   experience: any[] | undefined;
-  mongoExperience: MongoExperience,
+  mongoExperience: MongoExperience;
   openReviewModal: boolean;
   showPaywallDialog: boolean;
   experienceId: string;
@@ -51,7 +56,10 @@ interface ExperienceModuleState {
   language: string;
 }
 
-class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModuleState> {
+class ExperienceModule extends Component<
+  ExperienceModuleProps,
+  ExperienceModuleState
+> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -157,7 +165,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
     this.setState({ user: athleteProfile[0] });
   }
 
-  markSubmitted = async (milestone: any, githubLink: string, athleteNotes: string) => {
+  markSubmitted = async (
+    milestone: { amount: string; priority: any },
+    githubLink: string,
+    athleteNotes: string
+  ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -199,7 +211,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
     }
   };
 
-  markRequestRevisions = async (milestone: any, mongoExperience: any, coachNotes: string) => {
+  markRequestRevisions = async (
+    milestone: { amount: string; priority: string | number },
+    mongoExperience: MongoExperience,
+    coachNotes: string
+  ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -241,7 +257,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
     }
   };
 
-  markComplete = async (milestone: any, mongoExperience: any, coachNotes: string) => {
+  markComplete = async (
+    milestone: { amount: string; priority: any },
+    mongoExperience: MongoExperience,
+    coachNotes: string
+  ) => {
     let milestoneXP = parseInt(milestone.amount, 10);
 
     let body = {
@@ -286,12 +306,15 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
       // handleShowError(e as Error);
     }
   };
-
-  renderExperienceList = (topics: any[], activeExperience: ActiveExperience, mongoExperience: MongoExperience) => {
+  renderExperienceList = (
+    topics: LibraryEntry[],
+    activeExperience: ActiveExperience,
+    mongoExperience: MongoExperience
+  ) => {
     let inactiveBlock = classNames("block", "first-step-exp");
     let activeBlock = "highlight-block";
 
-    return topics.map((topic, i) => {
+    return topics.map((topic) => {
       let title;
       let activeClass = false;
       if (this.state.language === "en") {
@@ -306,8 +329,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
       return (
         <div
           className={activeClass === true ? activeBlock : inactiveBlock}
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={topic._id}
           onClick={() => {
             this.setState({
               activeExperience: topic,
@@ -320,11 +342,11 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
             {mongoExperience._01 ? (
               <div className="second-step-exp">
                 {mongoExperience[topic.priority].approved === true &&
-                  mongoExperience[topic.priority].completed === true ? (
+                mongoExperience[topic.priority].completed === true ? (
                   <ImCheckmark />
                 ) : null}
                 {mongoExperience[topic.priority].completed === true &&
-                  mongoExperience[topic.priority].approved === false ? (
+                mongoExperience[topic.priority].approved === false ? (
                   <FaSearch />
                 ) : null}
                 {mongoExperience[topic.priority].completed === false ? (
@@ -341,7 +363,10 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
     });
   };
 
-  renderExperienceInfo(activeExperience: ActiveExperience, mongoExperience: MongoExperience) {
+  renderExperienceInfo(
+    activeExperience: ActiveExperience,
+    mongoExperience: MongoExperience
+  ) {
     let newClassname = classNames("flex", "fifth-step-exp");
     if (mongoExperience === undefined) {
       return <>Nothing</>;
@@ -362,7 +387,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
               </Button>
             )}
             {this.props.user.instructor === true &&
-              mongoExperience[activeExperience.priority].completed === true ? (
+            mongoExperience[activeExperience.priority].completed === true ? (
               <Button
                 onClick={() => this.setState({ openReviewModal: true })}
                 className="btn"
@@ -423,36 +448,20 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
             alt="Tour for Experience Module"
             height="40"
             width="40"
-            style={{ marginLeft: 20, cursor: "pointer", borderRadius: 40, overflow: "hidden" }}
+            style={{
+              marginLeft: 20,
+              cursor: "pointer",
+              borderRadius: 40,
+              overflow: "hidden",
+            }}
           />
         </h1>
         <div className="experience-container flex">
           <div style={{ flexBasis: "30%" }} className="overflow">
             {this.state.isLoading === true ? (
-              <section style={{ marginTop: -12, marginLeft: -4 }}>
-                {/* <h2 className="section-title">
-                  <Skeleton height={100} width={860} />
-                </h2>
-
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2>
-                <h2 className="section-title">
-                  <Skeleton height={100} width={520} />
-                </h2> */}
-              </section>
+              <div className={blockOverflow}>
+                <Skeleton height={800} width="100%" />
+              </div>
             ) : (
               <div>
                 {this.renderExperienceList(
@@ -464,15 +473,10 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
             )}
           </div>
           {this.state.isLoading === true ? (
-            <div
-              style={{
-                marginLeft: 10,
-                marginTop: 2,
-                marginRight: 8,
-                width: "100%",
-              }}
-            >
-              {/* <Skeleton height="100%" width="100%" /> */}
+            <div className={blockOverflow} style={{ flexBasis: "70%" }}>
+              <h2>
+                <Skeleton height={800} width="90%" />
+              </h2>
             </div>
           ) : (
             <div className={blockOverflow} style={{ flexBasis: "70%" }}>
@@ -513,7 +517,7 @@ class ExperienceModule extends Component<ExperienceModuleProps, ExperienceModule
               if (
                 reason !== "backdropClick" &&
                 reason !== "escapeKeyDown" &&
-                this.props.user.learningPurchase === false
+                this.props.user.learningPurchase === true
               ) {
                 this.setState({ ...this.state, showPaywallDialog: false });
                 this.props.history.push("/");

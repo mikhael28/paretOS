@@ -42,10 +42,17 @@ To fix a bug or contribute a new feature, follow these steps:
 
 - Fork the repo
 - Install the pnpm package manager `brew install pnpm` or `npm i -g pnpm`
+<<<<<<< HEAD
   - a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
   - 1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
   - 2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
   - 3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support. Lock files will be removed in a separate PR.
+=======
+    a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
+        1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
+        2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
+        3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support.
+>>>>>>> 05e1ca043acb9ac98133a130db5fb730f81c99ab
 - Run `pnpm install` to install the dependencies, once you have `cd`'d into the directory
     a. There is a known issue where Puppeteer's install script may hang indefinitely. In this case, first try updating to Node 16 and running again.
     b. If this does not work, this will sound weird, but try using a different wireless connection. Yours may be too slow, or have some weird configuration settings. `https://github.com/puppeteer/puppeteer/issues/5611`

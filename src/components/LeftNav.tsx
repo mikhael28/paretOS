@@ -19,7 +19,8 @@ import { Avatar, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
 import LanguageContext, { Language } from "../state/LanguageContext";
-import { User, Relationship } from "../types";
+import { User } from "../types/ProfileTypes";
+import { Relationship } from "../types/MentorshipTypes";
 import Pomodoro from "./Pomodoro";
 
 interface LeftNavProps {
@@ -72,9 +73,13 @@ function LeftNav(props: LeftNavProps) {
     setAnchorEl(null);
   };
 
-  const handleClose = () => { setAnchorEl(null) };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  const handleSetLanguage = (language: any) => { setLanguage(language) };
+  const handleSetLanguage = (language: any) => {
+    setLanguage(language);
+  };
 
   // Dropdown styling is very hacky at the moment - will eventually be converted to MUI
   const LanguageDropdown = () => (
@@ -143,15 +148,15 @@ function LeftNav(props: LeftNavProps) {
   const mentorshipsMenu: LeftNavSection | null =
     user.instructor === true && athletes.length > 0
       ? {
-        heading: { path: "/mentorship", label: I18n.get("mentorship") },
-        subHeadings: athletes.map((relationship) => ({
-          path: `/mentorship/${relationship.id}`,
-          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-          Icon: (
-            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
-          ),
-        })),
-      }
+          heading: { path: "/mentorship", label: I18n.get("mentorship") },
+          subHeadings: athletes.map((relationship) => ({
+            path: `/mentorship/${relationship.id}`,
+            label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+            Icon: (
+              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
+            ),
+          })),
+        }
       : null;
 
   const trainingMenu: LeftNavSection = {
@@ -191,15 +196,17 @@ function LeftNav(props: LeftNavProps) {
       subHeadings: [],
     },
     /* Journal */
-    {
-      heading: { path: "/journal", label: I18n.get("journal") },
-      subHeadings: [],
-    },
+    // TODO re-enable journal once it's ready
+    // {
+    //   heading: { path: "/journal", label: I18n.get("journal") },
+    //   subHeadings: [],
+    // },
     /* Profile - TODO: move to dropdown from profile pic */
     {
       heading: { path: `/profile/edit/${user.id}`, label: "Profile" },
       subHeadings: [],
-    });
+    }
+  );
 
   return (
     <div id="mySidenav" className="sidenav">
@@ -398,8 +405,8 @@ function Heading({
         to={path}
         style={headingStyle as StyleHTMLAttributes<HTMLElement>}
         className="flex"
-        activeStyle={activeStyle}
-        exact
+        activestyle={activeStyle}
+        end
       >
         <p
           style={{
@@ -430,7 +437,7 @@ const SubHeading = ({
   Icon: React.ReactComponentElement<any>;
 }) => {
   return (
-    <NavLink to={path} style={subheadingStyle} activeStyle={activeStyle} exact>
+    <NavLink end to={path} style={subheadingStyle} activestyle={activeStyle}>
       {Icon}
       <p style={{ marginLeft: 8 }}>{label}</p>
     </NavLink>

@@ -1,6 +1,12 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState, useContext } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 import { I18n } from "@aws-amplify/core";
-import { RouteComponentProps, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastMsgContext } from "../state/ToastContext";
 import Tour from "reactour";
@@ -10,17 +16,22 @@ import ws from "../libs/websocket";
 import question from "../assets/question.svg";
 import Analytics from "./Analytics";
 import ArenaProofModal from "../components/ArenaProofModal";
-import { steps, updateSprintData } from "./utils";
+import { steps } from "../libs/tour";
+import { updateSprintData } from "../utils/updateSprintData";
 import Missions from "./Missions/Index";
 import getFormattedDay from "../utils/getFormattedDay";
-import ArenaTabsHeader from "./ArenaTabsHeadr";
+import ArenaTabsHeader from "./ArenaTabsHeader";
 import Details from "./Details";
 import ArenaStats from "./ArenaStats";
 import ArenaDateHeader from "./ArenaDateHeader";
 import ArenaDynamicForms from "./ArenaDynamicForms";
-import { GenMission, ActivePersonMissionsOnDay } from "./types";
+import {
+  GenMission,
+  ActiveMission,
+  ActivePersonMissionsOnDay,
+} from "../types/ArenaTypes";
 import { ReduxRootState } from "../state";
-import { ActiveMission, User } from "../types";
+import { User } from "../types/ProfileTypes";
 import { store } from "..";
 
 /**
@@ -30,11 +41,12 @@ import { store } from "..";
  * @TODO Add some sort of icon set to each card.
  * @returns {JSX}
  */
-interface SprintProps extends RouteComponentProps {
+interface SprintProps {
   user: User;
+  navigate: typeof useNavigate;
 }
 
-function Sprint({ user, history }: SprintProps) {
+function Sprint({ user, navigate }: SprintProps) {
   const sprints = useSelector((state: ReduxRootState) => state.sprint);
   const dispatch = useDispatch();
   // Identify the sprint index
@@ -52,7 +64,9 @@ function Sprint({ user, history }: SprintProps) {
 
   // Identify the user's index in the team
   let sprint = sprints[SPRINT_INDEX];
-  const TEAM_INDEX = sprint.teams.findIndex((team) => team.id === user.id);
+  const TEAM_INDEX = sprint.teams.findIndex(
+    (team: User) => team.id === user.id
+  );
 
   // Identify the start date of the sprint
   let currentTS = Date.now();
@@ -147,7 +161,6 @@ function Sprint({ user, history }: SprintProps) {
       content: string
     ) => {
       setLoading(true);
-
 
       dispatch({
         type: "PLANNING_FORMS",
@@ -279,7 +292,7 @@ function Sprint({ user, history }: SprintProps) {
                 users={sprints[SPRINT_INDEX].teams}
                 itemsPerPage={10}
                 currentUser={user}
-                history={history}
+                navigate={navigate}
               />
             </div>
             <div className="col-xs-12 col-sm-5" style={{ marginTop: "20px" }}>

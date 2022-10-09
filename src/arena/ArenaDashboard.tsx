@@ -1,23 +1,28 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import Sprints from "./Sprints";
 import question from "../assets/question.svg";
 import logo from "../assets/Pareto_Lockup-01.png";
-import { RouteComponentProps } from ".pnpm/@types+react-router@5.1.18/node_modules/@types/react-router";
-import { Sprint, User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 /**
  * The 'main dashboard' in the UI, that shows different things depending on what level of user you are.
  *
  */
-interface HomeDashboardProps extends RouteComponentProps {
+interface HomeDashboardProps {
   user: User;
-  fetchMenteeSprints: (userid: string) => {}
+  fetchMenteeSprints: (userid: string) => {};
+  navigate: typeof useNavigate;
 }
 
-function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps) {
+function HomeDashboard({
+  user,
+  fetchMenteeSprints,
+  navigate,
+}: HomeDashboardProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const theme = useTheme();
@@ -32,9 +37,9 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
       content: `${I18n.get("homeSecond")}`,
     },
     {
-      selector: '.third-step-home',
-      content: `${I18n.get('homeThird')}`
-    }
+      selector: ".third-step-home",
+      content: `${I18n.get("homeThird")}`,
+    },
   ];
   return (
     <div className="flex-down">
@@ -84,7 +89,7 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
         <div className="col-xs-12">
           <Sprints
             reviewMode={false}
-            history={history}
+            navigate={navigate}
             user={user}
             fetchMenteeSprints={fetchMenteeSprints}
           />
@@ -95,8 +100,8 @@ function HomeDashboard({ history, user, fetchMenteeSprints }: HomeDashboardProps
         steps={steps}
         isOpen={isTourOpen}
         onRequestClose={() => setIsTourOpen(false)}
-      // showCloseButton={true}
-      // rewindOnClose={false}
+        // showCloseButton={true}
+        // rewindOnClose={false}
       />
     </div>
   );

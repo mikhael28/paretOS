@@ -7,8 +7,9 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 package-lock.json
-stats.html
 
+coverage
+.prettierrc
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -31,3 +32,4 @@ amplifytools.xcconfig
 **.sample
 yarn-error.log
 #amplify-do-not-edit-end
+

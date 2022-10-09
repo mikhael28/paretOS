@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import classNames from "classnames";
-import { FaUserEdit } from "react-icons/fa";
-import { ContextObjectProps } from "./ContextTypes";
+import {FaUserEdit} from "react-icons/fa";
+import {ContextObjectProps} from "../types/ContextTypes";
 
 const useStyles = makeStyles({
   root: {

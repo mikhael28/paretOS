@@ -19,10 +19,10 @@
     "types": [
       "vite/client",
       "jest",
-      "@types/react"
+      "@types/react",
+      "vitest/globals"
     ],
-    "typeRoots": ["src/types/custom_types", "node_modules/@types"]
-    // "typeRoots": ["./src/types/custom_types", "./node_modules/@types"]
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src", "tests", "jest.setup.js"]
 }

@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { DialogContent, Button } from "@mui/material";
 import Order from "./Order";
-import { RouterHistory } from "@sentry/react/types/reactrouter";
-import { User } from "../types";
-
+import { User } from "../types/ProfileTypes";
+import { useNavigate } from "react-router-dom";
 /**
  * Paywall modal that shows advertising/marketing copy for the Pareto Full-Stack Starter Kit.
  */
 
 interface LoadingModalProps {
-  history: RouterHistory;
   user: User;
   initialFetch: (id: string) => {};
+  navigate: typeof useNavigate;
 }
 
-function LoadingModal({ history, user, initialFetch }: LoadingModalProps) {
+function LoadingModal({ user, initialFetch }: LoadingModalProps) {
   const [stripeKey, setStripeKey] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (import.meta.env.NODE_ENV === "development") {
@@ -60,10 +60,7 @@ function LoadingModal({ history, user, initialFetch }: LoadingModalProps) {
           </p>
 
           <div className="flex-evenly">
-            <Button
-              className="btn-cancel"
-              onClick={() => history.push("/")}
-            >
+            <Button className="btn-cancel" onClick={() => navigate("/")}>
               Cancel
             </Button>
             <Button className="btn" onClick={() => setShowPayment(true)}>
@@ -74,7 +71,12 @@ function LoadingModal({ history, user, initialFetch }: LoadingModalProps) {
       ) : (
         <DialogContent ref={modalRef} style={{ textAlign: "start" }}>
           <div>
-            <Order history={history} user={user} initialFetch={initialFetch} stripeKey={stripeKey || ""} />
+            <Order
+              navigate={navigate}
+              user={user}
+              initialFetch={initialFetch}
+              stripeKey={stripeKey || ""}
+            />
           </div>
         </DialogContent>
       )}
