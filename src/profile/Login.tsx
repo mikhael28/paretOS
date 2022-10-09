@@ -38,9 +38,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface LoginProps {
-  initialFetch: (id: string) => {};
-  setLoading: (b: boolean) => {};
-  userHasAuthenticated: (b: boolean) => {};
+  initialFetch: (id: string) => void;
+  setLoading: (b: boolean) => void;
+  userHasAuthenticated: (b: boolean) => void;
 }
 const Login = ({
   initialFetch,

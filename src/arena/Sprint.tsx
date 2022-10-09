@@ -43,7 +43,7 @@ import { store } from "..";
  */
 interface SprintProps {
   user: User;
-  navigate: typeof useNavigate;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 function Sprint({ user, navigate }: SprintProps) {

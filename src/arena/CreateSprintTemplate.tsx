@@ -91,6 +91,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [columns, setColumns] = useState({
     Options: {
@@ -142,7 +143,6 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
-      const navigate = useNavigate();
       await RestAPI.post("pareto", `/templates`, { body });
       navigate("/");
     } catch (e) {

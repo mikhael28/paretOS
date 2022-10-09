@@ -20,7 +20,7 @@ export interface BoardProps {
   users: User[];
   itemsPerPage: number;
   currentUser: User;
-  navigate: typeof useNavigate;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 function Leaderboard({ users, itemsPerPage, currentUser }: BoardProps) {
