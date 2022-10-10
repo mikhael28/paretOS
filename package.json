@@ -64,7 +64,7 @@
     "vite": "3.1.2",
     "web-vitals": "3.0.2",
     "workbox-background-sync": "6.5.3",
-    "workbox-broadcast-update": "6.5.3",
+    "workbox-broadcast-update": "6.5.4",
     "workbox-cacheable-response": "6.5.3",
     "workbox-core": "6.5.3",
     "workbox-expiration": "6.5.3",
