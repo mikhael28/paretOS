@@ -50,6 +50,8 @@ function SprintCreation({ user, connectSocket }: SprintCreationProps) {
 
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     getConfiguration();
   }, []);
@@ -207,7 +209,6 @@ function SprintCreation({ user, connectSocket }: SprintCreationProps) {
       teams: databasedTeams,
     };
     try {
-      const navigate = useNavigate();
       await RestAPI.post("pareto", "/sprints", { body });
       await connectSocket();
       handleShowSuccess("Sprint created successfully.");

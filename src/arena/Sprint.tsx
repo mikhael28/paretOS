@@ -43,7 +43,7 @@ import { ReduxRootState } from "@src/redux/state";
  */
 interface SprintProps {
   user: User;
-  navigate: typeof useNavigate;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 function Sprint({ user, navigate }: SprintProps) {

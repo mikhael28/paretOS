@@ -8,7 +8,7 @@ import React, {
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, RouteProps } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
 import { GrLogout } from "react-icons/gr";
@@ -326,7 +326,6 @@ function App(props: AppProps) {
           .filter((r) => r !== false)
           .forEach((item) => {
             const { success, ...rest } = item;
-            console.log(rest, "rest");
             if (success === true) {
               const keys = Object.keys(rest);
               keys.forEach((k: string) => {
