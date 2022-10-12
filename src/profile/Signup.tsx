@@ -146,21 +146,19 @@ const Signup = (_props: any) => {
 
   const renderConfirmationForm = () => (
     <div className="Form">
-      <div className="flex-center">
-        <Link to="/">
-          <img
-            src={logo}
-            alt="Pareto"
-            height="45"
-            width="180"
-            style={{
-              marginTop: 32,
-              filter:
-                theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-            }}
-          />
-        </Link>
-      </div>
+      <Link to="/" className="flex-center">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
+        />
+      </Link>
       <form
         className={classes.root}
         onSubmit={_handleSubmit(handleConfirmationSubmit)}
@@ -191,21 +189,19 @@ const Signup = (_props: any) => {
 
   const renderForm = () => (
     <div>
-      <div className="flex-center">
-        <Link to="/">
-          <img
-            src={logo}
-            alt="Pareto"
-            height="45"
-            width="180"
-            style={{
-              marginTop: 32,
-              filter:
-                theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-            }}
-          />
-        </Link>
-      </div>
+      <Link to="/" className="flex-center">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
+        />
+      </Link>
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
