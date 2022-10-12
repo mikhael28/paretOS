@@ -46,12 +46,8 @@ export interface User extends MinimalUser {
   picture?: string;
   mentors?: Array<User>;
   projects?: Array<Project>;
-  // Deprecate ideas?
-  ideas?: Array<any>;
   notes?: Array<any>;
 
-  // deprecate actions?
-  actions: Array<any>;
   // deprecate/verify achievements
   achievements: Array<any>;
 
@@ -61,23 +57,8 @@ export interface User extends MinimalUser {
   summary: string;
   city: string;
 
-  // @TODO deprecate ranks? This was never used
-  communityRank: string;
-  technicalRank: string;
-
-  // @TODO deprecate this? I'm not sure this is being used anywhere
-  experience: string;
-
-  // @TODO: integrate LinkedIn profile
-  linkedIn: string;
-  // @TODO deprecate stripe and paypall? We need to rethink how we handle payments/public-private keys in general
-  stripe: string;
-  paypal: string;
-
   admin: boolean;
 
-  // @TODO deprecate Expo
-  expo: string;
   xp: number;
 
   learningPurchase: boolean;
@@ -86,10 +67,6 @@ export interface User extends MinimalUser {
   completionPercentage: number;
   completionAttempts: number;
   completions: number;
-
-  // @TODO work through a more substantial WR integration
-  wrMembers: boolean;
-  wrid: string;
 
   createdAt: string;
   __v: number;
