@@ -143,10 +143,9 @@ const Signup = (_props: any) => {
       setIsLoading(false);
     }
   };
-
-  const renderConfirmationForm = () => (
-    <div className="Form">
-      <Link to="/" className="flex-center">
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
         <img
           src={logo}
           alt="Pareto"
@@ -159,6 +158,11 @@ const Signup = (_props: any) => {
           }}
         />
       </Link>
+    </div>
+  )
+  const renderConfirmationForm = () => (
+    <div className="Form">
+      {renderLogo()}
       <form
         className={classes.root}
         onSubmit={_handleSubmit(handleConfirmationSubmit)}
@@ -186,23 +190,9 @@ const Signup = (_props: any) => {
       </form>
     </div>
   );
-
   const renderForm = () => (
     <div>
-      <Link to="/" className="flex-center">
-        <img
-          src={logo}
-          alt="Pareto"
-          height="45"
-          width="180"
-          style={{
-            marginTop: 32,
-            filter:
-              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-          }}
-        />
-      </Link>
-
+      {renderLogo()}
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
           <TextField
