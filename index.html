@@ -1,77 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/favicon-32x32.png"
-      sizes="32x32"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/favicon-16x16.png"
-      sizes="16x16"
-    />
-    <link
-      rel="mask-icon"
-      href="/safari-pinned-tab.svg"
-      color="#5bbad5"
-    />
-    <!-- <link rel="preload" href="index.css" as="style"> -->
-    <!-- <link rel="preload" href="/FuturaStdBook.woff" as="font"> -->
-    <meta name="theme-color" content="#ffffff" />
-    <meta
-      name="description"
-      content="The ParetOS is a browser-based operating system designed to maximize human potential. Our vision is to provide the 20% of software that provides 80% of the benefits of modern technology."
-    />
-    <style type="text/css">
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-      body {
-        /* FIXME: This overrides an unknown inline style. Remove this and the inline style if the inline style is found */
-        overflow: auto !important;
-        padding-right: 0 !important;
-      }
-    </style>
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+  <!-- <link rel="preload" href="index.css" as="style"> -->
+  <!-- <link rel="preload" href="/FuturaStdBook.woff" as="font"> -->
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="description"
+    content="The ParetOS is a browser-based operating system designed to maximize human potential. Our vision is to provide the 20% of software that provides 80% of the benefits of modern technology." />
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    body {
+      /* FIXME: This overrides an unknown inline style. Remove this and the inline style if the inline style is found */
+      overflow: auto !important;
+      padding-right: 0 !important;
+    }
+  </style>
+  <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="/manifest.json" />
-    <!-- The 'defer' keyword is for not having to worry about waiting for DOM events to being AFTER dowloading the script - you are allowed to allow DOM events to fire in parallel to the  script finishes downloading.-->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      defer
-    />
-    <title>ParetOS</title>
+  <link rel="manifest" href="/manifest.json" />
+  <!-- The 'defer' keyword is for not having to worry about waiting for DOM events to being AFTER dowloading the script - you are allowed to allow DOM events to fire in parallel to the  script finishes downloading.-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" defer />
+  <title>ParetOS</title>
+  <script> if (global === undefined) { var global = window; } </script>
+  <script src="https://js.stripe.com/v3/" defer></script>
+</head>
 
-    <script src="https://js.stripe.com/v3/" defer></script>
-  </head>
-  <body>
-    <noscript> You need to enable JavaScript to run this app. </noscript>
-    <script type="module" src="/src/index.jsx"></script>
-    <div id="root"></div>
-    <script>
-      if (global === undefined) {
-        var global = window;
-      }
-    </script>
-  </body>
+<body>
+  <noscript> You need to enable JavaScript to run this app. </noscript>
+  <script type="module" src="/src/index.jsx"></script>
+  <div id="root"></div>
+</body>
+
 </html>

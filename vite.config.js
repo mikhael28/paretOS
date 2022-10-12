@@ -5,6 +5,11 @@ import resolve from "@rollup/plugin-node-resolve";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  resolve: {
+    preferBuiltins: false,
+    browser: true,
+    alias: { './runtimeConfig': './runtimeConfig.browser' }
+  },
   test: {
     testTimeout: 60_000,
     hookTimeout: 60_000,
@@ -23,6 +28,7 @@ export default defineConfig({
       ...resolve({
         preferBuiltins: false,
         browser: true,
+        alias: { './runtimeConfig': './runtimeConfig.browser' }
       }),
       enforce: "pre",
       apply: "build",
