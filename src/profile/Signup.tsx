@@ -1,6 +1,6 @@
 // hooks import
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import {
@@ -147,17 +147,19 @@ const Signup = (_props: any) => {
   const renderConfirmationForm = () => (
     <div className="Form">
       <div className="flex-center">
-        <img
-          src={logo}
-          alt="Pareto"
-          height="45"
-          width="180"
-          style={{
-            marginTop: 32,
-            filter:
-              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-          }}
-        />
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Pareto"
+            height="45"
+            width="180"
+            style={{
+              marginTop: 32,
+              filter:
+                theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+            }}
+          />
+        </Link>
       </div>
       <form
         className={classes.root}
@@ -190,17 +192,19 @@ const Signup = (_props: any) => {
   const renderForm = () => (
     <div>
       <div className="flex-center">
-        <img
-          src={logo}
-          alt="Pareto"
-          height="45"
-          width="180"
-          style={{
-            marginTop: 32,
-            filter:
-              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-          }}
-        />
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Pareto"
+            height="45"
+            width="180"
+            style={{
+              marginTop: 32,
+              filter:
+                theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+            }}
+          />
+        </Link>
       </div>
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
