@@ -6,7 +6,7 @@ import { RestAPI } from "@aws-amplify/api-rest";
  */
 
 interface CreateExperienceParams {
-  expId: string;
+  expId?: string;
   userId: string;
   type: string;
   title: string;

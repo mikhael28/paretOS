@@ -1,18 +1,8 @@
-import React, {
-  Component,
-  ComponentProps,
-  ComponentType,
-  FormEvent,
-  FormEventHandler,
-} from "react";
+import { ComponentProps, ComponentType, FormEvent, useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import {
-  CardElement,
-  injectStripe,
-  StripeProvider,
-} from "react-stripe-elements";
+import { CardElement, injectStripe } from "react-stripe-elements";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -36,125 +26,119 @@ interface BillingState {
   zip?: string;
 }
 
-class BillingForm extends Component<BillingFormProps, BillingState> {
-  loading: boolean;
+const BillingForm = ({ loading, onSubmit, stripe }: BillingFormProps) => {
+  const [billingForm, setBillingForm] = useState<BillingState>({
+    name: "",
+    storage: 1,
+    isProcessing: false,
+    isCardComplete: false,
+    street: "",
+    city: "",
+    zip: "",
+  });
 
-  constructor({ loading, onSubmit, stripe }: BillingFormProps) {
-    super({ loading, onSubmit, stripe });
-    this.loading = this.props.loading;
-    this.state = {
-      name: "",
-      storage: 1,
-      isProcessing: false,
-      isCardComplete: false,
-      street: "",
-      // street2: "",
-      city: "",
-      zip: "",
-    };
-  }
-
-  validateForm() {
+  const validateForm = () => {
     return (
-      this.state.name !== "" &&
-      this.state.storage !== "" &&
-      this.state.isCardComplete
+      billingForm.name !== "" &&
+      billingForm.storage !== "" &&
+      billingForm.isCardComplete
     );
-  }
-
-  handleFieldChange = (event: FormEvent<FormControl>) => {
-    this.setState({
-      [(event.target as HTMLInputElement).id]: (
-        event.target as HTMLInputElement
-      ).value,
-    } as BillingState);
   };
 
-  handleCardFieldChange = (event: any) => {
-    this.setState({
+  const handleFieldChange = (event: FormEvent<FormControl>) => {
+    setBillingForm(
+      (...prevState) =>
+        ({
+          ...prevState,
+          [(event.target as HTMLInputElement).id]: (
+            event.target as HTMLInputElement
+          ).value,
+        } as BillingState)
+    );
+  };
+
+  const handleCardFieldChange = (event: any) => {
+    setBillingForm((...prevState) => ({
+      ...prevState,
       isCardComplete: event.complete,
-    });
+    }));
   };
 
-  handleSubmitClick = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmitClick = async (event: FormEvent<HTMLFormElement>) => {
     (event as any).preventDefault();
 
-    const { name } = this.state;
+    setBillingForm((...prevState) => ({ ...prevState, isProcessing: true }));
 
-    this.setState({ isProcessing: true });
+    const { token, error } = await stripe.createToken({ name });
 
-    const { token, error } = await this.props.stripe.createToken({ name });
+    setBillingForm((...prevState) => ({ ...prevState, isProcessing: false }));
 
-    this.setState({ isProcessing: false });
-
-    this.props.onSubmit(this.state.storage, { token, error });
+    onSubmit(billingForm.storage, { token, error });
   };
 
-  render() {
-    const loading = this.state.isProcessing || this.props.loading;
+  const isLoading = billingForm.isProcessing || loading;
 
-    return (
-      <form className="BillingForm" onSubmit={this.handleSubmitClick}>
-        <FormGroup bsSize="large" controlId="name">
-          <ControlLabel>Cardholder&apos;s name</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.name}
-            onChange={this.handleFieldChange}
-            placeholder="Name on the card"
-          />
-        </FormGroup>
-        <FormGroup bsSize="large" controlId="street">
-          <ControlLabel>Street Address</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.street}
-            onChange={this.handleFieldChange}
-            placeholder="Street Address"
-          />
-        </FormGroup>
-        <FormGroup bsSize="large" controlId="city">
-          <ControlLabel>City</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.city}
-            onChange={this.handleFieldChange}
-            placeholder="City"
-          />
-        </FormGroup>
-        <FormGroup bsSize="large" controlId="zip">
-          <ControlLabel>Zip Code</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.zip}
-            onChange={this.handleFieldChange}
-            placeholder="Zip Code"
-          />
-        </FormGroup>
-        <ControlLabel>Credit Card Info</ControlLabel>
-        <CardElement
-          className="card-field"
-          onChange={this.handleCardFieldChange}
-          style={{
-            base: {
-              fontSize: "18px",
-              fontFamily: '"Futura Std Book", sans-serif',
-            },
-          }}
+  return (
+    <form className="BillingForm" onSubmit={handleSubmitClick}>
+      <FormGroup bsSize="large" controlId="name">
+        <ControlLabel>Cardholder&apos;s name</ControlLabel>
+        <FormControl
+          type="text"
+          value={billingForm.name}
+          onChange={handleFieldChange}
+          placeholder="Name on the card"
         />
-        <LoaderButton
-          block="true"
-          size="large"
-          type="submit"
-          text="Purchase"
-          isLoading={loading}
-          loadingText="Purchasing…"
-          disabled={!this.validateForm()}
+      </FormGroup>
+      <FormGroup bsSize="large" controlId="street">
+        <ControlLabel>Street Address</ControlLabel>
+        <FormControl
+          type="text"
+          value={billingForm.street}
+          onChange={handleFieldChange}
+          placeholder="Street Address"
         />
-      </form>
-    );
-  }
-}
+      </FormGroup>
+      <FormGroup bsSize="large" controlId="city">
+        <ControlLabel>City</ControlLabel>
+        <FormControl
+          type="text"
+          value={billingForm.city}
+          onChange={handleFieldChange}
+          placeholder="City"
+        />
+      </FormGroup>
+      <FormGroup bsSize="large" controlId="zip">
+        <ControlLabel>Zip Code</ControlLabel>
+        <FormControl
+          type="text"
+          value={billingForm.zip}
+          onChange={handleFieldChange}
+          placeholder="Zip Code"
+        />
+      </FormGroup>
+      <ControlLabel>Credit Card Info</ControlLabel>
+      <CardElement
+        className="card-field"
+        onChange={handleCardFieldChange}
+        style={{
+          base: {
+            fontSize: "18px",
+            fontFamily: '"Futura Std Book", sans-serif',
+          },
+        }}
+      />
+      <LoaderButton
+        block
+        size="large"
+        type="submit"
+        text="Purchase"
+        isLoading={isLoading}
+        loadingText="Purchasing…"
+        disabled={!validateForm()}
+      />
+    </form>
+  );
+};
 
 export default injectStripe(
   BillingForm as ComponentType<BillingFormProps & any>

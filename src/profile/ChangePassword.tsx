@@ -41,7 +41,7 @@ const ChangePassword = (props: any) => {
     });
 
     try {
-      navigate = useNavigate();
+      const navigate = useNavigate();
       const currentUser = await Auth.currentAuthenticatedUser();
       await Auth.changePassword(currentUser, state.oldPassword, state.password);
       handleShowSuccess("Password successfully changed.");

@@ -7,6 +7,11 @@ import { visualizer } from "rollup-plugin-visualizer";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  resolve: {
+    preferBuiltins: false,
+    browser: true,
+    alias: { './runtimeConfig': './runtimeConfig.browser' }
+  },
   test: {
     testTimeout: 60_000,
     hookTimeout: 60_000,
@@ -26,6 +31,7 @@ export default defineConfig({
       ...resolve({
         preferBuiltins: false,
         browser: true,
+        alias: { './runtimeConfig': './runtimeConfig.browser' }
       }),
       enforce: "pre",
       apply: "build",

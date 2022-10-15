@@ -1,10 +1,11 @@
-import { Component, useContext } from "react";
+import { useState } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
 import { createExperience } from "../utils/createExperience";
 import { User } from "../types/ProfileTypes";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Parent component of the Billing form.
@@ -18,19 +19,11 @@ interface OrderProps {
   navigate: (arg0: string) => void;
 }
 
-export default class Order extends Component<
-  OrderProps,
-  { isLoading: boolean }
-> {
-  constructor(props: OrderProps) {
-    super(props);
+const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    this.state = {
-      isLoading: false,
-    };
-  }
-
-  billUser(details: any) {
+  const billUser = (details: any) => {
     let route;
     if (import.meta.env.NODE_ENV === "development") {
       route = "/billing-dev";
@@ -40,25 +33,21 @@ export default class Order extends Component<
     return RestAPI.post("util", route, {
       body: details,
     });
-  }
+  };
 
-  unlockLearning = async () => {
+  const unlockLearning = async () => {
     let body = {
       learningPurchase: true,
     };
 
-    let updatedUser = await RestAPI.put(
-      "pareto",
-      `/users/${this.props.user.id}`,
-      {
-        body,
-      }
-    );
+    let updatedUser = await RestAPI.put("pareto", `/users/${user.id}`, {
+      body,
+    });
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: this.props.user.apprenticeshipId ?? "",
-      userId: this.props.user.id,
+      expId: user.apprenticeshipId ?? "",
+      userId: user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
       description: "Learning the tools, habits and workflows of development.",
@@ -66,8 +55,8 @@ export default class Order extends Component<
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: this.props.user.productId ?? "",
-      userId: this.props.user.id,
+      expId: user.productId ?? "",
+      userId: user.id,
       type: "Product",
       title: "Capstone Project",
       description:
@@ -76,8 +65,8 @@ export default class Order extends Component<
     const createProduct = await createExperience(productParams);
     console.log("Created Product: ", createProduct);
     let interviewingParams = {
-      expId: this.props.user.masteryId,
-      userId: this.props.user.id,
+      expId: user.masteryId,
+      userId: user.id,
       type: "Interviewing",
       title: "Interviewing",
       description:
@@ -106,8 +95,8 @@ export default class Order extends Component<
     // console.log('New mentor: ', defaultMentor);
   };
 
-  handleFormSubmit = async (
-    storage: number,
+  const handleFormSubmit = async (
+    storage: any,
     { token, error }: { token: any; error: Error }
   ) => {
     if (error) {
@@ -115,10 +104,10 @@ export default class Order extends Component<
       return;
     }
 
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
-      let billing = await this.billUser({
+      let billing = await billUser({
         storage,
         source: token.id,
       });
@@ -129,47 +118,44 @@ export default class Order extends Component<
 
       if (billing.status === true) {
         // create learning account info
-        await this.unlockLearning();
+        await unlockLearning();
       }
 
-      await this.props.initialFetch(this.props.user._id);
-      this.props.navigate("/training");
+      await initialFetch(user._id);
+      navigate("/training");
     } catch (e) {
       alert(e);
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  handleFreeUnlock = async () => {
-    this.setState({ isLoading: true });
+  const handleFreeUnlock = async () => {
+    setIsLoading(true);
 
     try {
-      await this.unlockLearning();
-      await this.props.initialFetch(this.props.user._id);
-      this.props.navigate("/training");
+      await unlockLearning();
+      await initialFetch(user._id);
+      navigate("/training");
     } catch (e) {
       alert(e);
     }
   };
 
-  render() {
-    return (
-      <>
-        <div className="Form">
-          <StripeProvider apiKey={this.props.stripeKey}>
-            <Elements>
-              <BillingForm
-                loading={this.state.isLoading}
-                onSubmit={this.handleFormSubmit}
-              />
-            </Elements>
-          </StripeProvider>
-        </div>
-        <Button onClick={this.handleFreeUnlock}>No Donation</Button>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="Form">
+        <StripeProvider apiKey={stripeKey}>
+          <Elements>
+            <BillingForm loading={isLoading} onSubmit={handleFormSubmit} />
+          </Elements>
+        </StripeProvider>
+      </div>
+      <Button onClick={handleFreeUnlock}>No Donation</Button>
+    </>
+  );
+};
+
+export default Order;
 
 //(property) loading: boolean
 //Type '{

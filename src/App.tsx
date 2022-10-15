@@ -59,7 +59,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => {},
+  setLanguage: () => { },
 };
 
 interface AppProps {
@@ -104,12 +104,7 @@ function App(props: AppProps) {
       bio: "",
       summary: "",
       city: "",
-      communityRank: "",
-      technicalRank: "",
       experience: "",
-      linkedIn: "",
-      stripe: "",
-      paypal: "",
       productId: "",
       apprenticeshipId: "",
       masteryId: "",
@@ -117,13 +112,9 @@ function App(props: AppProps) {
       completionPercentage: 0,
       completionAttempts: 0,
       completions: 0,
-      wrMembers: false,
-      wrid: "",
       createdAt: "",
       __v: 0,
-      actions: [],
       achievements: [],
-      expo: "",
       missions: [] as any,
       planning: [] as any,
     } as User,
