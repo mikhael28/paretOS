@@ -146,7 +146,7 @@ const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
       <div className="Form">
 
       </div>
-      <Button onClick={handleFreeUnlock}>No Donation</Button>
+      {/* <Button onClick={handleFreeUnlock}>No Donation</Button> */}
     </>
   );
 };
