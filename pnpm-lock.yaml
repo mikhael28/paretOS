@@ -23,6 +23,7 @@ specifiers:
   '@sanity/image-url': 1.0.1
   '@sentry/react': 7.13.0
   '@sentry/tracing': 7.13.0
+  '@stripe/stripe-js': 1.41.0
   '@testing-library/react': 13.4.0
   '@types/chai': 4.3.3
   '@types/lodash.sortby': 4.7.7
@@ -75,7 +76,7 @@ specifiers:
   react-redux: 8.0.2
   react-router-dom: 6.4.1
   react-spring: 9.5.4
-  react-stripe-elements: 1.6.0
+  react-stripe-js: 1.1.2
   reactour: 1.18.7
   redux: 4.2.0
   rollup: 2.79.0
@@ -126,6 +127,7 @@ dependencies:
   '@sanity/image-url': 1.0.1
   '@sentry/react': 7.13.0_react@18.2.0
   '@sentry/tracing': 7.13.0
+  '@stripe/stripe-js': 1.41.0
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@types/pell': 1.0.1
   '@types/react-beautiful-dnd': 13.1.2
@@ -155,7 +157,7 @@ dependencies:
   react-redux: 8.0.2_aemdmwlcz5opcibgu44t3w3tw4
   react-router-dom: 6.4.1_biqbaboplfbrettd7655fr4n2y
   react-spring: 9.5.4_qzzfasg2hjvd3mne2zgfwmtwym
-  react-stripe-elements: 1.6.0_biqbaboplfbrettd7655fr4n2y
+  react-stripe-js: 1.1.2_biqbaboplfbrettd7655fr4n2y
   reactour: 1.18.7_bn2um6jdwvng2733mr43pgz3se
   redux: 4.2.0
   rollup: 2.79.0
@@ -3429,6 +3431,34 @@ packages:
 
   /@socket.io/component-emitter/3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
+    dev: false
+
+  /@stripe/react-stripe-js/1.7.2_dg7sxx6zmh46madajf2p7xt5xa:
+    resolution: {integrity: sha512-IAVg2nPUPoSwI//XDRCO7D8mGeK4+N3Xg63fYZHmlfEWAuFVcuaqJKTT67uzIdKYZhHZ/NMdZw/ttz+GOjP/rQ==}
+    peerDependencies:
+      '@stripe/stripe-js': ^1.26.0
+      react: ^16.8.0 || ^17.0.0
+      react-dom: ^16.8.0 || ^17.0.0
+    peerDependenciesMeta:
+      '@stripe/stripe-js':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@stripe/stripe-js': 1.29.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@stripe/stripe-js/1.29.0:
+    resolution: {integrity: sha512-OsUxk0VLlum8E2d6onlEdKuQcvLMs7qTrOXCnl/BGV3fAm65qr6h3e1IZ5AX4lgUlPRrzRcddSOA5DvkKKYLvg==}
+    dev: false
+
+  /@stripe/stripe-js/1.41.0:
+    resolution: {integrity: sha512-9cbv1CO/fF37qDiHFCxkRgSJjlIZLV0bl+m6zu4dUObRnfYq5bpczCByOvhiSWtbrKqNhYL1j+otPSogRfSqGw==}
     dev: false
 
   /@testing-library/dom/8.17.1:
@@ -9278,20 +9308,20 @@ packages:
       - zdog
     dev: false
 
-  /react-stripe-elements/1.6.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-Re7dnYAGbwCjxDk80VXIntgl8nXvkkqsNEp4ptJUsutDrgEU1ohUfTJzXWXXNcZur66VEblT1TLgM0deznuh3g==}
+  /react-stripe-js/1.1.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-ovMKYhMA+k9o7SKvj56XTUpSD5DenB/LlLfqTwqnxXN1hfVfOcNAfnCH9pBLKBq98bfdSXNavyqv6ky5vqToMQ==}
+    engines: {node: '>=10'}
     peerDependencies:
-      react: ^15.5.4 || ^16.0.0-0
-      react-dom: ^15.5.4 || ^16.0.0-0
+      react: '>=16'
     peerDependenciesMeta:
       react:
         optional: true
-      react-dom:
-        optional: true
     dependencies:
-      prop-types: 15.8.1
+      '@stripe/react-stripe-js': 1.7.2_dg7sxx6zmh46madajf2p7xt5xa
+      '@stripe/stripe-js': 1.29.0
       react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - react-dom
     dev: false
 
   /react-three-fiber/2.4.3_ztpc23sdrrbfemecstgn5lesgm:

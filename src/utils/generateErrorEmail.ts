@@ -523,10 +523,10 @@ export function generateErrorEmail(
 	</html>`;
 	let body = {
 		recipient: "mikhael@hey.com",
-		sender: "michael@fsa.community",
+		sender: "mikhael@hey.com",
 		subject: "Bug: Network Request",
 		htmlBody: email,
 		textBody: "Hello",
 	};
-	return RestAPI.post("util", "/email", { body });
+	return RestAPI.post("pareto", "/email", { body });
 }

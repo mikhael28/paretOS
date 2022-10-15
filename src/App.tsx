@@ -63,7 +63,6 @@ const languageProps: LanguageProps = {
 };
 
 interface AppProps {
-  location: RouteProps["location"];
   children: RouteProps["children"];
   isAuthenticated: boolean;
   history: Array<string>;
@@ -109,9 +108,7 @@ function App(props: AppProps) {
       apprenticeshipId: "",
       masteryId: "",
       xp: 0,
-      completionPercentage: 0,
-      completionAttempts: 0,
-      completions: 0,
+      cp: 0,
       createdAt: "",
       __v: 0,
       achievements: [],
@@ -221,7 +218,6 @@ function App(props: AppProps) {
 
   useEffect(() => {
     setLoading(true);
-    console.log(strings);
     I18n.putVocabularies(strings);
 
     const loadData = async () => {
