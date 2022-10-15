@@ -1,6 +1,6 @@
 import { Component, useContext } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { Elements, StripeProvider } from "react-stripe-elements";
+// import { Elements, StripeProvider } from "react-stripe-elements";
 import { Button } from "@mui/material";
 import BillingForm from "./BillingForm";
 import { createExperience } from "../utils/createExperience";
@@ -156,14 +156,14 @@ export default class Order extends Component<
     return (
       <>
         <div className="Form">
-          <StripeProvider apiKey={this.props.stripeKey}>
+          {/* <StripeProvider apiKey={this.props.stripeKey}>
             <Elements>
               <BillingForm
                 loading={this.state.isLoading}
                 onSubmit={this.handleFormSubmit}
               />
             </Elements>
-          </StripeProvider>
+          </StripeProvider> */}
         </div>
         <Button onClick={this.handleFreeUnlock}>No Donation</Button>
       </>

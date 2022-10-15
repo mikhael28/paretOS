@@ -8,11 +8,11 @@ import React, {
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import {
-  CardElement,
-  injectStripe,
-  StripeProvider,
-} from "react-stripe-elements";
+// import {
+//   CardElement,
+//   injectStripe,
+//   StripeProvider,
+// } from "react-stripe-elements";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -132,7 +132,7 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
           />
         </FormGroup>
         <ControlLabel>Credit Card Info</ControlLabel>
-        <CardElement
+        {/* <CardElement
           className="card-field"
           onChange={this.handleCardFieldChange}
           style={{
@@ -141,7 +141,7 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
               fontFamily: '"Futura Std Book", sans-serif',
             },
           }}
-        />
+        /> */}
         <LoaderButton
           block="true"
           size="large"
@@ -156,6 +156,4 @@ class BillingForm extends Component<BillingFormProps, BillingState> {
   }
 }
 
-export default injectStripe(
-  BillingForm as ComponentType<BillingFormProps & any>
-);
+export default BillingForm as ComponentType<BillingFormProps & any>;

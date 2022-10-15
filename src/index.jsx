@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import "@stripe/stripe-js";
 import App from "./App";
 import { CustomRouter } from "./utils/CustomBrowswerRouter";
 import customHistory from "./utils/customHistory";
@@ -34,13 +35,12 @@ if (import.meta.env.NODE_ENV === "production") {
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
+    // 1.0 captures 100% of transactions for performance monitoring.
     tracesSampleRate: 1.0,
   });
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export const store = configureStore({
   reducer,
 });
