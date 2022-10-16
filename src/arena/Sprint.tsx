@@ -30,9 +30,9 @@ import {
   ActivePersonMissionsOnDay,
 } from "../types/ArenaTypes";
 import { User } from "../types/ProfileTypes";
-import { ToastMsgContext } from "@src/context/ToastContext";
-import { store } from "@src/redux/store";
-import { ReduxRootState } from "@src/redux/state";
+import { ToastMsgContext } from "../context/ToastContext";
+import { store } from "../redux/store";
+import { ReduxRootState } from "../redux/state";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.

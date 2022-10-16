@@ -5,8 +5,8 @@ import React, {
   createContext,
   ComponentPropsWithoutRef,
 } from "react";
-import LoaderButton from "@components/LoaderButton";
-import logo from "@assets/Pareto-Red-01.png";
+import LoaderButton from "../components/LoaderButton";
+import logo from "../assets/Pareto-Red-01.png";
 import { Snackbar, Alert } from "@mui/material";
 
 // Leaving toast type as any for now as it is a work in progress
