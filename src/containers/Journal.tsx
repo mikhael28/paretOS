@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { init, exec } from "pell";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { ToastMsgContext } from "../state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 import { User } from "../types/ProfileTypes";
 /**
  * This is the Learning Dashboard page, where the student sees their experience summaries (for navigation in mobile view) and the notepad, which they can use to take down notes and which will one day be expanded into a Roam-like daily notes system, into the ParetOS family of services.

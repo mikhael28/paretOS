@@ -1,6 +1,6 @@
 import { I18n } from "@aws-amplify/core";
-import LoaderButton from "@src/components/LoaderButton";
-import { selectProfile } from "@src/redux/selectors/profile/select-profile";
+import LoaderButton from "../../components/LoaderButton";
+import { selectProfile } from "../../redux/selectors/profile/select-profile";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsPlusLg } from "react-icons/bs";
@@ -15,7 +15,6 @@ import {
   FormGroup,
 } from "@mui/material";
 import RestAPI from "@aws-amplify/api-rest";
-import { Project } from "@src/types/ProfileTypes";
 const Projects = () => {
   const user = useSelector(selectProfile);
   const [state, setState] = useState({

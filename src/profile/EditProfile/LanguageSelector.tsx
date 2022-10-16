@@ -7,11 +7,11 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { MdAutorenew } from "react-icons/md";
-import LanguageContext, { Language } from "../redux/state/LanguageContext";
-import { availableLanguages, updateLanguage } from "../libs/languages";
+import LanguageContext, { Language } from "../../redux/state/LanguageContext";
+import { availableLanguages, updateLanguage } from "../../libs/languages";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { selectProfile } from "@src/redux/selectors/profile/select-profile";
+import { selectProfile } from "../../redux/selectors/profile/select-profile";
 
 const LanguageSelector = () => {
   const langContext = useContext(LanguageContext);

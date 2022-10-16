@@ -6,7 +6,6 @@ import FormControl from "react-bootstrap/lib/FormControl";
 import { FormEvent } from "react";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import { useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
 import { IconButton } from "@mui/material";
 import cloneDeep from "lodash.clonedeep";
@@ -14,8 +13,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { ReduxRootState } from "../state";
-import { ToastMsgContext } from "../state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 import LoaderButton from "../components/LoaderButton";
 import { MinimalUser, User } from "../types/ProfileTypes";
 import {
@@ -25,6 +23,7 @@ import {
   EnMission,
 } from "../types/ArenaTypes";
 import { useNavigate } from "react-router-dom";
+import { ReduxRootState } from "@src/redux/state";
 
 /**
  * This is the component where a user creates a new sprint, and selects which players are competing.
@@ -36,7 +35,6 @@ interface SprintCreationProps {
 }
 
 function SprintCreation({ user, connectSocket }: SprintCreationProps) {
-  const profile = useSelector((state: ReduxRootState) => state.profile);
   const [startDate, setStartDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);

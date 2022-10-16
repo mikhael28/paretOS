@@ -30,7 +30,7 @@ import {
   ActivePersonMissionsOnDay,
 } from "../types/ArenaTypes";
 import { User } from "../types/ProfileTypes";
-import { ToastMsgContext } from "@src/redux/state/ToastContext";
+import { ToastMsgContext } from "@src/context/ToastContext";
 import { store } from "@src/redux/store";
 import { ReduxRootState } from "@src/redux/state";
 

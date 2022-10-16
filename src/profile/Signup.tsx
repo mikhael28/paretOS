@@ -3,18 +3,11 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import {
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import { FormControl, TextField, useTheme } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 import { User } from "@sentry/react";
-import { ToastMsgContext } from "../state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
 import * as Yup from "yup";

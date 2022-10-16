@@ -16,7 +16,7 @@ import LoaderButton from "./LoaderButton";
 import uploadToS3 from "../utils/s3";
 import { User } from "../types/ProfileTypes";
 import { ActiveMission, Sprint } from "../types/ArenaTypes";
-import { ToastMsgContext } from "@src/redux/state/ToastContext";
+import { ToastMsgContext } from "@src/context/ToastContext";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.

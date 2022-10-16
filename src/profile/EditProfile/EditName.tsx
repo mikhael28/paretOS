@@ -5,18 +5,18 @@ import { Storage } from "@aws-amplify/storage";
 import { FormEvent, useContext, useState } from "react";
 import { BsPencil } from "react-icons/bs";
 import RestAPI from "@aws-amplify/api-rest";
-import { ToastMsgContext } from "@src/redux/state/ToastContext";
+import { ToastMsgContext } from "../../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserAction } from "@src/redux/state/profile";
-import { selectProfile } from "@src/redux/selectors/profile/select-profile";
-import { useForm } from "react-hook-form";
+import { setUserAction } from "../../redux/state/profile";
+import { selectProfile } from "../../redux/selectors/profile/select-profile";
+import { Controller, useForm } from "react-hook-form";
 
 const EditName = () => {
   const dispatch = useDispatch();
 
   const { register, handleSubmit } = useForm();
 
-  const user = useSelector(selectProfile);
+  const user: any = useSelector(selectProfile);
   const [state, setState] = useState({
     isLoading: false,
     summaryCheck: false,

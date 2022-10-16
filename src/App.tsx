@@ -26,7 +26,7 @@ import {
   fetchSanitySchemas,
 } from "./utils/initialFetch";
 import LeftNav from "./components/LeftNav";
-import { ToastMsgContext, ToastMsg } from "./redux/state/ToastContext";
+import { ToastMsgContext, ToastMsg } from "./context/ToastContext";
 import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
@@ -59,7 +59,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => { },
+  setLanguage: () => {},
 };
 
 interface AppProps {

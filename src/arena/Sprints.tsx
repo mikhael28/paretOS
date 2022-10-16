@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { selectSortedSprints } from "../redux/selectors/select-sorted-sprints";
 import { useNavigate } from "react-router-dom";
-import { ToastMsgContext } from "../redux/state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.

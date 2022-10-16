@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { ToastMsgContext } from "../state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
 import { useNavigate } from "react-router-dom";

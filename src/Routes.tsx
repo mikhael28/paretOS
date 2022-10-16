@@ -22,7 +22,9 @@ const ExperienceModule = lazy(() => import("./learn/ExperienceModule"));
 const SprintCreation = lazy(() => import("./arena/SprintCreation"));
 const NotFound = lazy(() => import("./containers/NotFound"));
 const EditProfile = lazy(() => import("./profile/EditProfile"));
-const LanguageSelector = lazy(() => import("./profile/LanguageSelector"));
+const LanguageSelector = lazy(
+  () => import("./profile/EditProfile/LanguageSelector")
+);
 const ArenaDashboard = lazy(() => import("./arena/Sprints"));
 const ContextBuilder = lazy(() => import("./context/ContextBuilder"));
 const ContextPage = lazy(() => import("./context/ContextPage"));
@@ -212,7 +214,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <EditProfile {...childProps} />
+            <EditProfile />
           </AuthenticatedRoute>
         }
       />
@@ -221,7 +223,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <LanguageSelector {...childProps} />
+            <LanguageSelector />
           </AuthenticatedRoute>
         }
       />

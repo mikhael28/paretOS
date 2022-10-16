@@ -1,5 +1,4 @@
-import { useTheme } from "@mui/material";
-import LanguageSelector from "../LanguageSelector";
+import LanguageSelector from "./LanguageSelector";
 import { Summary } from "./Summary";
 import { Projects } from "./Projects";
 import { EditName } from "./EditName";
