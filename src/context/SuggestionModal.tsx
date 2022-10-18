@@ -113,10 +113,10 @@ export default function SuggestionModal({
         .then((response) => response.json())
         .catch((error) => console.error(error));
 
-      await RestAPI.post("util", "/email", {
+      await RestAPI.post("pareto", "/email", {
         body: {
-          recipient: "michael@pareto.education",
-          sender: "michael@pareto.education",
+          recipient: "mikhael@hey.com",
+          sender: "mikhael@hey.com",
           subject: messageTitle,
           htmlBody: email,
           textBody: messagesummary,

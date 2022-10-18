@@ -77,7 +77,6 @@ export interface Sprint {
   endDate: Date;
   started: boolean;
   events: Array<object>;
-  studySessions: Array<object>;
   type: string;
   verified: boolean;
   teams: Array<User>;

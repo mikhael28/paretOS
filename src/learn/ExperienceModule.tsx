@@ -196,10 +196,10 @@ class ExperienceModule extends Component<
         showSubmitModal: false,
         mongoExperience: updatedExperienceModule,
       });
-      await RestAPI.post("util", "/email", {
+      await RestAPI.post("pareto", "/email", {
         body: {
           recipient: this.props.user.email,
-          sender: "michael@fsa.community",
+          sender: "mikhael@hey.com",
           subject: "Pareto Achievement For Review",
           htmlBody: email,
           textBody: "Pareto Achievement For Review.",
@@ -242,10 +242,10 @@ class ExperienceModule extends Component<
         showSubmitModal: false,
         mongoExperience: updatedExperienceModule,
       });
-      await RestAPI.post("util", "/email", {
+      await RestAPI.post("pareto", "/email", {
         body: {
           recipient: this.state.user.email,
-          sender: "michael@fsa.community",
+          sender: "mikhael@hey.com",
           subject: "Pareto Achievement For Review",
           htmlBody: email,
           textBody: "Pareto Achievement For Review.",
@@ -292,10 +292,10 @@ class ExperienceModule extends Component<
         mongoExperience: updatedExperienceModule,
         openReviewModal: false,
       });
-      await RestAPI.post("util", "/email", {
+      await RestAPI.post("pareto", "/email", {
         body: {
           recipient: "mikhael@hey.com",
-          sender: "michael@fsa.community",
+          sender: "mikhael@hey.com",
           subject: "Pareto Achievement Unlocked",
           htmlBody: email,
           textBody: "Pareto Achievement Unlocked.",
@@ -342,11 +342,11 @@ class ExperienceModule extends Component<
             {mongoExperience._01 ? (
               <div className="second-step-exp">
                 {mongoExperience[topic.priority].approved === true &&
-                mongoExperience[topic.priority].completed === true ? (
+                  mongoExperience[topic.priority].completed === true ? (
                   <ImCheckmark />
                 ) : null}
                 {mongoExperience[topic.priority].completed === true &&
-                mongoExperience[topic.priority].approved === false ? (
+                  mongoExperience[topic.priority].approved === false ? (
                   <FaSearch />
                 ) : null}
                 {mongoExperience[topic.priority].completed === false ? (
@@ -387,7 +387,7 @@ class ExperienceModule extends Component<
               </Button>
             )}
             {this.props.user.instructor === true &&
-            mongoExperience[activeExperience.priority].completed === true ? (
+              mongoExperience[activeExperience.priority].completed === true ? (
               <Button
                 onClick={() => this.setState({ openReviewModal: true })}
                 className="btn"

@@ -46,13 +46,13 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
   const accountCreationEmail = async (email: string) => {
     let body = {
       recipient: email,
-      sender: "michael@pareto.education",
+      sender: "mikhael@hey.com",
       subject: "Your ParetOS Login",
       htmlBody: `<p>Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.</p>`,
       textBody: `Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.`,
     };
     try {
-      await RestAPI.post("util", "/email", { body });
+      await RestAPI.post("pareto", "/email", { body });
     } catch (e) {
       console.log("Email send error: ", e);
     }
@@ -91,36 +91,23 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
           mentor: "",
           mentors: [],
           projects: [],
-          ideas: [],
           bio: "",
           summary:
             "This is the space for you to write your bio, so people can learn more about you and your interests.",
           notes: [notepadIntro],
-          actions: [],
           city: formData.city,
           state: formData.state,
           phone: "",
           github: formData.github,
-          communityRank: "",
-          technicalRank: "",
-          experience: "Incomplete",
-          linkedIn: "Incomplete",
-          stripe: "",
-          paypal: "",
           instructor: instructorStatus,
           admin: false,
           productId: productId,
           apprenticeshipId: apprenticeshipId,
           beginId: beginId,
           masteryId: interviewingId,
-          expo: "",
           xp: 0,
           learningPurchase: false,
-          completionPercentage: 0,
-          completionAttempts: 0,
-          completions: 0,
-          wrMembers: false,
-          wrid: "",
+          cp: 0,
           defaultLanguage: "en",
           createdAt: new Date(),
         },

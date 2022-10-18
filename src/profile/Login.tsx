@@ -73,9 +73,9 @@ const Login = ({
     }
   };
 
-  return (
-    <div className="Form">
-      <div className="flex-center">
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
         <img
           src={logo}
           alt="Pareto"
@@ -87,7 +87,13 @@ const Login = ({
               theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
           }}
         />
-      </div>
+      </Link>
+    </div>
+  )
+
+  return (
+    <div className="Form">
+      {renderLogo()}
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <div>

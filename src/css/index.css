@@ -2,6 +2,13 @@
 All CSS that loads on every page should be placed here.
 */
 
+* {
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   --backgroundColor: rgb(0 0 0);
   --backgroundColor-light: rgb(255 255 255);
@@ -189,7 +196,6 @@ input[type="file"] {
     left: calc(100vw - 52px);
   }
 
-
   .btn {
     min-width: 80px !important;
   }
@@ -254,7 +260,7 @@ input[type="file"] {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     margin-top: 22px;
-    cursor:pointer;
+    cursor: pointer;
   }
   .dropdown-caret-down {
     border-top: 5px solid;
@@ -287,11 +293,11 @@ input[type="file"] {
   border: 1px solid transparent;
 }
 
-#overlay  {
+#overlay {
   position: fixed;
   top: 50%;
   left: 50%;
-  margin-left: -200px; 
+  margin-left: -200px;
 }
 
 /* Colors */
@@ -414,9 +420,8 @@ input[type="file"] {
 
 .flex-columns {
   display: flex;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
 }
-
 
 /* CSS Below is for the spinning animation in the loading screen */
 .ipl-progress-indicator.available {

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,11 +22,15 @@
     "noImplicitAny": true,
     "types": [
       "vite/client",
-      "jest",
       "@types/react",
       "vitest/globals"
     ],
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
-  "include": ["src", "tests", "jest.setup.js"]
+  "include": [
+    "src",
+    "tests"
+  ]
 }
