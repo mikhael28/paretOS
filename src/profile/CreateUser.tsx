@@ -16,6 +16,7 @@ import { ToastMsgContext } from "../state/ToastContext";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
 import { useNavigate } from "react-router-dom";
+import { generateEmail } from "../utils/generateErrorEmail";
 
 /**
  * Functionality for new user signup, creating their profile.
@@ -43,12 +44,14 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
   const [showTOS, setShowTOS] = useState(false);
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
+  const email = generateEmail("Welcome to the ParetOS", "You have joined an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.")
+
   const accountCreationEmail = async (email: string) => {
     let body = {
       recipient: email,
       sender: "mikhael@hey.com",
       subject: "Your ParetOS Login",
-      htmlBody: `<p>Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.</p>`,
+      htmlBody: email,
       textBody: `Welcome to the ParetOS - an experimental, high-level operating system that lives in the browser to maximize your human performance and growth. You can login at https://paret0.com with the email ${email} and the password you created.`,
     };
     try {

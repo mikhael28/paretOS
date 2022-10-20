@@ -8,6 +8,7 @@ import { Sprint as SprintInterface } from "./types/ArenaTypes";
 import { User } from "./types/ProfileTypes";
 import ExperienceSummary from "./learn/ExperienceSummary";
 import { Coach } from "./types/MentorshipTypes";
+import Logout from "./components/Logout";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -34,6 +35,7 @@ const Room = lazy(() => import("./containers/Room"));
 const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
+
 
 export interface ChildProps {
   stripeKey: string;
@@ -126,7 +128,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
             <Journal {...childProps} />
           </AuthenticatedRoute>
         }
-        // props={childProps}
+      // props={childProps}
       />
       <Route
         path="/arena"
@@ -187,7 +189,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         /* @ts-ignore */
         element={<Room {...childProps} />}
-        // props={childProps}
+      // props={childProps}
       />
       <Route
         path="/settings/password"
@@ -257,6 +259,8 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
           </AuthenticatedRoute>
         }
       />
+      <Route path="/logout" {...rest} element={<Logout />} />
+
       <Route path="/workandrise" {...rest} element={<WorkRise />} />
       {/* Finally, catch all unmatched routes */}
       <Route path="/*" element={<NotFound />} />
