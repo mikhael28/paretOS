@@ -35,6 +35,7 @@
   <link rel="manifest" href="/manifest.json" />
   <!-- The 'defer' keyword is for not having to worry about waiting for DOM events to being AFTER dowloading the script - you are allowed to allow DOM events to fire in parallel to the  script finishes downloading.-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" defer />
+
   <title>ParetOS</title>
   <script> if (global === undefined) { var global = window; } </script>
   <script src="https://js.stripe.com/v3/" defer></script>
@@ -43,6 +44,7 @@
 <body>
   <noscript> You need to enable JavaScript to run this app. </noscript>
   <script type="module" src="/src/index.jsx"></script>
+  <script type="module" src="/src/sw-google.js"></script>
   <div id="root"></div>
 </body>
 

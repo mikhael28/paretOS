@@ -1,6 +1,6 @@
 {
-  "name": "paret-os",
-  "version": "0.1.5",
+  "name": "pareto-os",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@aws-amplify/api-rest": "2.0.57",
@@ -16,8 +16,8 @@
     "@mui/system": "5.10.10",
     "@mui/x-date-pickers": "5.0.4",
     "@portabletext/react": "1.0.6",
-    "@react-three/fiber": "8.8.10",
     "@react-three/drei": "9.36.0",
+    "@react-three/fiber": "8.8.10",
     "@reduxjs/toolkit": "1.8.6",
     "@rollup/plugin-node-resolve": "15.0.0",
     "@sanity/client": "3.4.1",
@@ -73,6 +73,7 @@
     "workbox-navigation-preload": "6.5.4",
     "workbox-precaching": "6.5.4",
     "workbox-range-requests": "6.5.4",
+    "workbox-recipes": "6.5.4",
     "workbox-routing": "6.5.4",
     "workbox-strategies": "6.5.4",
     "workbox-streams": "6.5.4",
@@ -123,6 +124,7 @@
     "stylelint": "14.14.0",
     "stylelint-config-standard": "29.0.0",
     "ts-node": "10.9.1",
+    "vite-plugin-pwa": "^0.13.1",
     "vitest": "0.24.3"
   },
   "strict-peer-dependencies": false,
