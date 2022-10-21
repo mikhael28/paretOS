@@ -1,0 +1,102 @@
+/* CSS for Form styles */
+
+/* Form styles */
+
+.NotFound {
+    padding-top: 100px;
+    text-align: center;
+  }
+  
+  .BillingForm .card-field {
+    margin-bottom: 15px;
+    background-color: white;
+    padding: 11px 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 7.5%);
+    line-height: 1.3333;
+  }
+  
+  .BillingForm .card-field.StripeElement--focus {
+    box-shadow:
+      inset 0 1px 1px rgb(0 0 0 / 7.5%),
+      0 0 8px rgb(102 175 233 / 60%);
+    border-color: #66afe9;
+  }
+  
+  .BillingForm .form-group .form-group-lg {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  
+  .ConfirmPurchaseForm {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+  }
+  
+  .ConfirmPurchaseForm > button {
+    height: 56px;
+    margin-bottom: 60px;
+    border-radius: 6px;
+    background-color: #f44336;
+    font-size: 18px;
+  }
+  
+  @media all and (min-width: 480px) {
+    .Form {
+      padding: 60px 0;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+  }
+  
+  .Form .LoaderButton:last-child {
+    margin-top: 15px;
+  }
+  
+  .Form form {
+    margin: 0 auto;
+    max-width: 320px;
+  }
+  
+  .Form .success {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .Form .success .glyphicon {
+    color: grey;
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .Form form span.help-block {
+    font-size: 14px;
+    padding-bottom: 10px;
+    color: #999;
+  }
+  
+  .planning-forms {
+    min-height: 60px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    width: 100%;
+    margin-right: 16px;
+    background-color: var(--navigation-bgColor);
+  }
+  
+  .input-group {
+    margin-top: 16px;
+    width: 100%;
+  }
+  
+  .input-group h3 {
+    padding: 8px 0;
+  }
+  
+  .input-group:last-child {
+    margin-bottom: 16px;
+  }

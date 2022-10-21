@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
+import { ToastMsgContext } from "../state/ToastContext";
 import TextField from "@mui/material/TextField";
 import {
   DragDropContext,
@@ -13,7 +14,7 @@ import { nanoid } from "nanoid";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
 import sanity from "../libs/sanity";
-import { errorToast } from "../libs/toasts";
+import { useNavigate } from "react-router-dom";
 
 /**
  *
@@ -23,7 +24,7 @@ import { errorToast } from "../libs/toasts";
 
 interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
-  history: Array<string>;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 interface OnDragEndParams {
@@ -87,7 +88,11 @@ const onDragEnd = ({ result, columns, setColumns }: OnDragEndParams) => {
 };
 
 function CreateSprintTemplate(props: CreateSprintTemplateProps) {
+  const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
+
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const [columns, setColumns] = useState({
     Options: {
       name: "Options",
@@ -112,6 +117,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
 
   async function createTemplate() {
     let missionsArray: never[] = [];
+
     columns.Morning.items.map((item) => {
       missionsArray.push(item);
     });
@@ -138,10 +144,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
     };
     try {
       await RestAPI.post("pareto", `/templates`, { body });
-      props.history.push("/");
+      navigate("/");
     } catch (e) {
-      // @ts-ignore
-      errorToast(e, props.user);
+      handleShowError(e as Error);
     }
   }
 
@@ -246,8 +251,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         </ControlLabel>
         <TextField
           color="success"
-          /* @ts-ignore */
-          error={error}
+          error={!!error}
           required
           helperText={error}
           style={{ width: 300 }}
@@ -259,7 +263,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         <Button
           /* @ts-ignore */
           disabled={
-            (title === "" && meetsMinimumOptionsThreshold === false) || error
+            (title === "" && meetsMinimumOptionsThreshold === false) || !!error
           }
           variant="gradient"
           onClick={createTemplate}

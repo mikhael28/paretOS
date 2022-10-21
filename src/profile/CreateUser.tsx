@@ -1,7 +1,7 @@
 import { Auth } from "@aws-amplify/auth";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { nanoid } from "nanoid";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState, useContext } from "react";
 import {
   FormControl,
   TextField,
@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
 import { notepadIntro, countries } from "../libs/static";
 import TermsOfService from "./TermsOfService";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Functionality for new user signup, creating their profile.
@@ -25,10 +26,9 @@ import TermsOfService from "./TermsOfService";
 interface CreateUserProps {
   setLoading: Function;
   initialFetch: Function;
-  history: Array<string>;
 }
 
-const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
+const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
   const {
     register,
     handleSubmit,
@@ -37,8 +37,11 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
     formState: { errors, isValid },
   } = useForm({ mode: "onBlur" });
 
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const [showTOS, setShowTOS] = useState(false);
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   const accountCreationEmail = async (email: string) => {
     let body = {
@@ -88,46 +91,35 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
           mentor: "",
           mentors: [],
           projects: [],
-          ideas: [],
           bio: "",
           summary:
             "This is the space for you to write your bio, so people can learn more about you and your interests.",
           notes: [notepadIntro],
-          actions: [],
           city: formData.city,
           state: formData.state,
           phone: "",
           github: formData.github,
-          communityRank: "",
-          technicalRank: "",
-          experience: "Incomplete",
-          linkedIn: "Incomplete",
-          stripe: "",
-          paypal: "",
           instructor: instructorStatus,
           admin: false,
           productId: productId,
           apprenticeshipId: apprenticeshipId,
           beginId: beginId,
           masteryId: interviewingId,
-          expo: "",
           xp: 0,
           learningPurchase: false,
           completionPercentage: 0,
           completionAttempts: 0,
           completions: 0,
-          wrMembers: false,
-          wrid: "",
           defaultLanguage: "en",
           createdAt: new Date(),
         },
       });
       await accountCreationEmail(tempEmail);
-      successToast("Account created!");
+      handleShowSuccess("Account created!");
       await initialFetch(uuid);
-      history.push("/");
+      navigate("/");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setLoading(false);
     }
   };
@@ -201,6 +193,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
                     <FormControl error={invalid} style={formStyle}>
                       <InputLabel id="user-type">User Type</InputLabel>
                       <Select
+                        defaultValue={""}
                         labelId="user-type"
                         id="user-type"
                         label="User Type"
@@ -249,6 +242,7 @@ const CreateUser = ({ setLoading, initialFetch, history }: CreateUserProps) => {
                         labelId="country"
                         id="country"
                         label="Country"
+                        defaultValue={""}
                         {...register("state", { required: true })}
                       >
                         {countries.map((country, index) => (

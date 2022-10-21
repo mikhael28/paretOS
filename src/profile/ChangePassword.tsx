@@ -1,11 +1,12 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useContext } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
+import { ToastMsgContext } from "../state/ToastContext";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Change your password through Cognito
@@ -27,7 +28,8 @@ const ChangePassword = (props: any) => {
   const handleChange = (event: FormEvent<FormControl>) => {
     setState({
       ...state,
-      [(event.target as HTMLFormElement).id]: (event.target as HTMLFormElement).value,
+      [(event.target as HTMLFormElement).id]: (event.target as HTMLFormElement)
+        .value,
     });
   };
 
@@ -39,18 +41,21 @@ const ChangePassword = (props: any) => {
     });
 
     try {
+      const navigate = useNavigate();
       const currentUser = await Auth.currentAuthenticatedUser();
       await Auth.changePassword(currentUser, state.oldPassword, state.password);
-      successToast("Password successfully changed.");
-      props.history.push("/");
+      handleShowSuccess("Password successfully changed.");
+      navigate("/");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setState({
         ...state,
         isChanging: false,
       });
     }
   };
+
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   return (
     <div className="Form">
@@ -81,7 +86,7 @@ const ChangePassword = (props: any) => {
           />
         </FormGroup>
         <LoaderButton
-          block
+          block="true"
           type="submit"
           size="large"
           text={I18n.get("confirm")}

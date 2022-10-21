@@ -1,18 +1,23 @@
 import { useState, useContext, FormEvent } from "react";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
+import {
+  FormControl,
+  MenuItem,
+  Box,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { MdAutorenew } from "react-icons/md";
 import LanguageContext, { Language } from "../state/LanguageContext";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import { SelectChangeEvent } from "@mui/material";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
+import { Controller, useForm } from "react-hook-form";
 
-const LanguageSelector = (props: {user : User }) => {
+const LanguageSelector = (props: { user: User }) => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;
   let [isLoading, setIsLoading] = useState(false);
+  const { control } = useForm({ reValidateMode: "onChange" });
 
   const handleSetIsLoading = (bool: boolean) => {
     setIsLoading(bool);
@@ -22,58 +27,76 @@ const LanguageSelector = (props: {user : User }) => {
     setLanguage(language);
   };
 
-  const handleChange = (e: FormEvent<FormControl>) => {
+  const handleChange = (e: SelectChangeEvent) => {
     updateLanguage({
-      language: availableLanguages.find((x) => x.code === (e.target as HTMLSelectElement).value),
+      language: availableLanguages.find(
+        (x) => x.code === (e.target as HTMLInputElement).value
+      ),
       id: props.user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
     });
   };
+
   return (
-    <FormGroup controlId="defaultLanguage" bsSize="large">
-      {/* Here we are updating our default language */}
-      <ControlLabel><h2>Default Language</h2></ControlLabel>
-      <div className="flex">
+    <Box>
+      <h2>Default Language</h2>
+      <FormControl fullWidth id="defaultLanguage">
         {isLoading ? (
           <>
-            <FormControl
-              name="newLanguage"
-              componentClass="select"
-              onChange={handleChange}
-            >
-              <option value="">
-                Please wait - saving language preferences.
-              </option>
-            </FormControl>
-            <MdAutorenew
-              style={{ margin: 8, height: "100%" }}
-              className="loading-icon spinning"
+            <Controller
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  id="newLanguage"
+                  variant="filled"
+                  value=""
+                  defaultValue=""
+                  onChange={handleChange}
+                ></Select>
+              )}
+              name="Select"
+              control={control}
             />
+
+            <MenuItem value="">
+              <MdAutorenew
+                style={{ margin: 8, height: "100%" }}
+                className="loading-icon spinning"
+              />
+              Please wait - saving language preferences.
+            </MenuItem>
           </>
         ) : (
-          <FormControl
-            name="newLanguage"
-            componentClass="select"
-            onChange={handleChange}
-            defaultValue={language?.code || ""}
-            value={language.code || ""}
-          >
-            {availableLanguages.map(({ code, name }) =>
-              code === language.code ? (
-                <option key={code} value={code} selected>
-                  {name}
-                </option>
-              ) : (
-                <option key={code} value={code}>
-                  {name}
-                </option>
-              )
+          <Controller
+            render={({ field }) => (
+              <Select
+                {...field}
+                id="defaultLanguage"
+                variant="filled"
+                onChange={handleChange}
+                defaultValue={language?.code || ""}
+                value={language.code || ""}
+              >
+                {availableLanguages.map(({ code, name }) =>
+                  code === language.code ? (
+                    <MenuItem key={code} value={code} selected>
+                      {name}
+                    </MenuItem>
+                  ) : (
+                    <MenuItem key={code} value={code}>
+                      {name}
+                    </MenuItem>
+                  )
+                )}
+              </Select>
             )}
-          </FormControl>
+            name="Select"
+            control={control}
+          />
         )}
-      </div>
-    </FormGroup>
+      </FormControl>
+    </Box>
   );
 };
 export default LanguageSelector;

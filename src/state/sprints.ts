@@ -1,12 +1,50 @@
+import { createAction, createReducer, PayloadAction } from "@reduxjs/toolkit";
+
 import cloneDeep from "lodash.clonedeep";
 import { AnyAction } from "redux";
-import { Sprint } from "../types";
+import { Sprint } from "../types/ArenaTypes";
 
 export const COMPLETE_SPRINT_TASK = "COMPLETE_SPRINT_TASK";
 export const GET_ACTIVE_SPRINT_DATA = "GET_ACTIVE_SPRINT_DATA";
 export const GET_INITIAL_SPRINT_DATA = "GET_INITIAL_SPRINT_DATA";
 export const PUT_UPDATED_SPRINT_DATA = "PUT_UPDATED_SPRINT_DATA";
 export const PLANNING_FORMS = "PLANNING_FORMS";
+
+interface CompleteSprintTaskPayload {
+  idx: any;
+  activeSprintIndex: number;
+  index: number;
+  day: number;
+  key: string;
+}
+
+export const getActiveSprintDataAction = createAction(
+  GET_ACTIVE_SPRINT_DATA,
+  (sprint: Sprint[]) => ({
+    payload: sprint,
+  })
+);
+
+export const getInitialSprintDataAction = createAction(
+  GET_INITIAL_SPRINT_DATA,
+  (sprint: Sprint[]) => ({
+    payload: sprint,
+  })
+);
+
+export const completeSprintTaskAction = createAction(
+  COMPLETE_SPRINT_TASK,
+  (sprint: CompleteSprintTaskPayload) => ({
+    payload: sprint,
+  })
+);
+
+export const putUpdatedSprintDataAction = createAction(
+  PUT_UPDATED_SPRINT_DATA,
+  (sprint: Sprint[]) => ({
+    payload: sprint,
+  })
+);
 
 /**
  * Most of the Sprint business logic is here - including calculating an updated sprint, when an achievement has been completed.
@@ -253,15 +291,23 @@ const initialState = [
   },
 ];
 
-function sprint(state = [] as Sprint[], action: AnyAction) {
-  switch (action.type) {
-    case GET_ACTIVE_SPRINT_DATA:
-      state = action.payload;
-      return state;
-    case GET_INITIAL_SPRINT_DATA:
-      state = action.payload;
-      return state;
-    case COMPLETE_SPRINT_TASK:
+const sprintReducer = createReducer<Sprint[]>([], (builder) => {
+  builder
+    .addCase(
+      getActiveSprintDataAction,
+      (state, action: PayloadAction<Sprint[]>) => {
+        state = action.payload;
+        return state;
+      }
+    )
+    .addCase(
+      getInitialSprintDataAction,
+      (state, action: PayloadAction<Sprint[]>) => {
+        state = action.payload;
+        return state;
+      }
+    )
+    .addCase(completeSprintTaskAction, (state, action) => {
       let newTeams = state[action.payload.activeSprintIndex].teams.slice();
 
       // marking task as complete
@@ -313,55 +359,16 @@ function sprint(state = [] as Sprint[], action: AnyAction) {
       let newSprints = state.slice();
       newSprints[action.payload.activeSprintIndex].teams = newTeams;
 
-      return [...newSprints];
-    case PLANNING_FORMS:
-      let newFormsState = state[action.payload.activeSprintIndex].teams.slice();
-      newFormsState[action.payload.teamIndex].planning[
-        action.payload.planningIndex
-      ].content = action.payload.content;
-      let newForms = state.slice();
-      newForms[action.payload.activeSprintIndex].teams = newFormsState;
-      return [...newForms];
-    case PUT_UPDATED_SPRINT_DATA:
-      state = action.payload;
-      return state;
-    default:
-      return state;
-  }
-}
+      state = [...newSprints];
+    })
 
-interface UpdatePlanningFormsPayload {
-  activeSprintIndex: number;
-  teamIndex: number;
-  planningIndex: number;
-  content: string;
-}
+    .addCase(
+      putUpdatedSprintDataAction,
+      (state, action: PayloadAction<Sprint[]>) => {
+        state = action.payload;
+        return state;
+      }
+    );
+});
 
-interface CompleteSprintTaskPayload {
-  activeSprintIndex: number;
-  index: number;
-  day: number;
-  key: string;
-}
-
-export function updatePlanningForms(payload: UpdatePlanningFormsPayload) {
-  return { type: PLANNING_FORMS, payload };
-}
-
-export function getActiveSprintData(payload: Sprint[]) {
-  return { type: GET_ACTIVE_SPRINT_DATA, payload };
-}
-
-export function getInitialSprintData(payload: Sprint[]) {
-  return { type: GET_INITIAL_SPRINT_DATA, payload };
-}
-
-export function completeSprintTask(payload: CompleteSprintTaskPayload) {
-  return { type: COMPLETE_SPRINT_TASK, payload };
-}
-
-export function putUpdatedSprintData(payload: Sprint[]) {
-  return { type: PUT_UPDATED_SPRINT_DATA, payload };
-}
-
-export default sprint;
+export default sprintReducer;

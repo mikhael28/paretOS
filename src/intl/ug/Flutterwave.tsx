@@ -1,6 +1,6 @@
 import React from "react";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
-import { User } from "../../types";
+import { User } from "../../types/ProfileTypes";
 
 /**
  * This is an MVP, of a component to accept payments in Ugandan UGX - to replace the Stripe payment component in the paywall for the UG market.
@@ -8,7 +8,7 @@ import { User } from "../../types";
  * @returns
  */
 
-export default function Flutterwave(props: { user: User}) {
+export default function Flutterwave(props: { user: User }) {
   const config = {
     public_key: import.meta.env.VITE_FLUTTERWAVE_PK,
     tx_ref: Date.now().toString(),
@@ -40,7 +40,7 @@ export default function Flutterwave(props: { user: User}) {
               console.log(response);
               closePaymentModal(); // this will close the modal programmatically
             },
-            onClose: () => {},
+            onClose: () => { },
           });
         }}
       >

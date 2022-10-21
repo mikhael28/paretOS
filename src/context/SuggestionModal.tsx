@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -10,8 +10,8 @@ import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
-import { errorToast, successToast } from "../libs/toasts";
-import { generateEmail } from "../libs/errorEmail";
+import { ToastMsgContext } from "../state/ToastContext";;
+import { generateEmail } from "../utils/generateErrorEmail";
 
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
@@ -30,11 +30,11 @@ export default function SuggestionModal({
     imgUrl: "",
     type: "",
   });
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+
 
   useEffect(() => {
-    console.log('Checking');
     if (activeItem !== undefined) {
-
       setFormData(activeItem);
     }
   }, [activeItem]);
@@ -44,7 +44,7 @@ export default function SuggestionModal({
   const handleChange = (event: any) => {
     console.log(event.target.id);
     console.log(event.target.value);
-    
+
     setFormData({
       ...formData,
       [event.target.id]: event.target.value,
@@ -126,9 +126,9 @@ export default function SuggestionModal({
       setSubmissionLoading(false);
       setFormData({ title: "", summary: "", url: "", imgUrl: "", type: "" });
       handleClose();
-      successToast("Thank you for your suggestion!");
+      handleShowSuccess("Thank you for your suggestion!");
     } catch (e) {
-      errorToast(e);
+      handleShowError(e as Error);
       setSubmissionLoading(false);
     }
   };
@@ -137,8 +137,6 @@ export default function SuggestionModal({
     const result = str.replace(/([A-Z])/g, " $1");
     return result.charAt(0).toUpperCase() + result.slice(1);
   };
-
-  // console.log('No way: ', activeItem);
 
   return (
     <div>
@@ -154,7 +152,7 @@ export default function SuggestionModal({
           <FormControl value={formData.title} onChange={handleChange} />
         </FormGroup>
         <FormGroup controlId="summary" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>summary</ControlLabel>
+          <ControlLabel style={{ fontSize: "14px" }}>Summary</ControlLabel>
           <FormControl value={formData.summary} onChange={handleChange} />
         </FormGroup>
         <FormGroup controlId="url" bsSize="large">

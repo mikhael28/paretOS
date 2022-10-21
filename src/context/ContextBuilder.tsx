@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab } from "@mui/material";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import classNames from "classnames";
-import { LibraryEntry } from "./ContextTypes";
+import { LibraryEntry } from "../types/ContextTypes";
 import ContextObject from "./ContextObject";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
@@ -19,10 +19,17 @@ const builder = imageUrlBuilder(sanity);
  */
 
 function ContextBuilder(props: any) {
-  // console.log(props);
+  console.log({ props });
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [value, setValue] = useState(0);
-  const history = useHistory();
+  const [value, setValue] = useState<number>(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let initialTab = localStorage.getItem("contextTab");
+    if (initialTab !== null) {
+      setValue(parseInt(initialTab, 10));
+    }
+  }, []);
 
   const renderTopicsList = (topics: LibraryEntry[]) => {
     const newCardClass = classNames("context-card", "second-step-library");
@@ -37,7 +44,8 @@ function ContextBuilder(props: any) {
             return (
               <div
                 className={newCardClass}
-                onClick={() => history.push(`/${link}/${topic.slug.current}`)}
+                key={topic._id}
+                onClick={() => navigate(`/${link}/${topic.slug.current}`)}
               >
                 <ContextObject item={topic} img={img} />
               </div>
@@ -84,7 +92,10 @@ function ContextBuilder(props: any) {
       >
         <Tabs
           value={value}
-          onChange={(_, newValue) => setValue(newValue)}
+          onChange={(_, newValue) => {
+            localStorage.setItem("contextTab", newValue.toString());
+            setValue(newValue);
+          }}
           aria-label="Select the topics you wish to see in this group of tab"
         >
           <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />

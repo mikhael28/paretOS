@@ -1,9 +1,20 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import resolve from "@rollup/plugin-node-resolve";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  resolve: {
+    preferBuiltins: false,
+    browser: true,
+    alias: { './runtimeConfig': './runtimeConfig.browser' }
+  },
+  test: {
+    testTimeout: 60_000,
+    hookTimeout: 60_000,
+    // environment: 'jsdom'
+  },
   build: {
     rollupOptions: {
       external: [/^node:.*/],
@@ -17,6 +28,7 @@ export default defineConfig({
       ...resolve({
         preferBuiltins: false,
         browser: true,
+        alias: { './runtimeConfig': './runtimeConfig.browser' }
       }),
       enforce: "pre",
       apply: "build",

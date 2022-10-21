@@ -1,9 +1,11 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, useContext } from "react";
 import { useSelector } from "react-redux";
 import { I18n } from "@aws-amplify/core";
 import classNames from "classnames";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { ReduxRootState } from "../state";
+import { selectSortedSprints } from "../selectors/select-sorted-sprints";
+import { useNavigate } from "react-router-dom";
+import { ToastMsgContext } from "../state/ToastContext";
 
 /**
  * The Arena Dashboard shows you the sprints that you currently have, and let's you enter them by clicking/tapping.
@@ -16,13 +18,16 @@ interface SprintProps extends ComponentPropsWithoutRef<any> {
 
 function Sprints(props: SprintProps) {
   let newClassName = classNames("exp-card");
-  const sprints = useSelector((state: ReduxRootState) => state.sprint);
+  const sprints = useSelector(selectSortedSprints);
+  const navigate = useNavigate();
+  const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+
   return (
     <div style={{ marginTop: 20 }}>
       {props.reviewMode === true ? null : (
         <div className="flex-down">
           <div>
-            {sprints.length === 0 ? (
+            {sprints?.length === 0 ? (
               <div>
                 <p>
                   Welcome - this is a competitive, single or multi-player
@@ -40,51 +45,64 @@ function Sprints(props: SprintProps) {
       )}
       <div className={classNames("sprints-top")}>
         <div className={classNames("sprints-container", "sprints-scroller")}>
-          {sprints.length > 0 ? (
+          {sprints?.length > 0 ? (
             <div className="exp-cards">
-              {sprints
-                .sort((a, b) => (new Date(b.startDate)).getTime() - (new Date(a.startDate)).getTime())
-                .map((sprint, index) => (
-                  <div
-                    className={newClassName}
-                    key={sprint.id}
-                    style={{ cursor: "pointer", textAlign: "center" }}
-                    onClick={() =>
-                      props.history.push(`/arena/sprints/${sprint.id}`)
-                    }
-                  >
-                    <div>
-                      <h3 style={{ fontWeight: "bold" }}>
-                        {index === 0
-                          ? "Most Recent Sprint"
-                          : `Sprint ${sprints.length - index}`}
-                      </h3>
+              {sprints.map((sprint, index) => (
+                <div
+                  className={newClassName}
+                  key={sprint.id}
+                  style={{ cursor: "pointer", textAlign: "center" }}
+                >
+                  <div onClick={() => navigate(`/arena/sprints/${sprint.id}`)}>
+                    <h3 style={{ fontWeight: "bold" }}>
+                      {index === 0
+                        ? "Most Recent Sprint"
+                        : `Sprint ${sprints.length - index}`}
+                    </h3>
 
-                      <p>
-                        {I18n.get("starts")}:{" "}
-                        {new Date(sprint.startDate).getUTCMonth() + 1}/
-                        {new Date(sprint.startDate).getUTCDate()}/
-                        {new Date(sprint.startDate).getUTCFullYear()}
-                        <br />
-                        {I18n.get("finishes")}:{" "}
-                        {new Date(sprint.endDate).getUTCMonth() + 1}/
-                        {new Date(sprint.endDate).getUTCDate()}/
-                        {new Date(sprint.endDate).getUTCFullYear()}
-                      </p>
-                    </div>
-
-                    {props.user.admin === true ? (
-                      <button
-                        onClick={async () => {
-                          await RestAPI.del("pareto", `/sprints/${sprint.id}`, {});
-                          await props.fetchMenteeSprints(props.user.id);
-                        }}
-                      >
-                        {I18n.get("delete")}
-                      </button>
-                    ) : null}
+                    <p>
+                      {I18n.get("starts")}:{" "}
+                      {new Date(sprint.startDate).getUTCMonth() + 1}/
+                      {new Date(sprint.startDate).getUTCDate()}/
+                      {new Date(sprint.startDate).getUTCFullYear()}
+                      <br />
+                      {I18n.get("finishes")}:{" "}
+                      {new Date(sprint.endDate).getUTCMonth() + 1}/
+                      {new Date(sprint.endDate).getUTCDate()}/
+                      {new Date(sprint.endDate).getUTCFullYear()}
+                    </p>
                   </div>
-                ))}
+
+                  {props.user.admin === true || sprint.teams.length === 1 ? (
+                    <button
+                      style={{
+                        display: "flex",
+                        justifyContent: "end",
+                        backgroundColor: "black",
+                      }}
+                      onClick={async () => {
+                        try {
+                          let response = await RestAPI.del(
+                            "pareto",
+                            `/sprints/${sprint.id}`,
+                            {}
+                          );
+                          if (response) {
+                            handleShowSuccess("Successfully deleted.");
+                            window.location.reload();
+                          }
+                        } catch (e) {
+                          handleShowError(e as Error);
+                        }
+                        // TODO this is broken, fix this at some point
+                        // await props.fetchMenteeSprints(props.user.id);
+                      }}
+                    >
+                      {I18n.get("delete")}
+                    </button>
+                  ) : null}
+                </div>
+              ))}
             </div>
           ) : null}
         </div>

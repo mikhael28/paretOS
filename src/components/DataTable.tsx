@@ -214,9 +214,8 @@ function DataTable({
               .slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage)
               .map((row, index) => (
                 <TableRow
-                  className={`${dataTableClasses.row} ${
-                    getRowClassName && getRowClassName(row)
-                  }`}
+                  className={`${dataTableClasses.row} ${getRowClassName && getRowClassName(row)
+                    }`}
                   hover
                   onClick={(e) => onCellClick(row.id, e)}
                   role="row"

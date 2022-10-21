@@ -1,14 +1,15 @@
 import { useTheme } from "@mui/material";
-import { strings } from "../libs/strings";
+import strings from "../intl/localization";
 import Modal from "../components/Modal";
 import LoaderButton from "../components/LoaderButton";
+import { SyntheticEvent } from "react";
 
 interface TermsOfServiceProps {
   isLoading: boolean;
   open: boolean;
-  onClickAgree: () => {};
-  onClose: () => {};
-  childProps: any;
+  onClickAgree: (event: SyntheticEvent) => Promise<void>;
+  onClose: () => void;
+  childProps?: any;
 }
 
 export default function TermsOfService({
@@ -35,7 +36,7 @@ export default function TermsOfService({
           <div>
             <LoaderButton
               style={{ marginLeft: "auto" }}
-              block
+              block="true"
               size="small"
               isLoading={isLoading}
               onClick={onClickAgree}

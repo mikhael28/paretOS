@@ -38,11 +38,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface LoginProps {
-  initialFetch: (id: string) => {};
-  setLoading: (b: boolean) => {};
-  userHasAuthenticated: (b: boolean) => {};
+  initialFetch: (id: string) => void;
+  setLoading: (b: boolean) => void;
+  userHasAuthenticated: (b: boolean) => void;
 }
-const Login = ({ initialFetch, setLoading, userHasAuthenticated }: LoginProps) => {
+const Login = ({
+  initialFetch,
+  setLoading,
+  userHasAuthenticated,
+}: LoginProps) => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
@@ -69,9 +73,9 @@ const Login = ({ initialFetch, setLoading, userHasAuthenticated }: LoginProps) =
     }
   };
 
-  return (
-    <div className="Form">
-      <div className="flex-center">
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
         <img
           src={logo}
           alt="Pareto"
@@ -83,7 +87,13 @@ const Login = ({ initialFetch, setLoading, userHasAuthenticated }: LoginProps) =
               theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
           }}
         />
-      </div>
+      </Link>
+    </div>
+  )
+
+  return (
+    <div className="Form">
+      {renderLogo()}
 
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <div>

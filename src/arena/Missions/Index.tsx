@@ -1,6 +1,6 @@
 import { I18n } from "@aws-amplify/core";
 
-import { Missions as MissionsProps } from "../types";
+import { Missions as MissionsProps } from "../../types/ArenaTypes";
 import Mission from "./Mission";
 
 /**
@@ -20,7 +20,7 @@ function Missions(props: MissionsProps) {
           ))}
         </ul>
       ) : (
-        <p>{props.emptyMisionsMessage}</p>
+        <p>{props.emptyMissionsMessage}</p>
       )}
     </section>
   );

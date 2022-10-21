@@ -1,7 +1,7 @@
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import classNames from "classnames";
 import {FaUserEdit} from "react-icons/fa";
-import {ContextObjectProps} from "./ContextTypes";
+import {ContextObjectProps} from "../types/ContextTypes";
 
 const useStyles = makeStyles({
   root: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 export default function ContextObject(props: ContextObjectProps) {
   const classes = useStyles();
-  const {item, img, openExternalModal, closeExternalModal, openForEdit} = props;
+  const { item, img, openExternalModal, closeExternalModal, openForEdit } = props;
   return (
     <>
       {item.slug ? (
@@ -39,20 +39,20 @@ export default function ContextObject(props: ContextObjectProps) {
               : null
           }
           className={classNames("flex", "block")}
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
         >
           {img !== "na" ? (
             <img
               className={classes.media}
               src={img}
               alt={item.title}
-              style={{marginRight: 10}}
+              style={{ marginRight: 10 }}
             />
           ) : null}
           <div className="flex-down">
-            <p style={{fontSize: 20}}>{item.title}</p>
+            <p style={{ fontSize: 20 }}>{item.title}</p>
             {item.summary ? (
-              <p style={{fontSize: 14}}>{item.summary}</p>
+              <p style={{ fontSize: 14 }}>{item.summary}</p>
             ) : null}
           </div>
         </div>
@@ -62,13 +62,13 @@ export default function ContextObject(props: ContextObjectProps) {
             window.location.pathname !== "/context-builder" && openForEdit ? openForEdit(item) : null;
           }}
           className={classNames("flex", "block")}
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
         >
 
           <div className="flex-down">
-            <p style={{fontSize: 20}}><FaUserEdit />{item.title}</p>
+            <p style={{ fontSize: 20 }}><FaUserEdit />{item.title}</p>
             {item.summary ? (
-              <p style={{fontSize: 14}}>{item.summary}</p>
+              <p style={{ fontSize: 14 }}>{item.summary}</p>
             ) : null}
           </div>
         </div>

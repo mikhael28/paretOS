@@ -1,7 +1,7 @@
 import { I18n } from "@aws-amplify/core";
 
 import StatsBlock from "../components/StatsBlock";
-import { User } from "../types";
+import { User } from "../types/ProfileTypes";
 
 interface ArenaStatsProps {
   activePerson: User;
@@ -52,7 +52,7 @@ function ArenaStats({ activePerson, displayDay }: ArenaStatsProps) {
           //   index
           // ].percentage.toFixed(0)}%`}
 
-          score={`${parseInt(activePerson.percentage, 10).toFixed(0)}%`}
+          score={`${parseInt(activePerson.percentage.toString(), 10).toFixed(0)}%`}
         />
       </div>
     </section>

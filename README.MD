@@ -30,7 +30,7 @@ A crowd-sourced & curated collection of resources that help decrease the barrier
 
 ## We are live folks
 
-Signup is open at https://paret0.com - for those making an account, you may notice that the 'Training' that focuses on Full-Stack JavaScript Development is hiding behind a paywall. This is what I call the 'Paywall Puzzle' - based entirely on the code in this front-end repository, after forking it, you can modify the code and freely gain access to all the educational curriculum without paying. It requires changing a couple of values, commenting out a couple of functions while executing something. Believe it or not, this is a generous hint. If you can figure out how to do that - congratulations, you probably don't need to buy access to the curriculum! If you can't figure it out, you should seriously consider investing in your education. Included in the $89 is the Full-Stack Starter Kit, a set of laminated paper cheat-sheets, stikers, workbooks and playing cards that help teach you the 20% of JavaScript you need to know to get 80% of the actionable information needed to start writing code. In addition to the online curriculum. If you cannot make that payment (for example, living in Uganda and don't have VISA/Mastercard payment option) - open an Issue, and explain your situation! We will find a creative solution. 
+Signup is open at https://paret0.com - for those making an account, you may notice that the 'Training' that focuses on Full-Stack JavaScript Development is hiding behind a paywall. This is what I call the 'Paywall Puzzle' - based entirely on the code in this front-end repository, after forking it, you can modify the code and freely gain access to all the educational curriculum without paying. It requires changing a couple of values, commenting out a couple of functions while executing something. Believe it or not, this is a generous hint. If you can figure out how to do that - congratulations, you probably don't need to buy access to the curriculum! If you can't figure it out, you should seriously consider investing in your education. Included in the $89 is the Full-Stack Starter Kit, a set of laminated paper cheat-sheets, stikers, workbooks and playing cards that help teach you the 20% of JavaScript you need to know to get 80% of the actionable information needed to start writing code. In addition to the online curriculum. If you cannot make that payment (for example, living in Uganda and don't have VISA/Mastercard payment option) - open an Issue, and explain your situation! We will find a creative solution.
 
 It's also a great way of supporting this project, and you get real value that you can either use yourself to prepare for technical interviewing, or donate to a friend/colleague/connection who needs it.
 
@@ -39,15 +39,25 @@ It's also a great way of supporting this project, and you get real value that yo
 Want to contribute? Great! We have quite some issues in the repository, and I have tried to mark the easier ones as 'good first issue'. There are also issues marked as 'ownership' - these issues cover an item on our product backlog, a discrete, end to end piece of functionality that requires polish and a significant amount of work to implement. Completing one of these ownership tasks qualifies you to become a maintainer of the project, pending your availability and desire to do so. You will be a member of our Open-Source Hall of Fame as well!
 
 To fix a bug or contribute a new feature, follow these steps:
+
 - Fork the repo
 - Install the pnpm package manager `brew install pnpm` or `npm i -g pnpm`
+<<<<<<< HEAD
+  - a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
+  - 1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
+  - 2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
+  - 3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support. Lock files will be removed in a separate PR.
+=======
     a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
         1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
         2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
-        3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support. Lock files will be removed in a separate PR.
+        3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support.
+>>>>>>> 05e1ca043acb9ac98133a130db5fb730f81c99ab
 - Run `pnpm install` to install the dependencies, once you have `cd`'d into the directory
+    a. There is a known issue where Puppeteer's install script may hang indefinitely. In this case, first try updating to Node 16 and running again.
+    b. If this does not work, this will sound weird, but try using a different wireless connection. Yours may be too slow, or have some weird configuration settings. `https://github.com/puppeteer/puppeteer/issues/5611`
 - Run `pnpm start` to start the dev server
-    a. `pnpm add <package_name>` to add a new npm dependency to the project.
+  a. `pnpm add <package_name>` to add a new npm dependency to the project.
 - You will get an es-lint error about some config - go to `package.json`, and press Command+S - the error should go away.
 - Create a new branch (`git checkout -b improve-feature`)
 - Make the appropriate changes in the files
@@ -55,6 +65,15 @@ To fix a bug or contribute a new feature, follow these steps:
 - Commit your changes (`git commit -m 'Improve feature'`)
 - Push to the branch
 - Send a PR, and become a legend
+
+### Notes for Ubuntu
+
+- At this time, developers using Ubuntu 22 with Node 16 have encountered an issue when installing dependencies. Please attempt the following and if assistance is needed, please feel free to reach out.
+
+```bash
+pnpm install
+node node_modules/puppeteer/install.js
+```
 
 ### Bug / Feature Request
 
@@ -67,16 +86,16 @@ If you find a bug, have a great idea or just a question - please open an issue [
 - [AWS Lambda](https://aws.amazon.com/lambda/) - Serverless first
 - MongoDB + other services.
 
-## Admin
-
 - There is a separate, not quite fully featured admin platform.
 - We can create mentees, mentors, match them, and a host of other options.
 - Currently hidden from view, along with the APIs, to prevent foul play. This open-source repository focuses strictly on the front-end - trusted contributors will be invited to collaborate on the back-end.
 
-## Intellectual Property Notice
-- This CODE is open-source. 
-- The intellectual property in regards to the branding of the Pareto logos, the educational curriculum inside the Full-Stack Starter Kit, and the knowledge base belongs to Michael Litchev. 
+## Admin
 
+## Intellectual Property Notice
+
+- This CODE is open-source.
+- The intellectual property in regards to the branding of the Pareto logos, the educational curriculum inside the Full-Stack Starter Kit, and the knowledge base belongs to Michael Litchev.
 
 ## Team
 
