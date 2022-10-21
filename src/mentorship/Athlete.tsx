@@ -28,7 +28,7 @@ function Athlete(props: AthleteProps) {
     >
       <img
         src={
-          props.athlete.picture ||
+
           "https://wallsheaven.co.uk/photos/A065336811/220/user-account-profile-circle-flat-icon-for-apps-and-websites-.webp"
         }
         alt="Athletes profile pic"

@@ -255,7 +255,6 @@ const initialState = [
     // meaning is it a draft, or what
     started: false,
     events: [],
-    studySessions: [],
     // the above are relevant for mentorship sprints
     type: "String",
     // type: mentorship, match, private match, league

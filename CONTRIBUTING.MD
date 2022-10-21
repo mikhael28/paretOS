@@ -32,7 +32,7 @@ The following is a set of guidelines for contributing to ParetOS, which is hoste
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [ParetOS Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [michael@pareto.education](mailto:michael@pareto.education).
+This project and everyone participating in it is governed by the [ParetOS Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [mikhael@hey.com](mailto:mikhael@hey.com).
 
 ## I don't want to read this whole thing I just have a question!!!
 

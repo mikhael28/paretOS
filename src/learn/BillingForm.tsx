@@ -2,7 +2,11 @@ import { ComponentProps, ComponentType, FormEvent, useState } from "react";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import FormControl from "react-bootstrap/lib/FormControl";
-import { CardElement, injectStripe } from "react-stripe-elements";
+// import {
+//   CardElement,
+//   injectStripe,
+//   StripeProvider,
+// } from "react-stripe-elements";
 import LoaderButton from "../components/LoaderButton";
 
 /**
@@ -117,16 +121,6 @@ const BillingForm = ({ loading, onSubmit, stripe }: BillingFormProps) => {
         />
       </FormGroup>
       <ControlLabel>Credit Card Info</ControlLabel>
-      <CardElement
-        className="card-field"
-        onChange={handleCardFieldChange}
-        style={{
-          base: {
-            fontSize: "18px",
-            fontFamily: '"Futura Std Book", sans-serif',
-          },
-        }}
-      />
       <LoaderButton
         block
         size="large"
@@ -140,6 +134,4 @@ const BillingForm = ({ loading, onSubmit, stripe }: BillingFormProps) => {
   );
 };
 
-export default injectStripe(
-  BillingForm as ComponentType<BillingFormProps & any>
-);
+export default BillingForm as ComponentType<BillingFormProps & any>;
