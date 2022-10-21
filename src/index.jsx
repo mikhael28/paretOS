@@ -2,11 +2,10 @@ import { createRoot } from "react-dom/client";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { Provider, configureStore } from "react-redux";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import "@stripe/stripe-js";
 import App from "./App";
 import { CustomRouter } from "./utils/CustomBrowswerRouter";
 import customHistory from "./utils/customHistory";
@@ -34,14 +33,15 @@ if (import.meta.env.NODE_ENV === "production") {
     dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
+    // 1.0 captures 100% of transactions for performance monitoring.
     tracesSampleRate: 1.0,
   });
 }
 
-const store = createStore(reducer);
+// eslint-disable-next-line import/prefer-default-export
+export const store = configureStore({
+  reducer,
+});
 
 Amplify.configure(awsmobile);
 RestAPI.configure({
