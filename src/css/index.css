@@ -310,9 +310,6 @@ input[type="file"] {
   top: 25%;
   margin-left: 50%;
   transform: translate(-50%, -50%)
-    /* left: 42%; */
-    /* right: 50%; */
-    /* margin-left: -200px; */
 }
 
 .btn:hover {
