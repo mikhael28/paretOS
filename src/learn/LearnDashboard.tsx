@@ -56,7 +56,7 @@ function LearnDashboard(props: any) {
                 key={coach._id}
               >
                 <img
-                  src={coach.mentor.picture}
+                  src={""}
                   height="50"
                   width="50"
                   alt="Profile"

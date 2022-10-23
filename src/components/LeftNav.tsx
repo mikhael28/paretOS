@@ -148,15 +148,15 @@ function LeftNav(props: LeftNavProps) {
   const mentorshipsMenu: LeftNavSection | null =
     user.instructor === true && athletes.length > 0
       ? {
-          heading: { path: "/mentorship", label: I18n.get("mentorship") },
-          subHeadings: athletes.map((relationship) => ({
-            path: `/mentorship/${relationship.id}`,
-            label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-            Icon: (
-              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
-            ),
-          })),
-        }
+        heading: { path: "/mentorship", label: I18n.get("mentorship") },
+        subHeadings: athletes.map((relationship) => ({
+          path: `/mentorship/${relationship.id}`,
+          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+          Icon: (
+            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
+          ),
+        })),
+      }
       : null;
 
   const trainingMenu: LeftNavSection = {
@@ -233,7 +233,7 @@ function LeftNav(props: LeftNavProps) {
           <Avatar
             sx={{ width: 24, height: 24 }}
             src={
-              user.picture ||
+
               "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             }
           />

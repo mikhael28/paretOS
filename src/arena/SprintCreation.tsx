@@ -200,7 +200,6 @@ function SprintCreation({ user, connectSocket }: SprintCreationProps) {
       startDate: startDate,
       endDate: new Date(startDate.getTime() + 432000000),
       events: [],
-      studySessions: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
       started: true,

@@ -63,10 +63,7 @@ export interface User extends MinimalUser {
 
   learningPurchase: boolean;
 
-  // @TODO deprecate these three? It's meant to be 'lifetime' cp, but it's not used right now
-  completionPercentage: number;
-  completionAttempts: number;
-  completions: number;
+  cp: number;
 
   createdAt: string;
   __v: number;
