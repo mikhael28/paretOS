@@ -2,31 +2,25 @@
 
 The ParetOS is a browser-based, high-level operating system designed to maximize human potential. It is designed to give you the 20% of software you need on a day-to-day basis that gives you 80% of the benefits modern tech has to offer.
 
-Live at [https://paret0.com](https://paret-os.vercel.app/)
+Live at [https://paret0.com](https://paret0.com)
 
 ## The Arena
 
-A multiplayer, competitive habit tracking competition where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play.
+A multiplayer, competitive habit tracking competition where you and your friends can see who has the best work ethic. Or who spends the most time playing videogames. Or who makes the most outbound sales call in your company. You can create your own template, and invite friends to play and see your friends progress in real time.
 
-![The Pareto Arena](/screenshots/new_sprint.png "The Pareto Arena")
+![The Pareto Arena](/screenshots/sprint.png "The Pareto Arena")
 
 ## Pareto Learning
 
 Focus on learning the 20% of a skill that gives you 80% of the value. In the ParetOS, we start with offering Full-Stack JavaScript Development as a proof of concept for mentorship-guided, self-study learning through building. Included is a fully featured curriculum for you to start from the basics of creating a GitHub account, through building your first project and tackling technical interviews.
 
-![Learn Full-Stack JS](/screenshots/new_learning.png "Pareto Learning - JavaScript")
-
-## Mentorship
-
-More effective than almost anything towards helping people thrive in life is mentorship. We have built-in support, though limited, to allow members to become mentors to other Paretoans. They can review their stats in the Arena, and leave comments/feedback/approval for the curriculum they submit through the Learning modules.
-
-![Mentorship](/screenshots/mentorship.png "Mentorship Built-In")
+![Learn Full-Stack JS](/screenshots/learning.png "Pareto Learning - JavaScript")
 
 ## Library of Context
 
 A crowd-sourced & curated collection of resources that help decrease the barriers to success in the tech industry. Discover job boards you didn't know about, understand the players and heavy hitters in your local area & read curated tutorials, articles and resources designed to help you learn full-stack development in an optimized way. We encourage people to introduce themselves in our Discussions thread, so that we can add new regions, cities and countries to our Library for our community to contribute towards.
 
-![Library of Context](/screenshots/new_context.png "The Library of Context")
+![Library of Context](/screenshots/context.png "The Library of Context")
 
 ## We are live folks
 
@@ -42,17 +36,10 @@ To fix a bug or contribute a new feature, follow these steps:
 
 - Fork the repo
 - Install the pnpm package manager `brew install pnpm` or `npm i -g pnpm`
-<<<<<<< HEAD
   - a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
   - 1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
   - 2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
   - 3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support. Lock files will be removed in a separate PR.
-=======
-    a. Why pnpm? It uses an 'offline caching' approach, where you keep all of your download dependencies in an offline repository, and automatically put them into other projects that need to install them. This way, we are limiting the amount of hard drive space being used. This creates two major benefits.
-        1. We can theoretically run `pnpm install` when troubleshooting while fully offline.
-        2. When reviewing forks of ParetOS, we do not need to redownload 150mb of node_modules every time. This is beneficial for some of our international contributors, who pay for data by the GB. If they integrate pnpm into their dev workflow, it will save them a lot of space.
-        3. For the record, `yarn install` and `npm install` still work for now (I think). However, `pnpm` is the package manager that will have first class support.
->>>>>>> 05e1ca043acb9ac98133a130db5fb730f81c99ab
 - Run `pnpm install` to install the dependencies, once you have `cd`'d into the directory
     a. There is a known issue where Puppeteer's install script may hang indefinitely. In this case, first try updating to Node 16 and running again.
     b. If this does not work, this will sound weird, but try using a different wireless connection. Yours may be too slow, or have some weird configuration settings. `https://github.com/puppeteer/puppeteer/issues/5611`

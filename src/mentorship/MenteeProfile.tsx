@@ -14,7 +14,7 @@ import { User } from "../types/ProfileTypes";
  * This is the profile component, that is seen by the coaches of their students.
  */
 
-function Profile() {
+function Profile(props: any) {
   const [profile, setProfile] = useState({} as User);
   const [loading, setLoading] = useState(true);
   const [experiences, setExperiences] = useState([] as MongoExperience[]);
@@ -22,29 +22,32 @@ function Profile() {
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   useEffect(() => {
-    setLoading(true);
+    console.log('HELLO');
+    console.log(window.location.pathname.split('/'));
     let userId = window.location.pathname.split("/");
     let userStrings = userId[2].split("_");
-    if (userStrings.length === 1) {
-      getUser(userId[2]);
-    } else if (userStrings.length > 1) {
-      getUser(userStrings[1]);
-    }
-  }, [window.location.pathname]);
+    console.log(userStrings);
+    getUser(userStrings[0]);
+    
+  }, []);
 
   const getUser = async (id: string) => {
     let user = await RestAPI.get("pareto", `/users/${id}`, {});
     if (user.length > 0) {
+      
+      let experiences = await getExperienceByUser(user[0].id);
+      let sprints = await getSprintsByUser(user[0].id);
       setProfile(user[0]);
+      setExperiences(experiences);
+      setSprints(sprints);
+      setLoading(false);
     }
-    await getExperienceByUser(user[0].id);
-    await getSprintsByUser(user[0].id);
   };
 
   const getExperienceByUser = async (id: string) => {
     try {
       let experiences = await RestAPI.get("pareto", `/experience/user/${id}`, {});
-      setExperiences(experiences);
+      return experiences;
     } catch (e) {
       handleShowError(e as Error);
     }
@@ -53,8 +56,7 @@ function Profile() {
   const getSprintsByUser = async (id: string) => {
     try {
       let sprints = await RestAPI.get("pareto", `/sprints/mentee/${id}`, {});
-      setSprints(sprints);
-      setLoading(false);
+      return sprints;
     } catch (e) {
       handleShowError(e as Error);
     }

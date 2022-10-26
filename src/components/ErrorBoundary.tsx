@@ -1,11 +1,17 @@
 import React, { Component, ErrorInfo } from "react";
-import withRouter from "../utils/withRouter";
+
 class ErrorBoundary extends Component<any, any> {
-  public state: any = {
-    hasError: false,
-    errorText: "",
-    stackTrace: "",
-  };
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      hasError: false,
+      errorText: "",
+      stackTrace: "",
+    }
+
+  }
+  
 
   private unregisterListener: any;
 
@@ -29,6 +35,7 @@ class ErrorBoundary extends Component<any, any> {
 
   public static getDerivedStateFromError(_: Error): any {
     // Update state so the next render will show the fallback UI.
+    console.log('Get derived state from : ', _)
     if (window.location.hostname !== "paret0") {
       return { hasError: true, errorText: _.message, stackTrace: "" };
     } else {
@@ -38,6 +45,10 @@ class ErrorBoundary extends Component<any, any> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // isolate the stack trace
+    console.log('did catch')
+    console.log(this.props);
+    console.log(error);
+    console.log(errorInfo);
     this.setState({ stackTrace: errorInfo.componentStack.toString() });
   }
 

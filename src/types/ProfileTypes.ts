@@ -23,6 +23,7 @@ export interface MinimalUser {
   phone: string;
   github: string;
   id: any;
+  modules: any[];
   score: number;
   percentage: string | number;
   planning: PlanningField[];
@@ -40,9 +41,7 @@ export interface User extends MinimalUser {
   profileImg?: string;
   defaultLanguage?: string;
   instructor: boolean;
-  apprenticeshipId?: string;
-  productId?: string;
-  masteryId: string;
+  modules: [];
   picture?: string;
   mentors?: Array<User>;
   projects?: Array<Project>;
