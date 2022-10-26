@@ -47,7 +47,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.38.0",
     "react-icons": "4.6.0",
-    "react-is": ">=16.8.0 <17.0.0 || >=17.0.0-0 <18.0.0",
+    "react-is": ">=16.8.0 <17.0.0 || >=17.0.0-0 <18.0.0 || ^18.2.0",
     "react-native": "0.70.3",
     "react-redux": "8.0.4",
     "react-router-dom": "6.4.2",
