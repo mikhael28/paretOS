@@ -19,7 +19,8 @@ interface OrderProps {
   navigate: (arg0: string) => void;
 }
 
-const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
+const Order = ({ user, initialFetch, stripeKey, ...props }: OrderProps) => {
+  console.log(props);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -46,7 +47,6 @@ const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
     console.log(updatedUser);
 
     let apprenticeParams = {
-      expId: user.apprenticeshipId ?? "",
       userId: user.id,
       type: "Apprenticeship",
       title: "Dev Onboarding",
@@ -55,7 +55,6 @@ const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
     const createApprenticeship = await createExperience(apprenticeParams);
     console.log("Created Apprenticeship: ", createApprenticeship);
     let productParams = {
-      expId: user.productId ?? "",
       userId: user.id,
       type: "Product",
       title: "Capstone Project",
@@ -65,7 +64,6 @@ const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
     const createProduct = await createExperience(productParams);
     console.log("Created Product: ", createProduct);
     let interviewingParams = {
-      expId: user.masteryId,
       userId: user.id,
       type: "Interviewing",
       title: "Interviewing",
@@ -75,24 +73,6 @@ const Order = ({ user, initialFetch, stripeKey }: OrderProps) => {
     const createInterviewing = await createExperience(interviewingParams);
     console.log(createInterviewing);
 
-    // const defaultMentor = await API.post('pareto', '/relationship', {
-    // 	body: {
-    // 		id: `${this.state.admin.id}_${newUser.id}`,
-    // 		mentee: newUser,
-    // 		mentor: this.state.admin,
-    // 		tasks: [],
-    // 		coachId: this.state.admin.id,
-    // 		athleteId: newUser.id,
-    // 		resources: [],
-    // 		events: [],
-    // 		reminders: [],
-    // 		accepted: true,
-    // 		completed: false,
-    // 		createdAt: new Date()
-    // 	}
-    // });
-
-    // console.log('New mentor: ', defaultMentor);
   };
 
   const handleFormSubmit = async (

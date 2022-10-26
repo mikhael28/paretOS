@@ -73,7 +73,7 @@ function Sprints(props: SprintProps) {
                     </p>
                   </div>
 
-                  {props.user.admin === true || sprint.teams.length === 1 ? (
+                  {sprint.teams.length === 1 ? (
                     <button
                       style={{
                         display: "flex",
