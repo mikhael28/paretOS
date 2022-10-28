@@ -6,16 +6,18 @@ import { RestAPI } from "@aws-amplify/api-rest";
  */
 
 interface CreateExperienceParams {
-  expId?: string;
   userId: string;
   type: string;
   title: string;
   description: string;
 }
 
+// TODO need to create a 'class' generator, similar to sprint template creation.
+// ultimately, I need to replace sanity - or do i?
+
 // eslint-disable-next-line import/prefer-default-export
 export async function createExperience(params: CreateExperienceParams) {
-  const { expId, userId, type, title, description } = params;
+  const { userId, type, title, description } = params;
   let achievement = {
     completed: false,
     approved: false,
@@ -28,7 +30,6 @@ export async function createExperience(params: CreateExperienceParams) {
     prLink: "",
   };
   let body = {
-    id: expId,
     xp: 2000,
     xpEarned: 0,
     achievements: 0,

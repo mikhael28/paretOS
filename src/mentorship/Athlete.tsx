@@ -4,8 +4,9 @@
  *
  */
 
+import { useNavigate } from "react-router-dom";
+
 interface AthleteProps {
-  history: any;
   athlete: {
     picture: string;
     fName: string;
@@ -15,6 +16,8 @@ interface AthleteProps {
 }
 
 function Athlete(props: AthleteProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       className="exp-card"
@@ -24,7 +27,8 @@ function Athlete(props: AthleteProps) {
         justifyContent: "flex-start",
         alignItems: "center",
       }}
-      onClick={() => props.history.push(`/mentorship/${props.athlete.id}`)}
+      // TODO fix this
+      onClick={() => navigate(`/mentorship/${props.athlete.id}`)}
     >
       <img
         src={

@@ -276,7 +276,7 @@ function Sprint({ user, navigate }: SprintProps) {
 
             <Details
               displayDay={displayDay}
-              admin={user.admin}
+              admin={true}
               missions={sprints[SPRINT_INDEX].teams[TEAM_INDEX].missions}
               setDisplayDay={setDisplayDay}
               setStatus={setStatus}
@@ -320,4 +320,8 @@ function Sprint({ user, navigate }: SprintProps) {
   );
 }
 
+function errorToast(error: any) {
+  throw new Error("Function not implemented.");
+}
 export default Sprint;
+

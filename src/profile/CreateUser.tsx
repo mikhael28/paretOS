@@ -65,10 +65,6 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
     setLoading(true);
     const formData = getValues();
     // need to auto-generate cognito credentials for the email
-    const productId = nanoid();
-    const apprenticeshipId = nanoid();
-    const interviewingId = nanoid();
-    const beginId = nanoid();
     setIsLoading(true);
     let instructorStatus;
     if (formData.type === "mentee") {
@@ -86,28 +82,24 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
       await RestAPI.post("pareto", "/users", {
         body: {
           id: uuid,
-          type: formData.type,
           fName: formData.fName,
           lName: formData.lName,
           email: tempEmail,
           country: "",
-          mentor: "",
           mentors: [],
-          projects: [],
-          bio: "",
           summary:
             "This is the space for you to write your bio, so people can learn more about you and your interests.",
-          notes: [notepadIntro],
           city: formData.city,
-          state: formData.state,
+          notes: [],
+          groups: [],
+          connections: [],
+          modules: [],
+          permissions: [],
+          achievements: [],
           phone: "",
           github: formData.github,
           instructor: instructorStatus,
           admin: false,
-          productId: productId,
-          apprenticeshipId: apprenticeshipId,
-          beginId: beginId,
-          masteryId: interviewingId,
           xp: 0,
           learningPurchase: false,
           cp: 0,
@@ -244,7 +236,7 @@ const CreateUser = ({ setLoading, initialFetch }: CreateUserProps) => {
                         id="country"
                         label="Country"
                         defaultValue={""}
-                        {...register("state", { required: true })}
+                        {...register("country", { required: true })}
                       >
                         {countries.map((country, index) => (
                           // eslint-disable-next-line react/no-array-index-key

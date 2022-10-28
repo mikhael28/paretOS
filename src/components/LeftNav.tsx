@@ -268,18 +268,23 @@ function LeftNav(props: LeftNavProps) {
           left: 16,
         }}
       >
-        <img
-          src={white}
-          width="120"
-          style={{ opacity: 0.6 }}
-          alt="pareto logo"
-          onMouseEnter={(e) => {
-            (e.currentTarget.style.opacity as any) = 1;
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget.style.opacity as any) = 0.6;
-          }}
-        />
+        <div className="flex">
+
+          <img
+            src={white}
+            width="120"
+            style={{ opacity: 0.6 }}
+            alt="pareto logo"
+            onMouseEnter={(e) => {
+              (e.currentTarget.style.opacity as any) = 1;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget.style.opacity as any) = 0.6;
+            }}
+          />
+          {/* TODO make this dynamic based on package.json */}
+          <p>&nbsp;v0.2.0</p>
+        </div>
       </div>
     </div>
   );
