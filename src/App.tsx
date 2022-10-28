@@ -103,10 +103,8 @@ function App(props: AppProps) {
       bio: "",
       summary: "",
       city: "",
+      modules: [],
       experience: "",
-      productId: "",
-      apprenticeshipId: "",
-      masteryId: "",
       xp: 0,
       cp: 0,
       createdAt: "",
@@ -555,9 +553,8 @@ function App(props: AppProps) {
             value={{ handleShowError, handleShowSuccess }}
           >
             <Box
+              component="div"
               sx={{
-                // width: "100vw",
-                // height: "100vh",
                 bgcolor: "background.default",
                 color: "text.primary",
                 // overflow: "scroll",
@@ -613,7 +610,7 @@ function App(props: AppProps) {
                   </div>
                 </>
               ) : (
-                <Routes childProps={childProps} />
+                <Routes childProps={childProps} history={[]} />
               )}
               <Onboarding showCloseButton />
               <Dialog

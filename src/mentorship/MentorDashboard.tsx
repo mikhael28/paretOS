@@ -8,11 +8,6 @@ import { useNavigate } from "react-router-dom";
  */
 
 function MentorDashboard(props: any) {
-  // redux and dispatch replace the old connect/bind functions
-  const redux = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   return (
     <div>
       <h1>Coaching Dashboard</h1>
@@ -24,7 +19,6 @@ function MentorDashboard(props: any) {
               <Athlete
                 athlete={athlete.mentee}
                 key={athlete._id}
-                history={navigate}
               />
             ))}
           </div>

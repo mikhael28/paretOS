@@ -13,9 +13,11 @@ interface LoadingModalProps {
   navigate: typeof useNavigate;
 }
 
-function LoadingModal({ user, initialFetch }: LoadingModalProps) {
+function LoadingModal({ user, initialFetch, ...props }: LoadingModalProps) {
   const [stripeKey, setStripeKey] = useState(null);
   const navigate = useNavigate();
+
+  console.log(props);
 
   useEffect(() => {
     if (import.meta.env.NODE_ENV === "development") {
@@ -63,8 +65,10 @@ function LoadingModal({ user, initialFetch }: LoadingModalProps) {
             <Button className="btn-cancel" onClick={() => navigate("/")}>
               Cancel
             </Button>
-            <Button className="btn" onClick={() => setShowPayment(true)}>
-              Purchase
+            <Button className="btn" 
+            // onClick={() => setShowPayment(true)}
+            >
+              Purchase (Locked Temporarily)
             </Button>
           </div>
         </DialogContent>
@@ -76,6 +80,7 @@ function LoadingModal({ user, initialFetch }: LoadingModalProps) {
               user={user}
               initialFetch={initialFetch}
               stripeKey={stripeKey || ""}
+
             />
           </div>
         </DialogContent>

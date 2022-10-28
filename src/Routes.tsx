@@ -9,6 +9,7 @@ import { User } from "./types/ProfileTypes";
 import ExperienceSummary from "./learn/ExperienceSummary";
 import { Coach } from "./types/MentorshipTypes";
 import Logout from "./components/Logout";
+import MenteeProfile from "./mentorship/MenteeProfile";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -255,7 +256,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <Profile />
+            <MenteeProfile {...childProps} />
           </AuthenticatedRoute>
         }
       />
