@@ -3,14 +3,14 @@ lockfileVersion: 5.4
 packageExtensionsChecksum: 93ec16a3b368a4ce097b8f5a256e744f
 
 specifiers:
-  '@aws-amplify/api-rest': 2.0.57
+  '@aws-amplify/api-rest': 2.0.60
   '@aws-amplify/auth': 4.6.10
   '@aws-amplify/core': 4.7.8
   '@aws-amplify/storage': 4.5.10
   '@date-io/date-fns': 2.16.0
   '@emotion/react': 11.10.4
   '@emotion/styled': 11.10.4
-  '@hookform/resolvers': 2.9.9
+  '@hookform/resolvers': 2.9.10
   '@mui/material': 5.10.10
   '@mui/styles': 5.10.10
   '@mui/system': 5.10.10
@@ -30,7 +30,7 @@ specifiers:
   '@types/chai': 4.3.3
   '@types/lodash.sortby': 4.7.7
   '@types/mocha': 10.0.0
-  '@types/node': 18.11.3
+  '@types/node': 18.11.7
   '@types/pell': 1.0.1
   '@types/puppeteer': 5.4.7
   '@types/react': 18.0.21
@@ -110,14 +110,14 @@ specifiers:
   yup: 0.32.11
 
 dependencies:
-  '@aws-amplify/api-rest': 2.0.57_react-native@0.70.3
+  '@aws-amplify/api-rest': 2.0.60_react-native@0.70.3
   '@aws-amplify/auth': 4.6.10_react-native@0.70.3
   '@aws-amplify/core': 4.7.8_react-native@0.70.3
   '@aws-amplify/storage': 4.5.10_react-native@0.70.3
   '@date-io/date-fns': 2.16.0_date-fns@2.29.3
   '@emotion/react': 11.10.4_iapumuv4e6jcjznwuxpf4tt22e
   '@emotion/styled': 11.10.4_g3tud4ene45llglqap74b5kkse
-  '@hookform/resolvers': 2.9.9_react-hook-form@7.38.0
+  '@hookform/resolvers': 2.9.10_react-hook-form@7.38.0
   '@mui/material': 5.10.10_ikcgkdnp4bn3rgptamntbhbo7e
   '@mui/styles': 5.10.10_iapumuv4e6jcjznwuxpf4tt22e
   '@mui/system': 5.10.10_h33l6npc22g7vcra72cibfsrvm
@@ -191,7 +191,7 @@ devDependencies:
   '@types/chai': 4.3.3
   '@types/lodash.sortby': 4.7.7
   '@types/mocha': 10.0.0
-  '@types/node': 18.11.3
+  '@types/node': 18.11.7
   '@types/puppeteer': 5.4.7
   '@types/react': 18.0.21
   '@types/react-bootstrap': 0.32.31
@@ -214,7 +214,7 @@ devDependencies:
   rollup-plugin-visualizer: 5.8.3_rollup@3.2.3
   stylelint: 14.14.0
   stylelint-config-standard: 29.0.0_stylelint@14.14.0
-  ts-node: 10.9.1_lw7q66ikwuedwcorwkk4v6trsa
+  ts-node: 10.9.1_evej5wzm4hojmu6uzxwpspdmsu
   vite-plugin-pwa: 0.13.1_vite@3.1.8
   vitest: 0.24.3_jsdom@20.0.1
 
@@ -242,10 +242,10 @@ packages:
       leven: 3.1.0
     dev: true
 
-  /@aws-amplify/api-rest/2.0.57_react-native@0.70.3:
-    resolution: {integrity: sha512-XhmiHSBIB11+vYX0CODEF1dkKxTwE3JR7il8a+IuRgU1X0DBpNv7yEw96NifzTASNqkOiMVUkpdzcUmUIEejzQ==}
+  /@aws-amplify/api-rest/2.0.60_react-native@0.70.3:
+    resolution: {integrity: sha512-MQFDWDfNB1EsWBW4VG92Xc36zryHMJGgFsBxVpf0C/GBy9AAJou/CkyXTWJGRvzKBSVDBL/n8YqWOvyYEbL/gg==}
     dependencies:
-      '@aws-amplify/core': 4.7.8_react-native@0.70.3
+      '@aws-amplify/core': 4.7.11_react-native@0.70.3
       axios: 0.26.0
     transitivePeerDependencies:
       - debug
@@ -268,6 +268,21 @@ packages:
     resolution: {integrity: sha512-+8g/4euAyBRezh66GOhjplF1tbfug9d+Ko6/lyuSn4pxFUhileKZsYxn/UO3Z8xb9vpM+cbWuJkzalhQGRuZkw==}
     dependencies:
       '@aws-amplify/core': 4.7.8_react-native@0.70.3
+    transitivePeerDependencies:
+      - react-native
+    dev: false
+
+  /@aws-amplify/core/4.7.11_react-native@0.70.3:
+    resolution: {integrity: sha512-Gfn9V66wgnyWi/dUzYfjmqbYxRdpeY1MH6jqCWXMWPHIBA7yPtac4xHpNK886TOuvekUK7HRI91Lvl//XKueOw==}
+    dependencies:
+      '@aws-crypto/sha256-js': 1.0.0-alpha.0
+      '@aws-sdk/client-cloudwatch-logs': 3.6.1_react-native@0.70.3
+      '@aws-sdk/client-cognito-identity': 3.6.1_react-native@0.70.3
+      '@aws-sdk/credential-provider-cognito-identity': 3.6.1_react-native@0.70.3
+      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/util-hex-encoding': 3.6.1
+      universal-cookie: 4.0.4
+      zen-observable-ts: 0.8.19
     transitivePeerDependencies:
       - react-native
     dev: false
@@ -3036,8 +3051,8 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: false
 
-  /@hookform/resolvers/2.9.9_react-hook-form@7.38.0:
-    resolution: {integrity: sha512-WMKO5HbNoGMdQNmf6kcjHmBKPd3voKvDdzr+IQGn1Rtb7dIQbTE33zf5dptZnv8dF4K0NvnzpTgz3bLdeAPc9w==}
+  /@hookform/resolvers/2.9.10_react-hook-form@7.38.0:
+    resolution: {integrity: sha512-JIL1DgJIlH9yuxcNGtyhsWX/PgNltz+5Gr6+8SX9fhXc/hPbEIk6wPI82nhgvp3uUb6ZfAM5mqg/x7KR7NAb+A==}
     peerDependencies:
       react-hook-form: ^7.0.0
     peerDependenciesMeta:
@@ -3085,7 +3100,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       '@types/yargs': 15.0.14
       chalk: 4.1.2
     dev: false
@@ -3096,7 +3111,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       '@types/yargs': 16.0.4
       chalk: 4.1.2
     dev: false
@@ -4397,8 +4412,8 @@ packages:
     resolution: {integrity: sha512-rADY+HtTOA52l9VZWtgQfn4p+UDVM2eDVkMZT1I6syp0YKxW2F9v+0pbRZLsvskhQv/vMb6ZfCay81GHbz5SHg==}
     dev: true
 
-  /@types/node/18.11.3:
-    resolution: {integrity: sha512-fNjDQzzOsZeKZu5NATgXUPsaFaTxeRgFXoosrHivTl8RGeV733OLawXsGfEk9a8/tySyZUyiZ6E8LcjPFZ2y1A==}
+  /@types/node/18.11.7:
+    resolution: {integrity: sha512-LhFTglglr63mNXUSRYD8A+ZAIu5sFqNJ4Y2fPuY7UlrySJH87rRRlhtVmMHplmfk5WkoJGmDjE9oiTfyX94CpQ==}
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -4421,7 +4436,7 @@ packages:
   /@types/puppeteer/5.4.7:
     resolution: {integrity: sha512-JdGWZZYL0vKapXF4oQTC5hLVNfOgdPrqeZ1BiQnGk5cB7HeE91EWUiTdVSdQPobRN8rIcdffjiOgCYJ/S8QrnQ==}
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
     dev: true
 
   /@types/react-beautiful-dnd/13.1.2:
@@ -4505,7 +4520,7 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
     dev: true
 
   /@types/resolve/1.20.2:
@@ -4542,7 +4557,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
     dev: true
     optional: true
 
@@ -7932,7 +7947,7 @@ packages:
     resolution: {integrity: sha512-jZCyo6iIxO1aqUxpuBlwTDMkzOAJS4a3eYz3YzgxxVQFwLeSA7Jfq5cbqCY+JLvTDrWirgusI/0KwxKMgrdf7w==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       graceful-fs: 4.2.10
     dev: false
 
@@ -7941,7 +7956,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       chalk: 4.1.2
       ci-info: 3.3.2
       graceful-fs: 4.2.10
@@ -7964,7 +7979,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -7973,7 +7988,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false
@@ -11554,7 +11569,7 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /ts-node/10.9.1_lw7q66ikwuedwcorwkk4v6trsa:
+  /ts-node/10.9.1_evej5wzm4hojmu6uzxwpspdmsu:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -11577,7 +11592,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -12481,7 +12496,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.3
       '@types/chai-subset': 1.3.3
-      '@types/node': 18.11.3
+      '@types/node': 18.11.7
       chai: 4.3.6
       debug: 4.3.4
       jsdom: 20.0.1
