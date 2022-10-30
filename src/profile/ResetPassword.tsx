@@ -39,6 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type ResetPasswordForm = {
+  email:string,
+};
+
+type ConfirmationForm = {
+  code:string,
+  password:string,
+  confirmPassword:string,
+};
+
 const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => {
   const classes = useStyles();
 
@@ -50,17 +60,17 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
 
   const {
     register,
-    formState: { errors },
+    formState: { errors},
     handleSubmit,
     getValues,
-  } = useForm();
+  } = useForm<ResetPasswordForm>();
 
   const {
     register: register2,
     formState: { errors: errors2 },
     handleSubmit: handleSubmit2,
     watch,
-  } = useForm();
+  } = useForm<ConfirmationForm>();
 
   let password1 = watch("password");
   let email1 = getValues("email");

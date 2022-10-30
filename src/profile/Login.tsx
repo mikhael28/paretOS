@@ -8,6 +8,7 @@ import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(5),
@@ -42,6 +43,12 @@ interface LoginProps {
   setLoading: (b: boolean) => void;
   userHasAuthenticated: (b: boolean) => void;
 }
+
+type LoginForm = {
+  email:string,
+  password: string,
+};
+
 const Login = ({
   initialFetch,
   setLoading,
@@ -55,7 +62,7 @@ const Login = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<LoginForm>();
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -90,11 +97,9 @@ return (<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
       },
     })}
   />
-  {errors.email &&
     <span className="error">
-      errors.email.message
+      {errors.email&&errors.email.message}
     </span>
-  }
 </div>
 <br />
 <div>
@@ -111,13 +116,11 @@ return (<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         message: "minimum length is 8 characters",
       },
     })}
-  />
-  {errors.password &&
-    <span className="error">
-      errors.password.message
+    />
+  <span className="error">
+      {errors.password&&errors.password.message}
     </span>
-  }
-</div>
+  </div>
 
 <div>
   <Button
