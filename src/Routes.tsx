@@ -216,7 +216,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <EditProfile />
+            <EditProfile {...childProps} />
           </AuthenticatedRoute>
         }
       />
@@ -225,7 +225,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <LanguageSelector />
+            <LanguageSelector {...childProps} />
           </AuthenticatedRoute>
         }
       />

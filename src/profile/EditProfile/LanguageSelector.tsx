@@ -13,7 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { selectProfile } from "../../redux/selectors/profile/select-profile";
 
-const LanguageSelector = () => {
+const LanguageSelector = (_: any) => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;
