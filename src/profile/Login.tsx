@@ -111,7 +111,11 @@ const Login = ({
               },
             })}
           />
-          <span className="error">{errors.email && errors.email.message}</span>
+          {errors.email &&
+            <span className="error">
+              errors.email.message
+            </span>
+          }
         </div>
         <br />
         <div>
@@ -129,9 +133,11 @@ const Login = ({
               },
             })}
           />
-          <span className="error">
-            {errors.password && errors.password.message}
-          </span>
+          {errors.password &&
+            <span className="error">
+              errors.password.message
+            </span>
+          }
         </div>
 
         <div>
