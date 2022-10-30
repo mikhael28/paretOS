@@ -4,7 +4,7 @@ import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
 import { AiOutlineGithub } from "react-icons/ai";
 import classNames from "classnames";
-import { ToastMsgContext } from "../state/ToastContext";
+import { ToastMsgContext } from "../context/ToastContext";
 import Skeleton from "@mui/material/Skeleton/Skeleton";
 import { MongoExperience } from "../types/LearnTypes";
 import { Sprint } from "../types/ArenaTypes";

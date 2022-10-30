@@ -14,7 +14,7 @@ import customHistory from "./utils/customHistory";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import awsmobile from "./aws-exports";
-import reducer from "./state/index";
+import reducer from "./redux/state/index";
 // import css below
 import "./css/index.css";
 import "./css/arena.css";

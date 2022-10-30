@@ -13,10 +13,10 @@ import { MdClose } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { I18n } from "@aws-amplify/core";
 import LoaderButton from "./LoaderButton";
-import { ToastMsgContext } from "../state/ToastContext";;
 import uploadToS3 from "../utils/s3";
 import { User } from "../types/ProfileTypes";
 import { ActiveMission, Sprint } from "../types/ArenaTypes";
+import { ToastMsgContext } from "../context/ToastContext";
 
 /**
  * The Arena Proof Modal is where a player submits the proof of their achievement, and where they/their coach (I believe - review) can review the proof.
@@ -94,7 +94,8 @@ export default function ArenaProofModal({
       activeIndex,
       day,
       pictureKey,
-      `${user.fName} just completed ${activeMission.title}.${data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
+      `${user.fName} just completed ${activeMission.title}.${
+        data.trashTalk.length > 0 ? `They also said: "${data.trashTalk}"` : ""
       } `
     );
     setPictureKey("");
@@ -193,7 +194,9 @@ export default function ArenaProofModal({
         <DialogContent>
           {activeMission.proofLink !== "" ? (
             <a
-              href={`https://${import.meta.env.VITE_PROOF_BUCKET}.s3.amazonaws.com/public/${activeMission.proofLink}`}
+              href={`https://${
+                import.meta.env.VITE_PROOF_BUCKET
+              }.s3.amazonaws.com/public/${activeMission.proofLink}`}
               target="_blank"
               rel="noopener noreferrer"
             >

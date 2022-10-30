@@ -24,7 +24,9 @@ const ExperienceModule = lazy(() => import("./learn/ExperienceModule"));
 const SprintCreation = lazy(() => import("./arena/SprintCreation"));
 const NotFound = lazy(() => import("./containers/NotFound"));
 const EditProfile = lazy(() => import("./profile/EditProfile"));
-const LanguageSelector = lazy(() => import("./profile/LanguageSelector"));
+const LanguageSelector = lazy(
+  () => import("./profile/EditProfile/LanguageSelector")
+);
 const ArenaDashboard = lazy(() => import("./arena/Sprints"));
 const ContextBuilder = lazy(() => import("./context/ContextBuilder"));
 const ContextPage = lazy(() => import("./context/ContextPage"));
@@ -36,7 +38,6 @@ const Room = lazy(() => import("./containers/Room"));
 const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
-
 
 export interface ChildProps {
   stripeKey: string;
@@ -129,7 +130,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
             <Journal {...childProps} />
           </AuthenticatedRoute>
         }
-      // props={childProps}
+        // props={childProps}
       />
       <Route
         path="/arena"
@@ -190,7 +191,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         /* @ts-ignore */
         element={<Room {...childProps} />}
-      // props={childProps}
+        // props={childProps}
       />
       <Route
         path="/settings/password"
@@ -215,7 +216,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <EditProfile {...childProps} />
+            <EditProfile />
           </AuthenticatedRoute>
         }
       />
@@ -224,7 +225,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         element={
           <AuthenticatedRoute>
-            <LanguageSelector {...childProps} />
+            <LanguageSelector />
           </AuthenticatedRoute>
         }
       />

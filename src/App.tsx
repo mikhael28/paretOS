@@ -15,7 +15,7 @@ import { GrLogout } from "react-icons/gr";
 import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
 import strings from "./intl/localization";
 import BottomNav from "./components/BottomNav";
-import { LanguageContext, LanguageProps } from "./state/LanguageContext";
+import { LanguageContext, LanguageProps } from "./redux/state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
   fetchUser,
@@ -26,7 +26,7 @@ import {
   fetchSanitySchemas,
 } from "./utils/initialFetch";
 import LeftNav from "./components/LeftNav";
-import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
+import { ToastMsgContext, ToastMsg } from "./context/ToastContext";
 import Routes, { ChildProps } from "./Routes";
 import question from "./assets/help.png";
 import Palette from "./containers/Palette";
@@ -59,7 +59,7 @@ const Transition = React.forwardRef(function Transition(
 
 const languageProps: LanguageProps = {
   language: null,
-  setLanguage: () => { },
+  setLanguage: () => {},
 };
 
 interface AppProps {

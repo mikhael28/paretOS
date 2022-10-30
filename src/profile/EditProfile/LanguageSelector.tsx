@@ -7,15 +7,17 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { MdAutorenew } from "react-icons/md";
-import LanguageContext, { Language } from "../state/LanguageContext";
-import { availableLanguages, updateLanguage } from "../libs/languages";
-import { User } from "../types/ProfileTypes";
+import LanguageContext, { Language } from "../../redux/state/LanguageContext";
+import { availableLanguages, updateLanguage } from "../../libs/languages";
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { selectProfile } from "../../redux/selectors/profile/select-profile";
 
-const LanguageSelector = (props: { user: User }) => {
+const LanguageSelector = () => {
   const langContext = useContext(LanguageContext);
   const language = langContext.language as Language;
   const setLanguage = langContext.setLanguage;
+  const user = useSelector(selectProfile);
   let [isLoading, setIsLoading] = useState(false);
   const { control } = useForm({ reValidateMode: "onChange" });
 
@@ -32,7 +34,7 @@ const LanguageSelector = (props: { user: User }) => {
       language: availableLanguages.find(
         (x) => x.code === (e.target as HTMLInputElement).value
       ),
-      id: props.user.id,
+      id: user.id,
       setLanguage: handleSetLanguage,
       setIsLoading: handleSetIsLoading,
     });

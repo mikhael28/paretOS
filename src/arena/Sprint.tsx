@@ -8,7 +8,6 @@ import {
 import { I18n } from "@aws-amplify/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { ToastMsgContext } from "../state/ToastContext";
 import Tour from "reactour";
 import Board from "../components/Board";
 import TabPanel from "../components/TabPanel.js";
@@ -30,9 +29,10 @@ import {
   ActiveMission,
   ActivePersonMissionsOnDay,
 } from "../types/ArenaTypes";
-import { ReduxRootState } from "../state";
 import { User } from "../types/ProfileTypes";
-import { store } from "..";
+import { ToastMsgContext } from "../context/ToastContext";
+import { store } from "../redux/store";
+import { ReduxRootState } from "../redux/state";
 
 /**
  * This component handles the logic and UI of the Sprint functionality. It theoretically has multiplayer functionality, and keeps score between multiple competitors.
@@ -145,7 +145,7 @@ function Sprint({ user, navigate }: SprintProps) {
       try {
         await updateSprintData(sprint[SPRINT_INDEX], ws);
       } catch (error: any) {
-        errorToast(error);
+        handleShowError(error);
       } finally {
         setLoading(false);
       }
@@ -176,7 +176,7 @@ function Sprint({ user, navigate }: SprintProps) {
       try {
         await updateSprintData(sprint[SPRINT_INDEX], ws);
       } catch (error) {
-        errorToast(error as Error);
+        handleShowError(error as Error);
       } finally {
         setLoading(false);
       }

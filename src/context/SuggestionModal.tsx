@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
-import { ToastMsgContext } from "../state/ToastContext";;
+import { ToastMsgContext } from "../context/ToastContext";
 import { generateEmail } from "../utils/generateErrorEmail";
 import { useForm } from "react-hook-form";
 /**
@@ -21,7 +21,7 @@ export default function SuggestionModal({
   user,
   handleClose,
   activeItem,
-  method
+  method,
 }: any) {
   const [formData, setFormData] = useState({
     title: "",
@@ -40,7 +40,6 @@ export default function SuggestionModal({
     reset
   } = useForm();
 
-
   useEffect(() => {
     if (activeItem !== undefined) {
       setFormData(activeItem);
@@ -55,7 +54,6 @@ export default function SuggestionModal({
     let mutations;
 
     if (method === "post") {
-
       mutations = [
         {
           create: {
@@ -89,7 +87,9 @@ export default function SuggestionModal({
 
     try {
       fetch(
-        `https://${import.meta.env.VITE_SANITY_ID}.api.sanity.io/v1/data/mutate/production`,
+        `https://${
+          import.meta.env.VITE_SANITY_ID
+        }.api.sanity.io/v1/data/mutate/production`,
         {
           method: "post",
           headers: {

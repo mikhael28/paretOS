@@ -1,18 +1,28 @@
-import React, { useCallback, useEffect, useState, createContext, ComponentPropsWithoutRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  createContext,
+  ComponentPropsWithoutRef,
+} from "react";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
 import { Snackbar, Alert } from "@mui/material";
-
 
 // Leaving toast type as any for now as it is a work in progress
 
 export const ToastMsgContext = createContext({
   handleShowSuccess: (st: any) => {
-    ToastMsg({ msg: st, type: 'success', open: () => { }, handleCloseSnackbar: () => { } })
+    ToastMsg({
+      msg: st,
+      type: "success",
+      open: () => {},
+      handleCloseSnackbar: () => {},
+    });
   },
-  handleShowError: (error: any) => { },
+  handleShowError: (error: any) => {},
 });
-const ToastContext = createContext({ addToast: (t: any) => { } });
+const ToastContext = createContext({ addToast: (t: any) => {} });
 
 export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
   const handleClose = () => {
@@ -36,10 +46,11 @@ export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
   );
 }
 
-
 export default ToastContext;
 
-export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>) {
+export function ToastContextProvider({
+  children,
+}: ComponentPropsWithoutRef<any>) {
   const [toasts, setToasts] = useState([] as any[]);
 
   useEffect(() => {

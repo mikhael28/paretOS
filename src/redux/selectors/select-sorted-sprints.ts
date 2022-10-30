@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { ReduxRootState } from "../state";
+import { ReduxRootState } from "../../redux/state";
 import { Sprint } from "../types";
 
 const selectSortedSprints = createSelector(

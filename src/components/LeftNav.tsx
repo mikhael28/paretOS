@@ -18,7 +18,7 @@ import { BiRun } from "react-icons/bi";
 import { Avatar, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
 import white from "../assets/Pareto_Lockup-White.png";
 import { availableLanguages, updateLanguage } from "../libs/languages";
-import LanguageContext, { Language } from "../state/LanguageContext";
+import LanguageContext, { Language } from "../redux/state/LanguageContext";
 import { User } from "../types/ProfileTypes";
 import { Relationship } from "../types/MentorshipTypes";
 import Pomodoro from "./Pomodoro";
