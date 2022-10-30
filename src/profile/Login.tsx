@@ -62,7 +62,7 @@ const Login = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<LoginForm>();
+  } = useForm<LoginForm>({mode: "onChange",});
 
   const onSubmit = async (data: any) => {
     setLoading(true);

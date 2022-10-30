@@ -3,8 +3,11 @@ import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
-import { Typography, TextField, Link } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
+import theme from "../libs/theme";
+import logo from "../assets/Pareto_Lockup-01.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,14 +66,14 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
     formState: { errors},
     handleSubmit,
     getValues,
-  } = useForm<ResetPasswordForm>();
+  } = useForm<ResetPasswordForm>({mode: "onChange",});
 
   const {
     register: register2,
     formState: { errors: errors2 },
     handleSubmit: handleSubmit2,
     watch,
-  } = useForm<ConfirmationForm>();
+  } = useForm<ConfirmationForm>({mode: "onChange",});
 
   let password1 = watch("password");
   let email1 = getValues("email");
@@ -228,12 +231,30 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
       <Typography variant="h1">{I18n.get("Success!")}</Typography>
 
       <p>Your password has been reset.</p>
-      <Link href="/login">Click here to login with your new credentials.</Link>
+      <Link to="/login">Click here to login with your new credentials.</Link>
     </div>
   );
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
+        />
+      </Link>
+    </div>
+  )
 
   return (
     <div className="Form">
+      {renderLogo()}
       {!codeSent
         ? renderRequestCodeForm()
         : !confirmed
