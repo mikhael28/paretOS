@@ -73,6 +73,76 @@ const Login = ({
     }
   };
 
+  const renderForm=()=>{
+return (<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+<div>
+  <TextField
+    id="email"
+    variant="filled"
+    size="medium"
+    autoFocus
+    label={I18n.get("email")}
+    {...register("email", {
+      required: "email is required",
+      pattern: {
+        value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
+        message: "invalid email address",
+      },
+    })}
+  />
+  {errors.email &&
+    <span className="error">
+      errors.email.message
+    </span>
+  }
+</div>
+<br />
+<div>
+  <TextField
+    id="password"
+    variant="filled"
+    size="medium"
+    type="password"
+    label={I18n.get("password")}
+    {...register("password", {
+      required: "password is required",
+      minLength: {
+        value: 8,
+        message: "minimum length is 8 characters",
+      },
+    })}
+  />
+  {errors.password &&
+    <span className="error">
+      errors.password.message
+    </span>
+  }
+</div>
+
+<div>
+  <Button
+    component={Link}
+    to="/login/reset"
+    color="primary"
+    type="button"
+  >
+    {I18n.get("resetPassword")}
+  </Button>
+</div>
+
+<div>
+  <LoaderButton
+    text={I18n.get("login")}
+    loadingText={I18n.get("loggingIn")}
+    isLoading={isLoading}
+    disabled={disabled}
+    type="submit"
+    color="primary"
+    variant="contained"
+  />
+</div>
+</form>)
+  }
   const renderLogo = () => (
     <div className="flex-center">
       <Link to="/">
@@ -94,75 +164,7 @@ const Login = ({
   return (
     <div className="Form">
       {renderLogo()}
-
-      <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <TextField
-            id="email"
-            variant="filled"
-            size="medium"
-            autoFocus
-            label={I18n.get("email")}
-            {...register("email", {
-              required: "email is required",
-              pattern: {
-                value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
-                message: "invalid email address",
-              },
-            })}
-          />
-          {errors.email &&
-            <span className="error">
-              errors.email.message
-            </span>
-          }
-        </div>
-        <br />
-        <div>
-          <TextField
-            id="password"
-            variant="filled"
-            size="medium"
-            type="password"
-            label={I18n.get("password")}
-            {...register("password", {
-              required: "password is required",
-              minLength: {
-                value: 8,
-                message: "minimum length is 8 characters",
-              },
-            })}
-          />
-          {errors.password &&
-            <span className="error">
-              errors.password.message
-            </span>
-          }
-        </div>
-
-        <div>
-          <Button
-            component={Link}
-            to="/login/reset"
-            color="primary"
-            type="button"
-          >
-            {I18n.get("resetPassword")}
-          </Button>
-        </div>
-
-        <div>
-          <LoaderButton
-            text={I18n.get("login")}
-            loadingText={I18n.get("loggingIn")}
-            isLoading={isLoading}
-            disabled={disabled}
-            type="submit"
-            color="primary"
-            variant="contained"
-          />
-        </div>
-      </form>
+      {renderForm()}
     </div>
   );
 };
