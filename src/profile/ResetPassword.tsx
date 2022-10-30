@@ -42,16 +42,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ResetPasswordForm = {
-  email:string,
+  email: string;
 };
 
 type ConfirmationForm = {
-  code:string,
-  password:string,
-  confirmPassword:string,
+  code: string;
+  password: string;
+  confirmPassword: string;
 };
 
-const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => {
+const ResetPassword = ({
+  setLoading,
+}: {
+  setLoading: (b: boolean) => void;
+}) => {
   const classes = useStyles();
 
   const [isConfirming, setIsConfirming] = useState(false);
@@ -62,17 +66,17 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
 
   const {
     register,
-    formState: { errors},
+    formState: { errors },
     handleSubmit,
     getValues,
-  } = useForm<ResetPasswordForm>({mode: "onChange",});
+  } = useForm<ResetPasswordForm>({ mode: "onChange" });
 
   const {
     register: register2,
     formState: { errors: errors2 },
     handleSubmit: handleSubmit2,
     watch,
-  } = useForm<ConfirmationForm>({mode: "onChange",});
+  } = useForm<ConfirmationForm>({ mode: "onChange" });
 
   let password1 = watch("password");
   let email1 = getValues("email");
@@ -249,7 +253,7 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
         />
       </Link>
     </div>
-  )
+  );
 
   return (
     <div className="Form">
@@ -257,8 +261,8 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
       {!codeSent
         ? renderRequestCodeForm()
         : !confirmed
-          ? renderConfirmationForm()
-          : renderSuccessMessage()}
+        ? renderConfirmationForm()
+        : renderSuccessMessage()}
     </div>
   );
 };

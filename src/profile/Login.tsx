@@ -8,7 +8,6 @@ import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(5),
@@ -45,8 +44,8 @@ interface LoginProps {
 }
 
 type LoginForm = {
-  email:string,
-  password: string,
+  email: string;
+  password: string;
 };
 
 const Login = ({
@@ -62,7 +61,7 @@ const Login = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<LoginForm>({mode: "onChange",});
+  } = useForm<LoginForm>({ mode: "onChange" });
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -80,72 +79,72 @@ const Login = ({
     }
   };
 
-  const renderForm=()=>{
-return (<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-<div>
-  <TextField
-    id="email"
-    variant="filled"
-    size="medium"
-    autoFocus
-    label={I18n.get("email")}
-    {...register("email", {
-      required: "email is required",
-      pattern: {
-        value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
-        message: "invalid email address",
-      },
-    })}
-  />
-    <span className="error">
-      {errors.email&&errors.email.message}
-    </span>
-</div>
-<br />
-<div>
-  <TextField
-    id="password"
-    variant="filled"
-    size="medium"
-    type="password"
-    label={I18n.get("password")}
-    {...register("password", {
-      required: "password is required",
-      minLength: {
-        value: 8,
-        message: "minimum length is 8 characters",
-      },
-    })}
-    />
-  <span className="error">
-      {errors.password&&errors.password.message}
-    </span>
-  </div>
+  const renderForm = () => {
+    return (
+      <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <TextField
+            id="email"
+            variant="filled"
+            size="medium"
+            autoFocus
+            label={I18n.get("email")}
+            {...register("email", {
+              required: "email is required",
+              pattern: {
+                value: /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/,
+                message: "invalid email address",
+              },
+            })}
+          />
+          <span className="error">{errors.email && errors.email.message}</span>
+        </div>
+        <br />
+        <div>
+          <TextField
+            id="password"
+            variant="filled"
+            size="medium"
+            type="password"
+            label={I18n.get("password")}
+            {...register("password", {
+              required: "password is required",
+              minLength: {
+                value: 8,
+                message: "minimum length is 8 characters",
+              },
+            })}
+          />
+          <span className="error">
+            {errors.password && errors.password.message}
+          </span>
+        </div>
 
-<div>
-  <Button
-    component={Link}
-    to="/login/reset"
-    color="primary"
-    type="button"
-  >
-    {I18n.get("resetPassword")}
-  </Button>
-</div>
+        <div>
+          <Button
+            component={Link}
+            to="/login/reset"
+            color="primary"
+            type="button"
+          >
+            {I18n.get("resetPassword")}
+          </Button>
+        </div>
 
-<div>
-  <LoaderButton
-    text={I18n.get("login")}
-    loadingText={I18n.get("loggingIn")}
-    isLoading={isLoading}
-    disabled={disabled}
-    type="submit"
-    color="primary"
-    variant="contained"
-  />
-</div>
-</form>)
-  }
+        <div>
+          <LoaderButton
+            text={I18n.get("login")}
+            loadingText={I18n.get("loggingIn")}
+            isLoading={isLoading}
+            disabled={disabled}
+            type="submit"
+            color="primary"
+            variant="contained"
+          />
+        </div>
+      </form>
+    );
+  };
   const renderLogo = () => (
     <div className="flex-center">
       <Link to="/">
@@ -162,7 +161,7 @@ return (<form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         />
       </Link>
     </div>
-  )
+  );
 
   return (
     <div className="Form">
