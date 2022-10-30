@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(3),
+    paddingTop: theme.spacing(5),
     width: 300,
 
     "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {

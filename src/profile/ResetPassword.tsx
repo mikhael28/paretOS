@@ -11,7 +11,6 @@ import logo from "../assets/Pareto_Lockup-01.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(5),
     width: 300,
 
     "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
