@@ -179,7 +179,7 @@ const Signup = (_props: any) => {
           id="email"
           variant="outlined"
           size="medium"
-          autoFocus={true}
+          autoFocus
           label={I18n.get("email")}
           {...register("email")}
           key={1}
