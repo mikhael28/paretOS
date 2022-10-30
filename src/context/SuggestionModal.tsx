@@ -1,18 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import {
   DialogActions,
-  DialogContent,
-  DialogContentText,
   Button,
+  FormControl,
+  InputLabel,
+  TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import FormControl from "react-bootstrap/lib/FormControl";
 import { RestAPI } from "@aws-amplify/api-rest";
 import LoaderButton from "../components/LoaderButton";
 import { ToastMsgContext } from "../context/ToastContext";
 import { generateEmail } from "../utils/generateErrorEmail";
-
+import { useForm } from "react-hook-form";
 /**
  * This is the modal where folks can offer suggestions into the prod knowledge base.
  */
@@ -31,6 +31,14 @@ export default function SuggestionModal({
     type: "",
   });
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
+  const [disabled] = useState(false);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset
+  } = useForm();
 
   useEffect(() => {
     if (activeItem !== undefined) {
@@ -40,24 +48,7 @@ export default function SuggestionModal({
 
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
-  const handleChange = (event: any) => {
-    console.log(event.target.id);
-    console.log(event.target.value);
-
-    setFormData({
-      ...formData,
-      [event.target.id]: event.target.value,
-    });
-  };
-
-  const validateForm = () =>
-    formData.title.length > 0 &&
-    formData.summary.length > 0 &&
-    formData.url.length > 0 &&
-    formData.type.length > 0;
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+  const onSubmit = async (data: any) => {
     setSubmissionLoading(true);
 
     let mutations;
@@ -67,10 +58,10 @@ export default function SuggestionModal({
         {
           create: {
             _type: `${schema}Schema`,
-            title: formData.title,
-            summary: formData.summary,
-            url: formData.url,
-            type: formData.type,
+            title: data.title,
+            summary: data.summary,
+            url: data.url,
+            type: data.type,
           },
         },
       ];
@@ -80,10 +71,10 @@ export default function SuggestionModal({
           createOrReplace: {
             _id: activeItem._id,
             _type: `${schema}Schema`,
-            title: formData.title,
-            summary: formData.summary,
-            url: formData.url,
-            type: formData.type,
+            title: data.title,
+            summary: data.summary,
+            url: data.url,
+            type: data.type,
           },
         },
       ];
@@ -124,13 +115,13 @@ export default function SuggestionModal({
       });
 
       setSubmissionLoading(false);
-      setFormData({ title: "", summary: "", url: "", imgUrl: "", type: "" });
       handleClose();
       handleShowSuccess("Thank you for your suggestion!");
     } catch (e) {
       handleShowError(e as Error);
       setSubmissionLoading(false);
     }
+    reset();
   };
 
   const convertCamelCaseToTitleCase = (str: string) => {
@@ -140,66 +131,123 @@ export default function SuggestionModal({
 
   return (
     <div>
-      <DialogContent>
+      
+      <form  onSubmit={handleSubmit(onSubmit)} style={{maxWidth:"400px", padding:"24px"}}>
         <h3 style={{ marginTop: "0px" }}>
           New {convertCamelCaseToTitleCase(schema)} Suggestion
         </h3>
-        <DialogContentText style={{ fontSize: "14px" }}>
-          Please enter the details
-        </DialogContentText>
-        <FormGroup controlId="title" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>Title</ControlLabel>
-          <FormControl value={formData.title} onChange={handleChange} />
-        </FormGroup>
-        <FormGroup controlId="summary" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>Summary</ControlLabel>
-          <FormControl value={formData.summary} onChange={handleChange} />
-        </FormGroup>
-        <FormGroup controlId="url" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>Website Link</ControlLabel>
-          <FormControl value={formData.url} onChange={handleChange} />
-        </FormGroup>
-        <FormGroup controlId="type" bsSize="large">
-          <ControlLabel style={{ fontSize: "14px" }}>Type</ControlLabel>
-          <FormControl
-            componentClass="select"
-            onChange={handleChange}
-            value={formData.type}
-          >
-            <option value="choose">Choose an Option</option>
-            <option value="jobs">Jobs</option>
-            <option value="modules">Libraries / SDKs / Modules</option>
-            <option value="news">News, Trends and Valuable Info</option>
-            <option value="community">Meetups / Communities</option>
-            <option value="education">Educational Programs</option>
-            <option value="companies">Amazing Companies</option>
-            <option value="incubators">Startup Incubators</option>
-            <option value="vc">Venture Capital</option>
-            <option value="docs">Documentation</option>
-            <option value="game">Games / Gamified Resources</option>
-            <option value="marketplace">Marketplace</option>
-            <option value="tutorial">Tutorial</option>
-            <option value="article">Article</option>
-            <option value="audio">Podcast / Audiobook</option>
-            <option value="video">Video</option>
-            <option value="social">Social Network</option>
-            <option value="book">Book</option>
+        <h4 style={{ marginTop: "8px" }}>
+          Please enter details
+        </h4>
+        <TextField
+            id="title"
+            variant="outlined"
+            size="medium"
+            label="Title"
+            style={{marginTop: 16}}
+            fullWidth
+            {...register("title", { 
+              required: "Required field",
+              minLength: {
+                value: 1,
+                message: "All fields must be filled"
+              }
+            })}
+          />
+          <p style={{fontSize: 14, margin:4, color:"rgb(220, 66, 100)"}}>
+            {errors.title && errors.title.message}
+          </p>
+          <TextField
+            id="summary"
+            variant="outlined"
+            size="medium"
+            label="Summary"
+            style={{marginTop: 16}}
+            fullWidth
+            {...register("summary", {  
+              required: "Required field",
+              minLength: {
+                value: 1,
+                message: "All fields must be filled"
+              }
+            })}
+          />
+          <p style={{fontSize: 14, margin:4, color:"rgb(220, 66, 100)"}}>
+            {errors.summary && errors.summary.message}
+          </p>
+          <TextField
+            id="url"
+            variant="outlined"
+            size="medium"
+            autoFocus
+            fullWidth
+            label="Website Link"
+            style={{marginTop: 16}}
+            {...register("url", { 
+              required: "Required field",
+              minLength: {
+                value: 1,
+                message: "All fields must be filled"
+              }
+            })}
+          />
+          <p style={{fontSize: 14, margin:4, color:"rgb(220, 66, 100)"}}>
+            {errors.url && errors.url.message}
+          </p>
+          <FormControl fullWidth style={{marginTop: 16}}>
+            <InputLabel id="demo-simple-select-label" >Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Type"
+              defaultValue="choose"
+              {...register("type", { 
+                required: "Required field",
+                minLength: {
+                  value: 1,
+                  message: "All fields must be filled"
+                }
+              })}
+            >
+              <MenuItem value="choose">Choose an Option</MenuItem>
+              <MenuItem value="jobs">Jobs</MenuItem>
+              <MenuItem value="modules">Libraries / SDKs / Modules</MenuItem>
+              <MenuItem value="news">News, Trends and Valuable Info</MenuItem>
+              <MenuItem value="community">Meetups / Communities</MenuItem>
+              <MenuItem value="education">Educational Programs</MenuItem>
+              <MenuItem value="companies">Amazing Companies</MenuItem>
+              <MenuItem value="incubators">Startup Incubators</MenuItem>
+              <MenuItem value="vc">Venture Capital</MenuItem>
+              <MenuItem value="docs">Documentation</MenuItem>
+              <MenuItem value="game">Games / Gamified Resources</MenuItem>
+              <MenuItem value="marketplace">Marketplace</MenuItem>
+              <MenuItem value="tutorial">Tutorial</MenuItem>
+              <MenuItem value="article">Article</MenuItem>
+              <MenuItem value="audio">Podcast / Audiobook</MenuItem>
+              <MenuItem value="video">Video</MenuItem>
+              <MenuItem value="social">Social Network</MenuItem>
+              <MenuItem value="book">Book</MenuItem>
+            </Select>
           </FormControl>
-        </FormGroup>
-      </DialogContent>
+            <p style={{fontSize: 14, margin:4, color:"rgb(220, 66, 100)"}}>
+              {errors.type && errors.type.message}
+            </p>
 
-      <DialogActions>
-        <Button className="btn-cancel" onClick={handleClose}>
-          Cancel
-        </Button>
-        <LoaderButton
-          text="Submit Suggestion"
-          loadingText="Submitting"
-          disabled={!validateForm()}
-          isLoading={submissionLoading}
-          onClick={handleSubmit}
-        />
-      </DialogActions>
+        <DialogActions>
+        <Button className="btn-cancel" onClick={ () => {handleClose(); reset()}}>
+              Cancel
+            </Button>
+          <LoaderButton
+                text="Submit Suggestion"
+                loadingText="Submitting"
+                disabled={disabled}
+                type="submit"
+                color="primary"
+                variant="contained"
+                isLoading={submissionLoading}
+              />
+        </DialogActions>
+      </form>
     </div>
   );
 }
