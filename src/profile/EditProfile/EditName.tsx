@@ -9,7 +9,7 @@ import { ToastMsgContext } from "../../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAction } from "../../redux/state/profile";
 import { selectProfile } from "../../redux/selectors/profile/select-profile";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const EditName = () => {
   const dispatch = useDispatch();
@@ -45,6 +45,8 @@ const EditName = () => {
       user: response[0],
       id: userId,
     }));
+
+    dispatch(setUserAction(response[0]));
   };
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.

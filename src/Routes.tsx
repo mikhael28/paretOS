@@ -39,7 +39,6 @@ const Journal = lazy(() => import("./containers/Journal"));
 const WorkRise = lazy(() => import("./intl/ug/WorkRise"));
 const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
-
 export interface ChildProps {
   stripeKey: string;
   navigate: ReturnType<typeof useNavigate>;
@@ -131,7 +130,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
             <Journal {...childProps} />
           </AuthenticatedRoute>
         }
-      // props={childProps}
+        // props={childProps}
       />
       <Route
         path="/arena"
@@ -192,7 +191,7 @@ export default ({ childProps, history, ...rest }: RouteWithChildProps) => (
         {...rest}
         /* @ts-ignore */
         element={<Room {...childProps} />}
-      // props={childProps}
+        // props={childProps}
       />
       <Route
         path="/settings/password"

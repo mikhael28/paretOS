@@ -1,8 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { userInfo } from "os";
 import { User } from "../../../types/ProfileTypes";
-import { ReduxRootState } from "../state";
-import { Sprint } from "../types";
+import { ReduxRootState } from "../../state";
 
 const selectProfile = createSelector(
   (state: ReduxRootState) => state.profile,

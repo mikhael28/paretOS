@@ -218,7 +218,7 @@ devDependencies:
   rollup-plugin-visualizer: 5.8.3_rollup@3.2.3
   stylelint: 14.14.0
   stylelint-config-standard: 29.0.0_stylelint@14.14.0
-  ts-node: 10.9.1_evej5wzm4hojmu6uzxwpspdmsu
+  ts-node: 10.9.1_5dbf0f790ab5083b09d1b295cafa7190
   vite-plugin-pwa: 0.13.1_vite@3.1.8
   vitest: 0.24.3_jsdom@20.0.1
 

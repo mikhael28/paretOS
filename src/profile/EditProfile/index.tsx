@@ -8,7 +8,7 @@ import { EditName } from "./EditName";
  * @TODO GH Issue #26
  */
 
-const EditProfile = () => {
+const EditProfile = (_: any) => {
   return (
     <div className="flex-down">
       <EditName />
