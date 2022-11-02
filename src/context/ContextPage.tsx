@@ -51,6 +51,8 @@ function ContextPage(props: any) {
     },
     title: "",
   });
+  console.log('CONTEXT_PAGE_OPENED');
+  console.log(JSON.stringify(props));
   const [activeItem, setActiveItem] = useState<ContextSuggestionForm | LibraryEntry>({
     title: "",
     summary: "",
