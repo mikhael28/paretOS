@@ -6,7 +6,6 @@ import { Storage } from "@aws-amplify/storage";
 import {
   Button,
   TextField,
-  useTheme,
   FormControl,
   FormLabel,
   TextareaAutosize,
@@ -23,6 +22,11 @@ import { useForm } from "react-hook-form";
  * @TODO GH Issue #26
  */
 
+type FormData = {
+  fName: string;
+  lName: string;
+};
+
 const EditProfile = (props: any) => {
   const currentUser =
     "user" in props
@@ -31,7 +35,7 @@ const EditProfile = (props: any) => {
           projects: [],
         };
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
 
   const [user, setUser] = useState(currentUser);
 
@@ -67,7 +71,6 @@ const EditProfile = (props: any) => {
     // what we did above, was the get the user id from the navigation bar
     const response = await RestAPI.get("pareto", `/users/${userId}`, {});
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
-    console.log("u", response);
     setState((prevState) => ({
       ...prevState,
       user: response[0],
@@ -78,7 +81,7 @@ const EditProfile = (props: any) => {
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
 
   const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | FormEvent<any>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setState((prevState) => ({
       ...prevState,
@@ -110,7 +113,7 @@ const EditProfile = (props: any) => {
     setState((prevState) => ({ ...prevState, isLoading: false }));
   };
 
-  const editName = async (data: any) => {
+  const editName = async (data: FormData) => {
     try {
       const newName = await RestAPI.put("pareto", `/users/${state.id}`, {
         body: data,
@@ -219,7 +222,6 @@ const EditProfile = (props: any) => {
                       name="fName"
                       label={I18n.get("firstName")}
                       defaultValue={user.fName}
-                      onChange={handleChange}
                       sx={{ m: 1, minWidth: "180px" }}
                     />
                     <TextField
@@ -229,7 +231,6 @@ const EditProfile = (props: any) => {
                       name="lName"
                       label={I18n.get("lastName")}
                       defaultValue={user.lName}
-                      onChange={handleChange}
                       sx={{ m: 1, minWidth: "180px" }}
                     />
                   </div>
