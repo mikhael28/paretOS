@@ -23,6 +23,7 @@ import "./css/form.css";
 import "./css/leaderboard.css";
 import "./css/messaging.css";
 import "./css/modal.css";
+import "./css/buttons.css";
 
 /**
  * The index file where React is initialized - here we are initializing Sentry (error tracking notification service), our API endpoints (courtesy of API Gateway + AWS Lambda) throught the AWS Amplify library, as well as initializing our Redux store.
