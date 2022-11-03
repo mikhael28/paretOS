@@ -51,8 +51,6 @@ function ContextPage(props: any) {
     },
     title: "",
   });
-  console.log('CONTEXT_PAGE_OPENED');
-  console.log(JSON.stringify(props));
   const [activeItem, setActiveItem] = useState<ContextSuggestionForm | LibraryEntry>({
     title: "",
     summary: "",
@@ -66,17 +64,9 @@ function ContextPage(props: any) {
     url: "",
   });
 
-  function openExternalModal(url: string) {
-    setExternalModal({ display: true, url });
-  }
-
-  function closeExternalModal() {
-    setExternalModal({ display: false, url: "" });
-  }
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const openExternalModal = (url: string) => setExternalModal({ display: true, url });
+  const closeExternalModal = () => setExternalModal({ display: false, url: "" });
+  const handleCloseModal = () => setOpenModal(false);
 
   const openSuggestionModal = () => {
     setMethod("post");
@@ -100,7 +90,10 @@ function ContextPage(props: any) {
     fetchSanityResources();
   }, []);
 
-  async function fetchSanityResources() {
+  const urlFor = (source: any) => builder.image(source);
+  const getContextCardUrl = (item: LibraryEntry) => !item.logo && !item.mainImage ? "na" : !item.logo && item.mainImage ? urlFor(item.mainImage.asset._ref) : urlFor(item.logo.asset._ref);
+
+  const fetchSanityResources = async () => {
     let tempPath = window.location.pathname.split("/");
     if (tempPath[1] === "hubs") {
       setRenderType("hubs");
@@ -113,35 +106,32 @@ function ContextPage(props: any) {
     const links = await sanity.fetch(query);
     console.warn(links);
     setItems(links);
-    let tempCommunity: LibraryEntry[] = [];
-    let tempSupport: LibraryEntry[] = [];
-    let tempCompanies: LibraryEntry[] = [];
-    let tempNews: LibraryEntry[] = [];
-    let tempAssorted: LibraryEntry[] = [];
+    const tempItems = {
+      tempCommunity: [] as LibraryEntry[],
+      tempSupport: [] as LibraryEntry[],
+      tempCompanies: [] as LibraryEntry[],
+      tempNews: [] as LibraryEntry[],
+      tempAssorted: [] as LibraryEntry[],
+    }
     if (tempPath[1] === "hubs") {
       links.map((link: LibraryEntry) => {
-        if (
-          link.type === "community" ||
-          link.type === "education" ||
-          link.type === "social" ||
-          link.type === "leader"
-        ) {
-          tempCommunity.push(link);
+        if (["community", "education", "social", "leader"].includes(link.type)) {
+          tempItems.tempCommunity.push(link);
         } else if (link.type === "incubators" || link.type === "vc") {
-          tempSupport.push(link);
+          tempItems.tempSupport.push(link);
         } else if (link.type === "companies" || link.type === "marketplace") {
-          tempCompanies.push(link);
+          tempItems.tempCompanies.push(link);
         } else if (link.type === "news") {
-          tempNews.push(link);
+          tempItems.tempNews.push(link);
         } else {
-          tempAssorted.push(link);
+          tempItems.tempAssorted.push(link);
         }
       });
-      setCommunity(tempCommunity);
-      setSupport(tempSupport);
-      setCompanies(tempCompanies);
-      setNews(tempNews);
-      setAssorted(tempAssorted);
+      setCommunity(tempItems.tempCommunity);
+      setSupport(tempItems.tempSupport);
+      setCompanies(tempItems.tempCompanies);
+      setNews(tempItems.tempNews);
+      setAssorted(tempItems.tempAssorted);
     }
   }
 
@@ -149,29 +139,15 @@ function ContextPage(props: any) {
     if (props.sanitySchemas.technicalSchemas.length > 0) {
       let tempPath = window.location.pathname.split("/");
       let schema = tempPath[2];
-      let sObj;
-      // possible to refactor??
-      props.sanitySchemas.technicalSchemas.map((obj: LibraryEntry) => {
+      const mapSchemas = (obj: LibraryEntry) => {
         if (obj.slug.current === schema) {
-          sObj = obj;
-          setSchemaObject(sObj);
+          setSchemaObject(obj);
           setLoading(false);
         }
-      });
-      props.sanitySchemas.economicSchemas.map((obj: LibraryEntry) => {
-        if (obj.slug.current === schema) {
-          sObj = obj;
-          setSchemaObject(sObj);
-          setLoading(false);
-        }
-      });
-      props.sanitySchemas.hubSchemas.map((obj: LibraryEntry) => {
-        if (obj.slug.current === schema) {
-          sObj = obj;
-          setSchemaObject(sObj);
-          setLoading(false);
-        }
-      });
+      }
+      props.sanitySchemas.technicalSchemas.map(mapSchemas);
+      props.sanitySchemas.economicSchemas.map(mapSchemas);
+      props.sanitySchemas.hubSchemas.map(mapSchemas);
     }
   }, [props.sanitySchemas]);
 
@@ -217,27 +193,17 @@ function ContextPage(props: any) {
         onClick={() => {
           openSuggestionModal();
         }}
-        style={{ color: 'white' }}
-        className={classNames("third-step-library", "btn")}
-
+        style={{ color: 'white', outline: '5px auto -webkit-focus-ring-color', outlineOffset: '-2px' }}
+        className={classNames("third-step-library", "btn", "suggest-new-resource-btn")}
       >Suggest New Resource</Button>
 
       {renderType === "hubs" ? (
         <>
           {schemaObject.Admin ? (
             <div>
-
               <h2>Curator Profile(s)</h2>
               {schemaObject.Admin.map((person: Admin, i: number) => {
-                function urlFor(source: any) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!person.adminPicture) {
-                  url = "na";
-                } else {
-                  url = urlFor(person.adminPicture.asset._ref);
-                }
+                let url = !person.adminPicture ? "na" : urlFor(person.adminPicture.asset._ref);
                 return (
                   <div key={i} className={classNames('flex', 'block')}>
                     <img src={url.toString()} height="60" width="60" />
@@ -261,29 +227,17 @@ function ContextPage(props: any) {
             >
               Click&nbsp;
               <span style={{ cursor: "pointer", textDecoration: "underline" }}>
-                {" "}
-                here{" "}
+                {" "}here{" "}
               </span>
               &nbsp;to suggest a resource into our community knowledge base.
             </p>
           ) : (
             <div className="context-cards-start">
               {community.map((item: LibraryEntry) => {
-                function urlFor(source: any) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!item.logo && !item.mainImage) {
-                  url = "na";
-                } else if (!item.logo && item.mainImage) {
-                  url = urlFor(item.mainImage.asset._ref);
-                } else {
-                  url = urlFor(item.logo.asset._ref);
-                }
-
+                let url = getContextCardUrl(item);
                 return (
                   <React.Fragment key={item._id}>
-                    {loading === true ? (
+                    {loading ? (
                       <></>
                     ) : (
                       <ContextObject
@@ -303,21 +257,11 @@ function ContextPage(props: any) {
           {support.length === 0 ? null : (
             <div className="context-cards-start">
               {support.map((item: LibraryEntry) => {
-                function urlFor(source: any) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!item.logo && !item.mainImage) {
-                  url = "na";
-                } else if (!item.logo && item.mainImage) {
-                  url = urlFor(item.mainImage.asset._ref);
-                } else {
-                  url = urlFor(item.logo.asset._ref);
-                }
+                let url = getContextCardUrl(item);
                 if (item.type === "incubators" || item.type === "vc") {
                   return (
                     <React.Fragment key={item._id}>
-                      {loading === true ? (
+                      {loading ? (
                         <></>
                       ) : (
                         <ContextObject
@@ -344,29 +288,18 @@ function ContextPage(props: any) {
             >
               Click&nbsp;
               <p style={{ cursor: "pointer", textDecoration: "underline" }}>
-                {" "}
-                here{" "}
+                {" "}here{" "}
               </p>
               &nbsp;to suggest a resource into our community knowledge base.
             </p>
           ) : (
             <div className="context-cards-start">
               {companies.map((item: LibraryEntry) => {
-                function urlFor(source: any) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!item.logo && !item.mainImage) {
-                  url = "na";
-                } else if (!item.logo && item.mainImage) {
-                  url = urlFor(item.mainImage.asset._ref);
-                } else {
-                  url = urlFor(item.logo.asset._ref);
-                }
+                let url = getContextCardUrl(item);
                 if (item.type === "companies" || item.type === "marketplace") {
                   return (
                     <React.Fragment key={item._id}>
-                      {loading === true ? (
+                      {loading ? (
                         <></>
                       ) : (
                         <ContextObject
@@ -387,21 +320,11 @@ function ContextPage(props: any) {
           {news.length === 0 ? null : (
             <div className="context-cards-start">
               {news.map((item: LibraryEntry) => {
-                function urlFor(source: any) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!item.logo && !item.mainImage) {
-                  url = "na";
-                } else if (!item.logo && item.mainImage) {
-                  url = urlFor(item.mainImage.asset._ref);
-                } else {
-                  url = urlFor(item.logo.asset._ref);
-                }
+                let url = getContextCardUrl(item);
                 if (item.type === "news") {
                   return (
                     <React.Fragment key={item._id}>
-                      {loading === true ? (
+                      {loading ? (
                         <></>
                       ) : (
                         <ContextObject
@@ -422,21 +345,11 @@ function ContextPage(props: any) {
           {assorted.length === 0 ? null : (
             <div className="context-cards-start">
               {assorted.map((item: LibraryEntry) => {
-                function urlFor(source: string) {
-                  return builder.image(source);
-                }
-                let url;
-                if (!item.logo && !item.mainImage) {
-                  url = "na";
-                } else if (!item.logo && item.mainImage) {
-                  url = urlFor(item.mainImage.asset._ref);
-                } else {
-                  url = urlFor(item.logo.asset._ref);
-                }
+                const url = getContextCardUrl(item);
                 if (item.type === "news") {
                   return (
                     <React.Fragment key={item._id}>
-                      {loading === true ? (
+                      {loading ? (
                         <></>
                       ) : (
                         <ContextObject
@@ -460,25 +373,15 @@ function ContextPage(props: any) {
         <>
           <h2>{schemaObject.description}</h2>
           <details>
-            <summary>Read Overview</summary>
+            <summary className="read-overview-btn" style={{ cursor: 'pointer', marginTop: '10px', marginBottom: '5px', width: 'fit-content' }}>Read Overview</summary>
             <PortableText value={schemaObject.body} />
           </details>
           <div className="context-cards">
             {items.map((item: LibraryEntry) => {
-              function urlFor(source: string) {
-                return builder.image(source);
-              }
-              let url;
-              if (!item.logo && !item.mainImage) {
-                url = "na";
-              } else if (!item.logo && item.mainImage) {
-                url = urlFor(item.mainImage.asset._ref);
-              } else {
-                url = urlFor(item.logo.asset._ref);
-              }
+              const url = getContextCardUrl(item);
               return (
                 <React.Fragment key={item._id}>
-                  {loading === true ? (
+                  {loading ? (
                     <></>
                   ) : (
                     <ContextObject

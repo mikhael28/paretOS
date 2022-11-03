@@ -1,0 +1,16 @@
+/* CSS for buttons */
+
+.suggest-new-resource-btn {
+  margin-bottom: 10px!important;
+}
+.suggest-new-resource-btn:hover {
+  background-color: #ffffff26!important;
+}
+
+.read-overview-btn {
+  transition: all 0.1s;
+}
+
+.read-overview-btn:hover {
+  opacity: .8;
+}
