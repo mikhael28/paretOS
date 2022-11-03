@@ -13,6 +13,7 @@ import { LibraryEntry, Admin, Hub } from "../types/ContextTypes";
 import classNames from "classnames";
 import { AiFillGithub } from 'react-icons/ai';
 import { BiBitcoin } from "react-icons/bi";
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -90,7 +91,7 @@ function ContextPage(props: any) {
     fetchSanityResources();
   }, []);
 
-  const urlFor = (source: any) => builder.image(source);
+  const urlFor = (source: SanityImageSource) => builder.image(source);
   const getContextCardUrl = (item: LibraryEntry) => !item.logo && !item.mainImage ? "na" : !item.logo && item.mainImage ? urlFor(item.mainImage.asset._ref) : urlFor(item.logo.asset._ref);
 
   const fetchSanityResources = async () => {
@@ -203,7 +204,7 @@ function ContextPage(props: any) {
             <div>
               <h2>Curator Profile(s)</h2>
               {schemaObject.Admin.map((person: Admin, i: number) => {
-                let url = !person.adminPicture ? "na" : urlFor(person.adminPicture.asset._ref);
+                const url = !person.adminPicture ? "na" : urlFor(person.adminPicture.asset._ref);
                 return (
                   <div key={i} className={classNames('flex', 'block')}>
                     <img src={url.toString()} height="60" width="60" />
@@ -234,7 +235,7 @@ function ContextPage(props: any) {
           ) : (
             <div className="context-cards-start">
               {community.map((item: LibraryEntry) => {
-                let url = getContextCardUrl(item);
+                const url = getContextCardUrl(item);
                 return (
                   <React.Fragment key={item._id}>
                     {loading ? (
@@ -257,7 +258,7 @@ function ContextPage(props: any) {
           {support.length === 0 ? null : (
             <div className="context-cards-start">
               {support.map((item: LibraryEntry) => {
-                let url = getContextCardUrl(item);
+                const url = getContextCardUrl(item);
                 if (item.type === "incubators" || item.type === "vc") {
                   return (
                     <React.Fragment key={item._id}>
@@ -295,7 +296,7 @@ function ContextPage(props: any) {
           ) : (
             <div className="context-cards-start">
               {companies.map((item: LibraryEntry) => {
-                let url = getContextCardUrl(item);
+                const url = getContextCardUrl(item);
                 if (item.type === "companies" || item.type === "marketplace") {
                   return (
                     <React.Fragment key={item._id}>
@@ -320,7 +321,7 @@ function ContextPage(props: any) {
           {news.length === 0 ? null : (
             <div className="context-cards-start">
               {news.map((item: LibraryEntry) => {
-                let url = getContextCardUrl(item);
+                const url = getContextCardUrl(item);
                 if (item.type === "news") {
                   return (
                     <React.Fragment key={item._id}>
