@@ -12,10 +12,21 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastMsgContext } from "../state/ToastContext";
 import { useNavigate } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
 
 /**
  * Change your password through Cognito
  */
+
+
+ const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiFormControl-root": {
+      width: "100%",
+      marginBottom: 5
+    }
+  }
+}));
 
  type changePasswordType = {
   oldPassword: string;
@@ -26,6 +37,7 @@ import { useNavigate } from "react-router-dom";
 const ChangePassword = (props: any) => {
   const [isChanging, setIsChanging] = useState(false);
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string()
@@ -65,11 +77,12 @@ const ChangePassword = (props: any) => {
 
   return (
     <div className="Form">
-      <form onSubmit={handleSubmit(handleChangePasswordSubmit)}>
+      <form className={classes.root} onSubmit={handleSubmit(handleChangePasswordSubmit)}>
         <FormControl>
-          <FormLabel>{I18n.get("oldPassword")}</FormLabel>
+          <FormLabel htmlFor="oldPassword">{I18n.get("oldPassword")}</FormLabel>
           <TextField
             type="password"
+            id="oldPassword"
             error={!!errors.oldPassword?.message}
             label={errors.oldPassword?.message}
             {...register("oldPassword")}
@@ -77,18 +90,20 @@ const ChangePassword = (props: any) => {
         </FormControl>
         <hr />
         <FormControl>
-          <FormLabel>{I18n.get("newPassword")}</FormLabel>
+          <FormLabel htmlFor="newPassword">{I18n.get("newPassword")}</FormLabel>
           <TextField
             type="password"
+            id="newPassword"
             error={!!errors.newPassword?.message}
             label={errors.newPassword?.message}
             {...register("newPassword")}
           />
         </FormControl>
         <FormControl>
-          <FormLabel>{I18n.get("confirm")}</FormLabel>
+          <FormLabel htmlFor="confirmPassword">{I18n.get("confirm")}</FormLabel>
           <TextField
             type="password"
+            id="confirmPassword"
             error={!!errors.confirmPassword?.message}
             label={errors.confirmPassword?.message}
             {...register("confirmPassword")}
