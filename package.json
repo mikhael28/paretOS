@@ -17,7 +17,7 @@
     "@mui/x-date-pickers": "5.0.4",
     "@portabletext/react": "1.0.6",
     "@react-three/drei": "9.36.0",
-    "@react-three/fiber": "8.8.10",
+    "@react-three/fiber": "8.9.2",
     "@reduxjs/toolkit": "1.8.6",
     "@rollup/plugin-node-resolve": "15.0.0",
     "@sanity/client": "3.4.1",
