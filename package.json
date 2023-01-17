@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api-rest": "2.0.60",
-    "@aws-amplify/auth": "4.6.10",
+    "@aws-amplify/auth": "5.1.4",
     "@aws-amplify/core": "4.7.8",
     "@aws-amplify/storage": "4.5.10",
     "@date-io/date-fns": "2.16.0",
