@@ -88,7 +88,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "test:unit": "CI=true vitest",
-    "test:integration": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout=60000 -r ts-node/register './tests/integration/*.ts'",
+    "test:integration": "CI=true vitest --dir ./tests/integration --config ./tests/integration/vite.config.js",
     "serve": "serve -s build"
   },
   "browserslist": [
