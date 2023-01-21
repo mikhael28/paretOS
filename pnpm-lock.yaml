@@ -4,7 +4,7 @@ packageExtensionsChecksum: 9c115b917b4305463c032ae4dc497ae0
 
 specifiers:
   '@aws-amplify/api-rest': 3.0.11
-  '@aws-amplify/auth': 4.6.10
+  '@aws-amplify/auth': 5.1.5
   '@aws-amplify/core': 4.7.8
   '@aws-amplify/storage': 4.5.10
   '@date-io/date-fns': 2.16.0
@@ -113,7 +113,7 @@ specifiers:
 
 dependencies:
   '@aws-amplify/api-rest': 3.0.11_react-native@0.71.0
-  '@aws-amplify/auth': 4.6.10_react-native@0.71.0
+  '@aws-amplify/auth': 5.1.5_react-native@0.71.0
   '@aws-amplify/core': 4.7.8_react-native@0.71.0
   '@aws-amplify/storage': 4.5.10_react-native@0.71.0
   '@date-io/date-fns': 2.16.0_date-fns@2.29.3
@@ -254,23 +254,14 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/auth/4.6.10_react-native@0.71.0:
-    resolution: {integrity: sha512-iXKpfo+S9jDQGb9D7cNm9XzjkItqCa2YCX/Wml8FQcZz/Ds8Yyr88d3vunk4A5brVXXIo6svY+2WSlkpbeyREQ==}
+  /@aws-amplify/auth/5.1.5_react-native@0.71.0:
+    resolution: {integrity: sha512-vtEpB4cG58xzt2/du75QztWLBG2cxa7ku3HBM5Yqr4sZSMhH1xKV8QjvlZtEHdADOimgrmL0ikTdUy+Xb7t4zw==}
     dependencies:
-      '@aws-amplify/cache': 4.0.59_react-native@0.71.0
-      '@aws-amplify/core': 4.7.8_react-native@0.71.0
-      amazon-cognito-identity-js: 5.2.11
-      crypto-js: 4.1.1
+      '@aws-amplify/core': 5.0.11_react-native@0.71.0
+      amazon-cognito-identity-js: 6.1.2
+      tslib: 1.14.1
     transitivePeerDependencies:
       - encoding
-      - react-native
-    dev: false
-
-  /@aws-amplify/cache/4.0.59_react-native@0.71.0:
-    resolution: {integrity: sha512-+8g/4euAyBRezh66GOhjplF1tbfug9d+Ko6/lyuSn4pxFUhileKZsYxn/UO3Z8xb9vpM+cbWuJkzalhQGRuZkw==}
-    dependencies:
-      '@aws-amplify/core': 4.7.8_react-native@0.71.0
-    transitivePeerDependencies:
       - react-native
     dev: false
 
@@ -4651,11 +4642,11 @@ packages:
       uri-js: 4.4.1
     dev: true
 
-  /amazon-cognito-identity-js/5.2.11:
-    resolution: {integrity: sha512-KOf72JL1bwvfX1rChK2VHNLqnB6QNBfQrp6Hi0pGfWFa0If7XHIFMmgv2FcIf2ec40NPGeJ5+WEdZ2PJ0T+taw==}
+  /amazon-cognito-identity-js/6.1.2:
+    resolution: {integrity: sha512-Ptutf9SLvKEM1Kr2kTPUvu/9THjQ0Si1l80iZYcS8NqScAAiDg8WjOOhQeJPcQDXt3Vym91luZ6zNW/3ErjEdQ==}
     dependencies:
+      '@aws-crypto/sha256-js': 1.2.2
       buffer: 4.9.2
-      crypto-js: 4.1.1
       fast-base64-decode: 1.0.0
       isomorphic-unfetch: 3.1.0
       js-cookie: 2.2.1
@@ -5596,10 +5587,6 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
-
-  /crypto-js/4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /crypto-random-string/2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
