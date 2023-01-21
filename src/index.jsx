@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import { Auth } from "@aws-amplify/auth";
 import { Amplify } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { Storage } from "@aws-amplify/storage";
@@ -46,6 +47,7 @@ export const store = configureStore({
 });
 
 Amplify.configure(awsmobile);
+Auth.configure(awsmobile);
 RestAPI.configure({
   endpoints: [
     {
