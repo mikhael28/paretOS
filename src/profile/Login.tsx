@@ -42,6 +42,12 @@ interface LoginProps {
   setLoading: (b: boolean) => void;
   userHasAuthenticated: (b: boolean) => void;
 }
+
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
 const Login = ({
   initialFetch,
   setLoading,
@@ -55,7 +61,7 @@ const Login = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<LoginForm>({ mode: "onChange" });
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -73,28 +79,8 @@ const Login = ({
     }
   };
 
-  const renderLogo = () => (
-    <div className="flex-center">
-      <Link to="/">
-        <img
-          src={logo}
-          alt="Pareto"
-          height="45"
-          width="180"
-          style={{
-            marginTop: 32,
-            filter:
-              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-          }}
-        />
-      </Link>
-    </div>
-  )
-
-  return (
-    <div className="Form">
-      {renderLogo()}
-
+  const renderForm = () => {
+    return (
       <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
         <div>
           <TextField
@@ -157,6 +143,30 @@ const Login = ({
           />
         </div>
       </form>
+    );
+  };
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
+        />
+      </Link>
+    </div>
+  );
+
+  return (
+    <div className="Form">
+      {renderLogo()}
+      {renderForm()}
     </div>
   );
 };

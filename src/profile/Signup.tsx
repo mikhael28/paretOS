@@ -1,6 +1,6 @@
 // hooks import
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import {
@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(3),
+    paddingTop: theme.spacing(5),
     width: 300,
 
     "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
@@ -145,51 +145,89 @@ const Signup = (_props: any) => {
   };
 
   const renderConfirmationForm = () => (
-    <div className="Form">
-      <div className="flex-center">
-        <img
-          src={logo}
-          alt="Pareto"
-          height="45"
-          width="180"
-          style={{
-            marginTop: 32,
-            filter:
-              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
-          }}
+    <form
+      className={classes.root}
+      onSubmit={_handleSubmit(handleConfirmationSubmit)}
+    >
+      <FormControl>
+        <TextField
+          id="confirmationCode"
+          variant="outlined"
+          size="medium"
+          label={I18n.get("confirmationCode")}
+          {..._register("confirmationCode")}
         />
-      </div>
-      <form
-        className={classes.root}
-        onSubmit={_handleSubmit(handleConfirmationSubmit)}
-      >
-        <FormControl>
-          <TextField
-            id="confirmationCode"
-            variant="outlined"
-            size="medium"
-            label={I18n.get("confirmationCode")}
-            {..._register("confirmationCode")}
-          />
-          <span className="error">{_errors.confirmationCode?.message}</span>
-        </FormControl>
-        <span>{formValues.email}</span>
-        <LoaderButton
-          text={I18n.get("verify")}
-          loadingText={I18n.get("nowVerifying")}
-          isLoading={isLoading}
-          disabled={!_isValid}
-          type="submit"
-          color="primary"
-          variant="contained"
-        />
-      </form>
-    </div>
+        <span className="error">{_errors.confirmationCode?.message}</span>
+      </FormControl>
+      <span>{formValues.email}</span>
+      <LoaderButton
+        text={I18n.get("verify")}
+        loadingText={I18n.get("nowVerifying")}
+        isLoading={isLoading}
+        disabled={!_isValid}
+        type="submit"
+        color="primary"
+        variant="contained"
+      />
+    </form>
   );
 
   const renderForm = () => (
-    <div>
-      <div className="flex-center">
+    <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
+      <FormControl>
+        <TextField
+          id="email"
+          variant="outlined"
+          size="medium"
+          autoFocus
+          label={I18n.get("email")}
+          {...register("email")}
+          key={1}
+        />
+        <span className="error">{errors.email?.message}</span>
+      </FormControl>
+
+      <FormControl>
+        <TextField
+          id="password"
+          variant="outlined"
+          size="medium"
+          type="password"
+          label={I18n.get("password")}
+          {...register("password")}
+          key={2}
+        />
+        <span className="error">{errors.password?.message}</span>
+      </FormControl>
+
+      <FormControl>
+        <TextField
+          id="confirmPassword"
+          variant="outlined"
+          size="medium"
+          type="password"
+          label={I18n.get("confirm")}
+          {...register("confirmPassword")}
+          key={3}
+        />
+        <span className="error">{errors.confirmPassword?.message}</span>
+      </FormControl>
+
+      <LoaderButton
+        text={I18n.get("signup")}
+        loadingText={I18n.get("signingUp")}
+        isLoading={isLoading}
+        disabled={!isValid}
+        type="submit"
+        color="primary"
+        variant="contained"
+      />
+    </form>
+  );
+
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
         <img
           src={logo}
           alt="Pareto"
@@ -201,63 +239,13 @@ const Signup = (_props: any) => {
               theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
           }}
         />
-      </div>
-
-      <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
-        <FormControl>
-          <TextField
-            id="email"
-            variant="outlined"
-            size="medium"
-            autoFocus={true}
-            label={I18n.get("email")}
-            {...register("email")}
-            key={1}
-          />
-          <span className="error">{errors.email?.message}</span>
-        </FormControl>
-
-        <FormControl>
-          <TextField
-            id="password"
-            variant="outlined"
-            size="medium"
-            type="password"
-            label={I18n.get("password")}
-            {...register("password")}
-            key={2}
-          />
-          <span className="error">{errors.password?.message}</span>
-        </FormControl>
-
-        <FormControl>
-          <TextField
-            id="confirmPassword"
-            variant="outlined"
-            size="medium"
-            type="password"
-            label={I18n.get("confirm")}
-            {...register("confirmPassword")}
-            key={3}
-          />
-          <span className="error">{errors.confirmPassword?.message}</span>
-        </FormControl>
-
-        <LoaderButton
-          text={I18n.get("signup")}
-          loadingText={I18n.get("signingUp")}
-          isLoading={isLoading}
-          disabled={!isValid}
-          type="submit"
-          color="primary"
-          variant="contained"
-        />
-      </form>
+      </Link>
     </div>
   );
 
   return (
     <div className="Form">
+      {renderLogo()}
       {Object.keys(newUser).length === 0
         ? renderForm()
         : renderConfirmationForm()}

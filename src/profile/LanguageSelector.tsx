@@ -39,7 +39,7 @@ const LanguageSelector = (props: { user: User }) => {
   };
 
   return (
-    <Box>
+    <Box component="div">
       <h2>Default Language</h2>
       <FormControl fullWidth id="defaultLanguage">
         {isLoading ? (
