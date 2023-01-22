@@ -8,7 +8,11 @@ import {
   TextField
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import * as Yup from "yup";
+import {
+  object as yupObject,
+  string as yupString,
+  ref as yupRef
+} from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastMsgContext } from "../state/ToastContext";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +23,7 @@ import { makeStyles } from "@mui/styles";
  */
 
 
- const useStyles = makeStyles((theme) => ({
+ const useStyles = makeStyles(() => ({
   root: {
     "& .MuiFormControl-root": {
       width: "100%",
@@ -34,21 +38,21 @@ import { makeStyles } from "@mui/styles";
   confirmPassword: string;
 };
 
-const ChangePassword = (props: any) => {
+const ChangePassword = () => {
   const [isChanging, setIsChanging] = useState(false);
   const navigate = useNavigate();
   const classes = useStyles();
 
-  const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string()
+  const validationSchema = yupObject().shape({
+    oldPassword: yupString()
     .required("Password is required"),
-    newPassword: Yup.string()
+    newPassword: yupString()
       .required("New password is required")
       .min(8, "Password must be at least 8 characters")
       .max(40, "Password must not exceed 40 characters"),
-    confirmPassword: Yup.string()
+    confirmPassword: yupString()
       .required("Confirm Password is required")
-      .oneOf([Yup.ref("newPassword"), null], "Confirm Password does not match"),
+      .oneOf([yupRef("newPassword"), null], "Confirm Password does not match"),
   });
 
   const {
@@ -76,50 +80,48 @@ const ChangePassword = (props: any) => {
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   return (
-    <div className="Form">
-      <form className={classes.root} onSubmit={handleSubmit(handleChangePasswordSubmit)}>
-        <FormControl>
-          <FormLabel htmlFor="oldPassword">{I18n.get("oldPassword")}</FormLabel>
-          <TextField
-            type="password"
-            id="oldPassword"
-            error={!!errors.oldPassword?.message}
-            label={errors.oldPassword?.message}
-            {...register("oldPassword")}
-          />
-        </FormControl>
-        <hr />
-        <FormControl>
-          <FormLabel htmlFor="newPassword">{I18n.get("newPassword")}</FormLabel>
-          <TextField
-            type="password"
-            id="newPassword"
-            error={!!errors.newPassword?.message}
-            label={errors.newPassword?.message}
-            {...register("newPassword")}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="confirmPassword">{I18n.get("confirm")}</FormLabel>
-          <TextField
-            type="password"
-            id="confirmPassword"
-            error={!!errors.confirmPassword?.message}
-            label={errors.confirmPassword?.message}
-            {...register("confirmPassword")}
-          />
-        </FormControl>
-        <LoaderButton
-          block="true"
-          type="submit"
-          size="large"
-          text={I18n.get("confirm")}
-          loadingText={I18n.get("confirming")}
-          disabled={!isValid}
-          isLoading={isChanging}
+    <form className={classes.root + " Form"} onSubmit={handleSubmit(handleChangePasswordSubmit)}>
+      <FormControl>
+        <FormLabel htmlFor="oldPassword">{I18n.get("oldPassword")}</FormLabel>
+        <TextField
+          type="password"
+          id="oldPassword"
+          error={!!errors.oldPassword?.message}
+          label={errors.oldPassword?.message}
+          {...register("oldPassword")}
         />
-      </form>
-    </div>
+      </FormControl>
+      <hr />
+      <FormControl>
+        <FormLabel htmlFor="newPassword">{I18n.get("newPassword")}</FormLabel>
+        <TextField
+          type="password"
+          id="newPassword"
+          error={!!errors.newPassword?.message}
+          label={errors.newPassword?.message}
+          {...register("newPassword")}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="confirmPassword">{I18n.get("confirm")}</FormLabel>
+        <TextField
+          type="password"
+          id="confirmPassword"
+          error={!!errors.confirmPassword?.message}
+          label={errors.confirmPassword?.message}
+          {...register("confirmPassword")}
+        />
+      </FormControl>
+      <LoaderButton
+        block="true"
+        type="submit"
+        size="large"
+        text={I18n.get("confirm")}
+        loadingText={I18n.get("confirming")}
+        disabled={!isValid}
+        isLoading={isChanging}
+      />
+    </form>
   );
 };
 
