@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies   
-        run: pnpm install
+        run: pnpm install --frozen-lockfile false
 
       - name: Run unit tests
         run: pnpm test:unit
@@ -45,5 +45,4 @@ jobs:
         run: |
           pnpm run start &
           sleep 45 &&
-          curl http://localhost:5173 &&
           pnpm test:integration

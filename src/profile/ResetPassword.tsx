@@ -3,12 +3,14 @@ import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
-import { Typography, TextField, Link } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
+import theme from "../libs/theme";
+import logo from "../assets/Pareto_Lockup-01.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(5),
     width: 300,
 
     "& .css-36njyd-MuiInputBase-root-MuiFilledInput-root": {
@@ -39,7 +41,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => {
+type ResetPasswordForm = {
+  email: string;
+};
+
+type ConfirmationForm = {
+  code: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const ResetPassword = ({
+  setLoading,
+}: {
+  setLoading: (b: boolean) => void;
+}) => {
   const classes = useStyles();
 
   const [isConfirming, setIsConfirming] = useState(false);
@@ -53,14 +69,14 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
     formState: { errors },
     handleSubmit,
     getValues,
-  } = useForm();
+  } = useForm<ResetPasswordForm>({ mode: "onChange" });
 
   const {
     register: register2,
     formState: { errors: errors2 },
     handleSubmit: handleSubmit2,
     watch,
-  } = useForm();
+  } = useForm<ConfirmationForm>({ mode: "onChange" });
 
   let password1 = watch("password");
   let email1 = getValues("email");
@@ -218,17 +234,35 @@ const ResetPassword = ({ setLoading }: { setLoading: (b: boolean) => void }) => 
       <Typography variant="h1">{I18n.get("Success!")}</Typography>
 
       <p>Your password has been reset.</p>
-      <Link href="/login">Click here to login with your new credentials.</Link>
+      <Link to="/login">Click here to login with your new credentials.</Link>
+    </div>
+  );
+  const renderLogo = () => (
+    <div className="flex-center">
+      <Link to="/">
+        <img
+          src={logo}
+          alt="Pareto"
+          height="45"
+          width="180"
+          style={{
+            marginTop: 32,
+            filter:
+              theme.palette.mode !== "dark" ? "" : "invert() brightness(150%)",
+          }}
+        />
+      </Link>
     </div>
   );
 
   return (
     <div className="Form">
+      {renderLogo()}
       {!codeSent
         ? renderRequestCodeForm()
         : !confirmed
-          ? renderConfirmationForm()
-          : renderSuccessMessage()}
+        ? renderConfirmationForm()
+        : renderSuccessMessage()}
     </div>
   );
 };
