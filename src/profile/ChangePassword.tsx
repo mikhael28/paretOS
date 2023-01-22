@@ -80,7 +80,7 @@ const ChangePassword = () => {
   const { handleShowSuccess, handleShowError } = useContext(ToastMsgContext);
 
   return (
-    <form className={classes.root + " Form"} onSubmit={handleSubmit(handleChangePasswordSubmit)}>
+    <form className={`${classes.root} Form`} onSubmit={handleSubmit(handleChangePasswordSubmit)}>
       <FormControl>
         <FormLabel htmlFor="oldPassword">{I18n.get("oldPassword")}</FormLabel>
         <TextField
