@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import FormGroup from "react-bootstrap/lib/FormGroup";
+import React, { useEffect, useState, useContext, SetStateAction } from "react";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import { useTheme, Button } from "@mui/material";
 import { ToastMsgContext } from "../state/ToastContext";
@@ -11,9 +10,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
-import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
-import sanity from "../libs/sanity";
 import { useNavigate } from "react-router-dom";
 
 /**
@@ -22,9 +19,12 @@ import { useNavigate } from "react-router-dom";
  * @TODO This page needs a few improvements.
  */
 
-interface CreateSprintTemplateProps {
+export interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
   navigate: ReturnType<typeof useNavigate>;
+  getTemplates: () => Promise<Array<{ title: string}>>;
+  setTemplate: (body: object) => Promise<void>;
+  getTemplateOptionsFromSanity: () => Promise<object>;
 }
 
 interface OnDragEndParams {
@@ -91,7 +91,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = props.navigate;
 
   const [columns, setColumns] = useState({
     Options: {
@@ -112,19 +112,19 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
     },
   });
   const [title, setTitle] = useState("");
-  const [existingTemplates, setExistingTemplates] = useState([]);
+  const [existingTemplates, setExistingTemplates] = useState([] as string[]);
   const [error, setError] = useState("");
 
   async function createTemplate() {
     let missionsArray: never[] = [];
 
-    columns.Morning.items.map((item) => {
+    columns.Morning.items.forEach((item) => {
       missionsArray.push(item);
     });
-    columns.Workday.items.map((item) => {
+    columns.Workday.items.forEach((item) => {
       missionsArray.push(item);
     });
-    columns.Evening.items.map((item) => {
+    columns.Evening.items.forEach((item) => {
       missionsArray.push(item);
     });
 
@@ -143,42 +143,15 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
-      await RestAPI.post("pareto", `/templates`, { body });
+      await props.setTemplate(body)
       navigate("/");
     } catch (e) {
       handleShowError(e as Error);
     }
   }
 
-  /**
-   * Getting our potential sprint items from Sanity. Will likely need to replace later.
-   */
-  async function getSanityItems() {
-    const query = `*[_type == 'achievement' && !(_id in path("drafts.**"))]`;
-    const links = await sanity.fetch(query);
-    let initialData = {
-      Options: {
-        name: `${I18n.get("options")}`,
-        items: links,
-      },
-      Morning: {
-        name: `${I18n.get("morning")}`,
-        items: [],
-      },
-      Workday: {
-        name: `${I18n.get("workday")}`,
-        items: [],
-      },
-      Evening: {
-        name: `${I18n.get("evening")}`,
-        items: [],
-      },
-    };
-    setColumns(initialData);
-  }
-
   useEffect(() => {
-    getSanityItems();
+    props.getTemplateOptionsFromSanity().then((res) => setColumns(res as SetStateAction<{ Options: { name: string; items: never[]; }; Morning: { name: string; items: never[]; }; Workday: { name: string; items: never[]; }; Evening: { name: string; items: never[]; }; }>))
   }, []);
 
   useEffect(() => {
@@ -187,8 +160,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
 
   // pulls the /templates api and sets the existing templates
   async function getConfiguration() {
-    let options = await RestAPI.get("pareto", "/templates", {});
-    setExistingTemplates(options.map((option: { title: any }) => option.title));
+    const templates = await props.getTemplates();
+    const templateTitles: string[] = templates.map((option: { title: string }) => option.title);
+    setExistingTemplates(templateTitles);
   }
   // This will equal true or false, not a number
   const meetsMinimumOptionsThreshold =
@@ -237,41 +211,49 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       >
         {I18n.get("createTemplate")}
       </h1>
-      <FormGroup
-        controlId="fName"
-        bsSize="large"
+      <div
         style={{
           width: "auto",
           display: "flex",
           flexDirection: "row",
         }}
       >
-        <ControlLabel style={{ marginRight: 25, paddingTop: 10 }}>
-          {I18n.get("enterTemplateName")}
-        </ControlLabel>
-        <TextField
-          color="success"
-          error={!!error}
-          required
-          helperText={error}
-          style={{ width: 300 }}
-          label={I18n.get("templateName")}
-          variant="outlined"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <Button
-          /* @ts-ignore */
-          disabled={
-            (title === "" && meetsMinimumOptionsThreshold === false) || !!error
-          }
-          variant="gradient"
-          onClick={createTemplate}
-          style={{ marginLeft: 30, height: "4.8rem" }}
-        >
-          {I18n.get("create")}
-        </Button>
-      </FormGroup>
+        <div style={{ margin: 'auto 25px auto 0px' }}>
+          <ControlLabel >
+            {I18n.get("enterTemplateName")}
+          </ControlLabel>
+        </div>
+        <div style={{ width: 300, margin:'auto 0px' }}>
+          <TextField
+            color="success"
+            error={!!error}
+            required
+            helperText={error}
+            fullWidth
+            label={I18n.get("templateName")}
+            variant="outlined"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+        </div>
+        <div style={{ margin: 'auto 0px auto 30px' }}>
+          <Button
+            /* @ts-ignore */
+            disabled={
+              (title === "" && meetsMinimumOptionsThreshold === false) || !!error
+            }
+            fullWidth
+            size="large"
+            variant="gradient"
+            sx={{
+              height: "3.8rem" 
+            }}
+            onClick={createTemplate}
+          >
+            {I18n.get("create")}
+          </Button>
+        </div>
+      </div>
       <h2
         style={{
           marginTop: 50,

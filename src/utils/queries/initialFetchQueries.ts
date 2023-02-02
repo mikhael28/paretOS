@@ -1,16 +1,16 @@
 import { RestAPI } from "@aws-amplify/api-rest";
 import sortby from "lodash.sortby";
-import sanity from "../libs/sanity";
+import sanity from "../../libs/sanity";
 
 interface ExperienceResult {
   success: boolean;
-  sanityTraining?: any;
-  sanityProduct?: any;
-  sanityInterview?: any;
-  training?: any;
-  product?: any;
-  interviewing?: any;
-  experiences?: any;
+  sanityTraining?: Object | null;
+  sanityProduct?: Object | null;
+  sanityInterview?: Object | null;
+  training?: Object | null;
+  product?: Object | null;
+  interviewing?: Object | null;
+  experiences?: Object | null;
 }
 
 export const fetchUser = async (username: string) => {
@@ -66,7 +66,7 @@ export const fetchStarterKitSanity = async () => {
   return result;
 };
 
-export const fetchStarterKitExperience = async (id: any) => {
+export const fetchStarterKitExperience = async (id: number | string) => {
   const result: ExperienceResult = {
     success: false,
     training: null,
@@ -80,7 +80,7 @@ export const fetchStarterKitExperience = async (id: any) => {
     let apprenticeship;
     let interviewing;
 
-    await experiences.forEach((exp: any) => {
+    await experiences.forEach((exp: Record<string, string>) => {
       if (exp.type === "Product") {
         product = exp;
       } else if (exp.type === "Apprenticeship") {

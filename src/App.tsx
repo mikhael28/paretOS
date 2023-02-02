@@ -3,7 +3,7 @@ import React, {
   useEffect,
   MouseEvent,
   ReactElement,
-  useContext,
+  KeyboardEvent,
 } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
@@ -24,7 +24,7 @@ import {
   fetchCoaches,
   fetchCoachingRoster,
   fetchSanitySchemas,
-} from "./utils/initialFetch";
+} from "./utils/queries/initialFetchQueries";
 import LeftNav from "./components/LeftNav";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import Routes, { ChildProps } from "./Routes";
@@ -38,6 +38,8 @@ import { Sprint } from "./types/ArenaTypes";
 import ErrorBoundary from "./components/ErrorBoundary";
 import customHistory from "./utils/customHistory";
 import MusicPlayer from "./components/MusicPlayer";
+import { Coach } from "./types/MentorshipTypes";
+import { BrowserHistory } from "history";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -131,7 +133,7 @@ function App(props: AppProps) {
   const [sprints, setSprints] = useState(initialSprints);
   const [athletes, setAthletes] = useState<any>([...emptyArray]);
 
-  const [coaches, setCoaches] = useState([...emptyArray]);
+  const [coaches, setCoaches] = useState([...emptyArray as Coach[]]);
   const [sanityTraining, setSanityTraining] = useState([...emptyArray]);
   const [sanityProduct, setSanityProduct] = useState([...emptyArray]);
   const [sanityInterview, setSanityInterview] = useState([...emptyArray]);
@@ -194,7 +196,7 @@ function App(props: AppProps) {
         setAthletes(payload as Array<object>);
         break;
       case "coaches":
-        setCoaches(payload as Array<object>);
+        setCoaches(payload as Array<Coach>);
         break;
       case "sanityTraining":
         setSanityTraining(payload as Array<object>);
@@ -377,7 +379,7 @@ function App(props: AppProps) {
 
     let sprintStrings: Array<string> = [];
 
-    result.sprints.map((spr: Sprint, idx: number) => {
+    result.sprints.forEach((spr: Sprint, idx: number) => {
       sprintStrings.push(`key${idx}=${spr.id}`);
     });
 
@@ -440,8 +442,9 @@ function App(props: AppProps) {
     setIsAuthenticated(authenticated);
   }
 
-  function handleLogout(event: MouseEvent<HTMLElement>) {
+  function handleLogout(event: MouseEvent<HTMLElement> |  KeyboardEvent<HTMLDivElement>) {
     event.preventDefault();
+    
     localStorage.removeItem("sanity");
     const signout = async () => {
       await Auth.signOut();
@@ -539,11 +542,10 @@ function App(props: AppProps) {
     sanitySchemas,
     coaches,
     reviewMode: false,
+    navigate: useNavigate()
   };
   languageProps.language = userData.chosenLanguage;
   languageProps.setLanguage = updateLanguage;
-
-  const navigate = useNavigate();
 
   return (
     !isAuthenticating && (
@@ -565,12 +567,15 @@ function App(props: AppProps) {
                 <>
                   <div
                     className="sticky-logout"
+                    role="button"
                     style={{
                       filter: theme.palette.mode === "dark" ? "invert()" : "",
+                      height: "20px"
                     }}
                     onClick={handleLogout}
+                    onKeyDown={handleLogout}
                   >
-                    <GrLogout style={{ height: "20px" }} />
+                    <GrLogout />
                   </div>
 
                   <div className="root-padding">
@@ -584,7 +589,12 @@ function App(props: AppProps) {
                     <div className="sticky-chat">
                       <img
                         src={question}
+                        role="button"
                         onClick={(event) => {
+                          event.preventDefault();
+                          setIsTourOpen(true);
+                        }}
+                        onKeyDown={(event) => {
                           event.preventDefault();
                           setIsTourOpen(true);
                         }}
@@ -610,27 +620,26 @@ function App(props: AppProps) {
                   </div>
                 </>
               ) : (
-                <Routes childProps={childProps} history={[]} />
+                <Routes childProps={childProps} history={{} as BrowserHistory} />
               )}
               <Onboarding showCloseButton />
-              <Dialog
-                style={{
-                  margin: "auto",
-                }}
-                open={loading}
-                TransitionComponent={
-                  Transition as React.JSXElementConstructor<any> | undefined
-                }
-                keepMounted
-                disableEscapeKeyDown
-                fullScreen
-                fullWidth
-                hideBackdrop={false}
-                aria-labelledby="loading"
-                aria-describedby="Please wait while the page loads"
-              >
-                <LoadingModal />
-              </Dialog>
+              <div style={{ margin: "auto" }}>
+                <Dialog
+                  open={loading}
+                  TransitionComponent={
+                    Transition as React.JSXElementConstructor<any> | undefined
+                  }
+                  keepMounted
+                  disableEscapeKeyDown
+                  fullScreen
+                  fullWidth
+                  hideBackdrop={false}
+                  aria-labelledby="loading"
+                  aria-describedby="Please wait while the page loads"
+                >
+                  <LoadingModal />
+                </Dialog>
+              </div>
             </Box>
           </ToastMsgContext.Provider>
           <ToastMsg
