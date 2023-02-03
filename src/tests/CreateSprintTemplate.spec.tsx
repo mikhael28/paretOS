@@ -7,7 +7,7 @@ import { vi, describe, beforeEach, afterEach, it, expect } from "vitest";
 
 import CreateSprintTemplate from "../arena/CreateSprintTemplate";
 import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate } from "../utils/queries/createSprintTemplateQueries";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getSampleTemplates } from "./testData";
 
 

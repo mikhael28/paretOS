@@ -11,7 +11,7 @@ import {
 } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
 import { I18n } from "@aws-amplify/core";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /**
  *

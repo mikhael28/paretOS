@@ -570,12 +570,12 @@ function App(props: AppProps) {
                     role="button"
                     style={{
                       filter: theme.palette.mode === "dark" ? "invert()" : "",
-                      height: "20px"
                     }}
                     onClick={handleLogout}
                     onKeyDown={handleLogout}
+                    tabIndex={1}
                   >
-                    <GrLogout />
+                    <GrLogout size={20} />
                   </div>
 
                   <div className="root-padding">
@@ -586,18 +586,21 @@ function App(props: AppProps) {
                   </div>
                   <Palette {...props} />
                   <div className="sticky-nav">
-                    <div className="sticky-chat">
+                    <div
+                      className="sticky-chat"
+                      role="button"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setIsTourOpen(true);
+                      }}
+                      onKeyDown={(event) => {
+                        event.preventDefault();
+                        setIsTourOpen(true);
+                      }}
+                      tabIndex={0}
+                    >
                       <img
                         src={question}
-                        role="button"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setIsTourOpen(true);
-                        }}
-                        onKeyDown={(event) => {
-                          event.preventDefault();
-                          setIsTourOpen(true);
-                        }}
                         alt="Home page tour icon"
                         height="24"
                         width="24"
