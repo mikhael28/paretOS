@@ -7,7 +7,7 @@ import { vi, describe, beforeEach, afterEach, it, expect } from "vitest";
 
 import CreateSprintTemplate from "../arena/CreateSprintTemplate";
 import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate } from "../utils/queries/createSprintTemplateQueries";
-import { useNavigate } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import { getSampleTemplates } from "./testData";
 
 
@@ -22,6 +22,7 @@ describe("CREATE SPRINT TEMPLATE", () => {
   const mockSetTemplate = vi.fn().mockImplementation(setSprintTemplate);
   const mockGetTemplateOptions = vi.fn().mockImplementation(getSprintTemplateOptionsFromSanity);
   const mockNavigate = vi.fn().mockImplementation(useNavigate);
+  mockNavigate.mockReturnValue(vi.fn())
 
   describe("Initial view with sprint template creation components", () => {
     beforeEach(() => {
@@ -59,13 +60,13 @@ describe("CREATE SPRINT TEMPLATE", () => {
       ])
 
       render(
-        <CreateSprintTemplate
-          user={testUser}
-          navigate={mockNavigate}
-          getTemplates={mockGetTemplates}
-          setTemplate={mockSetTemplate}
-          getTemplateOptionsFromSanity={mockGetTemplateOptions}
-        />
+          <CreateSprintTemplate
+            user={testUser}
+            navigate={mockNavigate}
+            getTemplates={mockGetTemplates}
+            setTemplate={mockSetTemplate}
+            getTemplateOptionsFromSanity={mockGetTemplateOptions}
+            />
       );
     });
 

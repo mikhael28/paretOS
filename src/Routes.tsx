@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { PathRouteProps, Route, Routes, useNavigate } from "react-router-dom";
+import { NavigateFunction, PathRouteProps, Route, Routes, useNavigate } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
@@ -40,7 +40,7 @@ const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 
 export interface ChildProps {
-  navigate: ReturnType<typeof useNavigate>
+  navigate: NavigateFunction
   reviewMode: boolean;
   isAuthenticated: boolean;
   userHasAuthenticated: (b: boolean) => void;
@@ -199,9 +199,7 @@ function RoutesComponent({ childProps, history, ...rest }: RouteWithChildProps) 
         <Route
           path="/chat/:id"
           {...rest}
-          /* @ts-ignore */
-          element={<Room {...childProps} />}
-        // props={childProps}
+          element={<Room />}
         />
         <Route
           path="/settings/password"

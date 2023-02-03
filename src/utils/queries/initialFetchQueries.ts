@@ -4,13 +4,13 @@ import sanity from "../../libs/sanity";
 
 interface ExperienceResult {
   success: boolean;
-  sanityTraining?: Object | null;
-  sanityProduct?: Object | null;
-  sanityInterview?: Object | null;
-  training?: Object | null;
-  product?: Object | null;
-  interviewing?: Object | null;
-  experiences?: Object | null;
+  sanityTraining?: object | null;
+  sanityProduct?: object | null;
+  sanityInterview?: object | null;
+  training?: object | null;
+  product?: object | null;
+  interviewing?: object | null;
+  experiences?: object | null;
 }
 
 export const fetchUser = async (username: string) => {

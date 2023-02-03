@@ -11,7 +11,7 @@ import {
 } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
 import { I18n } from "@aws-amplify/core";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 /**
  *
@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 export interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
-  navigate: ReturnType<typeof useNavigate>;
+  navigate: typeof useNavigate;
   getTemplates: () => Promise<Array<{ title: string}>>;
   setTemplate: (body: object) => Promise<void>;
   getTemplateOptionsFromSanity: () => Promise<object>;
@@ -91,7 +91,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
-  const navigate = props.navigate;
+  const navigate = props.navigate();
 
   const [columns, setColumns] = useState({
     Options: {
@@ -238,7 +238,6 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         </div>
         <div style={{ margin: 'auto 0px auto 30px' }}>
           <Button
-            /* @ts-ignore */
             disabled={
               (title === "" && meetsMinimumOptionsThreshold === false) || !!error
             }

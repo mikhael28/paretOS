@@ -542,7 +542,7 @@ function App(props: AppProps) {
     sanitySchemas,
     coaches,
     reviewMode: false,
-    navigate: useNavigate()
+    navigate: useNavigate
   };
   languageProps.language = userData.chosenLanguage;
   languageProps.setLanguage = updateLanguage;
@@ -627,7 +627,7 @@ function App(props: AppProps) {
                 <Dialog
                   open={loading}
                   TransitionComponent={
-                    Transition as React.JSXElementConstructor<any> | undefined
+                    Transition as React.JSXElementConstructor<object> | undefined
                   }
                   keepMounted
                   disableEscapeKeyDown
