@@ -127,7 +127,7 @@
     "stylelint-config-standard": "29.0.0",
     "ts-node": "10.9.1",
     "vite-plugin-pwa": "0.14.1",
-    "vitest": "0.27.1"
+    "vitest": "0.28.4"
   },
   "strict-peer-dependencies": false,
   "pnpm": {
