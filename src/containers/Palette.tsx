@@ -40,7 +40,7 @@ const routes = [
   },
 ];
 
-function CommandPalette(props: any) {
+function CommandPalette() {
   const ninjaKeys = useRef<any>(null);
   const navigate = useNavigate()
 
@@ -112,7 +112,7 @@ function CommandPalette(props: any) {
       {/* @ts-ignore */}
       <ninja-keys ref={ninjaKeys}></ninja-keys>
       <Dialog
-        style={{
+        sx={{
           margin: "auto",
           padding: 12,
         }}
@@ -128,7 +128,7 @@ function CommandPalette(props: any) {
             size="small"
             variant="contained"
             color="primary"
-            style={{
+            sx={{
               padding: "10px",
               fontSize: "20px",
             }}
@@ -145,7 +145,7 @@ function CommandPalette(props: any) {
             size="small"
             variant="contained"
             color="secondary"
-            style={{
+            sx={{
               padding: "10px",
               fontSize: "20px",
             }}

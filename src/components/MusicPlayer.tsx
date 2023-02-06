@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, MouseEventHandler } from "react";
 import {
   IoMdPlay,
   IoMdPause,
@@ -12,17 +12,18 @@ import FatsNY from "../assets/mp3/FatsNY.mp3";
 import PictureBall from "../assets/mp3/PictureBall.mp3";
 import Silvery from "../assets/mp3/Silvery.mp3";
 import SecretGarden from "../assets/mp3/SecretGarden.mp3";
+import { IconType } from "react-icons/lib";
 
-export default function MusicPlayer(props: any) {
+export interface Song {
+  title: string;
+  artist: string;
+  img_src: IconType;
+  src: string;
+}
+
+export default function MusicPlayer() {
   const [currentSong, setCurrentSong] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  interface Song {
-    title: string;
-    artist: string;
-    img_src: any;
-    src: string;
-  }
 
   const songs: Song[] = useMemo(
     () => [
@@ -100,43 +101,71 @@ export default function MusicPlayer(props: any) {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "gray",
-        display: "flex",
-        justifyContent: "space-between",
-        paddingLeft: 20,
-        paddingTop: 8,
-      }}
-    >
-      <div>
-        <h3>Now Playing</h3>
-        <p>
-          {songs[currentSong].title} by {songs[currentSong].artist}
-        </p>
-      </div>
-
-      <div>
-        <IoMdSkipBackward
-          style={{ cursor: "pointer", margin: 12 }}
-          onClick={handlePrevious}
-        />
-        {isPlaying ? (
-          <IoMdPause
-            style={{ cursor: "pointer", margin: 12 }}
-            onClick={() => (!isPlaying ? handlePlay() : handlePause())}
-          />
-        ) : (
-          <IoMdPlay
-            style={{ cursor: "pointer", margin: 12 }}
-            onClick={() => (!isPlaying ? handlePlay() : handlePause())}
-          />
-        )}
-        <IoMdSkipForward
-          style={{ cursor: "pointer", margin: 12 }}
-          onClick={handleSkip}
+    <div className="sticky-audio">
+      <div
+        style={{
+          backgroundColor: "gray",
+          display: "flex",
+          justifyContent: "space-between",
+          paddingLeft: 20,
+          paddingTop: 8,
+        }}
+      >
+        <NowPlaying songs={songs} currentSong={currentSong} />
+        <MusicPlayerControls
+          isPlaying={isPlaying}
+          handlePrevious={handlePrevious}
+          handlePlay={handlePlay}
+          handlePause={handlePause}
+          handleSkip={handleSkip}
         />
       </div>
     </div>
   );
+}
+
+interface NowPlayingProps {
+  songs: Song[];
+  currentSong: number;
+}
+
+function NowPlaying({ songs, currentSong }: NowPlayingProps) {
+  return (
+    <div>
+      <h3>Now Playing</h3>
+      <p>
+        {songs[currentSong].title} by {songs[currentSong].artist}
+      </p>
+    </div>
+  )
+}
+
+interface MusicPlayerPlayerControlsProps {
+  isPlaying: boolean;
+  handlePrevious: MouseEventHandler;
+  handlePlay: MouseEventHandler;
+  handlePause: MouseEventHandler;
+  handleSkip: MouseEventHandler;
+}
+
+function MusicPlayerControls({ isPlaying, handlePrevious, handlePlay, handlePause, handleSkip }: MusicPlayerPlayerControlsProps) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'nowrap' }}>
+      <StyledIcon Icon={IoMdSkipBackward} handleClick={handlePrevious}/>
+      {isPlaying ? (
+        <StyledIcon Icon={IoMdPause} handleClick={(e) => (!isPlaying ? handlePlay(e) : handlePause(e))}/>
+      ) : (
+        <StyledIcon Icon={IoMdPlay} handleClick={(e) => (!isPlaying ? handlePlay(e) : handlePause(e))}/>
+      )}
+      <StyledIcon Icon={IoMdSkipForward} handleClick={handleSkip}/>
+    </div>
+  )
+}
+
+function StyledIcon({ Icon, handleClick }: { Icon: IconType, handleClick: MouseEventHandler }) {
+  return (
+    <div style={{ cursor: "pointer", margin: 12 }}>
+      <Icon onClick={handleClick} />
+    </div>
+  )
 }
