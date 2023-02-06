@@ -79,7 +79,7 @@ function App(props: AppProps) {
     session: {},
   });
   const [toast, setToast] = useState({ msg: "", open: false, type: "info" });
-  const emptyError: any = {};
+
   const [userData, setUserData] = useState({
     user: {
       id: "8020",
