@@ -4,17 +4,17 @@ import React, {
   MouseEvent,
   ReactElement,
   KeyboardEvent,
+  MouseEventHandler,
+  PropsWithChildren,
 } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { RestAPI } from "@aws-amplify/api-rest";
-import { useNavigate, useLocation, RouteProps } from "react-router-dom";
+import { useNavigate, useLocation, RouteProps, Location } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
-import { GrLogout } from "react-icons/gr";
-import { Slide, Dialog, Box, ThemeProvider } from "@mui/material";
+import { Slide, Dialog, Box, ThemeProvider, Theme } from "@mui/material";
 import strings from "./intl/localization";
-import BottomNav from "./components/BottomNav";
 import { LanguageContext, LanguageProps } from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
 import {
@@ -25,21 +25,17 @@ import {
   fetchCoachingRoster,
   fetchSanitySchemas,
 } from "./utils/queries/initialFetchQueries";
-import LeftNav from "./components/LeftNav";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
-import Routes, { ChildProps } from "./Routes";
-import question from "./assets/help.png";
-import Palette from "./containers/Palette";
+import { ChildProps } from "./Routes";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
 import ws from "./libs/websocket";
 import { User } from "./types/ProfileTypes";
 import { Sprint } from "./types/ArenaTypes";
-import ErrorBoundary from "./components/ErrorBoundary";
 import customHistory from "./utils/customHistory";
-import MusicPlayer from "./components/MusicPlayer";
 import { Coach } from "./types/MentorshipTypes";
-import { BrowserHistory } from "history";
+import UnauthenticatedLayout from "./components/UnauthenticatedLayout";
+import AuthenticatedLayout from "./components/AuthenticatedLayout";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -74,7 +70,7 @@ interface AppProps {
 function App(props: AppProps) {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [isTourOpen, setIsTourOpen] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -212,9 +208,7 @@ function App(props: AppProps) {
     }
   };
 
-  const closeTour = () => {
-    setIsTourOpen(false);
-  };
+  
 
   useEffect(() => {
     setLoading(true);
@@ -442,7 +436,7 @@ function App(props: AppProps) {
     setIsAuthenticated(authenticated);
   }
 
-  function handleLogout(event: MouseEvent<HTMLElement> |  KeyboardEvent<HTMLDivElement>) {
+  function handleLogout(event: MouseEvent |  KeyboardEvent) {
     event.preventDefault();
     
     localStorage.removeItem("sanity");
@@ -473,8 +467,107 @@ function App(props: AppProps) {
     }));
   }
 
-  const OnboardingWithoutRouter = (props: any) => {
-    const { showCloseButton, location } = props;
+  const childProps: ChildProps = {
+    // authentication related state
+    isAuthenticated,
+    userHasAuthenticated,
+    user: userData.user,
+    setLoading: handleSetLoading,
+    connectSocket: connectSocketToSprint,
+
+    // experience related state
+    product,
+    interviewing,
+    training,
+    sanityTraining,
+    sanityInterview,
+    sanityProduct,
+    experiences,
+
+    // sprint related state
+    fetchMenteeSprints,
+    initialFetch,
+    sprints,
+
+    // assorted/unused state
+    athletes,
+    sanitySchemas,
+    coaches,
+    reviewMode: false,
+    navigate: useNavigate
+  };
+  languageProps.language = userData.chosenLanguage;
+  languageProps.setLanguage = updateLanguage;
+
+  return (
+    !isAuthenticating && (
+      <ContextProvider
+        theme={theme}
+        languageProps={languageProps}
+        handleShowError={handleShowError}
+        handleShowSuccess={handleShowSuccess}
+        handleCloseToast={handleCloseToast}
+        toast={toast}
+      >
+        <MainContent
+          isAuthenticated={isAuthenticated}
+          handleLogout={handleLogout}
+          childProps={childProps}
+          loading={loading}
+          location={location}
+        />
+      </ContextProvider>
+    )
+  );
+}
+
+interface ContextProviderProps extends PropsWithChildren {
+  handleShowError: (err: Error) => void;
+  handleShowSuccess: (msg: string) => void;
+  theme: Theme
+  languageProps: LanguageProps
+  toast: { msg: string; open: boolean; type: string; }
+  handleCloseToast: () => void
+}
+
+function ContextProvider({ children, handleShowError, handleShowSuccess, theme, languageProps, toast, handleCloseToast }: ContextProviderProps) {
+  return (
+    <ThemeProvider theme={theme}>
+        <LanguageContext.Provider value={languageProps}>
+          <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
+          { children }
+          </ToastMsgContext.Provider>
+        <ToastMsg
+            msg={toast.msg}
+            type={toast.type}
+            open={toast.open}
+            handleCloseSnackbar={handleCloseToast}
+        />
+      </LanguageContext.Provider>
+    </ThemeProvider>
+  )
+}
+
+interface MainContentProps {
+  isAuthenticated: boolean;
+  handleLogout: (event: MouseEvent | KeyboardEvent) => void;
+  childProps: ChildProps;
+  loading: boolean;
+  location: Location
+}
+function MainContent({ isAuthenticated, handleLogout, childProps, loading, location }: MainContentProps) {
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const closeTour = () => {
+      setIsTourOpen(false);
+  };
+  
+  const OnboardingWithoutRouter = ({ showCloseButton, location, isTourOpen, closeTour } : {
+    showCloseButton: boolean,
+    location: Location,
+    isTourOpen: boolean,
+    closeTour: MouseEventHandler
+  }) => {
     let pathname = "";
     if (location) pathname = location.pathname;
     const steps = [
@@ -514,147 +607,55 @@ function App(props: AppProps) {
     );
   };
 
-  const Onboarding = OnboardingWithoutRouter;
-  const childProps: ChildProps = {
-    // authentication related state
-    isAuthenticated,
-    userHasAuthenticated,
-    user: userData.user,
-    setLoading: handleSetLoading,
-    connectSocket: connectSocketToSprint,
-
-    // experience related state
-    product,
-    interviewing,
-    training,
-    sanityTraining,
-    sanityInterview,
-    sanityProduct,
-    experiences,
-
-    // sprint related state
-    fetchMenteeSprints,
-    initialFetch,
-    sprints,
-
-    // assorted/unused state
-    athletes,
-    sanitySchemas,
-    coaches,
-    reviewMode: false,
-    navigate: useNavigate
-  };
-  languageProps.language = userData.chosenLanguage;
-  languageProps.setLanguage = updateLanguage;
-
   return (
-    !isAuthenticating && (
-      <ThemeProvider theme={theme}>
-        <LanguageContext.Provider value={languageProps}>
-          <ToastMsgContext.Provider
-            value={{ handleShowError, handleShowSuccess }}
-          >
-            <Box
-              component="div"
-              sx={{
-                bgcolor: "background.default",
-                color: "text.primary",
-                // overflow: "scroll",
-                minHeight: "100vh",
-              }}
-            >
-              {isAuthenticated ? (
-                <>
-                  <div
-                    className="sticky-logout"
-                    role="button"
-                    style={{
-                      filter: theme.palette.mode === "dark" ? "invert()" : "",
-                    }}
-                    onClick={handleLogout}
-                    onKeyDown={handleLogout}
-                    tabIndex={1}
-                  >
-                    <GrLogout size={20} />
-                  </div>
+    <Box
+      component="div"
+      sx={{
+        bgcolor: "background.default",
+        color: "text.primary",
+        // overflow: "scroll",
+        minHeight: "100vh",
+      }}
+    >
+      {isAuthenticated ? (
+        <AuthenticatedLayout
+          handleLogout={handleLogout}
+          customHistory={customHistory}
+          childProps={childProps}
+          setIsTourOpen={setIsTourOpen}
+        />
+      ) : <UnauthenticatedLayout childProps={childProps} />}
+      <OnboardingWithoutRouter
+        showCloseButton
+        location={location}
+        isTourOpen={isTourOpen}
+        closeTour={closeTour}
+      />
+      <LoadingScreen loading={loading} />
+    </Box>
+  )
+}
 
-                  <div className="root-padding">
-                    <LeftNav user={userData.user as any} athletes={athletes} />
-                    <ErrorBoundary history={customHistory}>
-                      <Routes history={customHistory} childProps={childProps} />
-                    </ErrorBoundary>
-                  </div>
-                  <Palette {...props} />
-                  <div className="sticky-nav">
-                    <div
-                      className="sticky-chat"
-                      role="button"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        setIsTourOpen(true);
-                      }}
-                      onKeyDown={(event) => {
-                        event.preventDefault();
-                        setIsTourOpen(true);
-                      }}
-                      tabIndex={0}
-                    >
-                      <img
-                        src={question}
-                        alt="Home page tour icon"
-                        height="24"
-                        width="24"
-                        className="sticky-btn"
-                        style={{
-                          cursor: "pointer",
-                          filter: "grayscale(100%)",
-                          outline: "2px solid white",
-                          border: "2px solid transparent",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </div>
-                    <div className="sticky-audio">
-                      <MusicPlayer />
-                    </div>
-                    <div id="myBottomNav" className="bottom-nav">
-                      <BottomNav user={userData.user} />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <Routes childProps={childProps} history={{} as BrowserHistory} />
-              )}
-              <Onboarding showCloseButton />
-              <div style={{ margin: "auto" }}>
-                <Dialog
-                  open={loading}
-                  TransitionComponent={
-                    Transition as React.JSXElementConstructor<object> | undefined
-                  }
-                  keepMounted
-                  disableEscapeKeyDown
-                  fullScreen
-                  fullWidth
-                  hideBackdrop={false}
-                  aria-labelledby="loading"
-                  aria-describedby="Please wait while the page loads"
-                >
-                  <LoadingModal />
-                </Dialog>
-              </div>
-            </Box>
-          </ToastMsgContext.Provider>
-          <ToastMsg
-            msg={toast.msg}
-            type={toast.type}
-            open={toast.open}
-            handleCloseSnackbar={handleCloseToast}
-          />
-        </LanguageContext.Provider>
-      </ThemeProvider>
-    )
-  );
+function LoadingScreen({ loading }: { loading: boolean }) {
+  return (
+    <div style={{ margin: "auto" }}>
+      <Dialog
+        open={loading}
+        TransitionComponent={
+          Transition as React.JSXElementConstructor<object> | undefined
+        }
+        keepMounted
+        disableEscapeKeyDown
+        fullScreen
+        fullWidth
+        hideBackdrop={false}
+        aria-labelledby="loading"
+        aria-describedby="Please wait while the page loads"
+      >
+        <LoadingModal />
+      </Dialog>
+    </div>
+  )
 }
 
 export default App;

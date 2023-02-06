@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, SetStateAction } from "react";
-import ControlLabel from "react-bootstrap/lib/ControlLabel";
-import { useTheme, Button } from "@mui/material";
+import { useTheme, Button, FormLabel } from "@mui/material";
 import { ToastMsgContext } from "../state/ToastContext";
 import TextField from "@mui/material/TextField";
 import {
@@ -218,40 +217,37 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
           flexDirection: "row",
         }}
       >
-        <div style={{ margin: 'auto 25px auto 0px' }}>
-          <ControlLabel >
-            {I18n.get("enterTemplateName")}
-          </ControlLabel>
-        </div>
-        <div style={{ width: 300, margin:'auto 0px' }}>
-          <TextField
-            color="success"
-            error={!!error}
-            required
-            helperText={error}
-            fullWidth
-            label={I18n.get("templateName")}
-            variant="outlined"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-        </div>
-        <div style={{ margin: 'auto 0px auto 30px' }}>
-          <Button
-            disabled={
-              (title === "" && meetsMinimumOptionsThreshold === false) || !!error
-            }
-            fullWidth
-            size="large"
-            variant="gradient"
-            sx={{
-              height: "3.8rem" 
-            }}
-            onClick={createTemplate}
-          >
-            {I18n.get("create")}
-          </Button>
-        </div>
+        <FormLabel sx={{ margin: 'auto 25px auto 0px' }} >
+          {I18n.get("enterTemplateName")}
+        </FormLabel>
+        <TextField
+          color="success"
+          error={!!error}
+          required
+          helperText={error}
+          fullWidth
+          label={I18n.get("templateName")}
+          variant="outlined"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          sx={{ width: '300px', minWidth: '300px', margin:'auto 0px' }}
+        />
+        <Button
+          disabled={
+            (title === "" && meetsMinimumOptionsThreshold === false) || !!error
+          }
+          fullWidth
+          size="large"
+          variant="gradient"
+          sx={{
+            height: "3.8rem",
+            margin: 'auto 0px auto 30px',
+            maxWidth: '280px'
+          }}
+          onClick={createTemplate}
+        >
+          {I18n.get("create")}
+        </Button>
       </div>
       <h2
         style={{

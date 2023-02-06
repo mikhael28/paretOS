@@ -57,8 +57,8 @@ export interface ChildProps {
   sanityInterview: {};
   sanityProduct: {};
   experiences: {};
-  fetchMenteeSprints: (id: string) => void;
-  initialFetch: (id: string) => void;
+  fetchMenteeSprints: (id: string) => Promise<void>;
+  initialFetch: (id: string) => Promise<void>;
   sprints: SprintInterface[];
   athletes: any[];
   sanitySchemas: {
