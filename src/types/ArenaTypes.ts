@@ -26,8 +26,8 @@ export interface Mission {
   confirmed: boolean;
   img: string;
   key: string;
-  proof: any[];
-  questions: any[];
+  proof: string[];
+  questions: string[];
   esSummary: string;
   type: string;
   xp: number;
@@ -36,7 +36,7 @@ export interface Mission {
   proofLink?: string;
 }
 
-export interface EnMission extends Omit<Mission, "esTitle" | "esDescription"> {
+export interface EnMission extends Omit<Mission, "esTitle" | "esDescription" | "esSummary"> {
   title: string;
   description: string;
   summary: string
@@ -57,13 +57,19 @@ export interface Missions {
   missionBtnText: string;
   setActiveIndex: Dispatch<SetStateAction<number>>;
   setActiveMission: Dispatch<
-    SetStateAction<any>
+    SetStateAction<number>
   >;
   setView?: Dispatch<SetStateAction<string>>;
   setShowProofModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export type PlanningField = {
+  name: string;
+  code: string;
+  content: string;
+};
+
+export type ReviewField = {
   name: string;
   code: string;
   content: string;
@@ -83,7 +89,7 @@ export interface Sprint {
   stake: {
     title: string;
     value: string;
-    conditions: Array<any>;
+    conditions: Array<object>;
   };
   createdAt: Date;
   updatedAt: Date;
