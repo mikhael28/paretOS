@@ -5,7 +5,7 @@
   "dependencies": {
     "@aws-amplify/api-rest": "3.0.11",
     "@aws-amplify/auth": "5.1.5",
-    "@aws-amplify/core": "4.7.8",
+    "@aws-amplify/core": "5.0.12",
     "@aws-amplify/storage": "4.5.10",
     "@date-io/date-fns": "2.16.0",
     "@emotion/react": "11.10.5",
@@ -17,11 +17,11 @@
     "@mui/x-date-pickers": "5.0.14",
     "@portabletext/react": "2.0.0",
     "@react-three/drei": "9.53.0",
-    "@react-three/fiber": "8.10.0",
+    "@react-three/fiber": "8.10.4",
     "@reduxjs/toolkit": "1.9.1",
     "@rollup/plugin-node-resolve": "15.0.1",
     "@sanity/client": "4.0.1",
-    "@sanity/image-url": "1.0.1",
+    "@sanity/image-url": "1.0.2",
     "@sentry/react": "7.31.1",
     "@sentry/tracing": "7.31.0",
     "@stripe/stripe-js": "1.46.0",
@@ -103,7 +103,7 @@
     "@types/lodash.sortby": "4.7.7",
     "@types/mocha": "10.0.1",
     "@types/node": "18.11.18",
-    "@types/react": "18.0.26",
+    "@types/react": "18.0.27",
     "@types/react-bootstrap": "0.32.32",
     "@types/react-dom": "18.0.10",
     "@types/react-router-dom": "5.3.3",
@@ -127,7 +127,7 @@
     "stylelint-config-standard": "29.0.0",
     "ts-node": "10.9.1",
     "vite-plugin-pwa": "0.14.1",
-    "vitest": "0.27.1"
+    "vitest": "0.28.4"
   },
   "strict-peer-dependencies": false,
   "pnpm": {
