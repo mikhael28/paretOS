@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { BufferGeometry, Float32BufferAttribute, PointsMaterial } from "three";
+import { BufferAttribute, BufferGeometry, Float32BufferAttribute, PointLight, PointsMaterial } from "three";
 
 const COUNT = 5000,
     SEPARATION = 0.2,
     AMOUNTX = 500,
     AMOUNTY = 500;
 
-export const angleVector = (angle, distance) => {
+export const angleVector = (angle: number, distance: number) => {
     const angleRadians = (angle * Math.PI) / 180 + (90 * Math.PI) / 180;
     return {
         x: distance * Math.cos(angleRadians),
@@ -17,7 +17,7 @@ export const angleVector = (angle, distance) => {
 
 export const ParticlesBG = () => {
     const mesh = useRef();
-    const light = useRef();
+    const light = useRef<PointLight | null>(null);
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 
@@ -25,7 +25,7 @@ export const ParticlesBG = () => {
     const particlesMaterial = new PointsMaterial({ color: "white", size: 0.4 });
 
     const particlesPositions = [];
-    const particleOptions = [];
+    const particleOptions: { speed: number }[] = [];
 
     let i = 0;
     for (let ix = 0; ix < AMOUNTX; ix++) {
@@ -46,7 +46,7 @@ export const ParticlesBG = () => {
 
     let count = 0;
     useFrame((state, delta) => {
-        const particles = particlesGeometry.attributes.position.array;
+        const particles = (particlesGeometry.attributes.position as BufferAttribute).array as Array<number>;
         const elapsedTime = state.clock.getElapsedTime();
 
         particleOptions.forEach((p, i) => {

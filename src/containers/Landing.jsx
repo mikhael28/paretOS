@@ -1,17 +1,15 @@
 import { Link } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { useTheme } from "@mui/material";
-import logo from "../assets/Pareto_Lockup-White.png";
 import { Canvas } from "@react-three/fiber";
-import { ParticlesBG } from "./ParticlesBG";
 import { OrbitControls } from "@react-three/drei";
-// import { RouterHistory } from "@sentry/react/types/reactrouter";
+import { ParticlesBG } from "./ParticlesBG";
 
 /**
  * This is the Landing page component, that has the testimonials from members of our community.
  */
 
-export default function Landing({ navigate }) {
+export default function Landing() {
   const theme = useTheme();
 
 

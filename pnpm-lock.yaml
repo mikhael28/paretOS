@@ -11,6 +11,7 @@ specifiers:
   '@emotion/react': 11.10.5
   '@emotion/styled': 11.10.5
   '@hookform/resolvers': 2.9.10
+  '@juggle/resize-observer': ^3.4.0
   '@mui/material': 5.11.5
   '@mui/styles': 5.11.2
   '@mui/system': 5.11.4
@@ -120,6 +121,7 @@ dependencies:
   '@emotion/react': 11.10.5_3stiutgnnbnfnf3uowm5cip22i
   '@emotion/styled': 11.10.5_jrh5enlbqfbnumycmktdqgd6se
   '@hookform/resolvers': 2.9.10_react-hook-form@7.42.1
+  '@juggle/resize-observer': 3.4.0
   '@mui/material': 5.11.5_rqh7qj4464ntrqrt6banhaqg4q
   '@mui/styles': 5.11.2
   '@mui/system': 5.11.4_gzalmy7izvhol7vh4xfy3dq6ua
@@ -2998,6 +3000,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
+
+  /@juggle/resize-observer/3.4.0:
+    resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
+    dev: false
 
   /@lit/reactive-element/1.4.1:
     resolution: {integrity: sha512-qDv4851VFSaBWzpS02cXHclo40jsbAjRXnebNXpm0uVg32kCneZPo9RYVQtrTNICtZ+1wAYHu1ZtxWSWMbKrBw==}

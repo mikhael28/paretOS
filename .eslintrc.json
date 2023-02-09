@@ -1,7 +1,8 @@
 {
   "plugins": [
     "react",
-    "prettier"
+    "prettier",
+    "@juggle/resize-observer"
   ],
   "extends": [
     "airbnb",
