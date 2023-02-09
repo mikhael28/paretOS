@@ -1,3 +1,5 @@
+import { Image } from "react-bootstrap";
+
 export interface ContextObjectProps {
   // @TODO: needs to become type ImageUrlBuilder, import sanity types?
   img: any;
@@ -16,7 +18,7 @@ export interface LibraryEntry {
   _updatedAt: string;
   body: any[];
   description: string;
-  mainImage: any;
+  mainImage: { _type: string, asset: { _ref: string }};
   public: string;
   slug: {
     _type: string;
@@ -25,7 +27,7 @@ export interface LibraryEntry {
   title: string;
   type: string;
   summary?: string;
-  logo?: any;
+  logo?: string;
 }
 
 export interface Hub {

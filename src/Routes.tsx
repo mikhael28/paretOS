@@ -11,6 +11,7 @@ import MenteeProfile from "./mentorship/MenteeProfile";
 import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate } from "./utils/queries/createSprintTemplateQueries";
 import { CreateSprintTemplateProps } from "./arena/CreateSprintTemplate";
 import { BrowserHistory } from "history";
+import { LibraryEntry } from "./types/ContextTypes";
 
 const Home = lazy(() => import("./containers/Home"));
 const Login = lazy(() => import("./profile/Login"));
@@ -40,7 +41,7 @@ const MentorDashboard = lazy(() => import("./mentorship/MentorDashboard"));
 
 
 export interface ChildProps {
-  navigate: NavigateFunction
+  navigate: typeof useNavigate;
   reviewMode: boolean;
   isAuthenticated: boolean;
   userHasAuthenticated: (b: boolean) => void;
@@ -62,9 +63,9 @@ export interface ChildProps {
   sprints: SprintInterface[];
   athletes: any[];
   sanitySchemas: {
-    technicalSchemas: object[];
-    economicSchemas: object[];
-    hubSchemas: object[];
+    technicalSchemas: LibraryEntry[];
+    economicSchemas: LibraryEntry[];
+    hubSchemas: LibraryEntry[];
   };
   coaches: Coach[];
 }
@@ -114,7 +115,7 @@ function RoutesComponent({ childProps, history, ...rest }: RouteWithChildProps) 
         <Route
           path="/context-builder"
           {...rest}
-          element={<ContextBuilder {...childProps} />}
+          element={<ContextBuilder {...(childProps as ChildProps)} />}
         />
         <Route
           path="/context/:id"
@@ -160,8 +161,7 @@ function RoutesComponent({ childProps, history, ...rest }: RouteWithChildProps) 
           element={
             <AuthenticatedRoute>
               <CreateSprintTemplate {...{
-                ...childProps,
-                navigate: useNavigate,
+                ...(childProps as ChildProps),
                 getTemplates: getSprintTemplates,
                 setTemplate: setSprintTemplate,
                 getTemplateOptionsFromSanity: getSprintTemplateOptionsFromSanity

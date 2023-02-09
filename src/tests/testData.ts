@@ -1,3 +1,7 @@
+import { User, Project } from "../types/ProfileTypes";
+import { LibraryEntry } from "../types/ContextTypes";
+import { PlanningField, ReviewField, ActivePersonMissionsOnDay, Mission } from "../types/ArenaTypes";
+import { nanoid } from "nanoid";
 
 interface TemplateConfig {
   titles?: string[],
@@ -111,4 +115,119 @@ function getSampleTemplate(title?: string, user?: { fName: string, lName: string
         "createdAt": "2023-02-01T23:16:56.039Z",
         "__v": 0
       }
+}
+
+/* 
+/* CONTEXT TEST DATA
+ */
+
+export function getSampleSanitySchemas(numberToGenerate: number = 3) {
+  const schemas = []
+  for (let i = 0; i < numberToGenerate; i++) {
+    schemas.push(getSampleSanitySchema(nanoid(10)))
+  }
+  return schemas;
+}
+
+export function getSampleSanitySchema(uniqueString: string): LibraryEntry {
+  return {
+    createdAt: '2022-01-01',
+    _id: `id${uniqueString}`,
+    _rev: `rev${uniqueString}`,
+    _type: `rev${uniqueString}`,
+    _updatedAt: '2022-01-02',
+    body: [`${uniqueString}1`, `${uniqueString}2`],
+    description: `description${uniqueString}`,
+    mainImage: {
+      _type: 'image', asset: {_ref: `image-${uniqueString.replace(/-/g, '')}-2000x3000-jpg`
+    }
+  },
+    public: `public${uniqueString}`,
+    slug: {
+      _type: `slugType${uniqueString}`,
+      current: `current-slug-${uniqueString}`,
+    },
+    title: `title${uniqueString}`,
+    type: `type${uniqueString}`,
+    summary: `summary${uniqueString}`,
+    logo: `logo${uniqueString}`
+  }
+}
+
+/* 
+/* USER TEST DATA
+ */
+interface TestUserDataOptions {
+  rank?: number;
+  score?: number;
+  _id?: string;
+  id?: number;
+  fName?: string;
+  lName?: string;
+  email?: string;
+  phone?: string;
+  github?: string;
+  modules?: [];
+  percentage?: string | number;
+  planning?: PlanningField[];
+  review?: ReviewField[];
+  missions?: ActivePersonMissionsOnDay[];
+  profileImg?: string;
+  defaultLanguage?: string;
+  instructor?: boolean;
+  picture?: string;
+  mentors?: Array<User>;
+  projects?: Array<Project>;
+  notes?: Array<string>;
+  achievements?: Array<string>;
+  mentor?: string;
+  country?: string;
+  bio?: string;
+  summary?: string;
+  city?: string;
+  admin?: boolean;
+  xp?: number;
+  learningPurchase?: boolean;
+  cp?: number;
+  createdAt?: string;
+  _v?: number;
+}
+
+export function generateTestUserData(index: number, options: TestUserDataOptions) {
+
+  return {
+    rank: options.rank || index,
+    score: options.score || 0,
+    _id: options._id || `userId${index}`,
+    id: options.id || index,
+    fName: options.fName || `Firstname${index}`,
+    lName: options.lName || `Lastname${index}`,
+    email: options.email || `user${index}@fakeemail.com`,
+    phone: options.phone || `123-456-7890`,
+    github: options.github || `githubprofilelink${index}`,
+    modules: options.modules || [],
+    percentage: options.percentage || (1 / index),
+    planning: options.planning || [] as PlanningField[],
+    review: options.review || [] as ReviewField[],
+    missions: options.missions || [] as ActivePersonMissionsOnDay[],
+    profileImg: options.profileImg || `profileImg${index}`,
+    defaultLanguage: options.defaultLanguage || 'en',
+    instructor: options.instructor || false,
+    picture: options.picture || `userPicture${index}`,
+    mentors: options.mentors || [] as User[],
+    projects: options.projects || [] as Project[],
+    notes: options.notes || [] as string[],
+    achievements: options.achievements || [] as string[],
+    mentor: options.mentor || `mentor${index}`,
+    country: options.country || 'USA',
+    bio: options.bio || `User bio number ${index}`,
+    summary: options.summary || `User summary number ${index}`,
+    city: options.city || 'City',
+    admin: options.admin || false,
+    xp: options.xp || 100,
+    learningPurchase: options.learningPurchase || false,
+    cp: options.cp || 50,
+    createdAt: options.createdAt || `2022-01-01`,
+    __v: options._v || 1,
+  }
 }

@@ -5,15 +5,8 @@ export interface Project {
   id: string;
   description: string;
   name: string;
-  team: Array<any>;
-  tools: Array<any>;
-}
-
-export interface User {
-  rank?: number;
-  score: number;
-  _id: string;
-  id: any;
+  team: Array<User>;
+  tools: Array<string>;
 }
 
 export interface MinimalUser {
@@ -22,8 +15,8 @@ export interface MinimalUser {
   email: string;
   phone: string;
   github: string;
-  id: any;
-  modules: any[];
+  id: number;
+  modules: string[];
   score: number;
   percentage: string | number;
   planning: PlanningField[];
@@ -45,10 +38,10 @@ export interface User extends MinimalUser {
   picture?: string;
   mentors?: Array<User>;
   projects?: Array<Project>;
-  notes?: Array<any>;
+  notes?: Array<string>;
 
   // deprecate/verify achievements
-  achievements: Array<any>;
+  achievements: Array<string>;
 
   mentor: string;
   country: string;

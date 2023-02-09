@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import { AppBar, Tabs, Tab } from "@mui/material";
+import { AppBar, Tabs, Tab, Box } from "@mui/material";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import classNames from "classnames";
 import { LibraryEntry } from "../types/ContextTypes";
 import ContextObject from "./ContextObject";
-import help from "../assets/help.png";
+import question from "../assets/question.svg";
 import sanity from "../libs/sanity";
 import TabPanel from "../components/TabPanel";
+import { useTheme } from "@emotion/react";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -18,11 +19,19 @@ const builder = imageUrlBuilder(sanity);
  *
  */
 
-function ContextBuilder(props: any) {
-  console.log({ props });
+interface ContextBuilderProps {
+  navigate: typeof useNavigate;
+  sanitySchemas: {
+    technicalSchemas: LibraryEntry[];
+    economicSchemas: LibraryEntry[]
+    hubSchemas: LibraryEntry[];
+  }
+}
+
+function ContextBuilder(props: ContextBuilderProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState<number>(0);
-  const navigate = useNavigate();
+  const navigate = props.navigate();
 
   useEffect(() => {
     let initialTab = localStorage.getItem("contextTab");
@@ -70,16 +79,16 @@ function ContextBuilder(props: any) {
     <div style={{ width: "100%" }}>
       <h1>
         {I18n.get("library")}
-        <img
-          src={help}
-          onClick={(event) => {
-            event.preventDefault();
-            setIsTourOpen(true);
+        <Box
+          component="img"
+          src={question}
+          height={18}
+          width={18}
+          sx={{
+            opacity: 0.8,
+            filter: "invert()",
+            margin: '8px 8px 14px 8px'
           }}
-          alt="Library of Context Tour"
-          height="40"
-          width="40"
-          style={{ cursor: "pointer" }}
         />
       </h1>
       <AppBar
