@@ -39,6 +39,7 @@ specifiers:
   '@types/react-dom': 18.0.10
   '@types/react-router-dom': 5.3.3
   '@types/reactour': 1.18.2
+  '@types/three': ^0.149.0
   '@vitejs/plugin-react': 3.0.1
   '@vitest/coverage-c8': 0.27.1
   chai: 4.3.7
@@ -127,7 +128,7 @@ dependencies:
   '@mui/system': 5.11.4_gzalmy7izvhol7vh4xfy3dq6ua
   '@mui/x-date-pickers': 5.0.14_6ixi66hsnl2xepv6okilu7ivqq
   '@portabletext/react': 2.0.0_react@18.2.0
-  '@react-three/drei': 9.53.0_wkpcosvjrvcdywh6zunij77ohq
+  '@react-three/drei': 9.53.0_5mgz5bzyrqdslvddjgnpeeplqy
   '@react-three/fiber': 8.10.4_lykdi52vkvnquhdw4c4cmmzv4q
   '@reduxjs/toolkit': 1.9.1_k4ae6lp43ej6mezo3ztvx6pykq
   '@rollup/plugin-node-resolve': 15.0.1_rollup@3.10.0
@@ -203,6 +204,7 @@ devDependencies:
   '@types/react-bootstrap': 0.32.32
   '@types/react-dom': 18.0.10
   '@types/react-router-dom': 5.3.3
+  '@types/three': 0.149.0
   '@vitest/coverage-c8': 0.27.1_jsdom@21.0.0
   chai: 4.3.7
   dotenv: 16.0.3
@@ -3816,7 +3818,7 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@react-three/drei/9.53.0_wkpcosvjrvcdywh6zunij77ohq:
+  /@react-three/drei/9.53.0_5mgz5bzyrqdslvddjgnpeeplqy:
     resolution: {integrity: sha512-+A0WaHpcBb97oQIXOfftrtRlHn+5C2jWRhrFMaZZO2GgU3/+cP6c5RvQDE41sIZPi4lW6r4BKj9MggRLL6kucw==}
     peerDependencies:
       '@react-three/fiber': '>=8.0'
@@ -3838,7 +3840,7 @@ packages:
       lodash.clamp: 4.0.3
       lodash.omit: 4.5.0
       lodash.pick: 4.4.0
-      maath: 0.5.1_three@0.148.0
+      maath: 0.5.1_qooljkydnb4kkdh7cbaahsn3zm
       meshline: 3.1.6_three@0.148.0
       react: 18.2.0
       react-composer: 5.0.3_react@18.2.0
@@ -4529,6 +4531,11 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: false
 
+  /@types/three/0.149.0:
+    resolution: {integrity: sha512-fgNBm9LWc65ER/W0cvoXdC0iMy7Ke9e2CONmEr6Jt8sDSY3sw4DgOubZfmdZ747dkPhbQrgRQAWwDEr2S/7IEg==}
+    dependencies:
+      '@types/webxr': 0.5.1
+
   /@types/trusted-types/2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}
 
@@ -4539,6 +4546,9 @@ packages:
   /@types/use-sync-external-store/0.0.3:
     resolution: {integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==}
     dev: false
+
+  /@types/webxr/0.5.1:
+    resolution: {integrity: sha512-xlFXPfgJR5vIuDefhaHuUM9uUgvPaXB6GKdXy2gdEh8gBWQZ2ul24AJz3foUd8NNKlSTQuWYJpCb1/pL81m1KQ==}
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -8591,12 +8601,13 @@ packages:
     hasBin: true
     dev: false
 
-  /maath/0.5.1_three@0.148.0:
+  /maath/0.5.1_qooljkydnb4kkdh7cbaahsn3zm:
     resolution: {integrity: sha512-qSyiavNFnB957lGQiGvHr+fEgG3ZXrk2upniCAAMsZb54NaZfMLMFakHqp+22OKlix5UNwYqJ8vFeO4hAq0U1Q==}
     peerDependencies:
       '@types/three': '>=0.144.0'
       three: '>=0.144.0'
     dependencies:
+      '@types/three': 0.149.0
       three: 0.148.0
     dev: false
 

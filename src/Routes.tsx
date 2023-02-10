@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { NavigateFunction, PathRouteProps, Route, Routes, useNavigate } from "react-router-dom";
+import { PathRouteProps, Route, Routes, useNavigate } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
@@ -47,7 +47,7 @@ export interface ChildProps {
   userHasAuthenticated: (b: boolean) => void;
   user: User;
   setLoading: (b: boolean) => void;
-  connectSocket: (id?: string) => Promise<{
+  connectSocket: (id?: number) => Promise<{
     success: boolean;
     sprints: [];
   }>;

@@ -1,11 +1,10 @@
 import { useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { BufferAttribute, BufferGeometry, Float32BufferAttribute, PointLight, PointsMaterial } from "three";
 
-const COUNT = 5000,
-    SEPARATION = 0.2,
-    AMOUNTX = 500,
-    AMOUNTY = 500;
+const SEPARATION = 0.2;
+const AMOUNTX = 500;
+const AMOUNTY = 500;
 
 export const angleVector = (angle: number, distance: number) => {
     const angleRadians = (angle * Math.PI) / 180 + (90 * Math.PI) / 180;
@@ -16,10 +15,7 @@ export const angleVector = (angle: number, distance: number) => {
 };
 
 export const ParticlesBG = () => {
-    const mesh = useRef();
     const light = useRef<PointLight | null>(null);
-    const { size, viewport } = useThree();
-    const aspect = size.width / viewport.width;
 
     const particlesGeometry = new BufferGeometry();
     const particlesMaterial = new PointsMaterial({ color: "white", size: 0.4 });
@@ -27,12 +23,11 @@ export const ParticlesBG = () => {
     const particlesPositions = [];
     const particleOptions: { speed: number }[] = [];
 
-    let i = 0;
     for (let ix = 0; ix < AMOUNTX; ix++) {
         for (let iy = 0; iy < AMOUNTY; iy++) {
-            const x = ix * ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
-            const z = iy * iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
-            particlesPositions.push(z, 0, x);
+            const xCoord = ix * ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
+            const zCoord = iy * iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
+            particlesPositions.push(zCoord, 0, xCoord);
             particleOptions.push({
                 speed: 0.2 + (0.2 - Math.random() * 10) / 10000
             });
@@ -44,13 +39,12 @@ export const ParticlesBG = () => {
         new Float32BufferAttribute(particlesPositions, 3)
     );
 
-    let count = 0;
-    useFrame((state, delta) => {
+    useFrame((state) => {
         const particles = (particlesGeometry.attributes.position as BufferAttribute).array as Array<number>;
         const elapsedTime = state.clock.getElapsedTime();
 
-        particleOptions.forEach((p, i) => {
-            const i3 = i * 3;
+        particleOptions.forEach((_, index) => {
+            const i3 = index * 3;
             const particle = {
                 x: i3,
                 y: i3 + 1,
@@ -64,13 +58,19 @@ export const ParticlesBG = () => {
 
         particlesGeometry.attributes.position.needsUpdate = true;
     });
+
     return (
         <>
-            <pointLight ref={light} distance={140} intensity={8} color="white" />
+            <pointLight
+                ref={light}
+                distance={140} // skipcq JS-0455
+                intensity={8} // skipcq JS-0455
+                color="white"
+            />  
 
             <points
-                args={[particlesGeometry, particlesMaterial]}
-                position={[0, 0, 0]}
+                args={[particlesGeometry, particlesMaterial]} // skipcq JS-0455
+                position={[0, 0, 0]}  // skipcq JS-0455
             />
         </>
     );

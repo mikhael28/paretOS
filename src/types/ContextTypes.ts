@@ -1,5 +1,3 @@
-import { Image } from "react-bootstrap";
-
 export interface ContextObjectProps {
   // @TODO: needs to become type ImageUrlBuilder, import sanity types?
   img: any;

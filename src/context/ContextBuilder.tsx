@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useState, useEffect, SetStateAction, Dispatch, KeyboardEventHandler, KeyboardEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
 import { AppBar, Tabs, Tab, Box } from "@mui/material";
 import Tour from "reactour";
@@ -10,7 +10,6 @@ import ContextObject from "./ContextObject";
 import question from "../assets/question.svg";
 import sanity from "../libs/sanity";
 import TabPanel from "../components/TabPanel";
-import { useTheme } from "@emotion/react";
 
 const builder = imageUrlBuilder(sanity);
 
@@ -49,12 +48,20 @@ function ContextBuilder(props: ContextBuilderProps) {
           topics.map((topic) => {
             const link = topic.type === "hub" ? "hubs" : "context";
             const img = builder.image(topic.mainImage.asset._ref);
+            const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (e: KeyboardEvent) => {
+              if (e.key === 'Enter') {
+                navigate(`/${link}/${topic.slug.current}`)
+              }
+            }
 
             return (
               <div
+                role="button"
+                tabIndex={0}
                 className={newCardClass}
                 key={topic._id}
                 onClick={() => navigate(`/${link}/${topic.slug.current}`)}
+                onKeyDown={handleKeyPress}
               >
                 <ContextObject item={topic} img={img} />
               </div>
@@ -75,6 +82,11 @@ function ContextBuilder(props: ContextBuilderProps) {
     },
   ];
 
+  const tabPanelSxStyle = {
+    margin: "-8.5vw",
+    marginBottom:"6vh",
+  }
+
   return (
     <div style={{ width: "100%" }}>
       <h1>
@@ -93,34 +105,23 @@ function ContextBuilder(props: ContextBuilderProps) {
       </h1>
       <AppBar
         position="static"
-        style={{
+        sx={{
           boxShadow: "none",
           backgroundImage: "none",
           backgroundColor: "transparent",
         }}
       >
-        <Tabs
-          value={value}
-          onChange={(_, newValue) => {
-            localStorage.setItem("contextTab", newValue.toString());
-            setValue(newValue);
-          }}
-          aria-label="Select the topics you wish to see in this group of tab"
-        >
-          <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />
-          <Tab label={I18n.get("findingWork")} style={{ fontSize: 18 }} />
-          <Tab label={I18n.get("cityByCity")} style={{ fontSize: 18 }} />
-        </Tabs>
+        <TabNavigation value={value} setValue={setValue} />
       </AppBar>
-      <TabPanel value={value} index={0} className="tabPanelCont">
+      <TabPanel value={value} index={0} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas.technicalSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={1} className="tabPanelCont">
+      <TabPanel value={value} index={1} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas?.economicSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={2} className="tabPanelCont">
+      <TabPanel value={value} index={2} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas?.hubSchemas)}
       </TabPanel>
@@ -134,6 +135,23 @@ function ContextBuilder(props: ContextBuilderProps) {
       />
     </div>
   );
+}
+
+function TabNavigation({ value, setValue }: { value: number, setValue: Dispatch<SetStateAction<number>> }) {
+  return (
+    <Tabs
+      value={value}
+      onChange={(_, newValue) => {
+        localStorage.setItem("contextTab", newValue.toString());
+        setValue(newValue);
+      }}
+      aria-label="Select the topics you wish to see in this group of tab"
+    >
+      <Tab label={I18n.get("fullStackDev")} sx={{ fontSize: 18 }} />
+      <Tab label={I18n.get("findingWork")} sx={{ fontSize: 18 }} />
+      <Tab label={I18n.get("cityByCity")} sx={{ fontSize: 18 }} />
+    </Tabs>
+  )
 }
 
 export default ContextBuilder;

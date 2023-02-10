@@ -27,7 +27,6 @@ describe("LANDING", () => {
     const componentHeader = screen.getByText("Build the future")
     const signupButton = screen.getByText("signup")
     const signinButton = screen.getByText("login")
-    const buttonLink = screen.getAllByRole("link");
 
     expect(componentHeader).toBeDefined();
     expect(signupButton).toBeDefined();

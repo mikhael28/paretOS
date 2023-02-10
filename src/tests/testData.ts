@@ -1,6 +1,6 @@
 import { User, Project } from "../types/ProfileTypes";
 import { LibraryEntry } from "../types/ContextTypes";
-import { PlanningField, ReviewField, ActivePersonMissionsOnDay, Mission } from "../types/ArenaTypes";
+import { PlanningField, ReviewField, ActivePersonMissionsOnDay } from "../types/ArenaTypes";
 import { nanoid } from "nanoid";
 
 interface TemplateConfig {
@@ -121,7 +121,7 @@ function getSampleTemplate(title?: string, user?: { fName: string, lName: string
 /* CONTEXT TEST DATA
  */
 
-export function getSampleSanitySchemas(numberToGenerate: number = 3) {
+export function getSampleSanitySchemas(numberToGenerate = 3) {
   const schemas = []
   for (let i = 0; i < numberToGenerate; i++) {
     schemas.push(getSampleSanitySchema(nanoid(10)))

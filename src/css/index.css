@@ -39,6 +39,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+div:has(>#landing-page-canvas) {
+  height: 100vh;
+}
+
 .dropdown-menu {
   left: unset;
   right: 0;
