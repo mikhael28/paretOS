@@ -140,7 +140,7 @@ function LeftNav(props: LeftNavProps) {
       {
         path: "/arena/create/template",
         label: "Sprint Template",
-        Icon: <IoMdCreate style={iconStyle} />,
+        Icon: <IoMdCreate id="iomdcreate" style={iconStyle} />,
       },
     ],
   };
@@ -148,15 +148,15 @@ function LeftNav(props: LeftNavProps) {
   const mentorshipsMenu: LeftNavSection | null =
     user.instructor === true && athletes.length > 0
       ? {
-        heading: { path: "/mentorship", label: I18n.get("mentorship") },
-        subHeadings: athletes.map((relationship) => ({
-          path: `/mentorship/${relationship.id}`,
-          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-          Icon: (
-            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
-          ),
-        })),
-      }
+          heading: { path: "/mentorship", label: I18n.get("mentorship") },
+          subHeadings: athletes.map((relationship) => ({
+            path: `/mentorship/${relationship.id}`,
+            label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+            Icon: (
+              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
+            ),
+          })),
+        }
       : null;
 
   const trainingMenu: LeftNavSection = {
@@ -233,7 +233,6 @@ function LeftNav(props: LeftNavProps) {
           <Avatar
             sx={{ width: 24, height: 24 }}
             src={
-
               "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             }
           />
@@ -269,7 +268,6 @@ function LeftNav(props: LeftNavProps) {
         }}
       >
         <div className="flex">
-
           <img
             src={white}
             width="120"
@@ -424,6 +422,7 @@ function Heading({
       </NavLink>
       {dropdown && (
         <div
+          id={label}
           className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"}
           onClick={handleClick}
         ></div>
@@ -444,7 +443,9 @@ const SubHeading = ({
   return (
     <NavLink end to={path} style={subheadingStyle} activestyle={activeStyle}>
       {Icon}
-      <p style={{ marginLeft: 8 }}>{label}</p>
+      <p id={label} style={{ marginLeft: 8 }}>
+        {label}
+      </p>
     </NavLink>
   );
 };

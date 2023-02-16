@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 export interface CreateSprintTemplateProps {
   user: { fName: string; lName: string; id: number };
   navigate: typeof useNavigate;
-  getTemplates: () => Promise<Array<{ title: string}>>;
+  getTemplates: () => Promise<Array<{ title: string }>>;
   setTemplate: (body: object) => Promise<void>;
   getTemplateOptionsFromSanity: () => Promise<object>;
 }
@@ -142,7 +142,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       createdAt: Date.now(),
     };
     try {
-      await props.setTemplate(body)
+      await props.setTemplate(body);
       navigate("/");
     } catch (e) {
       handleShowError(e as Error);
@@ -150,7 +150,16 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   }
 
   useEffect(() => {
-    props.getTemplateOptionsFromSanity().then((res) => setColumns(res as SetStateAction<{ Options: { name: string; items: never[]; }; Morning: { name: string; items: never[]; }; Workday: { name: string; items: never[]; }; Evening: { name: string; items: never[]; }; }>))
+    props.getTemplateOptionsFromSanity().then((res) =>
+      setColumns(
+        res as SetStateAction<{
+          Options: { name: string; items: never[] };
+          Morning: { name: string; items: never[] };
+          Workday: { name: string; items: never[] };
+          Evening: { name: string; items: never[] };
+        }>
+      )
+    );
   }, []);
 
   useEffect(() => {
@@ -160,7 +169,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   // pulls the /templates api and sets the existing templates
   async function getConfiguration() {
     const templates = await props.getTemplates();
-    const templateTitles: string[] = templates.map((option: { title: string }) => option.title);
+    const templateTitles: string[] = templates.map(
+      (option: { title: string }) => option.title
+    );
     setExistingTemplates(templateTitles);
   }
   // This will equal true or false, not a number
@@ -217,10 +228,11 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
           flexDirection: "row",
         }}
       >
-        <FormLabel sx={{ margin: 'auto 25px auto 0px' }} >
+        <FormLabel sx={{ margin: "auto 25px auto 0px" }}>
           {I18n.get("enterTemplateName")}
         </FormLabel>
         <TextField
+          id="template-name"
           color="success"
           error={!!error}
           required
@@ -230,19 +242,20 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
           variant="outlined"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          sx={{ width: '300px', minWidth: '300px', margin:'auto 0px' }}
+          sx={{ width: "300px", minWidth: "300px", margin: "auto 0px" }}
         />
         <Button
           disabled={
             (title === "" && meetsMinimumOptionsThreshold === false) || !!error
           }
+          id="create-template-button"
           fullWidth
           size="large"
           variant="gradient"
           sx={{
             height: "3.8rem",
-            margin: 'auto 0px auto 30px',
-            maxWidth: '280px'
+            margin: "auto 0px auto 30px",
+            maxWidth: "280px",
           }}
           onClick={createTemplate}
         >
@@ -296,6 +309,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
                 <Droppable droppableId={id} key={id}>
                   {(provided, snapshot) => (
                     <div
+                      id={id}
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                       style={{
@@ -315,6 +329,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
                         >
                           {(provided, snapshot) => (
                             <div
+                              id={item._id}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
@@ -330,7 +345,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
                                 ...provided.draggableProps.style,
                               }}
                             >
-                              <p>
+                              <p id={item.title}>
                                 {item.title} - {item.xp}XP
                               </p>
                               <p>{item.type}</p>
