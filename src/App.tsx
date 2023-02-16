@@ -36,6 +36,7 @@ import customHistory from "./utils/customHistory";
 import { Coach } from "./types/MentorshipTypes";
 import UnauthenticatedLayout from "./components/UnauthenticatedLayout";
 import AuthenticatedLayout from "./components/AuthenticatedLayout";
+import { LibraryEntry } from "./types/ContextTypes";
 
 const Transition = React.forwardRef(function Transition(
   {
@@ -82,7 +83,7 @@ function App(props: AppProps) {
 
   const [userData, setUserData] = useState({
     user: {
-      id: "8020",
+      id: 8020,
       _id: "",
       fName: "Vilfredo",
       lName: "Pareto",
@@ -121,9 +122,9 @@ function App(props: AppProps) {
   const [experiences, setExperiences] = useState([...emptyArray]);
 
   const [sanitySchemas, setSanitySchemas] = useState({
-    technicalSchemas: [...emptyArray],
-    economicSchemas: [...emptyArray],
-    hubSchemas: [...emptyArray],
+    technicalSchemas: [...(emptyArray as LibraryEntry[])],
+    economicSchemas: [...(emptyArray as LibraryEntry[])],
+    hubSchemas: [...(emptyArray as LibraryEntry[])],
   });
   const initialSprints: Array<Sprint> = [];
   const [sprints, setSprints] = useState(initialSprints);
@@ -179,9 +180,9 @@ function App(props: AppProps) {
       case "sanitySchemas":
         setSanitySchemas(
           payload as {
-            technicalSchemas: Array<object>;
-            hubSchemas: Array<object>;
-            economicSchemas: Array<object>;
+            technicalSchemas: LibraryEntry[];
+            hubSchemas: LibraryEntry[];
+            economicSchemas: LibraryEntry[];
           }
         );
         break;
@@ -524,10 +525,10 @@ function App(props: AppProps) {
 interface ContextProviderProps extends PropsWithChildren {
   handleShowError: (err: Error) => void;
   handleShowSuccess: (msg: string) => void;
-  theme: Theme
-  languageProps: LanguageProps
-  toast: { msg: string; open: boolean; type: string; }
-  handleCloseToast: () => void
+  theme: Theme;
+  languageProps: LanguageProps;
+  toast: { msg: string; open: boolean; type: string; };
+  handleCloseToast: () => void;
 }
 
 function ContextProvider({ children, handleShowError, handleShowSuccess, theme, languageProps, toast, handleCloseToast }: ContextProviderProps) {
@@ -537,13 +538,13 @@ function ContextProvider({ children, handleShowError, handleShowSuccess, theme, 
           <ToastMsgContext.Provider value={{ handleShowError, handleShowSuccess }}>
           { children }
           </ToastMsgContext.Provider>
-        <ToastMsg
-            msg={toast.msg}
-            type={toast.type}
-            open={toast.open}
-            handleCloseSnackbar={handleCloseToast}
-        />
-      </LanguageContext.Provider>
+          <ToastMsg
+              msg={toast.msg}
+              type={toast.type}
+              open={toast.open}
+              handleCloseSnackbar={handleCloseToast}
+          />
+        </LanguageContext.Provider>
     </ThemeProvider>
   )
 }

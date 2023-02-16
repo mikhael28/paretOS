@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction, Dispatch, KeyboardEventHandler, KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "@aws-amplify/core";
-import { AppBar, Tabs, Tab } from "@mui/material";
+import { AppBar, Tabs, Tab, Box } from "@mui/material";
 import Tour from "reactour";
 import imageUrlBuilder from "@sanity/image-url";
 import classNames from "classnames";
 import { LibraryEntry } from "../types/ContextTypes";
 import ContextObject from "./ContextObject";
-import help from "../assets/help.png";
+import question from "../assets/question.svg";
 import sanity from "../libs/sanity";
 import TabPanel from "../components/TabPanel";
 
@@ -18,11 +18,19 @@ const builder = imageUrlBuilder(sanity);
  *
  */
 
-function ContextBuilder(props: any) {
-  console.log({ props });
+interface ContextBuilderProps {
+  navigate: typeof useNavigate;
+  sanitySchemas: {
+    technicalSchemas: LibraryEntry[];
+    economicSchemas: LibraryEntry[]
+    hubSchemas: LibraryEntry[];
+  }
+}
+
+function ContextBuilder(props: ContextBuilderProps) {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [value, setValue] = useState<number>(0);
-  const navigate = useNavigate();
+  const navigate = props.navigate();
 
   useEffect(() => {
     let initialTab = localStorage.getItem("contextTab");
@@ -40,12 +48,20 @@ function ContextBuilder(props: any) {
           topics.map((topic) => {
             const link = topic.type === "hub" ? "hubs" : "context";
             const img = builder.image(topic.mainImage.asset._ref);
+            const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (e: KeyboardEvent) => {
+              if (e.key === 'Enter') {
+                navigate(`/${link}/${topic.slug.current}`)
+              }
+            }
 
             return (
               <div
+                role="button"
+                tabIndex={0}
                 className={newCardClass}
                 key={topic._id}
                 onClick={() => navigate(`/${link}/${topic.slug.current}`)}
+                onKeyDown={handleKeyPress}
               >
                 <ContextObject item={topic} img={img} />
               </div>
@@ -66,52 +82,46 @@ function ContextBuilder(props: any) {
     },
   ];
 
+  const tabPanelSxStyle = {
+    margin: "-8.5vw",
+    marginBottom:"6vh",
+  }
+
   return (
     <div style={{ width: "100%" }}>
       <h1>
         {I18n.get("library")}
-        <img
-          src={help}
-          onClick={(event) => {
-            event.preventDefault();
-            setIsTourOpen(true);
+        <Box
+          component="img"
+          src={question}
+          height={18}
+          width={18}
+          sx={{
+            opacity: 0.8,
+            filter: "invert()",
+            margin: '8px 8px 14px 8px'
           }}
-          alt="Library of Context Tour"
-          height="40"
-          width="40"
-          style={{ cursor: "pointer" }}
         />
       </h1>
       <AppBar
         position="static"
-        style={{
+        sx={{
           boxShadow: "none",
           backgroundImage: "none",
           backgroundColor: "transparent",
         }}
       >
-        <Tabs
-          value={value}
-          onChange={(_, newValue) => {
-            localStorage.setItem("contextTab", newValue.toString());
-            setValue(newValue);
-          }}
-          aria-label="Select the topics you wish to see in this group of tab"
-        >
-          <Tab label={I18n.get("fullStackDev")} style={{ fontSize: 18 }} />
-          <Tab label={I18n.get("findingWork")} style={{ fontSize: 18 }} />
-          <Tab label={I18n.get("cityByCity")} style={{ fontSize: 18 }} />
-        </Tabs>
+        <TabNavigation value={value} setValue={setValue} />
       </AppBar>
-      <TabPanel value={value} index={0} className="tabPanelCont">
+      <TabPanel value={value} index={0} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas.technicalSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={1} className="tabPanelCont">
+      <TabPanel value={value} index={1} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas?.economicSchemas)}
       </TabPanel>
-      <TabPanel value={value} index={2} className="tabPanelCont">
+      <TabPanel value={value} index={2} sx={tabPanelSxStyle}>
         {props.sanitySchemas &&
           renderTopicsList(props.sanitySchemas?.hubSchemas)}
       </TabPanel>
@@ -125,6 +135,23 @@ function ContextBuilder(props: any) {
       />
     </div>
   );
+}
+
+function TabNavigation({ value, setValue }: { value: number, setValue: Dispatch<SetStateAction<number>> }) {
+  return (
+    <Tabs
+      value={value}
+      onChange={(_, newValue) => {
+        localStorage.setItem("contextTab", newValue.toString());
+        setValue(newValue);
+      }}
+      aria-label="Select the topics you wish to see in this group of tab"
+    >
+      <Tab label={I18n.get("fullStackDev")} sx={{ fontSize: 18 }} />
+      <Tab label={I18n.get("findingWork")} sx={{ fontSize: 18 }} />
+      <Tab label={I18n.get("cityByCity")} sx={{ fontSize: 18 }} />
+    </Tabs>
+  )
 }
 
 export default ContextBuilder;

@@ -1,6 +1,6 @@
 import { I18n } from "@aws-amplify/core";
 
-import { Missions as MissionsProps } from "../../types/ArenaTypes";
+import { GenMission, Missions as MissionsProps } from "../../types/ArenaTypes";
 import Mission from "./Mission";
 
 /**
@@ -15,8 +15,8 @@ function Missions(props: MissionsProps) {
       </h2>
       {missions.length > 0 ? (
         <ul className="context-cards">
-          {missions.map((mission: any) => (
-            <Mission mission={mission[0]} id={mission[1]} {...props} />
+          {missions.map((mission: [GenMission, number]) => (
+            <Mission mission={mission[0]} id={mission[1]} key={mission[1].toString()} {...props} />
           ))}
         </ul>
       ) : (

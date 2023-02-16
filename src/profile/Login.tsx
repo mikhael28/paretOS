@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
 import { Link } from "react-router-dom";
-import { Button, TextField, useTheme } from "@mui/material";
+import { Button, TextField, Theme, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@mui/styles";
 import logo from "../assets/Pareto_Lockup-01.png";
 import LoaderButton from "../components/LoaderButton";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme: Theme) => makeStyles(() => ({
   root: {
     paddingTop: theme.spacing(5),
     width: 300,
@@ -56,20 +56,20 @@ const Login = ({
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled] = useState(false);
-  const classes = useStyles();
+  const classes = useStyles(theme)();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<LoginForm>({ mode: "onChange" });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { email: string, password: string}) => {
     setLoading(true);
     setIsLoading(true);
 
     try {
       const user = await Auth.signIn(data.email, data.password);
-      await initialFetch(user.username);
+      initialFetch(user.username);
       userHasAuthenticated(true);
       setLoading(false);
     } catch (e) {
@@ -87,7 +87,6 @@ const Login = ({
             id="email"
             variant="filled"
             size="medium"
-            autoFocus
             label={I18n.get("email")}
             {...register("email", {
               required: "email is required",
