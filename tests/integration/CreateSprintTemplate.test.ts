@@ -17,8 +17,9 @@ describe("Login Page:", () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false, // <------------------------ This is the line that makes it work, currently it needs to be in headed
-      slowMo: 50,
+      // headless: false, // <------------------------ This is the line that makes it so you can see whats going on
+
+      slowMo: 50, // <-------- use this if you want to slow down the tests so you can see what is happening, 50 minimum to make it work in headless mode.
       defaultViewport: null,
       args: ["--window-size=1400,1022"], // In headed mode you need the window size to have a width of at least 1400px or the drag test will fail as there isnt enough window space to drag the box to the correct location
     });
@@ -48,7 +49,7 @@ describe("Login Page:", () => {
   }, 90_000);
 
   it("should allow a user to create a sprint template", async () => {
-    await page.waitForSelector(`[id="The Arena"]`);
+    await page.waitForSelector(`[id="The Arena"]`, { visible: true });
     await page.click(`[id="The Arena"]`);
     console.log("clicking carrot");
     await page.waitForSelector(`[id="Sprint Template"]`);
@@ -126,13 +127,12 @@ describe("Login Page:", () => {
     await page.click("#create-template-button");
     console.log("clicking create template button");
     await page.waitForSelector(`[alt="Arena tour icon"]`);
-    await page.waitForSelector("#email");
-    // await page.click("[type='submit']");
-    // await page.waitForSelector(".sticky-logout", { timeout: 90_000 });
-    // const logout = await page.$(".sticky-logout");
-    // if (typeof logout === "undefined") {
-    //   await page.screenshot({ path: "login-failure.png" });
-    // }
-    // expect(typeof logout === "undefined").to.equal(false);
+    await page.click(".sticky-logout");
+    await page.waitForSelector("#animation-container");
+    const createSprintTemplate = await page.$("#animation-container");
+    if (typeof createSprintTemplate === "undefined") {
+      await page.screenshot({ path: "createSprintTemplate-failure.png" });
+    }
+    expect(typeof createSprintTemplate === "undefined").to.equal(false);
   }, 90_000);
 });
