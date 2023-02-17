@@ -5,7 +5,6 @@ import type { Browser, Page } from "puppeteer";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
 import { installMouseHelper } from "./install-mouse-helper.js";
-import { width } from "@mui/system";
 
 dotenv.config();
 const username = process.env.TEST_FIXTURE_USERNAME;
@@ -18,13 +17,13 @@ describe("Login Page:", () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      // headless: false,
-      // slowMo: 50,
-      // defaultViewport: null,
-      // args: ["--window-size=1400,1022"],
+      headless: false, // <------------------------ This is the line that makes it work, currently it needs to be in headed
+      slowMo: 50,
+      defaultViewport: null,
+      args: ["--window-size=1400,1022"], // In headed mode you need the window size to have a width of at least 1400px or the drag test will fail as there isnt enough window space to drag the box to the correct location
     });
     page = await browser.newPage();
-    await installMouseHelper(page);
+    await installMouseHelper(page); // This is a helper function that allows you to see what the mouse is actually doing on the screen in headed mode.
   });
 
   afterAll(async () => {
@@ -55,11 +54,14 @@ describe("Login Page:", () => {
     await page.waitForSelector(`[id="Sprint Template"]`);
     await page.click(`[id="Sprint Template"]`);
     console.log("clicking sprint template");
+    // |*************************************************START
+    // This here is where it stops working in headless mode, if you use the page.goto method it will continue on, but for some reason it will not actually go to the page in headless mode without it.
     // await page.goto(`http://localhost:5173/arena/create/template`, {
     //   timeout: 90_000,
     //   waitUntil: "networkidle2",
     // });
     await page.waitForSelector("#template-name");
+    // |*************************************************END
     await page.type("#template-name", randomTemplateName);
     const origin1 = await page.waitForSelector(`[id="Talk to Customers"]`);
     const origin2 = await page.waitForSelector(`[id="No Nicotine or Tobacco"]`);
@@ -68,8 +70,8 @@ describe("Login Page:", () => {
     const workDay = await page.waitForSelector("#Workday");
     const evening = await page.waitForSelector("#Evening");
     let ob = await origin1?.boundingBox();
-    let ob2 = await origin2?.boundingBox();
-    let ob3 = await origin3?.boundingBox();
+    // let ob2 = await origin2?.boundingBox(); // <-----start ||Currently not using this box as unless you make some sort of time out function it will fail as it will try to drag the box before it has moved to the correct location.
+    // let ob3 = await origin3?.boundingBox(); // <--------end
     let mb = await morning?.boundingBox();
     let wb = await workDay?.boundingBox();
     let eb = await evening?.boundingBox();
@@ -111,12 +113,6 @@ describe("Login Page:", () => {
     await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2, {
       steps: 10,
     });
-    // console.log(
-    //   `Dragging from ${ob3.x + ob3.width / 2}, ${ob3.y + ob3.height / 2}`
-    // );
-    // await page.mouse.move(ob3.x + ob3.width / 2, ob3.y + ob3.height / 2, {
-    //   steps: 20,
-    // });
     await page.mouse.down();
 
     console.log(
