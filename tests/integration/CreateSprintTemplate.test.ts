@@ -113,6 +113,7 @@ describe("Login Page:", () => {
       //  skipcq: JS-0339
       `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
       steps: 10,
     });
