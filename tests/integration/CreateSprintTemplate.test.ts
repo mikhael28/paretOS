@@ -72,13 +72,17 @@ describe("Login Page:", () => {
 
     // first box
     console.log(
+      //  skipcq: JS-0339
       `Dragging from ${ob!?.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2);
     await page.mouse.down();
     console.log(
+      //  skipcq: JS-0339
       `Dropping at   ${mb!.x + mb!.width / 2}, ${mb!.y + mb!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(mb!.x + mb!.width / 2, mb!.y + mb!.height / 2, {
       steps: 3,
     });
@@ -86,15 +90,19 @@ describe("Login Page:", () => {
 
     // second box
     console.log(
+      //  skipcq: JS-0339
       `Dragging from ${ob!?.x + ob!?.width / 2}, ${ob!.y + ob!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
       steps: 5,
     });
     await page.mouse.down();
     console.log(
+      //  skipcq: JS-0339
       `Dropping at   ${wb!.x + wb!.width / 2}, ${wb!.y + wb!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(wb!.x + wb!.width / 2, wb!.y + wb!.height / 2, {
       steps: 6,
     });
@@ -102,6 +110,7 @@ describe("Login Page:", () => {
     // third box
 
     console.log(
+      //  skipcq: JS-0339
       `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
@@ -110,8 +119,10 @@ describe("Login Page:", () => {
     await page.mouse.down();
 
     console.log(
+      //  skipcq: JS-0339
       `Dropping at   ${eb!.x + eb!.width / 2}, ${eb!.y + eb!.height / 2}`
     );
+    //  skipcq: JS-0339
     await page.mouse.move(eb!.x + eb!.width / 2, eb!.y + eb!.height / 2, {
       steps: 15,
     });
