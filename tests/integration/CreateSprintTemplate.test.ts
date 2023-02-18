@@ -72,7 +72,7 @@ describe("Login Page:", () => {
 
     // first box
     console.log(
-      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
+      `Dragging from ${ob!?.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2);
     await page.mouse.down();
@@ -86,7 +86,7 @@ describe("Login Page:", () => {
 
     // second box
     console.log(
-      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
+      `Dragging from ${ob!?.x + ob!?.width / 2}, ${ob!.y + ob!.height / 2}`
     );
     await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
       steps: 5,
