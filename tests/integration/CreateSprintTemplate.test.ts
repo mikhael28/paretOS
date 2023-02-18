@@ -19,7 +19,7 @@ describe("Login Page:", () => {
     browser = await puppeteer.launch({
       // headless: false, // <------------------------ This is the line that makes it so you can see whats going on
 
-      slowMo: 50, // <-------- use this if you want to slow down the tests so you can see what is happening, 50 minimum to make it work in headless mode.
+      slowMo: 50, // <-------- use this if you want to slow down the tests so you can see what is happening, 50 minimum to make it work properly or its too fast.
       defaultViewport: null,
       args: ["--window-size=1400,1022"], // In headed mode you need the window size to have a width of at least 1400px or the drag test will fail as there isnt enough window space to drag the box to the correct location
     });
@@ -55,14 +55,7 @@ describe("Login Page:", () => {
     await page.waitForSelector(`[id="Sprint Template"]`);
     await page.click(`[id="Sprint Template"]`);
     console.log("clicking sprint template");
-    // |*************************************************START
-    // This here is where it stops working in headless mode, if you use the page.goto method it will continue on, but for some reason it will not actually go to the page in headless mode without it.
-    // await page.goto(`http://localhost:5173/arena/create/template`, {
-    //   timeout: 90_000,
-    //   waitUntil: "networkidle2",
-    // });
     await page.waitForSelector("#template-name");
-    // |*************************************************END
     await page.type("#template-name", randomTemplateName);
     const origin1 = await page.waitForSelector(`[id="Talk to Customers"]`);
     const origin2 = await page.waitForSelector(`[id="No Nicotine or Tobacco"]`);
@@ -71,7 +64,7 @@ describe("Login Page:", () => {
     const workDay = await page.waitForSelector("#Workday");
     const evening = await page.waitForSelector("#Evening");
     let ob = await origin1?.boundingBox();
-    // let ob2 = await origin2?.boundingBox(); // <-----start ||Currently not using this box as unless you make some sort of time out function it will fail as it will try to drag the box before it has moved to the correct location.
+    // let ob2 = await origin2?.boundingBox(); // <-----start ||Currently not using this box as unless you make some sort of timer function, it will fail as it will try to drag the box before it has moved to the correct location.
     // let ob3 = await origin3?.boundingBox(); // <--------end
     let mb = await morning?.boundingBox();
     let wb = await workDay?.boundingBox();
@@ -79,47 +72,47 @@ describe("Login Page:", () => {
 
     // first box
     console.log(
-      `Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`
+      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
-    await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2);
+    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2);
     await page.mouse.down();
     console.log(
-      `Dropping at   ${mb.x + mb.width / 2}, ${mb.y + mb.height / 2}`
+      `Dropping at   ${mb!.x + mb!.width / 2}, ${mb!.y + mb!.height / 2}`
     );
-    await page.mouse.move(mb.x + mb.width / 2, mb.y + mb.height / 2, {
+    await page.mouse.move(mb!.x + mb!.width / 2, mb!.y + mb!.height / 2, {
       steps: 3,
     });
     await page.mouse.up();
 
     // second box
     console.log(
-      `Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`
+      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
-    await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2, {
+    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
       steps: 5,
     });
     await page.mouse.down();
     console.log(
-      `Dropping at   ${wb.x + wb.width / 2}, ${wb.y + wb.height / 2}`
+      `Dropping at   ${wb!.x + wb!.width / 2}, ${wb!.y + wb!.height / 2}`
     );
-    await page.mouse.move(wb.x + wb.width / 2, wb.y + wb.height / 2, {
+    await page.mouse.move(wb!.x + wb!.width / 2, wb!.y + wb!.height / 2, {
       steps: 6,
     });
     await page.mouse.up();
     // third box
 
     console.log(
-      `Dragging from ${ob.x + ob.width / 2}, ${ob.y + ob.height / 2}`
+      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
     );
-    await page.mouse.move(ob.x + ob.width / 2, ob.y + ob.height / 2, {
+    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
       steps: 10,
     });
     await page.mouse.down();
 
     console.log(
-      `Dropping at   ${eb.x + eb.width / 2}, ${eb.y + eb.height / 2}`
+      `Dropping at   ${eb!.x + eb!.width / 2}, ${eb!.y + eb!.height / 2}`
     );
-    await page.mouse.move(eb.x + eb.width / 2, eb.y + eb.height / 2, {
+    await page.mouse.move(eb!.x + eb!.width / 2, eb!.y + eb!.height / 2, {
       steps: 15,
     });
     await page.mouse.up();
