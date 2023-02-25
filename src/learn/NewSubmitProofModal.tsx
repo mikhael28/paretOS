@@ -108,7 +108,6 @@ export default function SubmitProof({
               id="athleteNotes"
               variant="filled"
               size="medium"
-              autoFocus
               {...register("athleteNotes", { required: true })}
             />
             <br />
@@ -118,7 +117,6 @@ export default function SubmitProof({
               id="github"
               variant="filled"
               size="medium"
-              autoFocus
               {...register("github", { required: true })}
             />
             <br />

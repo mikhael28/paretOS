@@ -97,7 +97,8 @@ const ConfirmModal = ({
           <MdClose />
         </IconButton>
       </DialogTitle>
-      <DialogContent className={classes.root}>
+      <DialogContent className={classes.root}> { // skipcq: JS-0394
+      }
         <h3>{I18n.get("description")}</h3>
         <PortableText value={activeExperience.overview} />
         <h3>{I18n.get("notesForCoach")}</h3>
@@ -131,7 +132,6 @@ const ConfirmModal = ({
               id="coachNotes"
               variant="filled"
               size="medium"
-              autoFocus
               {...register("coachNotes")}
             />
             <DialogActions>
