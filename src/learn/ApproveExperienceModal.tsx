@@ -7,6 +7,8 @@ import {
   Button,
   IconButton,
   TextField,
+  useTheme,
+  Theme,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { MdClose } from "react-icons/md";
@@ -20,7 +22,7 @@ import { ActiveExperience, MongoExperience } from "../types/LearnTypes";
  * @TODO Issue #64
  */
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme: Theme) => makeStyles(() => ({
   root: {
     "& .MuiTextField-root": {
       width: "100%",
@@ -62,7 +64,8 @@ const ConfirmModal = ({
   markComplete,
 }: ArenaProofModalProps) => {
   const { register, handleSubmit } = useForm<{ coachNotes: string }>();
-  const classes = useStyles();
+  const theme = useTheme();
+  const classes = useStyles(theme)();
 
   const handleMarkRequestRevisions = handleSubmit((data) => {
     markRequestRevisions(activeExperience, mongoExperience, data.coachNotes);

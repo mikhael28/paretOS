@@ -7,6 +7,8 @@ import {
   Button,
   IconButton,
   TextField,
+  Theme,
+  useTheme,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { MdClose } from "react-icons/md";
@@ -19,7 +21,7 @@ import { ActiveExperience } from "../types/LearnTypes";
  * This is the modal where a player submits the proof for their Arena event
  */
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme: Theme) => makeStyles(() => ({
   root: {
     "& .MuiTextField-root": {
       width: "100%",
@@ -60,7 +62,8 @@ export default function SubmitProof({
   markSubmitted,
   activeExperience,
 }: SubmitProofProps) {
-  const classes = useStyles();
+  const theme = useTheme();
+  const classes = useStyles(theme)();
   const [isChanging, setChanging] = useState(false);
   const { register, handleSubmit, formState, reset } = useForm<{
     github: string;
