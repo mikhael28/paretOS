@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, it } from "vitest";
 import { expect } from "chai";
-import puppeteer from "puppeteer";
+import puppeteer, { BoundingBox, ElementHandle } from "puppeteer";
 import type { Browser, Page } from "puppeteer";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
@@ -10,28 +10,30 @@ dotenv.config();
 const username = process.env.TEST_FIXTURE_USERNAME;
 const password = process.env.TEST_FIXTURE_PASSWORD;
 
+const RUN_TESTS_IN_HEADLESS_MODE = true; // Change to 'false' in order to run tests in headful mode so you can see whats going on
+
+const SLOW_MO_RATE = 50; // <-------- use this if you want to slow down the tests so you can see what is happening, 50 minimum to make it work properly or its too fast.
+
 const randomTemplateName = nanoid(10);
-describe("Login Page:", () => {
+const WINDOW_WIDTH = 1400; // In headed mode you need the window size to have a width of at least 1400px or the drag test will fail as there isnt enough window space to drag the box to the correct location
+
+const WINDOW_HEIGHT = 1022;
+describe("CreateSprintTemplate Page:", () => {
   let browser: Browser;
   let page: Page;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      // headless: false, // <------------------------ This is the line that makes it so you can see whats going on
+      headless: RUN_TESTS_IN_HEADLESS_MODE,
 
-      slowMo: 50, // <-------- use this if you want to slow down the tests so you can see what is happening, 50 minimum to make it work properly or its too fast.
+      slowMo: SLOW_MO_RATE,
       defaultViewport: null,
-      args: ["--window-size=1400,1022"], // In headed mode you need the window size to have a width of at least 1400px or the drag test will fail as there isnt enough window space to drag the box to the correct location
+      args: [`--window-size=${WINDOW_WIDTH},${WINDOW_HEIGHT}`],
     });
     page = await browser.newPage();
     await installMouseHelper(page); // This is a helper function that allows you to see what the mouse is actually doing on the screen in headed mode.
-  });
 
-  afterAll(async () => {
-    await browser.close();
-  });
-
-  it("should allow a user to log in and log out", async () => {
+    // Login script
     await page.goto(`http://localhost:5173/login`, {
       timeout: 90_000,
       waitUntil: "networkidle2",
@@ -41,14 +43,14 @@ describe("Login Page:", () => {
     await page.type("#password", password || "");
     await page.click("[type='submit']");
     await page.waitForSelector(".sticky-logout", { timeout: 90_000 });
-    const logout = await page.$(".sticky-logout");
-    if (typeof logout === "undefined") {
-      await page.screenshot({ path: "login-failure.png" });
-    }
-    expect(typeof logout === "undefined").to.equal(false);
-  }, 90_000);
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
 
   it("should allow a user to create a sprint template", async () => {
+    // Clicking into the arena
     await page.waitForSelector(`[id="The Arena"]`, { visible: true });
     await page.click(`[id="The Arena"]`);
     console.log("clicking carrot");
@@ -57,81 +59,131 @@ describe("Login Page:", () => {
     console.log("clicking sprint template");
     await page.waitForSelector("#template-name");
     await page.type("#template-name", randomTemplateName);
-    const origin1 = await page.waitForSelector(`[id="Talk to Customers"]`);
-    const origin2 = await page.waitForSelector(`[id="No Nicotine or Tobacco"]`);
-    const origin3 = await page.waitForSelector(`[id="3 Hours of Deep Work"]`);
-    const morning = await page.waitForSelector("#Morning");
-    const workDay = await page.waitForSelector("#Workday");
-    const evening = await page.waitForSelector("#Evening");
-    let ob = await origin1?.boundingBox();
-    // let ob2 = await origin2?.boundingBox(); // <-----start ||Currently not using this box as unless you make some sort of timer function, it will fail as it will try to drag the box before it has moved to the correct location.
-    // let ob3 = await origin3?.boundingBox(); // <--------end
-    let mb = await morning?.boundingBox();
-    let wb = await workDay?.boundingBox();
-    let eb = await evening?.boundingBox();
+
+    // Drag and drop
+    const origin1 = (await page.waitForSelector(
+      `[id="Talk to Customers"]`
+    )) as ElementHandle<Element>;
+
+    const morning = (await page.waitForSelector(
+      "#Morning"
+    )) as ElementHandle<Element>;
+
+    const workDay = (await page.waitForSelector(
+      "#Workday"
+    )) as ElementHandle<Element>;
+
+    const evening = (await page.waitForSelector(
+      "#Evening"
+    )) as ElementHandle<Element>;
+
+    // get bounding boxes
+    let optionsColumnItem1BoundingBox =
+      (await origin1.boundingBox()) as BoundingBox;
+    let morningColumnBoundingBox = (await morning.boundingBox()) as BoundingBox;
+    let workDayColumnBoundingBox = (await workDay.boundingBox()) as BoundingBox;
+    let eveningColumnBoundingBox = (await evening.boundingBox()) as BoundingBox;
 
     // first box
     console.log(
-      //  skipcq: JS-0339
-      `Dragging from ${ob!?.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
+      `Dragging from ${
+        optionsColumnItem1BoundingBox.x +
+        optionsColumnItem1BoundingBox.width / 2
+      }, ${
+        optionsColumnItem1BoundingBox.y +
+        optionsColumnItem1BoundingBox.height / 2
+      }`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2);
+    await page.mouse.move(
+      optionsColumnItem1BoundingBox.x + optionsColumnItem1BoundingBox.width / 2,
+      optionsColumnItem1BoundingBox.y + optionsColumnItem1BoundingBox.height / 2
+    );
     await page.mouse.down();
     console.log(
-      //  skipcq: JS-0339
-      `Dropping at   ${mb!.x + mb!.width / 2}, ${mb!.y + mb!.height / 2}`
+      `Dropping at   ${
+        morningColumnBoundingBox.x + morningColumnBoundingBox.width / 2
+      }, ${morningColumnBoundingBox.y + morningColumnBoundingBox.height / 2}`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(mb!.x + mb!.width / 2, mb!.y + mb!.height / 2, {
-      steps: 3,
-    });
+    await page.mouse.move(
+      morningColumnBoundingBox.x + morningColumnBoundingBox.width / 2,
+      morningColumnBoundingBox.y + morningColumnBoundingBox.height / 2,
+      {
+        steps: 3,
+      }
+    );
     await page.mouse.up();
 
     // second box
     console.log(
-      //  skipcq: JS-0339
-      `Dragging from ${ob!?.x + ob!?.width / 2}, ${ob!.y + ob!.height / 2}`
+      `Dragging from ${
+        optionsColumnItem1BoundingBox.x +
+        optionsColumnItem1BoundingBox.width / 2
+      }, ${
+        optionsColumnItem1BoundingBox.y +
+        optionsColumnItem1BoundingBox.height / 2
+      }`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
-      steps: 5,
-    });
+    await page.mouse.move(
+      optionsColumnItem1BoundingBox.x + optionsColumnItem1BoundingBox.width / 2,
+      optionsColumnItem1BoundingBox.y +
+        optionsColumnItem1BoundingBox.height / 2,
+      {
+        steps: 5,
+      }
+    );
     await page.mouse.down();
     console.log(
-      //  skipcq: JS-0339
-      `Dropping at   ${wb!.x + wb!.width / 2}, ${wb!.y + wb!.height / 2}`
+      `Dropping at   ${
+        workDayColumnBoundingBox.x + workDayColumnBoundingBox.width / 2
+      }, ${workDayColumnBoundingBox.y + workDayColumnBoundingBox.height / 2}`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(wb!.x + wb!.width / 2, wb!.y + wb!.height / 2, {
-      steps: 6,
-    });
+    await page.mouse.move(
+      workDayColumnBoundingBox.x + workDayColumnBoundingBox.width / 2,
+      workDayColumnBoundingBox.y + workDayColumnBoundingBox.height / 2,
+      {
+        steps: 6,
+      }
+    );
     await page.mouse.up();
     // third box
 
     console.log(
-      //  skipcq: JS-0339
-      `Dragging from ${ob!.x + ob!.width / 2}, ${ob!.y + ob!.height / 2}`
+      `Dragging from ${
+        optionsColumnItem1BoundingBox.x +
+        optionsColumnItem1BoundingBox.width / 2
+      }, ${
+        optionsColumnItem1BoundingBox.y +
+        optionsColumnItem1BoundingBox.height / 2
+      }`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(ob!.x + ob!.width / 2, ob!.y + ob!.height / 2, {
-      steps: 10,
-    });
+    await page.mouse.move(
+      optionsColumnItem1BoundingBox.x + optionsColumnItem1BoundingBox.width / 2,
+      optionsColumnItem1BoundingBox.y +
+        optionsColumnItem1BoundingBox.height / 2,
+      {
+        steps: 10,
+      }
+    );
     await page.mouse.down();
 
     console.log(
-      //  skipcq: JS-0339
-      `Dropping at   ${eb!.x + eb!.width / 2}, ${eb!.y + eb!.height / 2}`
+      `Dropping at   ${
+        eveningColumnBoundingBox.x + eveningColumnBoundingBox.width / 2
+      }, ${eveningColumnBoundingBox.y + eveningColumnBoundingBox.height / 2}`
     );
-    //  skipcq: JS-0339
-    await page.mouse.move(eb!.x + eb!.width / 2, eb!.y + eb!.height / 2, {
-      steps: 15,
-    });
+    await page.mouse.move(
+      eveningColumnBoundingBox.x + eveningColumnBoundingBox.width / 2,
+      eveningColumnBoundingBox.y + eveningColumnBoundingBox.height / 2,
+      {
+        steps: 15,
+      }
+    );
     await page.mouse.up();
     await page.waitForSelector("#create-template-button");
     await page.click("#create-template-button");
     console.log("clicking create template button");
     await page.waitForSelector(`[alt="Arena tour icon"]`);
+    // end of creating a sprint template and the start of the logout sequence
     await page.click(".sticky-logout");
     await page.waitForSelector("#animation-container");
     const createSprintTemplate = await page.$("#animation-container");
