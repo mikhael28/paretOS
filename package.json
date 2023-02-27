@@ -14,7 +14,7 @@
     "@juggle/resize-observer": "^3.4.0",
     "@mui/material": "5.11.5",
     "@mui/styles": "5.11.2",
-    "@mui/system": "5.11.4",
+    "@mui/system": "5.11.9",
     "@mui/x-date-pickers": "5.0.14",
     "@portabletext/react": "2.0.0",
     "@react-three/drei": "9.53.0",
