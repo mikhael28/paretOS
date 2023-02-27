@@ -135,12 +135,12 @@ function LeftNav(props: LeftNavProps) {
       {
         path: "/arena/create/sprints",
         label: I18n.get("startSprint"),
-        Icon: <BiRun style={iconStyle} />,
+        Icon: (<BiRun style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: "/arena/create/template",
         label: "Sprint Template",
-        Icon: <IoMdCreate style={iconStyle} />,
+        Icon: (<IoMdCreate id="iomdcreate" style={iconStyle} />), // skipcq JS-0394
       },
     ],
   };
@@ -148,15 +148,13 @@ function LeftNav(props: LeftNavProps) {
   const mentorshipsMenu: LeftNavSection | null =
     user.instructor === true && athletes.length > 0
       ? {
-        heading: { path: "/mentorship", label: I18n.get("mentorship") },
-        subHeadings: athletes.map((relationship) => ({
-          path: `/mentorship/${relationship.id}`,
-          label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-          Icon: (
-            <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />
-          ),
-        })),
-      }
+          heading: { path: "/mentorship", label: I18n.get("mentorship") },
+          subHeadings: athletes.map((relationship) => ({
+            path: `/mentorship/${relationship.id}`,
+            label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
+            Icon: (<FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />), // skipcq JS-0394
+          })),
+        }
       : null;
 
   const trainingMenu: LeftNavSection = {
@@ -165,17 +163,17 @@ function LeftNav(props: LeftNavProps) {
       {
         path: `/training/${user.apprenticeshipId}`,
         label: I18n.get("technicalTraining"),
-        Icon: <AiFillCode style={iconStyle} />,
+        Icon: (<AiFillCode style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: `/training/${user.productId}`,
         label: I18n.get("product"),
-        Icon: <FaTools style={iconStyle} />,
+        Icon: (<FaTools style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: `/training/${user.masteryId}`,
         label: I18n.get("interviewing"),
-        Icon: <IoMdSchool style={iconStyle} />,
+        Icon: (<IoMdSchool style={iconStyle} />), // skipcq JS-0394
       },
     ],
   };
@@ -233,7 +231,6 @@ function LeftNav(props: LeftNavProps) {
           <Avatar
             sx={{ width: 24, height: 24 }}
             src={
-
               "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             }
           />
@@ -269,18 +266,11 @@ function LeftNav(props: LeftNavProps) {
         }}
       >
         <div className="flex">
-
           <img
             src={white}
             width="120"
             style={{ opacity: 0.6 }}
             alt="pareto logo"
-            onMouseEnter={(e) => {
-              (e.currentTarget.style.opacity as any) = 1;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget.style.opacity as any) = 0.6;
-            }}
           />
           {/* TODO make this dynamic based on package.json */}
           <p>&nbsp;v0.2.0</p>
@@ -423,10 +413,9 @@ function Heading({
         </p>
       </NavLink>
       {dropdown && (
-        <div
-          className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"}
-          onClick={handleClick}
-        ></div>
+        <div id={label} className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"} role="button" onClick={handleClick}>{ // skipcq JS-0746, JS-0720
+          }
+        </div>
       )}
     </div>
   );
@@ -444,7 +433,9 @@ const SubHeading = ({
   return (
     <NavLink end to={path} style={subheadingStyle} activestyle={activeStyle}>
       {Icon}
-      <p style={{ marginLeft: 8 }}>{label}</p>
+      <p id={label} style={{ marginLeft: 8 }}>
+        {label}
+      </p>
     </NavLink>
   );
 };
