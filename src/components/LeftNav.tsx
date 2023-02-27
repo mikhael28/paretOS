@@ -135,18 +135,12 @@ function LeftNav(props: LeftNavProps) {
       {
         path: "/arena/create/sprints",
         label: I18n.get("startSprint"),
-        Icon: (
-          <BiRun style={iconStyle} />{ // skipcq JS-0394
-        } 
-        ),
+        Icon: (<BiRun style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: "/arena/create/template",
         label: "Sprint Template",
-        Icon: (
-          <IoMdCreate id="iomdcreate" style={iconStyle} />{ // skipcq JS-0394
-        } 
-        ),
+        Icon: (<IoMdCreate id="iomdcreate" style={iconStyle} />), // skipcq JS-0394
       },
     ],
   };
@@ -158,10 +152,7 @@ function LeftNav(props: LeftNavProps) {
           subHeadings: athletes.map((relationship) => ({
             path: `/mentorship/${relationship.id}`,
             label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
-            Icon: (
-              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />{ // skipcq JS-0394
-            } 
-            ),
+            Icon: (<FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />), // skipcq JS-0394
           })),
         }
       : null;
@@ -172,26 +163,17 @@ function LeftNav(props: LeftNavProps) {
       {
         path: `/training/${user.apprenticeshipId}`,
         label: I18n.get("technicalTraining"),
-        Icon: (
-          <AiFillCode style={iconStyle} />{ // skipcq JS-0394
-        }
-        ),
+        Icon: (<AiFillCode style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: `/training/${user.productId}`,
         label: I18n.get("product"),
-        Icon: (
-          <FaTools style={iconStyle} />{ // skipcq JS-0394
-        } 
-        ),
+        Icon: (<FaTools style={iconStyle} />), // skipcq JS-0394
       },
       {
         path: `/training/${user.masteryId}`,
         label: I18n.get("interviewing"),
-        Icon: (
-          <IoMdSchool style={iconStyle} />{ // skipcq JS-0394
-        } 
-        ),
+        Icon: (<IoMdSchool style={iconStyle} />), // skipcq JS-0394
       },
     ],
   };
