@@ -136,21 +136,16 @@ function LeftNav(props: LeftNavProps) {
         path: "/arena/create/sprints",
         label: I18n.get("startSprint"),
         Icon: (
-          <BiRun 
-            style={iconStyle}{ // skipcq JS-0394
-            } 
-          />
+          <BiRun style={iconStyle} />{ // skipcq JS-0394
+        } 
         ),
       },
       {
         path: "/arena/create/template",
         label: "Sprint Template",
         Icon: (
-          <IoMdCreate 
-            id="iomdcreate" 
-            style={iconStyle}{ // skipcq JS-0394
-            } 
-          />
+          <IoMdCreate id="iomdcreate" style={iconStyle} />{ // skipcq JS-0394
+        } 
         ),
       },
     ],
@@ -164,10 +159,8 @@ function LeftNav(props: LeftNavProps) {
             path: `/mentorship/${relationship.id}`,
             label: `${relationship.mentee.fName} ${relationship.mentee.lName}`,
             Icon: (
-              <FaHandsHelping 
-                style={{ height: 20, width: 20, margin: 2 }}{ // skipcq JS-0394
-                } 
-              />
+              <FaHandsHelping style={{ height: 20, width: 20, margin: 2 }} />{ // skipcq JS-0394
+            } 
             ),
           })),
         }
@@ -180,30 +173,24 @@ function LeftNav(props: LeftNavProps) {
         path: `/training/${user.apprenticeshipId}`,
         label: I18n.get("technicalTraining"),
         Icon: (
-          <AiFillCode 
-            style={iconStyle}{ // skipcq JS-0394
-            }
-          />
+          <AiFillCode style={iconStyle} />{ // skipcq JS-0394
+        }
         ),
       },
       {
         path: `/training/${user.productId}`,
         label: I18n.get("product"),
         Icon: (
-          <FaTools
-           style={iconStyle}{ // skipcq JS-0394
-           } 
-          />
+          <FaTools style={iconStyle} />{ // skipcq JS-0394
+        } 
         ),
       },
       {
         path: `/training/${user.masteryId}`,
         label: I18n.get("interviewing"),
         Icon: (
-          <IoMdSchool 
-            style={iconStyle}{ // skipcq JS-0394
-            } 
-          />
+          <IoMdSchool style={iconStyle} />{ // skipcq JS-0394
+        } 
         ),
       },
     ],
