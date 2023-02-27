@@ -419,7 +419,7 @@ function Heading({
         </p>
       </NavLink>
       {dropdown && (
-        <div id={label} className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"} role="button" onClick={handleClick}>{ // skipcq JS-0746
+        <div id={label} className={expanded ? "dropdown-caret-up" : "dropdown-caret-down"} role="button" onClick={handleClick}>{ // skipcq JS-0746, JS-0720
           }
         </div>
       )}
