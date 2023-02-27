@@ -51,8 +51,8 @@ async function installMouseHelper(page) {
         document.addEventListener(
           "mousemove",
           (event) => {
-            box.style.left = event.pageX + "px";
-            box.style.top = event.pageY + "px";
+            box.style.left = `${event.pageX}px`;
+            box.style.top = `${event.pageY}px`;
             updateButtons(event.buttons);
           },
           true
@@ -61,7 +61,7 @@ async function installMouseHelper(page) {
           "mousedown",
           (event) => {
             updateButtons(event.buttons);
-            box.classList.add("button-" + event.which);
+            box.classList.add(`button-${event.which}`);
           },
           true
         );
@@ -69,13 +69,13 @@ async function installMouseHelper(page) {
           "mouseup",
           (event) => {
             updateButtons(event.buttons);
-            box.classList.remove("button-" + event.which);
+            box.classList.remove(`button-${event.which}`);
           },
           true
         );
         function updateButtons(buttons) {
           for (let i = 0; i < 5; i++)
-            box.classList.toggle("button-" + i, buttons & (1 << i));
+            box.classList.toggle(`button-${i}`, buttons & (1 << i));
         }
       },
       false
