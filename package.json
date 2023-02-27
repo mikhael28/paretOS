@@ -46,7 +46,7 @@
     "react-beautiful-dnd": "13.1.1",
     "react-bootstrap": "0.32.4",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.42.1",
+    "react-hook-form": "7.43.2",
     "react-icons": "4.7.1",
     "react-is": ">=16.8.0 <17.0.0 || >=17.0.0-0 <18.0.0",
     "react-markdown": "8.0.4",
