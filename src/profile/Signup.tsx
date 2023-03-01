@@ -9,6 +9,7 @@ import {
   Input,
   InputLabel,
   TextField,
+  Theme,
   useTheme,
 } from "@mui/material";
 import logo from "../assets/Pareto_Lockup-01.png";
@@ -20,7 +21,7 @@ import { makeStyles } from "@mui/styles";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme: Theme) => makeStyles(() => ({
   root: {
     paddingTop: theme.spacing(5),
     width: 300,
@@ -65,7 +66,7 @@ type CodeConfirmationForm = {
 
 const Signup = (_props: any) => {
   const theme = useTheme();
-  const classes = useStyles();
+  const classes = useStyles(theme)();
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const validationSchema = Yup.object().shape({

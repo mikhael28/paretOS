@@ -66,7 +66,7 @@ RestAPI.configure({
 Storage.configure({
   AWSS3: {
     bucket: import.meta.env.VITE_PROOF_BUCKET,
-    region: import.meta.env.VITE_UTIL_REGION,
+    region: import.meta.env.VITE_S3_REGION,
   },
 });
 
