@@ -73,9 +73,9 @@ const EditProfile = (props: any) => {
     // here we are populating our initial state. In the future, we will likely just pass stuff in via props, instead of running a fresh network request. That was a legacy decision, don't worry about it @antonio-b
     setState((prevState) => ({
       ...prevState,
-      user: response[0],
       id: userId,
     }));
+    setUser(response[0]);
   };
   // This function below handles the changes in state, based on the forms. All of the information stored in the forms, is stored in state. Each form has an `id`, which is accessed by the event.target.id.
   // The actual updated value, is represented by the event.target.value. I recommend you console.log both of the values, above the setState, so you understand.
@@ -103,9 +103,9 @@ const EditProfile = (props: any) => {
       });
       setState((prevState) => ({
         ...prevState,
-        user: response,
         summaryCheck: false,
       }));
+      setUser(response);
     } catch (e) {
       console.log("email send error: ", e);
       // toast(e, { type: toast.TYPE.ERROR})
@@ -155,6 +155,10 @@ const EditProfile = (props: any) => {
       });
       console.log(updatedProfile);
       setUser(updatedProfile);
+      setState((previousState) => ({
+        ...previousState,
+        picture: updatedProfile.picture
+      }))
       // need to save the key
     } catch (e) {
       handleShowError(e as Error);
