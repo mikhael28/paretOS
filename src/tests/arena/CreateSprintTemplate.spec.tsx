@@ -6,7 +6,7 @@ import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import { vi, describe, beforeEach, afterEach, it, expect } from "vitest";
 
 import CreateSprintTemplate from "../../arena/CreateSprintTemplate";
-import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate } from "../../utils/queries/createSprintTemplateQueries";
+import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate, updateSprintTemplate } from "../../utils/queries/sprintTemplateQueries";
 import { useNavigate } from "react-router-dom";
 import { getSampleTemplates } from "../testData";
 
@@ -21,6 +21,7 @@ describe("CREATE SPRINT TEMPLATE", () => {
   const mockGetTemplates = vi.fn().mockImplementation(getSprintTemplates);
   const mockSetTemplate = vi.fn().mockImplementation(setSprintTemplate);
   const mockGetTemplateOptions = vi.fn().mockImplementation(getSprintTemplateOptionsFromSanity);
+  const mockUpdateTemplate = vi.fn().mockImplementation(updateSprintTemplate);
   const mockNavigate = vi.fn().mockImplementation(useNavigate);
   mockNavigate.mockReturnValue(vi.fn())
 
@@ -66,7 +67,8 @@ describe("CREATE SPRINT TEMPLATE", () => {
             getTemplates={mockGetTemplates}
             setTemplate={mockSetTemplate}
             getTemplateOptionsFromSanity={mockGetTemplateOptions}
-            />
+            updateTemplate={mockUpdateTemplate}
+          />
       );
     });
 
