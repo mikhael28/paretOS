@@ -163,13 +163,13 @@ const createTemplate = async (page: Page, templateName: string) => {
 }
 
 const scrollToManageTemplatesSection = async (page: Page) => {
-  page.evaluate(() => {
+  await page.evaluate(() => {
     document.getElementById("manage-templates-heading")?.scrollIntoView();
   })
 }
 
 const scrollToTemplateFormSection = async (page: Page) => {
-  page.evaluate(() => {
+  await page.evaluate(() => {
     document.getElementById("create-template-heading")?.scrollIntoView();
   })
 }
@@ -187,7 +187,7 @@ const updateTemplateName = async (page: Page, newName: string) => {
   let title;
   try {
     await scrollToTemplateFormSection(page);
-    title = await page.evaluate(() => (document.getElementById("template-name") as HTMLInputElement)!.value);
+    title = await page.evaluate(() => (document.getElementById("template-name") as HTMLInputElement).value);
     await page.type("#template-name", newName);
     await page.waitForXPath(xPathToFindAnyElementWithText("Update Template"));
     const [updateTemplateButton] = await page.$x(xPathToFindAnyElementWithText("Update Template")) as ElementHandle<Element>[];
@@ -200,7 +200,7 @@ const updateTemplateName = async (page: Page, newName: string) => {
 
 const deleteAllSprintTemplates = async (page: Page) => {
   const deleteButtons = await page.$x(xPathToFindSvgWithTitle("delete template")) as ElementHandle<Element>[];
-  deleteButtons.forEach(async (button) => await button.click())
+  deleteButtons.forEach(async (button) => await button.click()) // skipcq: JS-0336
 }
 
 const waitForToastMessage = async (page: Page) => {
@@ -290,7 +290,8 @@ describe("CreateSprintTemplate Page:", () => {
 
     // Conditions
     expect(typeof toastSuccessMessage === "undefined").to.equal(false);
-    expect((updatedTemplateCard.length === 1 || updatedTemplateCard.length === 2)).to.be.true;
+    const cardsCollectionIsExpectedLength = updatedTemplateCard.length === 1 || updatedTemplateCard.length === 2;
+    expect(cardsCollectionIsExpectedLength).to.equal(true);
     expect(oldTemplateCard.length).to.equal(0);
 
     // Cleanup
@@ -308,7 +309,8 @@ describe("CreateSprintTemplate Page:", () => {
     const manageTemplates = await page.evaluate("document.getElementById('manage-templates-heading').scrollIntoView()");
 
     // Conditions
-    expect(manageTemplates).to.be.undefined;
+    const isManageTemplatesUndefined = manageTemplates === undefined;
+    expect(isManageTemplatesUndefined).to.equal(true);
     LOGGING_ENABLED && console.log("verifying manage templates section is no longer displayed");
     console.log("Completed sprint template test: DELETE");
   }, 90_000);

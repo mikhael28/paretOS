@@ -6,7 +6,7 @@ import { Paper, useTheme } from "@mui/material";
 export interface ManageSprintTemplateProps {
   userManageableTemplates: SprintTemplateMongoDBDoc[];
   handleDeleteTemplate: (id: string) => Promise<void>;
-  handleEditTemplate: (id: string) => void;
+  handleEditTemplate: (id: string) => Promise<void>;
 }
 
 function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, handleEditTemplate }: ManageSprintTemplateProps) {
@@ -60,29 +60,33 @@ function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, 
                   {template.missions.length > 0 && `: ${template.missions.map((mission: Mission) => mission.title).join(", ")}`}
                 </span>
               </div>
-              <div style={{ minWidth: "55px"}}>
-                <BsPencil
-                  title="edit template"
-                  onClick={() => handleEditTemplate(template.id)}
-                  style={{
+              <div style={{ minWidth: "55px", display: "flex", flexWrap: "nowrap" }}>
+                <div style={{
+                    marginLeft: 8,
+                    width: "18px",
+                    height: "18px",
+                    cursor: "pointer",
+                  }}>
+                  <BsPencil
+                    title="edit template"
+                    onClick={() => handleEditTemplate(template.id)}
+                    
+                  />
+                </div>
+                <div style={{
                     marginLeft: 8,
                     width: "18px",
                     height: "18px",
                     cursor: "pointer",
                   }}
-                />
-                <BsTrash
-                  title="delete template"
-                  onClick={() => {
-                    handleDeleteTemplate(template.id);
-                  }}
-                  style={{
-                    marginLeft: 8,
-                    width: "18px",
-                    height: "18px",
-                    cursor: "pointer",
-                  }}
-                />
+                >
+                  <BsTrash
+                    title="delete template"
+                    onClick={() => {
+                      handleDeleteTemplate(template.id);
+                    }}
+                  />
+                </div>
               </div>
             </div>
 

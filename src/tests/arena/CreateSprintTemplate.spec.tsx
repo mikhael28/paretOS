@@ -264,11 +264,11 @@ describe("CREATE SPRINT TEMPLATE", () => {
     })
 
     it("displays no manage templates section", async () => {
-      expect(screen.queryByText("manageTemplates")).toBeNull();
+      expect(await screen.queryByText("manageTemplates")).toBeNull();
     });
 
     it("displays no template card(s)", async () => {
-      const templateCard = screen.queryByText(
+      const templateCard = await screen.queryByText(
         "5 missions: 6 am club, No Alcohol, 3 Hours of Deep Work, Eat the Frog, Drink 1 Liter of Water"
       )
       expect(templateCard).toBeNull();

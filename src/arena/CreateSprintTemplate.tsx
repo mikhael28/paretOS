@@ -12,7 +12,7 @@ import { nanoid } from "nanoid";
 import { I18n } from "@aws-amplify/core";
 import { useNavigate } from "react-router-dom";
 import ManageSprintTemplates from "./ManageSprintTemplates";
-import { Mission, SprintTemplateMongoDBDoc, SprintTemplatePostBody } from "../types/ArenaTypes";
+import { Mission, SprintTemplateMongoDBDoc } from "../types/ArenaTypes";
 import { deleteSprintTemplate } from "../utils/queries/sprintTemplateQueries";
 import { User } from "../types/ProfileTypes";
 
@@ -191,7 +191,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
 
   useEffect(() => {
     props.getTemplateOptionsFromSanity().then((res) => {
-      if (editMode == false) {
+      if (editMode === false) {
         setColumns(
           res as SetStateAction<{
             Options: { name: string; items: Mission[] };
@@ -264,7 +264,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   
   const handleEditTemplate = async (templateId: string) => {
     setEditMode(true);
-    const templateIndex = userManageableTemplates.findIndex(template => template.id == templateId)
+    const templateIndex = userManageableTemplates.findIndex(template => template.id === templateId)
     setActiveTemplate(templateIndex);
     setTitle(userManageableTemplates[templateIndex].title);
 
@@ -329,9 +329,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const shouldCreateSprint = () => (title !== "" && meetsMinimumOptionsThreshold && !error);
   const shouldUpdateSprint = () => {
     const existingMissionsInSprint: Record<string, boolean> = {};
-    userManageableTemplates[activeTemplate].missions.forEach((mission) => existingMissionsInSprint[mission._id] = true);
+    userManageableTemplates[activeTemplate].missions.forEach((mission) => { existingMissionsInSprint[mission._id] = true });
     const currentAndEditedSprintMissionsAreIdentical = () => {
-      return generateMissionsArray().every(mission => mission._id in existingMissionsInSprint) && generateMissionsArray().length == Object.keys(existingMissionsInSprint).length;
+      return generateMissionsArray().every(mission => mission._id in existingMissionsInSprint) && generateMissionsArray().length === Object.keys(existingMissionsInSprint).length;
     }
     return meetsMinimumOptionsThreshold && title !== "" && title !== userManageableTemplates[activeTemplate].title || !currentAndEditedSprintMissionsAreIdentical();
   }
