@@ -15,6 +15,7 @@ function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, 
   return (
     <>
       <h1
+        id="manage-templates-heading"
         style={{
           width: "auto",
           marginTop: "3rem",
@@ -28,12 +29,14 @@ function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, 
         style={{
           width: "auto",
           display: "flex",
+          flexWrap: "wrap",
           flexDirection: "row",
           margin: theme.spacing(-2)
         }}
       >
         {userManageableTemplates.map((template: SprintTemplateMongoDBDoc) => (
           <Paper
+            key={template.title}
             sx={{
               padding: theme.spacing(2),
               margin: theme.spacing(2),
@@ -59,6 +62,7 @@ function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, 
               </div>
               <div style={{ minWidth: "55px"}}>
                 <BsPencil
+                  title="edit template"
                   onClick={() => handleEditTemplate(template.id)}
                   style={{
                     marginLeft: 8,
@@ -68,6 +72,7 @@ function ManageSprintTemplates({ userManageableTemplates, handleDeleteTemplate, 
                   }}
                 />
                 <BsTrash
+                  title="delete template"
                   onClick={() => {
                     handleDeleteTemplate(template.id);
                   }}

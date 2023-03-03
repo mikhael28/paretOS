@@ -284,8 +284,8 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       userManageableTemplates[activeTemplate] = updatedTemplate;
       setEditMode(false);
       setActiveTemplate(-1);
-      handleShowSuccess(`Sprint Template "${body.title}" has been successfully updated with your changes.`);
       resetTitleAndColumns();
+      handleShowSuccess(`Sprint Template "${body.title}" has been successfully updated with your changes.`);
     } catch (e) {
       handleShowError(e as Error);
     }
@@ -340,6 +340,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   return (
     <>
       <h1
+        id="create-template-heading"
         style={{
           width: "auto",
           marginBottom: "3rem",
