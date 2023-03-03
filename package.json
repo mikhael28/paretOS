@@ -89,7 +89,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "test:unit": "CI=true vitest",
-    "test:integration": "CI=true vitest --dir ./tests/integration --config ./tests/integration/vite.config.js",
+    "test:integration": "CI=true vitest --threads=false --dir ./tests/integration --config ./tests/integration/vite.config.js",
     "serve": "serve -s build"
   },
   "browserslist": [
