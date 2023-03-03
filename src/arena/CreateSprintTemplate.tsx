@@ -402,7 +402,8 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
             }}
             onClick={() => {
               setEditMode(false);
-              setTitle("");
+              resetTitleAndColumns();
+              setActiveTemplate(-1);
             }}
           >
             {I18n.get("cancel")}
