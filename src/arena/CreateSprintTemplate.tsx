@@ -11,6 +11,10 @@ import {
 import { nanoid } from "nanoid";
 import { I18n } from "@aws-amplify/core";
 import { useNavigate } from "react-router-dom";
+import ManageSprintTemplates from "./ManageSprintTemplates";
+import { Mission, SprintTemplateMongoDBDoc, SprintTemplatePostBody } from "../types/ArenaTypes";
+import { deleteSprintTemplate } from "../utils/queries/sprintTemplateQueries";
+import { User } from "../types/ProfileTypes";
 
 /**
  *
@@ -19,29 +23,31 @@ import { useNavigate } from "react-router-dom";
  */
 
 export interface CreateSprintTemplateProps {
-  user: { fName: string; lName: string; id: number };
+  user: User;
   navigate: typeof useNavigate;
-  getTemplates: () => Promise<Array<{ title: string }>>;
+  getTemplates: () => Promise<SprintTemplateMongoDBDoc[]>;
   setTemplate: (body: object) => Promise<void>;
   getTemplateOptionsFromSanity: () => Promise<object>;
+  updateTemplate: (id: string, body: object) => Promise<SprintTemplateMongoDBDoc>;
+  deleteTemplate: (id: string) => Promise<SprintTemplateMongoDBDoc>;
 }
 
 interface OnDragEndParams {
   result: DropResult;
   columns: {
     [x: string]: any;
-    Options?: { name: string; items: never[] };
-    Morning?: { name: string; items: never[] };
-    Workday?: { name: string; items: never[] };
-    Evening?: { name: string; items: never[] };
+    Options?: { name: string; items: Mission[] };
+    Morning?: { name: string; items: Mission[] };
+    Workday?: { name: string; items: Mission[] };
+    Evening?: { name: string; items: Mission[] };
   };
   setColumns: {
     (
       value: React.SetStateAction<{
-        Options: { name: string; items: never[] };
-        Morning: { name: string; items: never[] };
-        Workday: { name: string; items: never[] };
-        Evening: { name: string; items: never[] };
+        Options: { name: string; items: Mission[] };
+        Morning: { name: string; items: Mission[] };
+        Workday: { name: string; items: Mission[] };
+        Evening: { name: string; items: Mission[] };
       }>
     ): void;
     (arg0: any): void;
@@ -90,32 +96,34 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   const { handleShowError, handleShowSuccess } = useContext(ToastMsgContext);
 
   const theme = useTheme();
-  const navigate = props.navigate();
 
   const [columns, setColumns] = useState({
     Options: {
       name: "Options",
-      items: [],
+      items: [] as Mission[],
     },
     Morning: {
       name: "Morning",
-      items: [],
+      items: [] as Mission[],
     },
     Workday: {
       name: "Workday",
-      items: [],
+      items: [] as Mission[],
     },
     Evening: {
       name: "Evening",
-      items: [],
+      items: [] as Mission[],
     },
   });
   const [title, setTitle] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [activeTemplate, setActiveTemplate] = useState(-1);
   const [existingTemplates, setExistingTemplates] = useState([] as string[]);
+  const [userManageableTemplates, setUserManageableTemplates] = useState([] as SprintTemplateMongoDBDoc[]);
   const [error, setError] = useState("");
 
-  async function createTemplate() {
-    let missionsArray: never[] = [];
+  function generateMissionsArray() {
+    let missionsArray: Mission[] = [];
 
     columns.Morning.items.forEach((item) => {
       missionsArray.push(item);
@@ -126,14 +134,44 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
     columns.Evening.items.forEach((item) => {
       missionsArray.push(item);
     });
+    return missionsArray;
+  }
 
+  function resetTitleAndColumns() {
+    setTitle("");
+    setColumns({
+      Options: {
+        name: "Options",
+        items: [
+          ...columns.Options.items,
+          ...columns.Morning.items,
+          ...columns.Workday.items,
+          ...columns.Evening.items
+        ]
+      },
+      Morning: {
+        name: "Morning",
+        items: []
+      },
+      Workday: {
+        name: "Workday",
+        items: []
+      },
+      Evening: {
+        name: "Evening",
+        items: []
+      }
+    })
+  }
+
+  async function createTemplate() {
     let body = {
       id: nanoid(),
       title: title,
       author: `${props.user.fName} ${props.user.lName}`,
       authorId: props.user.id,
       version: "1.0",
-      missions: missionsArray,
+      missions: generateMissionsArray(),
       league: "Pareto Athletic Association (PAA)",
       admin: {
         name: `${props.user.fName} ${props.user.lName}`,
@@ -143,23 +181,29 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
     };
     try {
       await props.setTemplate(body);
-      navigate("/");
+      resetTitleAndColumns();
+      handleShowSuccess(`Your template "${body.title}" has been successfully created. Scroll down to manage your existing templates.`);
+      await getConfiguration();
     } catch (e) {
       handleShowError(e as Error);
     }
   }
 
   useEffect(() => {
-    props.getTemplateOptionsFromSanity().then((res) =>
-      setColumns(
-        res as SetStateAction<{
-          Options: { name: string; items: never[] };
-          Morning: { name: string; items: never[] };
-          Workday: { name: string; items: never[] };
-          Evening: { name: string; items: never[] };
-        }>
-      )
-    );
+    props.getTemplateOptionsFromSanity().then((res) => {
+      if (editMode == false) {
+        setColumns(
+          res as SetStateAction<{
+            Options: { name: string; items: Mission[] };
+            Morning: { name: string; items: Mission[] };
+            Workday: { name: string; items: Mission[] };
+            Evening: { name: string; items: Mission[] };
+          }>
+        )
+      } else {
+        sortOptionsIntoColumns(activeTemplate).then((res) => setColumns(res));
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -169,10 +213,18 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
   // pulls the /templates api and sets the existing templates
   async function getConfiguration() {
     const templates = await props.getTemplates();
-    const templateTitles: string[] = templates.map(
-      (option: { title: string }) => option.title
+    let templateTitles: string[] = [];
+    let userAuthorOrAdminTemplates: SprintTemplateMongoDBDoc[] = [];
+    templates.forEach(
+      (template: SprintTemplateMongoDBDoc) => {
+        templateTitles.push(template.title);
+        if (template.authorId === props.user.id || template.admin.adminId === props.user.id) {
+          userAuthorOrAdminTemplates.push(template);
+        }
+      }
     );
     setExistingTemplates(templateTitles);
+    setUserManageableTemplates(userAuthorOrAdminTemplates);
   }
   // This will equal true or false, not a number
   const meetsMinimumOptionsThreshold =
@@ -180,7 +232,70 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       columns.Workday.items.length +
       columns.Evening.items.length >=
     3;
+  
+  async function sortOptionsIntoColumns(index: number) {
+      const optionColumns = {
+        Options: { name: "Options", items: [] as Mission[] },
+        Morning: { name: "Morning", items: [] as Mission[] },
+        Workday: { name: "Workday", items: [] as Mission[] },
+        Evening: { name: "Evening", items: [] as Mission[]},
+      }
+      const activeTemplateMissionIdsHash = Object.fromEntries(
+        userManageableTemplates[index].missions.map(mission => [mission._id, true])
+      )
+      await props.getTemplateOptionsFromSanity().then((res) => {
+        (res as {
+          Options: { name: string; items: Mission[] };
+          Morning: { name: string; items: Mission[] };
+          Workday: { name: string; items: Mission[] };
+          Evening: { name: string; items: Mission[] };
+        }).Options.items.forEach((item) => {
+          if (item._id in activeTemplateMissionIdsHash) {
+            // For now, for convenience, just assign all used options to Morning column
+            // TODO: Add logic to sprint template distinguishing what time of day is the goal to accomplish the mission
+            optionColumns.Morning.items.push(item)
+          } else {
+            optionColumns.Options.items.push(item)
+          }
+        })
+      })
+      return optionColumns
+    }
+  
+  const handleEditTemplate = async (templateId: string) => {
+    setEditMode(true);
+    const templateIndex = userManageableTemplates.findIndex(template => template.id == templateId)
+    setActiveTemplate(templateIndex);
+    setTitle(userManageableTemplates[templateIndex].title);
 
+    const sortedColumns = await sortOptionsIntoColumns(templateIndex);
+    setColumns(sortedColumns)
+  }
+
+  const updateTemplate = async (id: string) => {
+    const currentTemplate = userManageableTemplates[activeTemplate];
+    let body = {
+      title: title,
+      version: `${parseInt(currentTemplate.version) + 1.0}`,
+      missions: generateMissionsArray(),
+    };
+    try {
+      const updatedTemplate = await props.updateTemplate(id, body);
+      userManageableTemplates[activeTemplate] = updatedTemplate;
+      setEditMode(false);
+      setActiveTemplate(-1);
+      handleShowSuccess(`Sprint Template "${body.title}" has been successfully updated with your changes.`);
+      resetTitleAndColumns();
+    } catch (e) {
+      handleShowError(e as Error);
+    }
+  }
+
+  const handleDeleteTemplate = async (id: string) => {
+    const response = await deleteSprintTemplate(id);
+    handleShowSuccess(`Sprint Template "${response.title}" has been successfully deleted!`);
+    await getConfiguration();
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleChange = () => {
     const templates = existingTemplates.filter(
@@ -210,6 +325,18 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
     handleChange();
   }, [title, columns, handleChange]);
 
+
+  const shouldCreateSprint = () => (title !== "" && meetsMinimumOptionsThreshold && !error);
+  const shouldUpdateSprint = () => {
+    const existingMissionsInSprint: Record<string, boolean> = {};
+    userManageableTemplates[activeTemplate].missions.forEach((mission) => existingMissionsInSprint[mission._id] = true);
+    const currentAndEditedSprintMissionsAreIdentical = () => {
+      return generateMissionsArray().every(mission => mission._id in existingMissionsInSprint) && generateMissionsArray().length == Object.keys(existingMissionsInSprint).length;
+    }
+    return meetsMinimumOptionsThreshold && title !== "" && title !== userManageableTemplates[activeTemplate].title || !currentAndEditedSprintMissionsAreIdentical();
+  }
+  
+
   return (
     <>
       <h1
@@ -219,7 +346,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
           fontWeight: 900,
         }}
       >
-        {I18n.get("createTemplate")}
+        {editMode === false ? I18n.get("createTemplate") : I18n.get("editTemplate")}
       </h1>
       <div
         style={{
@@ -229,14 +356,14 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         }}
       >
         <FormLabel sx={{ margin: "auto 25px auto 0px" }}>
-          {I18n.get("enterTemplateName")}
+          {editMode ? I18n.get("enterNewTemplateName"): I18n.get("enterTemplateName")}
         </FormLabel>
         <TextField
           id="template-name"
           color="success"
-          error={!!error}
+          error={!editMode ? !!error : false}
           required
-          helperText={error}
+          helperText={!editMode ? error : null}
           fullWidth
           label={I18n.get("templateName")}
           variant="outlined"
@@ -246,7 +373,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
         />
         <Button
           disabled={
-            (title === "" && meetsMinimumOptionsThreshold === false) || !!error
+            (editMode ? !shouldUpdateSprint() : !shouldCreateSprint())
           }
           id="create-template-button"
           fullWidth
@@ -257,10 +384,29 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
             margin: "auto 0px auto 30px",
             maxWidth: "280px",
           }}
-          onClick={createTemplate}
+          onClick={() => editMode === false ? createTemplate() : updateTemplate(userManageableTemplates[activeTemplate].id)}
         >
-          {I18n.get("create")}
+          {editMode === false ? I18n.get("create") : I18n.get("updateTemplate")}
         </Button>
+
+      </div>
+      <div style={{ alignContent: "right", width: "100%", display: "flex" }}>
+        {editMode && (
+          <Button
+            id="cancel-edit-template-button"
+            size="medium"
+            sx={{
+              margin: "auto 0px auto auto",
+              maxWidth: "280px",
+            }}
+            onClick={() => {
+              setEditMode(false);
+              setTitle("");
+            }}
+          >
+            {I18n.get("cancel")}
+          </Button>
+        )}
       </div>
       <h2
         style={{
@@ -274,7 +420,7 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
       <p
         style={{
           textAlign: "left",
-          width: 600,
+          width: "100%",
         }}
       >
         {I18n.get("dragDropDescription")}
@@ -318,7 +464,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
                           : theme.palette.background.paper,
                         padding: 4,
                         width: 250,
-                        minHeight: 500,
+                        minHeight: 600,
+                        maxHeight: 600,
+                        overflowY: "scroll",
                       }}
                     >
                       {column.items.map((item: any, index: number) => (
@@ -346,9 +494,9 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
                               }}
                             >
                               <p id={item.title}>
-                                {item.title} - {item.xp}XP
+                                <strong>{item.title}</strong> <span style={{fontSize: "small"}}><br/>{item.xp || 100}XP </span>
                               </p>
-                              <p>{item.type}</p>
+                              <p></p>
                             </div>
                           )}
                         </Draggable>
@@ -362,6 +510,13 @@ function CreateSprintTemplate(props: CreateSprintTemplateProps) {
           ))}
         </DragDropContext>
       </div>
+      {userManageableTemplates.length > 0 ? (
+        <ManageSprintTemplates
+          handleDeleteTemplate={handleDeleteTemplate}
+          userManageableTemplates={userManageableTemplates}
+          handleEditTemplate={handleEditTemplate}
+        />
+      ) : null}
     </>
   );
 }

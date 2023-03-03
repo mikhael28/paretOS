@@ -88,10 +88,10 @@ describe("CreateSprintTemplate Page:", () => {
     console.log(
       `Dragging from ${
         optionsColumnItem1BoundingBox.x +
-        optionsColumnItem1BoundingBox.width / 2
+      optionsColumnItem1BoundingBox.width / 2
       }, ${
         optionsColumnItem1BoundingBox.y +
-        optionsColumnItem1BoundingBox.height / 2
+      optionsColumnItem1BoundingBox.height / 2
       }`
     );
     await page.mouse.move(
@@ -117,16 +117,16 @@ describe("CreateSprintTemplate Page:", () => {
     console.log(
       `Dragging from ${
         optionsColumnItem1BoundingBox.x +
-        optionsColumnItem1BoundingBox.width / 2
+      optionsColumnItem1BoundingBox.width / 2
       }, ${
         optionsColumnItem1BoundingBox.y +
-        optionsColumnItem1BoundingBox.height / 2
+      optionsColumnItem1BoundingBox.height / 2
       }`
     );
     await page.mouse.move(
       optionsColumnItem1BoundingBox.x + optionsColumnItem1BoundingBox.width / 2,
       optionsColumnItem1BoundingBox.y +
-        optionsColumnItem1BoundingBox.height / 2,
+      optionsColumnItem1BoundingBox.height / 2,
       {
         steps: 5,
       }
@@ -150,16 +150,16 @@ describe("CreateSprintTemplate Page:", () => {
     console.log(
       `Dragging from ${
         optionsColumnItem1BoundingBox.x +
-        optionsColumnItem1BoundingBox.width / 2
+      optionsColumnItem1BoundingBox.width / 2
       }, ${
         optionsColumnItem1BoundingBox.y +
-        optionsColumnItem1BoundingBox.height / 2
+      optionsColumnItem1BoundingBox.height / 2
       }`
     );
     await page.mouse.move(
       optionsColumnItem1BoundingBox.x + optionsColumnItem1BoundingBox.width / 2,
       optionsColumnItem1BoundingBox.y +
-        optionsColumnItem1BoundingBox.height / 2,
+      optionsColumnItem1BoundingBox.height / 2,
       {
         steps: 10,
       }
@@ -182,11 +182,16 @@ describe("CreateSprintTemplate Page:", () => {
     await page.waitForSelector("#create-template-button");
     await page.click("#create-template-button");
     console.log("clicking create template button");
-    await page.waitForSelector(`[alt="Arena tour icon"]`);
+    
+    await page.waitForSelector("#toast-message");
+    await page.click("#toast-message");
+    console.log("dismissing success toast message");
+
     // end of creating a sprint template and the start of the logout sequence
     await page.click(".sticky-logout");
-    await page.waitForSelector("#animation-container");
-    const createSprintTemplate = await page.$("#animation-container");
+
+    await page.waitForSelector("#email");
+    const createSprintTemplate = await page.$("#email");
     if (typeof createSprintTemplate === "undefined") {
       await page.screenshot({ path: "createSprintTemplate-failure.png" });
     }

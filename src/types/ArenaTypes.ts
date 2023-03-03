@@ -33,6 +33,8 @@ export interface Mission {
   xp: number;
   esTitle: string;
   esDescription: string;
+  title?: string,
+  description?: string,
   proofLink?: string;
 }
 
@@ -93,4 +95,38 @@ export interface Sprint {
   };
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface SprintTemplateUpdateBody {
+  title?: string,
+  author?: string,
+  authorId?: string,
+  version?: string,
+  missions?: Mission[],
+  league?: string,
+  admin?: {
+    name: string,
+    adminId: string,
+  },
+  createdAt?: number | string,
+}
+export interface SprintTemplatePostBody extends SprintTemplateUpdateBody {
+  id: string;
+  title: string,
+  author: string,
+  authorId: string,
+  version: string,
+  missions: Mission[],
+  league: string,
+  admin: {
+    name: string,
+    adminId: string,
+  },
+  createdAt: number | string,
+}
+
+export interface SprintTemplateMongoDBDoc extends SprintTemplatePostBody {
+  createdAt: string,
+  __v: string,
+  _id: string
 }

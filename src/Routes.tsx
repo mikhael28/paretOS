@@ -8,7 +8,7 @@ import { User } from "./types/ProfileTypes";
 import { Coach } from "./types/MentorshipTypes";
 import Logout from "./components/Logout";
 import MenteeProfile from "./mentorship/MenteeProfile";
-import { getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate } from "./utils/queries/createSprintTemplateQueries";
+import { deleteSprintTemplate, getSprintTemplateOptionsFromSanity, getSprintTemplates, setSprintTemplate, updateSprintTemplate } from "./utils/queries/sprintTemplateQueries";
 import { CreateSprintTemplateProps } from "./arena/CreateSprintTemplate";
 import { BrowserHistory } from "history";
 import { LibraryEntry } from "./types/ContextTypes";
@@ -164,7 +164,9 @@ function RoutesComponent({ childProps, history, ...rest }: RouteWithChildProps) 
                 ...(childProps as ChildProps),
                 getTemplates: getSprintTemplates,
                 setTemplate: setSprintTemplate,
-                getTemplateOptionsFromSanity: getSprintTemplateOptionsFromSanity
+                getTemplateOptionsFromSanity: getSprintTemplateOptionsFromSanity,
+                updateTemplate: updateSprintTemplate,
+                deleteTemplate: deleteSprintTemplate
               }} />
             </AuthenticatedRoute>
           }

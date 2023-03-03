@@ -24,12 +24,13 @@ export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
   }
   return (
     <Snackbar
+      id="toast-message-snackbar"
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       open={open}
       autoHideDuration={6000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
+      <Alert id="toast-message" onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
         {msg}
       </Alert>
     </Snackbar>
