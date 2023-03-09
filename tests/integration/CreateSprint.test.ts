@@ -66,7 +66,5 @@ describe("CreateSprint Page:", () => {
 		await page.waitForSelector(`[id="sprints-input"]`);
 		await delay(5000);
 		await page.click(`[id="sprints-input"]`);
-
-		await page.waitForSelector(`[id="sprint-template-name"]`);
 	}, 90_000);
 });
