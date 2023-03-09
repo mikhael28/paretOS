@@ -1,20 +1,33 @@
-import React, { useCallback, useEffect, useState, createContext, ComponentPropsWithoutRef } from "react";
+import { useCallback, useEffect, useState, createContext, ComponentPropsWithoutRef } from "react";
 import LoaderButton from "../components/LoaderButton";
 import logo from "../assets/Pareto-Red-01.png";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, AlertColor } from "@mui/material";
 
 
 // Leaving toast type as any for now as it is a work in progress
+type ShowErrorFunction = (error: Error) => void;
+const placeholderShowErrorFunction = (() => { }) as ShowErrorFunction; // skipcq: JS-0321
 
 export const ToastMsgContext = createContext({
-  handleShowSuccess: (st: any) => {
-    ToastMsg({ msg: st, type: 'success', open: () => { }, handleCloseSnackbar: () => { } })
+  handleShowSuccess: (st: string) => {
+    ToastMsg({ msg: st, type: 'success', open: false, handleCloseSnackbar: () => { } }) // skipcq: JS-0321
   },
-  handleShowError: (error: any) => { },
+  handleShowError: placeholderShowErrorFunction, // skipcq: JS-0356
 });
-const ToastContext = createContext({ addToast: (t: any) => { } });
+type AddToastFunction = (t: object) => void;
+const placeholderAddToastFunction = (() => { }) as AddToastFunction; // skipcq: JS-0321
 
-export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
+
+const ToastContext = createContext({ addToast: placeholderAddToastFunction }); // skipcq: JS-0356
+
+interface ToastMessageProps {
+  msg: string;
+  type: AlertColor | undefined;
+  open: boolean;
+  handleCloseSnackbar: () => void;
+}
+
+export function ToastMsg({ msg, type, open, handleCloseSnackbar }: ToastMessageProps) {
   const handleClose = () => {
     handleCloseSnackbar();
   };
@@ -24,12 +37,13 @@ export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
   }
   return (
     <Snackbar
+      id="toast-message-snackbar"
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       open={open}
       autoHideDuration={6000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
+      <Alert id="toast-message" onClose={handleClose} severity={type} sx={{ width: "100%", p: 3 }}>
         {msg}
       </Alert>
     </Snackbar>
@@ -39,8 +53,8 @@ export function ToastMsg({ msg, type, open, handleCloseSnackbar }: any) {
 
 export default ToastContext;
 
-export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>) {
-  const [toasts, setToasts] = useState([] as any[]);
+export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>) { // skipcq: JS-0323
+  const [toasts, setToasts] = useState([] as object[]);
 
   useEffect(() => {
     if (toasts.length > 0) {
@@ -53,8 +67,8 @@ export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>
   }, [toasts]);
 
   const addToast = useCallback(
-    function (toast: any) {
-      setToasts((toasts: any[]) => [...toasts, toast]);
+    function (toast: any) { // skipcq: JS-0323
+      setToasts((toasts: any[]) => [...toasts, toast]); // skipcq: JS-0323
     },
     [setToasts]
   );
@@ -63,8 +77,8 @@ export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>
     <ToastContext.Provider value={{ addToast }}>
       {children}
       <div className="toasts-wrapper">
-        {toasts.map((toast) => (
-          <div style={{ display: "flex" }} className="block">
+        {toasts.map((toast, index) => (
+          <div key={`${index.toString()}-wrapper`}  style={{ display: "flex" }} className="block">
             <img src={logo} height="80" width="80" alt="Pareto Logo" />
             <div
               style={{
@@ -83,7 +97,7 @@ export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>
               </p>
               <div style={{ display: "flex", justifyContent: "end" }}>
                 <LoaderButton
-                  style={{
+                  sx={{
                     backgroundColor: "rgb(220, 66, 45)",
                   }}
                   onClick={() => {
@@ -92,7 +106,7 @@ export function ToastContextProvider({ children }: ComponentPropsWithoutRef<any>
                   text="Close"
                 />
                 <LoaderButton
-                  style={{ backgroundColor: "green" }}
+                  sx={{ backgroundColor: "green" }}
                   onClick={() => {
                     // eslint-disable-next-line no-undef
                     window.location.replace("/");

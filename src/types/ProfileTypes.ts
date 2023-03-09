@@ -15,7 +15,7 @@ export interface MinimalUser {
   email: string;
   phone: string;
   github: string;
-  id: number;
+  id: string;
   modules: string[];
   score: number;
   percentage: string | number;

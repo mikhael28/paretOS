@@ -1,6 +1,7 @@
 import sanity from "../../libs/sanity";
 import { RestAPI } from "@aws-amplify/api-rest";
 import { I18n } from "@aws-amplify/core";
+import { SprintTemplateMongoDBDoc } from "../../types/ArenaTypes";
 
 /**
  * Getting our potential sprint items from Sanity. Will likely need to replace later.
@@ -32,10 +33,19 @@ export async function getSprintTemplateOptionsFromSanity() {
   }
 
   // pulls the /templates api and sets the existing templates
-export async function getSprintTemplates() {
+export async function getSprintTemplates(): Promise<SprintTemplateMongoDBDoc[]> {
     return await RestAPI.get("pareto", "/templates", {});
   }
 
 export async function setSprintTemplate(body: object) {
     return await RestAPI.post("pareto", "/templates", { body });
-  }
+}
+  
+export async function updateSprintTemplate(id: string, body: object) {
+  const response = await RestAPI.put("pareto", `/templates/${id}`, { body });
+  return response as SprintTemplateMongoDBDoc;
+}
+
+export async function deleteSprintTemplate(id: string) {
+  return (await RestAPI.del("pareto", `/templates/${id}`, {})) as SprintTemplateMongoDBDoc;
+}

@@ -6,22 +6,32 @@ import { nanoid } from "nanoid";
 interface TemplateConfig {
   titles?: string[],
   firstNames?: string[],
-  lastNames?: string[]
+  lastNames?: string[],
+  ids?: string[],
 }
 
 export function getSampleTemplates(number: number, config?: TemplateConfig) {
+  const { titles, firstNames, lastNames, ids } = config ? config : { titles: null, firstNames: null, lastNames: null, ids: null};
+  
   if (number === 1) {
-    return [getSampleTemplate()]
+    return [getSampleTemplate(
+      titles && titles.length > 0 ? getRandomArrayEntry(titles) : undefined,
+      firstNames && firstNames.length > 0 && lastNames && lastNames.length > 0  && ids && ids.length > 0 ? 
+        {
+          fName: getRandomArrayEntry(firstNames),
+          lName: getRandomArrayEntry(lastNames),
+          id: getRandomArrayEntry(ids),
+        } : undefined
+    )]
   }
-  const { titles, firstNames, lastNames } = config ? config : { titles: null, firstNames: null, lastNames: null};
   const results = [...new Array(number).keys()]
-  return results.map((item) => getSampleTemplate(
+  return results.map(() => getSampleTemplate(
     titles && titles.length > 0 ? getRandomArrayEntry(titles) : undefined,
-    firstNames && firstNames.length > 0 && lastNames && lastNames.length > 0 ? 
+    firstNames && firstNames.length > 0 && lastNames && lastNames.length > 0  && ids && ids.length > 0 ? 
       {
         fName: getRandomArrayEntry(firstNames),
         lName: getRandomArrayEntry(lastNames),
-        id: parseInt(`12345${item}`)
+        id: getRandomArrayEntry(ids),
       } : undefined
   ))
 }
@@ -30,17 +40,17 @@ function getRandomArrayEntry(array: string[]) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-function getSampleTemplate(title?: string, user?: { fName: string, lName: string, id: number}) {
+function getSampleTemplate(title?: string, user?: { fName: string, lName: string, id: string}) {
   return {
         "admin": {
             "name": user ? `${user.fName} ${user.lName}` : "Vilfredo Pareto",
-            "adminId": user?.id || 12345
+            "adminId": user?.id || "12345"
         },
         "_id": "63daf2e82cfaad59af962622",
         "id": "OtdBEbqXMX7-zGdM-Llrr",
         "title": title || "Simple Sprint",
         "author": user ? `${user.fName} ${user.lName}` : "Vilfredo Pareto",
-        "authorId": "8020",
+        "authorId": user?.id || "12345",
         "version": "1.0",
         "missions": [
           {
