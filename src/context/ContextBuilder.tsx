@@ -43,7 +43,7 @@ function ContextBuilder(props: ContextBuilderProps) {
     const newCardClass = classNames("context-card", "second-step-library");
 
     return (
-      <div className="context-cards">
+      <div className="context-cards" style={{padding: 120}}>
         {topics?.length > 0 &&
           topics.map((topic) => {
             const link = topic.type === "hub" ? "hubs" : "context";
@@ -88,7 +88,7 @@ function ContextBuilder(props: ContextBuilderProps) {
   }
 
   return (
-    <div style={{ width: "100%" }}>
+    <div>
       <h1>
         {I18n.get("library")}
         <Box
