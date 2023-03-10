@@ -25,7 +25,7 @@
     "@sanity/image-url": "1.0.2",
     "@sentry/react": "7.31.1",
     "@sentry/tracing": "7.31.0",
-    "@stripe/stripe-js": "1.46.0",
+    "@stripe/stripe-js": "1.48.0",
     "@testing-library/react": "13.4.0",
     "@types/pell": "1.0.1",
     "@types/react-beautiful-dnd": "13.1.3",
