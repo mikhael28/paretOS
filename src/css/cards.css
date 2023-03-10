@@ -126,7 +126,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      padding: 0;
+      padding: 20px;
       margin: 8px -8px 24px;
     }
   
@@ -134,7 +134,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
-      padding: 5px;
+      padding: 45px;
     }
   
     .context-card {
@@ -143,19 +143,11 @@
       max-width: calc(50% - 16px);
     }
   }
-  
-  @media screen and (min-width: 60em) {
-    .context-card {
-      flex: 1 1 calc(33% - 16px);
-      max-width: calc(33% - 16px);
-      min-width: calc(33% - 16px);
-      margin: 8px;
-    }
-  }
+
   
   @media screen and (max-width: 768px) {
     .context-cards {
-      padding: 0;
+      padding: 12px;
       margin: 8px -8px 24px;
     }
   }
