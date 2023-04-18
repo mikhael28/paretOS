@@ -124,7 +124,7 @@
         "eslint-plugin-react-hooks": "4.6.0",
         "mocha": "10.2.0",
         "prettier": "2.8.4",
-        "puppeteer": "19.7.3",
+        "puppeteer": "19.9.1",
         "rollup-plugin-visualizer": "5.9.0",
         "stylelint": "15.2.0",
         "stylelint-config-standard": "30.0.1",
