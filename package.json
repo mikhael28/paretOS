@@ -111,7 +111,7 @@
         "@types/react-router-dom": "5.3.3",
         "@types/three": "0.152.1",
         "@vitejs/plugin-react": "4.0.0",
-        "@vitest/coverage-c8": "0.29.2",
+        "@vitest/coverage-c8": "0.32.0",
         "chai": "4.3.7",
         "dotenv": "16.1.4",
         "eslint": "8.42.0",
