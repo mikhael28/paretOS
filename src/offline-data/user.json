@@ -1,0 +1,30 @@
+[
+    {
+        "actions": [],
+        "review": [],
+        "_id": "63589e314839d6ae37da00f9",
+        "id": "bc382b6b-b3fc-4f9c-8f41-88280779ced0",
+        "fName": "Mikha'el",
+        "lName": "Ben David",
+        "email": "mikhael@hey.com",
+        "country": "",
+        "mentors": [],
+        "city": "Seattle",
+        "summary": "This is the space for you to write your bio, so people can learn more about you and your interests.",
+        "notes": [],
+        "groups": [],
+        "connections": [],
+        "learningPurchase": false,
+        "phone": "",
+        "xp": 0,
+        "cp": 0,
+        "modules": [],
+        "github": "mikhael28",
+        "instructor": true,
+        "permissions": [],
+        "defaultLanguage": "en",
+        "achievements": [],
+        "createdAt": "2022-10-26T02:40:48.319Z",
+        "__v": 0
+    }
+]
