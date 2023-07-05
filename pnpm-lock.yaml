@@ -11,8 +11,8 @@ dependencies:
     specifier: 3.3.1
     version: 3.3.1(react-native@0.72.1)
   '@aws-amplify/auth':
-    specifier: 5.5.2
-    version: 5.5.2(react-native@0.72.1)
+    specifier: 5.5.3
+    version: 5.5.3(react-native@0.72.1)
   '@aws-amplify/core':
     specifier: 5.5.1
     version: 5.5.1(react-native@0.72.1)
@@ -381,10 +381,10 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/auth@5.5.2(react-native@0.72.1):
-    resolution: {integrity: sha512-G8i7KLwHboQjAcwC2ywzVBbgyBgvWxyIy9l85GfYh6U2BLqJfWuXYI3NTmUDC+ieQR//AV/UdYIHhYeHwSq2eA==}
+  /@aws-amplify/auth@5.5.3(react-native@0.72.1):
+    resolution: {integrity: sha512-vmJg2ELCzTI7OgaHzLALBvJjtr2Oy/xTGibZK4Wwhuax6cgiVTBxp9nO+EOLwhNz/hYS5rtn56ceVoS67bE2Fg==}
     dependencies:
-      '@aws-amplify/core': 5.5.1(react-native@0.72.1)
+      '@aws-amplify/core': 5.5.2(react-native@0.72.1)
       amazon-cognito-identity-js: 6.3.1
       tslib: 1.14.1
       url: 0.11.0
@@ -395,6 +395,23 @@ packages:
 
   /@aws-amplify/core@5.5.1(react-native@0.72.1):
     resolution: {integrity: sha512-UAKS/hTaY6oKYKHuQeJzp+GCzULozvxYPE69gaf9jtR1ktzLHG/2TdO4z5BKJd2/iiY1+fvrFEID4PBBXvw1Fg==}
+    dependencies:
+      '@aws-crypto/sha256-js': 1.2.2
+      '@aws-sdk/client-cloudwatch-logs': 3.6.1(react-native@0.72.1)
+      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/util-hex-encoding': 3.6.1
+      isomorphic-unfetch: 3.1.0
+      react-native-url-polyfill: 1.3.0(react-native@0.72.1)
+      tslib: 1.14.1
+      universal-cookie: 4.0.4
+      zen-observable-ts: 0.8.19
+    transitivePeerDependencies:
+      - encoding
+      - react-native
+    dev: false
+
+  /@aws-amplify/core@5.5.2(react-native@0.72.1):
+    resolution: {integrity: sha512-tX1N73LrmpsK5bkgzI6l1WmkSHofKFkhZ826k1yUTpGcMxx9o3DbuWSerbaEuEBBtcsSjnQMs9ob+vrpr1Xouw==}
     dependencies:
       '@aws-crypto/sha256-js': 1.2.2
       '@aws-sdk/client-cloudwatch-logs': 3.6.1(react-native@0.72.1)
