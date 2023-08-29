@@ -4,7 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-packageExtensionsChecksum: 9c115b917b4305463c032ae4dc497ae0
+packageExtensionsChecksum: 6392a00f256b1ed144294049becf364e
 
 dependencies:
   '@aws-amplify/api-rest':
@@ -29,8 +29,8 @@ dependencies:
     specifier: 11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.14)(react@18.2.0)
   '@hookform/resolvers':
-    specifier: 3.1.0
-    version: 3.1.0(react-hook-form@7.45.1)
+    specifier: 3.3.1
+    version: 3.3.1(react-hook-form@7.45.1)
   '@juggle/resize-observer':
     specifier: 3.4.0
     version: 3.4.0
@@ -4904,8 +4904,8 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: false
 
-  /@hookform/resolvers@3.1.0(react-hook-form@7.45.1):
-    resolution: {integrity: sha512-z0A8K+Nxq+f83Whm/ajlwE6VtQlp/yPHZnXw7XWVPIGm1Vx0QV8KThU3BpbBRfAZ7/dYqCKKBNnQh85BkmBKkA==}
+  /@hookform/resolvers@3.3.1(react-hook-form@7.45.1):
+    resolution: {integrity: sha512-K7KCKRKjymxIB90nHDQ7b9nli474ru99ZbqxiqDAWYsYhOsU3/4qLxW91y+1n04ic13ajjZ66L3aXbNef8PELQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
     peerDependenciesMeta:
