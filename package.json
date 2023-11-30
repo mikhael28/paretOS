@@ -61,7 +61,7 @@
         "remark-gfm": "3.0.1",
         "rollup": "3.26.0",
         "socket.io-client": "4.7.1",
-        "styled-components": "6.0.2",
+        "styled-components": "6.1.0",
         "three": "0.154.0",
         "ts-audio": "0.7.4",
         "typescript": "5.1.6",
