@@ -59,7 +59,7 @@
         "reactour": "1.19.0",
         "redux": "4.2.1",
         "remark-gfm": "3.0.1",
-        "rollup": "3.26.0",
+        "rollup": "3.29.5",
         "socket.io-client": "4.7.1",
         "styled-components": "6.0.2",
         "three": "0.154.0",
