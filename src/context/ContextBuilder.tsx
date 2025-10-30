@@ -47,10 +47,14 @@ function ContextBuilder(props: ContextBuilderProps) {
         {topics?.length > 0 &&
           topics.map((topic) => {
             const link = topic.type === "hub" ? "hubs" : "context";
-            const img = builder.image(topic.mainImage.asset._ref);
+            // Handle cases where mainImage might be null or undefined
+            let img: any = "na";
+            if (topic.mainImage?.asset?._ref) {
+              img = builder.image(topic.mainImage.asset._ref);
+            }
             const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (e: KeyboardEvent) => {
               if (e.key === 'Enter') {
-                navigate(`/${link}/${topic.slug.current}`)
+                navigate(`/${link}/${topic.slug?.current || topic._id}`)
               }
             }
 
@@ -60,7 +64,7 @@ function ContextBuilder(props: ContextBuilderProps) {
                 tabIndex={0}
                 className={newCardClass}
                 key={topic._id}
-                onClick={() => navigate(`/${link}/${topic.slug.current}`)}
+                onClick={() => navigate(`/${link}/${topic.slug?.current || topic._id}`)}
                 onKeyDown={handleKeyPress}
               >
                 <ContextObject item={topic} img={img} />

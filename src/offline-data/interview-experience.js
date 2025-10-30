@@ -1,4 +1,4 @@
-const exampleExperience  = {
+export const interviewExperience = {
     xp: 3000,
     xpEarned: 0,
     achievements: 15,
@@ -6,7 +6,7 @@ const exampleExperience  = {
     approved: false,
     authorId: 'memberId',
     studentId: 'bc382b6b-b3fc-4f9c-8f41-88280779ced0',
-    id: 'onboarding-experience',
+    id: 'interviewing-experience',
     title: 'Technical Interviewing',
     description: 'Understand some classic data structures and algorithms, and how to apply them to solve problems.',
     github: '',

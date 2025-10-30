@@ -7,9 +7,9 @@ import React, {
   MouseEventHandler,
   PropsWithChildren,
 } from "react";
-import { Auth } from "@aws-amplify/auth";
+// import { Auth } from "@aws-amplify/auth";
 import { I18n } from "@aws-amplify/core";
-import { RestAPI } from "@aws-amplify/api-rest";
+// import { RestAPI } from "@aws-amplify/api-rest";
 import { useNavigate, useLocation, RouteProps, Location } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Tour from "reactour";
@@ -17,19 +17,21 @@ import { Slide, Dialog, Box, ThemeProvider, Theme } from "@mui/material";
 import strings from "./intl/localization";
 import { LanguageContext, LanguageProps } from "./state/LanguageContext";
 import LoadingModal from "./components/LoadingModal";
-import {
-  fetchUser,
-  fetchStarterKitSanity,
-  fetchStarterKitExperience,
-  fetchCoaches,
-  fetchCoachingRoster,
-  fetchSanitySchemas,
-} from "./utils/queries/initialFetchQueries";
+// Replaced with mock services
+// import {
+//   fetchUser,
+//   fetchStarterKitSanity,
+//   fetchStarterKitExperience,
+//   fetchCoaches,
+//   fetchCoachingRoster,
+//   fetchSanitySchemas,
+// } from "./utils/queries/initialFetchQueries";
+import { mockService } from "./services/mockDataService";
 import { ToastMsgContext, ToastMsg } from "./state/ToastContext";
 import { ChildProps } from "./Routes";
 import theme from "./libs/theme";
 import { availableLanguages } from "./libs/languages";
-import ws from "./libs/websocket";
+// import ws from "./libs/websocket";
 import { User } from "./types/ProfileTypes";
 import { Sprint } from "./types/ArenaTypes";
 import customHistory from "./utils/customHistory";
@@ -217,58 +219,59 @@ function App(props: AppProps) {
 
     const loadData = async () => {
       try {
-        const session = await Auth.currentSession();
-        const idToken = session.getIdToken();
-        setAuthData({
-          username: idToken.payload.sub,
-          session: session,
-        });
-        setIsAuthenticating(false);
-        await initialFetch(idToken.payload.sub);
-      } catch (e) {
-        if (e === "No current user") {
-          const result = await fetchSanitySchemas();
-          if (result.success) {
-            setSanitySchemas(result.sanitySchemas);
-            setLoading(false);
-          } else {
-            // TODO: If success === false, redirect to a page indicating a app error and to try again later (not the 404 not found page)
-            setLoading(false);
-          }
-        }
-        if (e !== "No current user") {
-          handleShowError(e as Error);
+        // Check if user is "logged in" (using mock service)
+        const storedUser = mockService.storage.getUser();
+        
+        if (storedUser || true) { // Always treat as logged in for demo
+          const mockSession = await mockService.auth.currentSession();
+          const idToken = mockSession.getIdToken();
+          
+          setAuthData({
+            username: idToken.payload.sub,
+            session: mockSession,
+          });
+          setIsAuthenticating(false);
+          setIsAuthenticated(true);
+          
+          // Load mock data
+          await initialFetch(idToken.payload.sub);
+        } else {
+          // Load basic schemas for unauthenticated view
+          setSanitySchemas(mockService.data.sanitySchemas);
+          setIsAuthenticating(false);
           setLoading(false);
         }
+      } catch (e) {
+        console.error("Error loading data:", e);
+        // Load mock data even on error for demo purposes
+        setSanitySchemas(mockService.data.sanitySchemas);
+        setIsAuthenticating(false);
+        setLoading(false);
       }
-      setIsAuthenticating(false);
     };
     loadData();
   }, []);
 
   async function initialFetch(username: string) {
-    const path = location.pathname || "";
-    // Set up variables to enable fetching only the data needed for your current app view
-    const [context, training, arena] = [
-      path.includes("context-builder"),
-      path.includes("training"),
-      !path.includes("context-builder") && !path.includes("training"),
-    ];
-    const firstFetch: Array<Function> = [];
-    const secondFetch: Array<Function> = [];
-
-    const userArray: Array<User> = (await fetchUser(username)) as Array<User>;
-    if (userArray.length > 0) {
-      const currentUser = userArray[0];
-      try {
+    try {
+      // Load mock user data
+      const userArray = await mockService.api.getUser(username);
+      
+      if (userArray.length > 0) {
+        const currentUser = userArray[0];
+        
+        // Update Redux store
         dispatch({
           type: "GET_USER",
           payload: currentUser,
         });
+        
+        // Update local state
         const userStateUpdate = {
           user: currentUser,
           chosenLanguage: userData.chosenLanguage,
         };
+        
         if (currentUser.defaultLanguage) {
           const language = availableLanguages.find(
             (x) => x.code === currentUser.defaultLanguage
@@ -276,87 +279,70 @@ function App(props: AppProps) {
           I18n.setLanguage(currentUser.defaultLanguage);
           if (language) userStateUpdate.chosenLanguage = language;
         }
+        
         setUserData(userStateUpdate as any);
-
-        // Sort fetching functions according to whether they should happen before or after the loading overlay goes away
-        if (context) {
-          firstFetch.push(fetchSanitySchemas);
-        } else {
-          secondFetch.push(fetchSanitySchemas);
-        }
-        if (training) {
-          firstFetch.push(() => fetchStarterKitExperience(currentUser.id));
-          firstFetch.push(fetchStarterKitSanity);
-        } else {
-          secondFetch.push(() => fetchStarterKitExperience(currentUser.id));
-          secondFetch.push(fetchStarterKitSanity);
-        }
-        if (arena) {
-          firstFetch.push(() => connectSocketToSprint(currentUser.id));
-        } else {
-          secondFetch.push(() => connectSocketToSprint(currentUser.id));
-        }
+        
+        // Load all mock data
+        const [experiences, sprints, coaches] = await Promise.all([
+          mockService.api.getExperiences(currentUser.id),
+          mockService.api.getSprints(currentUser.id),
+          mockService.api.getCoaches(currentUser.id.toString()),
+        ]);
+        
+        // Set experiences
+        const product = experiences.find((e: any) => e.type === "Product");
+        const training = experiences.find((e: any) => e.type === "Apprenticeship");
+        const interviewing = experiences.find((e: any) => e.type === "Interviewing");
+        
+        setProduct(product || {});
+        setTraining(training || {});
+        setInterviewing(interviewing || {});
+        setExperiences(experiences);
+        
+        // Set mock Sanity data
+        setSanitySchemas(mockService.data.sanitySchemas);
+        setSanityTraining(mockService.data.sanityTraining);
+        setSanityProduct(mockService.data.sanityProduct);
+        setSanityInterview(mockService.data.sanityInterview);
+        
+        // Set sprints
+        setSprints(sprints);
+        dispatch({
+          type: "GET_INITIAL_SPRINT_DATA",
+          payload: sprints,
+        });
+        
+        // Set coaches
+        setCoaches(coaches);
+        
+        // If instructor, load athletes
         if (currentUser.instructor) {
-          firstFetch.push(() => fetchCoachingRoster(currentUser.id.toString()));
+          const athletes = await mockService.api.getAthletes(currentUser.id.toString());
+          setAthletes(athletes);
         }
-        firstFetch.push(() => fetchCoaches(currentUser.id.toString()));
-
-        // Fetch first set of data
-        const results = await Promise.all([...firstFetch.map((x) => x())]);
-
-        results
-          .filter((r) => r !== false)
-          .forEach((item) => {
-            const { success, ...rest } = item;
-            if (success === true) {
-              const keys = Object.keys(rest);
-              keys.forEach((k: string) => {
-                updateState(k, rest[k]);
-              });
-            }
-          });
+        
+        // Store user in mock storage
+        mockService.storage.setUser(currentUser);
+        
         setIsAuthenticated(true);
         setLoading(false);
-      } catch (e: any) {
-        console.log(e.toString());
-        if (e.toString() === "Error: Network Error") {
-          console.log("Successfully identified network error");
-        }
       }
-    }
-    try {
-      // Fetch remaining content that will be needed in other areas of the app.
-      const afterResults = await Promise.all([...secondFetch.map((x) => x())]);
-      afterResults
-        .filter((r) => r !== false)
-        .forEach((item) => {
-          const { success, ...rest } = item;
-          if (success === true) {
-            const keys = Object.keys(rest);
-            keys.forEach((k: string) => {
-              updateState(k, rest[k]);
-            });
-          }
-        });
-      setLoading(false);
     } catch (e: any) {
-      console.log(e.toString());
-      if (e.toString() === "Error: Network Error") {
-        console.log("Successfully identified network error");
-      }
+      console.error("Error in initialFetch:", e);
+      // Load mock data anyway for demo
+      setSanitySchemas(mockService.data.sanitySchemas);
+      setIsAuthenticated(true);
+      setLoading(false);
     }
   }
 
   async function connectSocketToSprint(userID = userData.user.id) {
+    // Using mock data instead of WebSocket
     let result = { success: false, sprints: [] as any };
     try {
-      const fetchedSprints = await RestAPI.get(
-        "pareto",
-        `/sprints/mentee/${userID}`,
-        {}
-      );
+      const fetchedSprints = await mockService.api.getSprints(userID.toString());
       result.success = true;
-      result.sprints = await fetchedSprints;
+      result.sprints = fetchedSprints;
 
       dispatch({
         type: "GET_INITIAL_SPRINT_DATA",
@@ -364,69 +350,15 @@ function App(props: AppProps) {
       });
 
       setSprints(fetchedSprints);
-
-      if (fetchedSprints.length === 0) {
-        return result;
-      }
     } catch (e) {
-      console.error(e);
-    }
-
-    let sprintStrings: Array<string> = [];
-
-    result.sprints.forEach((spr: Sprint, idx: number) => {
-      sprintStrings.push(`key${idx}=${spr.id}`);
-    });
-
-    let sprintString = sprintStrings.join("&");
-
-    let path = `${import.meta.env.VITE_WSS_ENDPOINT}?${sprintString}`;
-
-    const processMsg = (message: MessageEvent) => {
-      // console.log("Received data: ", JSON.parse(message.data));
-      let tempSprintData: any = JSON.parse(message.data);
-      // this check is to see whether the websocket connection successfully retrieved the latest state.
-      // if there are too many extraneous connections, through ping error or otherwise - the function to distribute state across connections will fail
-      if (!tempSprintData.message && sprints.length > 0) {
-        let newerSprintArray: Array<Sprint> | [] = [...sprints];
-        let tempVar = 0;
-        for (let i = 0; i < sprints.length; i++) {
-          const { id } = sprints[i];
-          if (id === tempSprintData.id) {
-            tempVar = i;
-            break;
-          }
-        }
-        newerSprintArray[tempVar] = tempSprintData;
-        try {
-          // console.log("Formatted Sprint Array: ", newerSprintArray);
-          setSprints(newerSprintArray);
-          dispatch({
-            type: "PUT_UPDATED_SPRINT_DATA",
-            payload: newerSprintArray,
-          });
-        } catch (e) {
-          // console.log("onmessage error", e);
-        }
-      } else {
-        // alert(tempSprintData.message);
-      }
-    };
-    try {
-      ws.connect({ path, processMsg });
-    } catch (e) {
-      alert(e);
+      console.error("Error fetching sprints:", e);
     }
     return result;
   }
 
   async function fetchMenteeSprints(userId: string) {
     try {
-      let menteeSprints = await RestAPI.get(
-        "pareto",
-        `/sprints/mentee/${userId}`,
-        {}
-      );
+      const menteeSprints = await mockService.api.getSprints(userId);
       setSprints(menteeSprints);
     } catch (e) {
       handleShowError(e as Error);
@@ -442,9 +374,11 @@ function App(props: AppProps) {
     
     localStorage.removeItem("sanity");
     const signout = async () => {
-      await Auth.signOut();
+      await mockService.auth.signOut();
+      mockService.storage.clearUser();
       userHasAuthenticated(false);
-      (props as AppProps).navigate("/login");
+      // No need to navigate to login since we're always authenticated for demo
+      // (props as AppProps).navigate("/login");
     };
     signout();
   }

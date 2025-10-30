@@ -7,6 +7,7 @@ import Tour from "reactour";
 import SuggestionModal from "./SuggestionModal";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
+import { sanityObjects } from "../offline-data/sanity-objects";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
 import { LibraryEntry, Admin, Hub } from "../types/ContextTypes";
@@ -105,11 +106,12 @@ function ContextPage(props: any) {
     }
     let schemaObj = tempPath[2];
     setSchema(schemaObj);
-    const query = `*[_type == '${schemaObj}Schema']`;
-
-    // const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
-    const links = await sanity.fetch(query);
-    console.warn(links);
+    
+    // Use static data instead of fetching from Sanity
+    // Filter sanityObjects to match the schema pattern if needed
+    // For now, we'll use all objects since the static data doesn't have _type field
+    const links = sanityObjects || [];
+    console.warn("Using static sanity data:", links);
     setItems(links);
     let tempCommunity: LibraryEntry[] = [];
     let tempSupport: LibraryEntry[] = [];
@@ -231,7 +233,7 @@ function ContextPage(props: any) {
                   return builder.image(source);
                 }
                 let url;
-                if (!person.adminPicture) {
+                if (!person.adminPicture?.asset?._ref) {
                   url = "na";
                 } else {
                   url = urlFor(person.adminPicture.asset._ref);
@@ -273,10 +275,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
 
                 return (
@@ -307,10 +311,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "incubators" || item.type === "vc") {
                   return (
@@ -356,10 +362,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "companies" || item.type === "marketplace") {
                   return (
@@ -391,10 +399,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "news") {
                   return (
@@ -426,10 +436,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "news") {
                   return (

@@ -59,4 +59,9 @@ export interface User extends MinimalUser {
 
   createdAt: string;
   __v: number;
+
+  // Experience IDs for navigation
+  apprenticeshipId?: string;
+  productId?: string;
+  masteryId?: string;
 }

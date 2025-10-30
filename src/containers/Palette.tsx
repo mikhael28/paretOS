@@ -2,7 +2,8 @@
 import { useRef, useEffect, useState } from "react";
 import { Button, Dialog } from "@mui/material";
 import "ninja-keys";
-import sanity from "../libs/sanity";
+// import sanity from "../libs/sanity";
+import { sanityObjects } from "../offline-data/sanity-objects";
 import ExternalSiteModal from "../context/ExternalSiteModal";
 import { useNavigate } from "react-router-dom"
 /**
@@ -83,23 +84,31 @@ function CommandPalette() {
   }
 
   async function fetchSanityItems() {
-    const query = `*[]`;
-    let data = [];
+    // Use static data instead of fetching from Sanity
+    let data = sanityObjects || [];
+    
+    // Check localStorage for cached data
     let links = localStorage.getItem("links");
-    if (links === null) {
-      data = (await sanity.fetch(query)) ?? [];
-    } else {
-      data = JSON.parse(links);
+    if (links !== null) {
+      try {
+        data = JSON.parse(links);
+      } catch (e) {
+        console.warn("Failed to parse cached links, using static data");
+      }
     }
+    
     let searchableLinks: SearchableLink[] = [];
     data.forEach((link: any) => {
-      if (link.type) {
+      // Include all items that have a title, not just ones with type
+      if (link.title) {
         searchableLinks.push({
-          id: link.title,
+          id: link.id || link.title,
           title: link.title,
           url: link.url,
           handler: () => {
-            openExternalModal(link.url);
+            if (link.url) {
+              openExternalModal(link.url);
+            }
           },
         });
       }

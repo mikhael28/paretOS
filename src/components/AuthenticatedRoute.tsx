@@ -5,13 +5,17 @@ interface AuthenticatedRouteProps {
 }
 
 const AuthenticatedRoute = ({ children }: AuthenticatedRouteProps) => {
-  const location = useLocation();
-  const { props } = children;
-  return props.isAuthenticated ? (
-    children
-  ) : (
-    <Navigate to={`/login?redirect=${location.pathname}${location.search}`} />
-  );
+  // Always return children for demo mode - no authentication required
+  return children;
+  
+  // Original authentication logic commented out:
+  // const location = useLocation();
+  // const { props } = children;
+  // return props.isAuthenticated ? (
+  //   children
+  // ) : (
+  //   <Navigate to={`/login?redirect=${location.pathname}${location.search}`} />
+  // );
 };
 
 export default AuthenticatedRoute;
