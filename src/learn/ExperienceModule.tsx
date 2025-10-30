@@ -2,7 +2,8 @@ import React, { Component, ReactElement } from "react";
 import { ImCheckmark } from "react-icons/im";
 import { FaSearch } from "react-icons/fa";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
-import { RestAPI } from "@aws-amplify/api-rest";
+// import { RestAPI } from "@aws-amplify/api-rest";
+import { mockService } from "../services/mockDataService";
 import { Slide, Dialog, Button } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton/Skeleton";
 import { PortableText } from "@portabletext/react";
@@ -139,30 +140,35 @@ class ExperienceModule extends Component<
     let path = pathArray[2];
     let expType;
 
-    let comparisonData = await RestAPI.get("pareto", `/experience/${path}`, {});
+    // Use mock service instead of API
+    let comparisonData = await mockService.api.getExperienceById(path);
 
-    if (comparisonData[0].type === "Apprenticeship") {
+    if (comparisonData[0] && comparisonData[0].type === "Apprenticeship") {
       expType = this.props.sanityTraining;
-    } else if (comparisonData[0].type === "Product") {
+    } else if (comparisonData[0] && comparisonData[0].type === "Product") {
       expType = this.props.sanityProduct;
-    } else if (comparisonData[0].type === "Interviewing") {
+    } else if (comparisonData[0] && comparisonData[0].type === "Interviewing") {
       expType = this.props.sanityInterview;
     }
 
-    this.setState({
-      experience: expType,
-      mongoExperience: comparisonData[0],
-      experienceId: comparisonData[0].id,
-      activeExperience: (expType as any[])[0],
-      isLoading: false,
-    });
+    if (comparisonData[0]) {
+      this.setState({
+        experience: expType,
+        mongoExperience: comparisonData[0],
+        experienceId: comparisonData[0].id,
+        activeExperience: (expType as any[])[0],
+        isLoading: false,
+      });
 
-    let athleteProfile = await RestAPI.get(
-      "pareto",
-      `/users/${comparisonData[0].memberId}`,
-      {}
-    );
-    this.setState({ user: athleteProfile[0] });
+      // Use mock service for user profile
+      let athleteProfile = await mockService.api.getUser(comparisonData[0].memberId || comparisonData[0].studentId);
+      if (athleteProfile[0]) {
+        this.setState({ user: athleteProfile[0] });
+      }
+    } else {
+      // No experience found, set loading false
+      this.setState({ isLoading: false });
+    }
   }
 
   markSubmitted = async (
@@ -187,23 +193,20 @@ class ExperienceModule extends Component<
         `Pareto Achievement for Review!`,
         `Your athlete ${this.state.user.fName} ${this.state.user.lName} has submitted the work submitted for the milestone called '${this.state.activeExperience.title}. There is ${milestoneXP} XP at stake - you are doing a great job providing mentorship and guidance!'`
       );
-      const updatedExperienceModule = await RestAPI.put(
-        "pareto",
-        `/experience/${this.state.experienceId}`,
-        { body }
+      const updatedExperienceModule = await mockService.api.updateExperience(
+        this.state.experienceId,
+        body
       );
       this.setState({
         showSubmitModal: false,
         mongoExperience: updatedExperienceModule,
       });
-      await RestAPI.post("pareto", "/email", {
-        body: {
-          recipient: this.props.user.email,
-          sender: "mikhael@hey.com",
-          subject: "Pareto Achievement For Review",
-          htmlBody: email,
-          textBody: "Pareto Achievement For Review.",
-        },
+      await mockService.api.sendEmail({
+        recipient: this.props.user.email,
+        sender: "mikhael@hey.com",
+        subject: "Pareto Achievement For Review",
+        htmlBody: email,
+        textBody: "Pareto Achievement For Review.",
       });
       // handleShowSuccess("Achievement submitted successfully!");
     } catch (e) {
@@ -233,10 +236,9 @@ class ExperienceModule extends Component<
         `Pareto Achievement Sent Back for Review!`,
         `Your coach has requested that the work submitted for the milestone called '${this.state.activeExperience.title}' be revised according to their feedback. Please log-in to https://arena.pareto.education for their details. There is ${milestoneXP} XP at stake - you are doing a great job learning and growing every day!'`
       );
-      const updatedExperienceModule = await RestAPI.put(
-        "pareto",
-        `/experience/${this.state.experienceId}`,
-        { body }
+      const updatedExperienceModule = await mockService.api.updateExperience(
+        this.state.experienceId,
+        body
       );
       this.setState({
         showSubmitModal: false,
@@ -282,10 +284,9 @@ class ExperienceModule extends Component<
         `Congratulations! Your coach has approved the work submitted for the milestone called '${this.state.activeExperience.title}'. You have earned ${milestoneXP} XP - you are doing a great job!'`
       );
 
-      const updatedExperienceModule = await RestAPI.put(
-        "pareto",
-        `/experience/${this.state.experienceId}`,
-        { body }
+      const updatedExperienceModule = await mockService.api.updateExperience(
+        this.state.experienceId,
+        body
       );
       this.setState({
         showSubmitModal: false,
@@ -524,7 +525,7 @@ class ExperienceModule extends Component<
               }
             }}
           >
-            <PaywallModal {...this.props} />
+            <PaywallModal {...this.props} onClose={() => this.setState({ ...this.state, showPaywallDialog: false })} />
           </Dialog>
         </div>
         {this.state.isLoading === true ? (

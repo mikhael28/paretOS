@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import imageUrlBuilder from "@sanity/image-url";
 import { PortableText } from "@portabletext/react";
-import { Dialog, Button } from "@mui/material";
+import { Dialog, Button, TextField, InputAdornment, FormControl, Select, MenuItem, InputLabel, Chip, Box } from "@mui/material";
 import { I18n } from "@aws-amplify/core";
 import Tour from "reactour";
 import SuggestionModal from "./SuggestionModal";
 import help from "../assets/help.png";
 import sanity from "../libs/sanity";
+import { sanityObjects } from "../offline-data/sanity-objects";
 import ContextObject from "./ContextObject";
 import ExternalSiteModal from "./ExternalSiteModal";
 import { LibraryEntry, Admin, Hub } from "../types/ContextTypes";
 import classNames from "classnames";
 import { AiFillGithub } from 'react-icons/ai';
 import { BiBitcoin } from "react-icons/bi";
+
 
 const builder = imageUrlBuilder(sanity);
 
@@ -29,14 +31,57 @@ interface ContextSuggestionForm {
   type: string;
 }
 
+// Auto-categorize resources based on keywords in their titles
+const categorizeResource = (resource: any) => {
+  const title = resource.title?.toLowerCase() || '';
+  
+  // Define category patterns
+  if (title.includes('react') || title.includes('vue') || title.includes('angular') || 
+      title.includes('javascript') || title.includes('typescript') || title.includes('css') ||
+      title.includes('html') || title.includes('web')) {
+    return 'Web Development';
+  }
+  if (title.includes('security') || title.includes('csrf') || title.includes('sql injection') ||
+      title.includes('auth')) {
+    return 'Security';
+  }
+  if (title.includes('design') || title.includes('ui') || title.includes('ux') || 
+      title.includes('color') || title.includes('font')) {
+    return 'Design & UX';
+  }
+  if (title.includes('job') || title.includes('work') || title.includes('hire') || 
+      title.includes('career') || title.includes('interview') || title.includes('freelanc')) {
+    return 'Career & Jobs';
+  }
+  if (title.includes('startup') || title.includes('founder') || title.includes('vc') ||
+      title.includes('incubat') || title.includes('venture') || title.includes('capital')) {
+    return 'Startups & Funding';
+  }
+  if (title.includes('community') || title.includes('meetup') || title.includes('club') ||
+      title.includes('group')) {
+    return 'Communities';
+  }
+  if (title.includes('learn') || title.includes('tutorial') || title.includes('course') ||
+      title.includes('academy') || title.includes('training')) {
+    return 'Learning Resources';
+  }
+  if (title.includes('tool') || title.includes('library') || title.includes('framework') ||
+      title.includes('service') || title.includes('api')) {
+    return 'Tools & Services';
+  }
+  if (title.includes('africa') || title.includes('nigeria') || title.includes('uganda') ||
+      title.includes('costa rica') || title.includes('seattle')) {
+    return 'Regional';
+  }
+  
+  return 'Other';
+};
+
 function ContextPage(props: any) {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [community, setCommunity] = useState<LibraryEntry[]>([]);
-  const [support, setSupport] = useState<LibraryEntry[]>([]);
-  const [companies, setCompanies] = useState<LibraryEntry[]>([]);
-  const [news, setNews] = useState<LibraryEntry[]>([]);
-  const [assorted, setAssorted] = useState<LibraryEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [schema, setSchema] = useState("");
   const [method, setMethod] = useState("post");
   const [renderType, setRenderType] = useState("generic");
@@ -65,12 +110,46 @@ function ContextPage(props: any) {
   });
 
   function openExternalModal(url: string) {
-    setExternalModal({ display: true, url });
+    // Open URL in new tab instead of modal
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   }
 
   function closeExternalModal() {
     setExternalModal({ display: false, url: "" });
   }
+
+  // Get unique categories from all resources
+  const categories = useMemo(() => {
+    const cats = new Set(['All']);
+    sanityObjects.forEach(item => {
+      cats.add(categorizeResource(item));
+    });
+    return Array.from(cats).sort();
+  }, []);
+
+  // Filter resources based on search and category
+  const filteredItems = useMemo(() => {
+    let filtered = sanityObjects || [];
+    
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(item => 
+        item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.url?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // Apply category filter
+    if (selectedCategory && selectedCategory !== 'All') {
+      filtered = filtered.filter(item => 
+        categorizeResource(item) === selectedCategory
+      );
+    }
+    
+    return filtered;
+  }, [searchTerm, selectedCategory]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -105,42 +184,10 @@ function ContextPage(props: any) {
     }
     let schemaObj = tempPath[2];
     setSchema(schemaObj);
-    const query = `*[_type == '${schemaObj}Schema']`;
-
-    // const query = `*[_type == '${schemaObj}Schema' && !(_id in path("drafts.**"))]`;
-    const links = await sanity.fetch(query);
-    console.warn(links);
+    
+    // Use static data
+    const links = sanityObjects || [];
     setItems(links);
-    let tempCommunity: LibraryEntry[] = [];
-    let tempSupport: LibraryEntry[] = [];
-    let tempCompanies: LibraryEntry[] = [];
-    let tempNews: LibraryEntry[] = [];
-    let tempAssorted: LibraryEntry[] = [];
-    if (tempPath[1] === "hubs") {
-      links.map((link: LibraryEntry) => {
-        if (
-          link.type === "community" ||
-          link.type === "education" ||
-          link.type === "social" ||
-          link.type === "leader"
-        ) {
-          tempCommunity.push(link);
-        } else if (link.type === "incubators" || link.type === "vc") {
-          tempSupport.push(link);
-        } else if (link.type === "companies" || link.type === "marketplace") {
-          tempCompanies.push(link);
-        } else if (link.type === "news") {
-          tempNews.push(link);
-        } else {
-          tempAssorted.push(link);
-        }
-      });
-      setCommunity(tempCommunity);
-      setSupport(tempSupport);
-      setCompanies(tempCompanies);
-      setNews(tempNews);
-      setAssorted(tempAssorted);
-    }
   }
 
   useEffect(() => {
@@ -211,14 +258,121 @@ function ContextPage(props: any) {
         />
       </div>
 
-      <Button
-        onClick={() => {
-          openSuggestionModal();
-        }}
-        style={{ color: 'white' }}
-        className={classNames("third-step-library", "btn")}
+      {/* Search and Filter Controls */}
+      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 3, flexWrap: 'wrap' }}>
+        <TextField
+          label="Search Resources"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ minWidth: 300 }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                🔍
+              </InputAdornment>
+            ),
+          }}
+        />
+        
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel>Category</InputLabel>
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            label="Category"
+          >
+            {categories.map(cat => (
+              <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-      >Suggest New Resource</Button>
+        <Button
+          onClick={() => {
+            openSuggestionModal();
+          }}
+          style={{ color: 'white' }}
+          className={classNames("third-step-library", "btn")}
+        >Suggest New Resource</Button>
+      </Box>
+
+      {/* Results count */}
+      <Box sx={{ mb: 2 }}>
+        <Chip 
+          label={`${filteredItems.length} resources found`} 
+          color="primary" 
+          variant="outlined"
+        />
+        {selectedCategory !== 'All' && (
+          <Chip 
+            label={selectedCategory}
+            onDelete={() => setSelectedCategory('All')}
+            sx={{ ml: 1 }}
+          />
+        )}
+      </Box>
+
+      {/* Simplified Resource Grid */}
+      <div className="context-cards">
+        {filteredItems.map((item: any) => {
+          const category = categorizeResource(item);
+          return (
+            <div
+              key={item.id}
+              className="context-card"
+              style={{ 
+                cursor: item.url ? 'pointer' : 'default',
+                padding: '16px',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                marginBottom: '16px',
+                transition: 'all 0.3s ease',
+                position: 'relative'
+              }}
+              onClick={() => {
+                if (item.url) {
+                  window.open(item.url, '_blank', 'noopener,noreferrer');
+                }
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: '0 0 8px 0', fontSize: '18px' }}>{item.title}</h3>
+                  <Chip 
+                    label={category} 
+                    size="small" 
+                    sx={{ mb: 1 }}
+                    variant="outlined"
+                  />
+                  {item.summary && (
+                    <p style={{ fontSize: '14px', opacity: 0.8, marginTop: '8px' }}>{item.summary}</p>
+                  )}
+                </div>
+                {item.url && (
+                  <span 
+                    style={{ 
+                      fontSize: '16px', 
+                      opacity: 0.6,
+                      marginLeft: '8px'
+                    }} 
+                  >
+                    ↗
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       {renderType === "hubs" ? (
         <>
@@ -231,7 +385,7 @@ function ContextPage(props: any) {
                   return builder.image(source);
                 }
                 let url;
-                if (!person.adminPicture) {
+                if (!person.adminPicture?.asset?._ref) {
                   url = "na";
                 } else {
                   url = urlFor(person.adminPicture.asset._ref);
@@ -273,10 +427,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
 
                 return (
@@ -307,10 +463,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "incubators" || item.type === "vc") {
                   return (
@@ -356,10 +514,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "companies" || item.type === "marketplace") {
                   return (
@@ -391,10 +551,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "news") {
                   return (
@@ -426,10 +588,12 @@ function ContextPage(props: any) {
                 let url;
                 if (!item.logo && !item.mainImage) {
                   url = "na";
-                } else if (!item.logo && item.mainImage) {
+                } else if (!item.logo && item.mainImage?.asset?._ref) {
                   url = urlFor(item.mainImage.asset._ref);
-                } else {
+                } else if (item.logo?.asset?._ref) {
                   url = urlFor(item.logo.asset._ref);
+                } else {
+                  url = "na";
                 }
                 if (item.type === "news") {
                   return (
@@ -454,7 +618,7 @@ function ContextPage(props: any) {
         </>
       ) : null}
       {/* This is the render for non-city based pages. */}
-      {renderType === "generic" ? (
+      {renderType === "generic" && false ? (
         <>
           <h2>{schemaObject.description}</h2>
           <details>

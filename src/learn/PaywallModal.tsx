@@ -11,6 +11,7 @@ interface LoadingModalProps {
   user: User;
   initialFetch: (id: string) => {};
   navigate: typeof useNavigate;
+  onClose?: () => void;
 }
 
 function LoadingModal({ user, initialFetch, ...props }: LoadingModalProps) {
@@ -62,7 +63,12 @@ function LoadingModal({ user, initialFetch, ...props }: LoadingModalProps) {
           </p>
 
           <div className="flex-evenly">
-            <Button className="btn-cancel" onClick={() => navigate("/")}>
+            <Button className="btn-cancel" onClick={() => {
+              // Just close the modal, don't navigate away
+              if (props.onClose) {
+                props.onClose();
+              }
+            }}>
               Cancel
             </Button>
             <Button className="btn" 

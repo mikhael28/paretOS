@@ -102,7 +102,7 @@ function LearnDashboard(props: any) {
           }
         }}
       >
-        <PaywallModal {...props} open={showPaywallDialog} />
+        <PaywallModal {...props} open={showPaywallDialog} onClose={() => setShowPaywallDialog(false)} />
       </Dialog>
     </div>
   );
