@@ -1,8 +1,18 @@
 # Pareto Operating System (ParetOS)
 
+Archive Note: In the days before ChatGPT, the ParetOS was an open-source project from 2019-2021 that worked to create a digital mentorship system for aspiring developers, as they worked through a series of practical, experience-based learning modules part of a curriculum sometimes called the Full-Stack Apprenticeship. Before I continue, I wanted to give a shoutout to the 32 developers who contributed their time and code to the project, especially [Jaye Clark](https://github.com/jayeclark) who spearheaded a large scale redesign of the UI in 2020 & was the finest open-source developer I've had the pleasure of working with. 
+
+To run an offline-only, static-data-only 'archive' of the ParetOS, simply clone the repository and run `pnpm install && pnpm start` - thanks to the magic of locked dependencies (no carets in your package.json), as of October 30th 2025, the dependencies still install just like they did 2+ years ago. 
+
+The modules of the 'Experience' section were designed to work alongside a set of offline paper products and a workbook I designed for aspiring software developers, as the prototype of an educational business. In addition, we had an online, multi-player habit tracker meant to incentivize aspiring developers to improve their study and life habits to help them increase their chance of breaking into the industry. We also had a 'Library of Context', a collection of links and resources curated to guide developers to the right places, but whose data model was designed by me in 2018 in a terrible, inneficient way abstracting types and ids to a headless CMS, resulting in a lack of filterable search for the filters today without that secondary data schema available to us. A simple search of all 600+ resources is available in the Context page.
+
+Perhaps I will write a blog post about this sometime, but it certainly feels odd looking at this in the age of AI development. With the benefit of hindsight and experience, what took 32 people, could probably be done by one person in less time, with access to the latest in AI tooling. It makes me wonder what the future of software development would be; 'back in the day' you actually had to write the code and develop muscle memory & debugging skills. Now, you just lean back in your chair and guide it to the point you want. What a time to be alive.
+
+## Original README below 
+
 The ParetOS is a browser-based, high-level operating system designed to maximize human potential. It is designed to give you the 20% of software you need on a day-to-day basis that gives you 80% of the benefits modern tech has to offer.
 
-Live at [https://paret0.com](https://paret0.com)
+Live at [https://paret0.com](https://paret0.com) **note** as of October 2025 the landing page here works, but the sign-in likely doesn't.
 
 ## The Arena
 
